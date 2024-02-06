@@ -1,0 +1,226 @@
+{
+  "info" : {
+    "name" : "Demo REST API Documentation",
+    "version" : "1.0.0",
+    "schema" : "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item" : [ {
+    "id" : "login-success",
+    "name" : "/v1/login",
+    "description" : "로그인",
+    "variable" : [ ],
+    "event" : [ ],
+    "request" : {
+      "url" : {
+        "protocol" : "http",
+        "host" : "localhost",
+        "path" : "/v1/login",
+        "port" : "8080"
+      },
+      "method" : "POST",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json;charset=UTF-8",
+        "disabled" : false
+      } ],
+      "body" : {
+        "mode" : "raw",
+        "raw" : "{\n  \"username\" : \"cau5UZ6NC5\",\n  \"password\" : \"cUXpLJkHbbbVDqxl1\"\n}",
+        "urlencoded" : [ ]
+      }
+    },
+    "response" : [ {
+      "id" : "login-success",
+      "name" : "login-success",
+      "originalRequest" : {
+        "url" : {
+          "protocol" : "http",
+          "host" : "localhost",
+          "path" : "/v1/login",
+          "port" : "8080"
+        },
+        "method" : "POST",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json;charset=UTF-8",
+          "disabled" : false
+        } ],
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\n  \"username\" : \"cau5UZ6NC5\",\n  \"password\" : \"cUXpLJkHbbbVDqxl1\"\n}",
+          "urlencoded" : [ ]
+        }
+      },
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json;charset=UTF-8",
+        "disabled" : false
+      } ],
+      "cookie" : [ ],
+      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"cau5UZ6NC5\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImRjZTkxYjdlLTNkYjktNGM5YS04MjM3LTBlNGU1MGJkMjc4YSIsInN1YiI6ImNhdTVVWjZOQzUiLCJpYXQiOjE3MDcxNzk1MzQsIm5iZiI6MTcwNzE3OTUzNCwiZXhwIjoxNzA3MTc5NzE0fQ.8BBPMsqpfBYGMptlnAtQQleefCGcnLoEBKvKqgcJhD9-eEoiE0Sg_On8cJVd0xWMpgbX0PzOzE58bIeR-kjkZA\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjkzZjkzYjRiLTY3NjctNDFhNi1iMjg3LTMwMjhjNTUzZTQ5ZCIsInN1YiI6ImNhdTVVWjZOQzUiLCJpYXQiOjE3MDcxNzk1MzQsIm5iZiI6MTcwNzE3OTUzNCwiZXhwIjoxNzA5NzcxNTM0fQ.CoVcNfHEzONbrgVBiXxsAOyBUuuOrYVUrC09nJs752CMx6y1cafO3Ftuu3mWwUlxyhk-A33QOOyGLAEgcUjDjA\"\n  }\n}",
+      "code" : 200
+    } ]
+  }, {
+    "id" : "logout-success",
+    "name" : "/v1/logout",
+    "description" : "로그아웃",
+    "variable" : [ ],
+    "event" : [ ],
+    "request" : {
+      "url" : {
+        "protocol" : "http",
+        "host" : "localhost",
+        "path" : "/v1/logout",
+        "port" : "8080"
+      },
+      "method" : "PUT",
+      "header" : [ {
+        "key" : "Authorization",
+        "value" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImNhNWI5OTE5LTUyZGQtNDgxYy05Y2IyLWMyODYxMGQ0MDRhYyIsInN1YiI6IktieXdPaXRxZngwTzkiLCJpYXQiOjE3MDcxNzk1MzQsIm5iZiI6MTcwNzE3OTUzNCwiZXhwIjoxNzA3MTc5NzE0fQ.P1Fh_o7VzC2z8vURZsjGWc3FdK6nUoScY9-vmOrJrv5rIwR_1RqU950pMW5lhud3Gabj_oJvERUSuxQ3H0L35Q",
+        "disabled" : false,
+        "description" : "AccessToken \"Bearer \" prefix"
+      } ]
+    },
+    "response" : [ {
+      "id" : "logout-success",
+      "name" : "logout-success",
+      "originalRequest" : {
+        "url" : {
+          "protocol" : "http",
+          "host" : "localhost",
+          "path" : "/v1/logout",
+          "port" : "8080"
+        },
+        "method" : "PUT",
+        "header" : [ {
+          "key" : "Authorization",
+          "value" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImNhNWI5OTE5LTUyZGQtNDgxYy05Y2IyLWMyODYxMGQ0MDRhYyIsInN1YiI6IktieXdPaXRxZngwTzkiLCJpYXQiOjE3MDcxNzk1MzQsIm5iZiI6MTcwNzE3OTUzNCwiZXhwIjoxNzA3MTc5NzE0fQ.P1Fh_o7VzC2z8vURZsjGWc3FdK6nUoScY9-vmOrJrv5rIwR_1RqU950pMW5lhud3Gabj_oJvERUSuxQ3H0L35Q",
+          "disabled" : false,
+          "description" : "AccessToken \"Bearer \" prefix"
+        } ]
+      },
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json;charset=UTF-8",
+        "disabled" : false
+      } ],
+      "cookie" : [ ],
+      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\"\n}",
+      "code" : 200
+    } ]
+  }, {
+    "id" : "refresh-success",
+    "name" : "/v1/refresh",
+    "description" : "Access Token 재발급",
+    "variable" : [ ],
+    "event" : [ ],
+    "request" : {
+      "url" : {
+        "protocol" : "http",
+        "host" : "localhost",
+        "path" : "/v1/refresh",
+        "port" : "8080"
+      },
+      "method" : "POST",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json;charset=UTF-8",
+        "disabled" : false
+      } ],
+      "body" : {
+        "mode" : "raw",
+        "raw" : "{\n  \"refreshToken\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6Ijc0NGM4NDIyLWQ3ZWMtNDUzOC04MGNhLTMyOGEzZDBlZjQ3MSIsInN1YiI6InV5YVBPbGx0d3BGViIsImlhdCI6MTcwNzE3OTUzNCwibmJmIjoxNzA3MTc5NTM0LCJleHAiOjE3MDk3NzE1MzR9.azbrdaBwWH1b0jskY7IosJjClnQMa56-zII19Ed0veFWsO-qNNoUw9Djt1ExcBvIOSEWoqbs3eTolt1r2gXoTw\"\n}",
+        "urlencoded" : [ ]
+      }
+    },
+    "response" : [ {
+      "id" : "refresh-success",
+      "name" : "refresh-success",
+      "originalRequest" : {
+        "url" : {
+          "protocol" : "http",
+          "host" : "localhost",
+          "path" : "/v1/refresh",
+          "port" : "8080"
+        },
+        "method" : "POST",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json;charset=UTF-8",
+          "disabled" : false
+        } ],
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\n  \"refreshToken\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6Ijc0NGM4NDIyLWQ3ZWMtNDUzOC04MGNhLTMyOGEzZDBlZjQ3MSIsInN1YiI6InV5YVBPbGx0d3BGViIsImlhdCI6MTcwNzE3OTUzNCwibmJmIjoxNzA3MTc5NTM0LCJleHAiOjE3MDk3NzE1MzR9.azbrdaBwWH1b0jskY7IosJjClnQMa56-zII19Ed0veFWsO-qNNoUw9Djt1ExcBvIOSEWoqbs3eTolt1r2gXoTw\"\n}",
+          "urlencoded" : [ ]
+        }
+      },
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json;charset=UTF-8",
+        "disabled" : false
+      } ],
+      "cookie" : [ ],
+      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImJhNzY3YzczLWQzMmQtNDEzYi1hZDM1LTE2Zjk4ODQ1ZTU4OSIsInN1YiI6InV5YVBPbGx0d3BGViIsImlhdCI6MTcwNzE3OTUzNCwibmJmIjoxNzA3MTc5NTM0LCJleHAiOjE3MDcxNzk3MTR9.MOtI5RCwcyotHOX23T9AWLCW8Nm_MZ4lYXoTOXxI_JvTCGw21mqDrItc8goqouFEDrmRHJHfI7kMlR8HjL-28Q\"\n  }\n}",
+      "code" : 200
+    } ]
+  }, {
+    "id" : "register-success",
+    "name" : "/v1/register",
+    "description" : "회원가입",
+    "variable" : [ ],
+    "event" : [ ],
+    "request" : {
+      "url" : {
+        "protocol" : "http",
+        "host" : "localhost",
+        "path" : "/v1/register",
+        "port" : "8080"
+      },
+      "method" : "POST",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json;charset=UTF-8",
+        "disabled" : false
+      } ],
+      "body" : {
+        "mode" : "raw",
+        "raw" : "{\n  \"username\" : \"tQy5T03NbHPS\",\n  \"password\" : \"CFxWuQojEuGXfBLr0Bm\",\n  \"email\" : \"xjnwWhe@ELOfx.com\",\n  \"nickname\" : \"AqpNa\"\n}",
+        "urlencoded" : [ ]
+      }
+    },
+    "response" : [ {
+      "id" : "register-success",
+      "name" : "register-success",
+      "originalRequest" : {
+        "url" : {
+          "protocol" : "http",
+          "host" : "localhost",
+          "path" : "/v1/register",
+          "port" : "8080"
+        },
+        "method" : "POST",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json;charset=UTF-8",
+          "disabled" : false
+        } ],
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\n  \"username\" : \"tQy5T03NbHPS\",\n  \"password\" : \"CFxWuQojEuGXfBLr0Bm\",\n  \"email\" : \"xjnwWhe@ELOfx.com\",\n  \"nickname\" : \"AqpNa\"\n}",
+          "urlencoded" : [ ]
+        }
+      },
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json;charset=UTF-8",
+        "disabled" : false
+      } ],
+      "cookie" : [ ],
+      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"tQy5T03NbHPS\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImE5NDgwOGZhLTU0YWUtNGJiMS04MTI0LTgxYjZhZjdmZGYwYSIsInN1YiI6InRReTVUMDNOYkhQUyIsImlhdCI6MTcwNzE3OTUzNCwibmJmIjoxNzA3MTc5NTM0LCJleHAiOjE3MDcxNzk3MTR9.TshOMq2EZaXmdRjtqoaIrRcElPBj4PWEnmMrFQHj3iZm6tCXgHMl5bl6JcD8d0lqwB5fDYqipETfCgBam9xCSQ\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6Ijc0NWQzOWJiLTgxNWUtNGExMi1hN2QwLWI0OWQ5MTU4YzMxMyIsInN1YiI6InRReTVUMDNOYkhQUyIsImlhdCI6MTcwNzE3OTUzNCwibmJmIjoxNzA3MTc5NTM0LCJleHAiOjE3MDk3NzE1MzR9.wpuY15vWbT6KUVoeLgOOPA4ZGMQJqpzOaZk7Xz2FlU-2vORJaHC2YoyOGJL4OQy_QTgNy9Aj_DNcrvcG7y1DVA\"\n  }\n}",
+      "code" : 200
+    } ]
+  } ],
+  "event" : [ ],
+  "variable" : [ ]
+}

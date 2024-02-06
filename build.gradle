@@ -1,0 +1,213 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'com.epages.restdocs-api-spec' version '0.18.2'
+    id 'org.hidetake.swagger.generator' version '2.19.2'
+}
+
+group = 'com.habin'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '21'
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    asciidoctorExt
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://packages.atlassian.com/maven/repository/public' }
+}
+
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+    set('generated', file("src/main/generated"))
+    set('springCloudVersion', "2023.0.0")
+    set('testcontainersVersion', "1.19.3")
+    set('jwtVersion', '0.12.3')
+    set('queryDslVersion', "6.0")
+    set('mapstructVersion', "1.5.5.Final")
+}
+
+dependencies {
+    // Presentation Layer
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.giffing.bucket4j.spring.boot.starter:bucket4j-spring-boot-starter:0.10.3'
+    implementation 'com.bucket4j:bucket4j-redis:8.7.1'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.26.0'
+    implementation 'org.zalando:logbook-spring-boot-starter:3.7.2'
+
+    // Persistence Layer
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
+    implementation "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}"
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    // development
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+
+    // External
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
+    implementation 'software.amazon.awssdk:s3:2.21.29'
+    implementation 'com.slack.api:slack-app-backend:1.38.0' // Chat
+    implementation 'com.atlassian.jira:jira-rest-java-client-core:5.2.7' // Issue Tracking
+    compileOnly 'io.atlassian.fugue:fugue:5.0.0'
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
+
+    // Message Broker
+    implementation 'org.apache.kafka:kafka-streams'
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    // Authentication, Authorization
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation "io.jsonwebtoken:jjwt-api:${jwtVersion}"
+    runtimeOnly "io.jsonwebtoken:jjwt-impl:${jwtVersion}"
+    runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jwtVersion}"
+
+    // Boiler Plate
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    implementation "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    compileOnly 'org.projectlombok:lombok'
+    implementation 'org.apache.commons:commons-lang3:3.13.0'
+    implementation 'org.apache.commons:commons-rng-simple:1.5'
+    implementation 'commons-io:commons-io:2.15.1'
+
+    // API Documentation
+    implementation 'com.epages:restdocs-api-spec-mockmvc:0.19.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
+    annotationProcessor(
+            'org.springframework.boot:spring-boot-configuration-processor',
+            "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}",
+            'org.projectlombok:lombok',
+            "org.mapstruct:mapstruct-processor:${mapstructVersion}",
+            'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    )
+
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    testImplementation 'org.apache.commons:commons-lang3:3.13.0'
+    testImplementation 'com.tngtech.archunit:archunit-junit5:1.1.0' // Architecture Rule Test
+    testImplementation "com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.12" // Test Double
+    testImplementation 'org.quickperf:quick-perf-junit5:1.1.0' // Performance Test
+    testImplementation 'io.karatelabs:karate-junit5:1.5.0.RC3' // Both Test Pyramid
+
+    testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0' // JUnit Extension
+    testImplementation 'com.slack.api:slack-app-backend:1.38.0'
+    testImplementation 'com.atlassian.jira:jira-rest-java-client-core:5.2.7'
+    testCompileOnly 'io.atlassian.fugue:fugue:5.0.0'
+
+    testRuntimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    testCompileOnly 'org.projectlombok:lombok'
+
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mariadb'
+    testImplementation 'org.testcontainers:kafka'
+    testImplementation 'org.testcontainers:localstack'
+
+    testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+sourceSets {
+    main.java.srcDirs += [generated]
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.annotationProcessorGeneratedSourcesDirectory(file(generated))
+}
+
+compileJava.doFirst {
+    delete file(generated)
+}
+
+tasks.withType(GenerateSwaggerUI).configureEach {
+    dependsOn 'openapi3'
+}
+
+bootRun {
+    systemProperty 'spring.profiles.active', 'dev'
+}
+
+test {
+    systemProperty 'spring.profiles.active', 'test_standalone'
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
+
+openapi3 { // Swagger OAS Generate
+    server = "http://localhost:8080"
+    title = "Demo REST API Documentation"
+    description = "Spring REST Docs with SwaggerUI."
+    version = "${version}"
+    outputFileNamePrefix = "${group}-open-api-3.0.1"
+    format = 'json'
+
+    outputDirectory = 'src/main/resources/static/docs'
+}
+
+postman { // Postman API Collection
+    baseUrl = 'http://localhost:8080'
+    title = 'Demo REST API Documentation'
+    version = "${version}"
+    outputFileNamePrefix = "${group}-postman-collection"
+
+    outputDirectory = 'src/main/resources/static/docs'
+}
+
+asciidoctor {
+    dependsOn test
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+
+    doFirst {
+        delete {
+            file("src/main/resources/static/docs")
+        }
+    }
+
+    doLast {
+        copy {
+            from(file("build/docs/asciidoc"))
+            into(file("src/main/resources/static/docs"))
+        }
+    }
+}
+
+bootJar {
+    dependsOn 'asciidoctor'
+    dependsOn 'openapi3'
+    dependsOn 'postman'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
