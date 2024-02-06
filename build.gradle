@@ -7,7 +7,7 @@ plugins {
     id 'org.hidetake.swagger.generator' version '2.19.2'
 }
 
-group = 'com.habin'
+group = 'com.tune_fun'
 version = '0.0.1-SNAPSHOT'
 
 java {
