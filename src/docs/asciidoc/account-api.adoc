@@ -1,0 +1,26 @@
+[[Account-API]]
+== Account API
+
+=== 회원가입 API
+
+==== 성공
+
+operation::register-success[snippets='http-request,http-response,request-fields,response-fields']
+
+=== 로그인 API
+
+==== 성공
+
+operation::login-success[snippets='http-request,http-response,request-fields,response-fields']
+
+=== 로그아웃 API
+
+==== 성공
+
+operation::logout-success[snippets='http-request,http-response,response-fields']
+
+=== Access Token 재발급 API
+
+==== 성공
+
+operation::refresh-success[snippets='http-request,http-response,request-fields,response-fields']

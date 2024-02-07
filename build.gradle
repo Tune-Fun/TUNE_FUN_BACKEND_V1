@@ -186,6 +186,12 @@ asciidoctor {
     inputs.dir snippetsDir
     configurations 'asciidoctorExt'
 
+    sources{
+        include("**/index.adoc")
+    }
+
+    baseDirFollowsSourceFile()
+
     doFirst {
         delete {
             file("${docsDir}")

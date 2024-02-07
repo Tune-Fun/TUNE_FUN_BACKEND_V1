@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
+import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -42,7 +43,8 @@ class RefreshControllerTest extends ControllerBaseTest {
 
         AccountCommands.Refresh command = new AccountCommands.Refresh(refreshToken);
 
-        FieldDescriptor requestDescriptor = fieldWithPath("refreshToken").description("Refresh Token");
+        FieldDescriptor requestDescriptor = fieldWithPath("refreshToken").description("Refresh Token")
+                .attributes(constraint("NOT BLANK"));
         FieldDescriptor[] responseDescriptors = ArrayUtils.addAll(baseResponseFields,
                 fieldWithPath("data").description("Response Data"),
                 fieldWithPath("data.access_token").description("Access Token")

@@ -17,6 +17,13 @@ public class DocumentUtil {
     }
 
     public static OperationResponsePreprocessor getDocumentResponse() {
-        return preprocessResponse(prettyPrint());
+        return preprocessResponse(
+                modifyHeaders()
+                        .remove("Transfer-Encoding")
+                        .remove("Date")
+                        .remove("Keep-Alive")
+                        .remove("Connection"),
+                prettyPrint()
+        );
     }
 }

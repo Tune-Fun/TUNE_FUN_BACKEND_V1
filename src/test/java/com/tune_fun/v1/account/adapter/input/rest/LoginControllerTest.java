@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.account.adapter.output.persistence.Role.CLIENT_0;
+import static com.tune_fun.v1.base.doc.RestDocsConfig.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -59,8 +60,8 @@ class LoginControllerTest extends ControllerBaseTest {
         assertTrue(validateAccessTokenUseCase.validateAccessToken(getAccessToken(resultActions)));
 
         FieldDescriptor[] requestDescriptors = {
-                fieldWithPath("username").description("아이디"),
-                fieldWithPath("password").description("비밀번호")
+                fieldWithPath("username").description("아이디").attributes(constraint("NOT BLANK")),
+                fieldWithPath("password").description("비밀번호").attributes(constraint("NOT BLANK"))
         };
 
         FieldDescriptor[] responseDescriptors = ArrayUtils.addAll(baseResponseFields,

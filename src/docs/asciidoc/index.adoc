@@ -1,4 +1,4 @@
-= Demo REST API Documentation
+= Tune Fun REST API Documentation
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -6,21 +6,4 @@
 :toclevels: 2
 :sectlinks:
 
-[[Account-API]]
-== Account API
-
-=== 회원가입 API
-
-operation::register-success[snippets='http-request,http-response,request-fields,response-fields']
-
-=== 로그인 API
-
-operation::login-success[snippets='http-request,http-response,request-fields,response-fields']
-
-=== 로그아웃 API
-
-operation::logout-success[snippets='http-request,http-response,response-fields']
-
-=== Access Token 재발급 API
-
-operation::refresh-success[snippets='http-request,http-response,request-fields,response-fields']
+include::account-api.adoc[]

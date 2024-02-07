@@ -21,10 +21,17 @@ public class RestDocsConfig {
         );
     }
 
+    public static final String CONSTRAINT = "constraint";
+
     public static Attribute field(
             final String key,
-            final String value) {
-        return new Attribute(key, value);
+            final String value){
+        return new Attribute(key,value);
+    }
+
+    public static Attribute constraint(
+            final String value){
+        return field(CONSTRAINT, value);
     }
 
 }
