@@ -32,6 +32,7 @@ repositories {
 ext {
     set('snippetsDir', file("build/generated-snippets"))
     set('generated', file("src/main/generated"))
+    set('docsDir', "src/main/resources/static/docs")
     set('springCloudVersion', "2023.0.0")
     set('testcontainersVersion', "1.19.3")
     set('jwtVersion', '0.12.3')
@@ -162,22 +163,22 @@ test {
 
 openapi3 { // Swagger OAS Generate
     server = "http://localhost:8080"
-    title = "Demo REST API Documentation"
+    title = "Tune Fun REST API V1 Documentation - #{LocalDate.now()}"
     description = "Spring REST Docs with SwaggerUI."
     version = "${version}"
     outputFileNamePrefix = "${group}-open-api-3.0.1"
     format = 'json'
 
-    outputDirectory = 'src/main/resources/static/docs'
+    outputDirectory = "${docsDir}"
 }
 
 postman { // Postman API Collection
     baseUrl = 'http://localhost:8080'
-    title = 'Demo REST API Documentation'
+    title = 'Tune Fun REST API V1 Documentation'
     version = "${version}"
     outputFileNamePrefix = "${group}-postman-collection"
 
-    outputDirectory = 'src/main/resources/static/docs'
+    outputDirectory = "${docsDir}"
 }
 
 asciidoctor {
@@ -187,14 +188,14 @@ asciidoctor {
 
     doFirst {
         delete {
-            file("src/main/resources/static/docs")
+            file("${docsDir}")
         }
     }
 
     doLast {
         copy {
             from(file("build/docs/asciidoc"))
-            into(file("src/main/resources/static/docs"))
+            into(file("${docsDir}"))
         }
     }
 }
