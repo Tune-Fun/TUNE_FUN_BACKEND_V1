@@ -1,12 +1,8 @@
 spring:
-  docker:
-    compose:
-      enabled: false
   datasource:
-    # 인프라 구축 필요
-    url:
-    username:
-    password:
+    url: jdbc:mariadb://localhost:3305/mydatabase
+    username: root
+    password: verysecret
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
@@ -19,10 +15,9 @@ spring:
         default_batch_fetch_size: 100
 
   data:
-    # 인프라 구축 필요
     redis:
-      host:
-      port:
+      host: localhost
+      port: 6378
 
   thymeleaf:
     enabled: false
@@ -38,10 +33,3 @@ springdoc:
   swagger-ui:
     url: /docs/com.tune_fun-open-api-3.0.1.json
     path: /swagger
-
-aws:
-  # 인프라 구축 필요
-  access-key-id:
-  secret-access-key:
-  default-region:
-  s3-bucket-name:

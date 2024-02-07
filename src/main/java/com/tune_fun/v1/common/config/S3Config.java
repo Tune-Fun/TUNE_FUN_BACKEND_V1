@@ -11,7 +11,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
-@Profile("!dev && !test && !test_standalone")
+@Profile("!dev_standalone && !test_standalone")
 @Configuration
 @RequiredArgsConstructor
 public class S3Config {
