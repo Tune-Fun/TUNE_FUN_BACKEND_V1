@@ -12,15 +12,15 @@ public class FirebaseMessagingMediator {
 
     private final FirebaseMessageMapper firebaseMessageMapper;
 
-    public void sendMessageByTopic(FirebaseMto.ByTopic message) throws FirebaseMessagingException {
+    public void sendMessageByTopic(final FirebaseMto.ByTopic message) throws FirebaseMessagingException {
         getInstance().send(firebaseMessageMapper.topicMessage(message));
     }
 
-    public void sendMessageByToken(FirebaseMto.ByToken message) throws FirebaseMessagingException {
+    public void sendMessageByToken(final FirebaseMto.ByToken message) throws FirebaseMessagingException {
         getInstance().send(firebaseMessageMapper.tokenMessage(message));
     }
 
-    public void sendMulticastMessageByTokens(FirebaseMto.ByTokens message) throws FirebaseMessagingException {
+    public void sendMulticastMessageByTokens(final FirebaseMto.ByTokens message) throws FirebaseMessagingException {
         getInstance().sendEachForMulticast(firebaseMessageMapper.tokensMessage(message));
     }
 

@@ -18,7 +18,7 @@ public abstract class FirebaseMessageMapper {
     @Mapping(target = "putAllData", ignore = true)
     @Mapping(target = "fcmOptions", ignore = true)
     @Mapping(target = "condition", ignore = true)
-    public abstract Message topicMessage(FirebaseMto.ByTopic message);
+    public abstract Message topicMessage(final FirebaseMto.ByTopic message);
 
     @Mapping(target = "notification", source = ".", qualifiedByName = "notification")
     @Mapping(target = "androidConfig", source = ".", qualifiedByName = "androidConfig")
@@ -28,9 +28,9 @@ public abstract class FirebaseMessageMapper {
     @Mapping(target = "putAllData", ignore = true)
     @Mapping(target = "fcmOptions", ignore = true)
     @Mapping(target = "condition", ignore = true)
-    public abstract Message tokenMessage(FirebaseMto.ByToken message);
+    public abstract Message tokenMessage(final FirebaseMto.ByToken message);
 
-    public MulticastMessage tokensMessage(FirebaseMto.ByTokens message) {
+    public MulticastMessage tokensMessage(final FirebaseMto.ByTokens message) {
         MulticastMessage.Builder builder = MulticastMessage.builder();
         builder.setNotification(notification(message));
         builder.setAndroidConfig(androidConfig(message));
@@ -43,7 +43,7 @@ public abstract class FirebaseMessageMapper {
     @Mapping(target = "title", source = "title")
     @Mapping(target = "body", source = "body")
     @Mapping(target = "image", ignore = true)
-    public abstract Notification notification(FirebaseMto.Base message);
+    public abstract Notification notification(final FirebaseMto.Base message);
 
     @Named("androidConfig")
     @Mapping(target = "notification", source = ".", qualifiedByName = "androidNotification")
@@ -54,7 +54,7 @@ public abstract class FirebaseMessageMapper {
     @Mapping(target = "fcmOptions", ignore = true)
     @Mapping(target = "directBootOk", ignore = true)
     @Mapping(target = "collapseKey", ignore = true)
-    public abstract AndroidConfig androidConfig(FirebaseMto.Base message);
+    public abstract AndroidConfig androidConfig(final FirebaseMto.Base message);
 
     @Named("androidNotification")
     @Mapping(target = "title", source = "title")
@@ -80,14 +80,14 @@ public abstract class FirebaseMessageMapper {
     @Mapping(target = "clickAction", ignore = true)
     @Mapping(target = "channelId", ignore = true)
     @Mapping(target = "bodyLocalizationKey", ignore = true)
-    public abstract AndroidNotification androidNotification(FirebaseMto.Base message);
+    public abstract AndroidNotification androidNotification(final FirebaseMto.Base message);
 
     @Named("apnsConfig")
     @Mapping(target = "aps", source = ".", qualifiedByName = "aps")
     @Mapping(target = "putAllHeaders", ignore = true)
     @Mapping(target = "putAllCustomData", ignore = true)
     @Mapping(target = "fcmOptions", ignore = true)
-    public abstract ApnsConfig apnsConfig(FirebaseMto.Base message);
+    public abstract ApnsConfig apnsConfig(final FirebaseMto.Base message);
 
     @Named("aps")
     @Mapping(target = "alert", source = ".", qualifiedByName = "apsAlert")
@@ -98,7 +98,7 @@ public abstract class FirebaseMessageMapper {
     @Mapping(target = "threadId", ignore = true)
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "putAllCustomData", ignore = true)
-    public abstract Aps aps(FirebaseMto.Base message);
+    public abstract Aps aps(final FirebaseMto.Base message);
 
     @Named("apsAlert")
     @Mapping(target = "title", source = "title")
@@ -109,6 +109,6 @@ public abstract class FirebaseMessageMapper {
     @Mapping(target = "subtitleLocalizationKey", ignore = true)
     @Mapping(target = "localizationKey", ignore = true)
     @Mapping(target = "actionLocalizationKey", ignore = true)
-    public abstract ApsAlert apsAlert(FirebaseMto.Base message);
+    public abstract ApsAlert apsAlert(final FirebaseMto.Base message);
 
 }

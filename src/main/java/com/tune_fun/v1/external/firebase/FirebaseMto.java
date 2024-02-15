@@ -9,7 +9,7 @@ public class FirebaseMto {
 
     @Getter
     @NoArgsConstructor
-    public abstract static class Base {
+    public static class Base {
         private String title;
         private String body;
 
