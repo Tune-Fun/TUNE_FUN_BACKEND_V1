@@ -12,6 +12,8 @@ spring:
         default_batch_fetch_size: 100
   thymeleaf:
     enabled: false
+  flyway:
+    enabled: false
 
 jwt:
   accessTokenValidity: 3m

@@ -6,7 +6,7 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     show-sql: false
     properties:
       hibernate:
@@ -26,6 +26,9 @@ spring:
       password: mongopass
 
   thymeleaf:
+    enabled: false
+
+  flyway:
     enabled: false
 
 jwt:
