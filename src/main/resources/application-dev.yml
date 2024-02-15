@@ -23,6 +23,12 @@ spring:
     redis:
       host:
       port:
+    mongodb:
+      host:
+      port:
+      database:
+      username:
+      password:
 
   thymeleaf:
     enabled: false

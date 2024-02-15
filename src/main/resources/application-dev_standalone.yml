@@ -18,6 +18,12 @@ spring:
     redis:
       host: localhost
       port: 6378
+    mongodb:
+      host: localhost
+      port: 27016
+      database: mongodatabase
+      username: mongouser
+      password: mongopass
 
   thymeleaf:
     enabled: false
