@@ -36,6 +36,10 @@ jwt:
   refreshTokenValidity: 30d
   secret: x/A?D(G+KbPeShVmYq3t6v9y$B&E)H@McQfTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z$C&F)H@McQfTjWnZr4u7x!A%D*G-KaNdRgUkX
 
+fcm:
+  sdk-file: tunefun-firebase-adminsdk.json
+  project-id: tunefun-9186f
+
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
