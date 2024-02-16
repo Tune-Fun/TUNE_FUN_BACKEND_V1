@@ -15,6 +15,10 @@ spring:
   flyway:
     enabled: false
 
+fcm:
+  sdk-file: tunefun-firebase-adminsdk.json
+  project-id: tunefun-9186f
+
 jwt:
   accessTokenValidity: 3m
   refreshTokenValidity: 30d

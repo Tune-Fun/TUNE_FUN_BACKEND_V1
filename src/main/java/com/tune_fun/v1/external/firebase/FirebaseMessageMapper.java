@@ -4,8 +4,10 @@ import com.google.firebase.messaging.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
+import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
 @Mapper(componentModel = SPRING)
 public abstract class FirebaseMessageMapper {
@@ -13,9 +15,9 @@ public abstract class FirebaseMessageMapper {
     @Mapping(target = "notification", source = ".", qualifiedByName = "notification")
     @Mapping(target = "androidConfig", source = ".", qualifiedByName = "androidConfig")
     @Mapping(target = "apnsConfig", source = ".", qualifiedByName = "apnsConfig")
+    @Mapping(target = "putAllData", source = "data", nullValuePropertyMappingStrategy = IGNORE)
     @Mapping(target = "token", ignore = true)
     @Mapping(target = "webpushConfig", ignore = true)
-    @Mapping(target = "putAllData", ignore = true)
     @Mapping(target = "fcmOptions", ignore = true)
     @Mapping(target = "condition", ignore = true)
     public abstract Message topicMessage(final FirebaseMto.ByTopic message);
@@ -23,9 +25,9 @@ public abstract class FirebaseMessageMapper {
     @Mapping(target = "notification", source = ".", qualifiedByName = "notification")
     @Mapping(target = "androidConfig", source = ".", qualifiedByName = "androidConfig")
     @Mapping(target = "apnsConfig", source = ".", qualifiedByName = "apnsConfig")
+    @Mapping(target = "putAllData", source = "data", nullValuePropertyMappingStrategy = IGNORE)
     @Mapping(target = "topic", ignore = true)
     @Mapping(target = "webpushConfig", ignore = true)
-    @Mapping(target = "putAllData", ignore = true)
     @Mapping(target = "fcmOptions", ignore = true)
     @Mapping(target = "condition", ignore = true)
     public abstract Message tokenMessage(final FirebaseMto.ByToken message);
