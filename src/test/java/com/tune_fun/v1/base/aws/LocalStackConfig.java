@@ -24,7 +24,7 @@ public class LocalStackConfig {
     @Bean(initMethod = "start", destroyMethod = "stop")
     public static LocalStackContainer localStackContainer() {
         return new LocalStackContainer(LOCAL_STACK_IMAGE)
-                .withServices(LocalStackContainer.Service.S3);
+                .withServices(LocalStackContainer.Service.S3, LocalStackContainer.Service.KMS);
     }
 
     @Bean

@@ -23,9 +23,9 @@ services:
     image: 'mongo:latest'
     container_name: 'tune_fun_mongodb'
     restart: always
+    environment:
+      - 'MONGO_INITDB_DATABASE=mydatabase'
+      - 'MONGO_INITDB_ROOT_PASSWORD=secret'
+      - 'MONGO_INITDB_ROOT_USERNAME=root'
     ports:
       - '27016:27017'
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mongouser
-      MONGO_INITDB_ROOT_PASSWORD: mongopass
-      MONGO_INITDB_DATABASE: mongodatabase

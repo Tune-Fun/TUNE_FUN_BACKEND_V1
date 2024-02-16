@@ -6,15 +6,19 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.containers.MariaDBContainer;
-import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.containers.*;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 
 import javax.sql.DataSource;
 
+import java.io.IOException;
+
+import static org.springframework.boot.jdbc.DataSourceBuilder.create;
 import static org.testcontainers.utility.DockerImageName.parse;
 
 @TestConfiguration(proxyBeanMethods = false)
@@ -25,17 +29,9 @@ public class TestContainersConfig {
     private static final String ASIA_SEOUL = "Asia/Seoul";
 
     private static final DockerImageName MARIADB_IMAGE = parse("mariadb:latest");
-
-    @Bean
-    @DependsOn("mariaDBContainer")
-    public static DataSource dataSource(MariaDBContainer<?> mariaDBContainer) {
-        return DataSourceBuilder.create()
-                .url(mariaDBContainer.getJdbcUrl())
-                .username(mariaDBContainer.getUsername())
-                .password(mariaDBContainer.getPassword())
-                .build();
-    }
-
+    /**
+     * @see <a href="https://www.testcontainers.org/modules/databases/mariadb/">MariaDBContainer</a>
+     */
     @Bean(initMethod = "start", destroyMethod = "stop")
     @ServiceConnection
     public static MariaDBContainer<?> mariaDBContainer() {
@@ -52,7 +48,30 @@ public class TestContainersConfig {
                 );
     }
 
-    private static final DockerImageName MONGODB_IMAGE = parse("mongo:6.0.9");
+    @Bean
+    @DependsOn("mariaDBContainer")
+    public static DataSource dataSource(MariaDBContainer<?> mariaDBContainer) {
+        return create()
+                .url(mariaDBContainer.getJdbcUrl())
+                .username(mariaDBContainer.getUsername())
+                .password(mariaDBContainer.getPassword())
+                .build();
+    }
+
+//    private static final ComposeContainer DOCKER_COMPOSE_CONTAINER;
+//
+//    static {
+//        try {
+//            DOCKER_COMPOSE_CONTAINER = new ComposeContainer(new ClassPathResource("compose-test.yaml").getFile())
+//                    .withLocalCompose(true)
+//                    .withExposedService("redis", 6378, Wait.forListeningPort())
+//                    .waitingFor("redis", Wait.forLogMessage("started", 1));
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+    private static final DockerImageName MONGODB_IMAGE = parse("mongo:latest");
 
     /**
      * @see <a href="https://www.testcontainers.org/modules/databases/mongodb/">MongoDBContainer</a>
@@ -72,30 +91,22 @@ public class TestContainersConfig {
 
     private static final DockerImageName KAFKA_IMAGE = parse("confluentinc/cp-kafka:latest");
 
+    /**
+     * @see <a href="https://www.testcontainers.org/modules/kafka/">KafkaContainer</a>
+     */
     @Bean(initMethod = "start", destroyMethod = "stop")
+    @ServiceConnection
     public static KafkaContainer kafkaContainer() {
-        return new KafkaContainer(KAFKA_IMAGE);
+        return new KafkaContainer(KAFKA_IMAGE)
+                .withExposedPorts(9092, 9093);
     }
-
-    @DynamicPropertySource
-    public static void properties(DynamicPropertyRegistry registry,
-                                  MongoDBContainer mongoDBContainer,
-                                  KafkaContainer kafkaContainer
-    ) {
-
-//        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-//        registry.add("spring.data.mongodb.username", () -> "test");
-//        registry.add("spring.data.mongodb.password", () -> "test");
-
-
-        kafkaContainer.start();
-        registry.add("spring.kafka.bootstrap-servers", kafkaContainer::getBootstrapServers);
-        registry.add("spring.kafka.consumer.auto-offset-reset", () -> "earliest");
-        registry.add("spring.kafka.consumer.group-id", () -> "test");
-        registry.add("spring.kafka.consumer.key-deserializer", () -> "org.apache.kafka.common.serialization.StringDeserializer");
-        registry.add("spring.kafka.consumer.value-deserializer", () -> "org.apache.kafka.common.serialization.StringDeserializer");
-        registry.add("spring.kafka.producer.key-serializer", () -> "org.apache.kafka.common.serialization.StringSerializer");
-        registry.add("spring.kafka.producer.value-serializer", () -> "org.apache.kafka.common.serialization.StringSerializer");
-    }
+//
+//    @DynamicPropertySource
+//    @DependsOn("dockerComposeContainer")
+//    public static void properties(DynamicPropertyRegistry registry) {
+//        registry.add("spring.data.redis.host", () -> DOCKER_COMPOSE_CONTAINER.getServiceHost("redis", 6378));
+//        registry.add("spring.data.redis.port", () -> DOCKER_COMPOSE_CONTAINER.getServicePort("redis", 6378));
+//        registry.add("spring.data.redis.database", () -> 0);
+//    }
 
 }

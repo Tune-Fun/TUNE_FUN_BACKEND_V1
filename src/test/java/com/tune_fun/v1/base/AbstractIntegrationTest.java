@@ -22,12 +22,12 @@ import org.testcontainers.utility.DockerImageName;
 
 import static org.testcontainers.utility.DockerImageName.parse;
 
-@Import({TestContainersConfig.class, LocalStackConfig.class})
 @SpringBootTest(
         classes = TuneFunV1Application.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = "spring.main.allow-bean-definition-overriding=true"
 )
+@Import({TestContainersConfig.class, LocalStackConfig.class})
 @ActiveProfiles("test_standalone")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public abstract class AbstractIntegrationTest {
