@@ -32,6 +32,22 @@ spring:
   flyway:
     enabled: false
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        debug: true
+        smtp:
+          timeout: 5000
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
+  config:
+    import: optional:aws-secretsmanager:tunefun_dev_secrets
+
 jwt:
   accessTokenValidity: 3m
   refreshTokenValidity: 30d
@@ -47,3 +63,7 @@ springdoc:
   swagger-ui:
     url: /docs/com.tune_fun-open-api-3.0.1.json
     path: /swagger
+
+aws:
+  secretsmanager:
+    region: ap-northeast-2

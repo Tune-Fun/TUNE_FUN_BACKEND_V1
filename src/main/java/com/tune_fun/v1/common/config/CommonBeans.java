@@ -1,9 +1,13 @@
 package com.tune_fun.v1.common.config;
 
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.zalando.logbook.HttpRequest;
@@ -12,12 +16,54 @@ import org.zalando.logbook.core.Conditions;
 import org.zalando.logbook.json.PrettyPrintingJsonBodyFilter;
 
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.function.Predicate;
 
 import static org.zalando.logbook.core.Conditions.exclude;
 
 @Configuration
 public class CommonBeans {
+
+    @Value("${gmail-username}")
+    private String gmailUsername;
+
+    @Value("${gmail-password}")
+    private String gmailPassword;
+
+    @Value("${spring.mail.host}")
+    private String mailSenderHost;
+
+    @Value("${spring.mail.port}")
+    private int mailSenderPort;
+
+    @Value("${spring.mail.properties.mail.debug}")
+    private boolean debug;
+
+    @Value("${spring.mail.properties.mail.smtp.auth}")
+    private boolean auth;
+
+    @Value("${spring.mail.properties.mail.smtp.timeout}")
+    private int timeout;
+
+    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
+    private boolean starttls;
+    @Bean
+    public JavaMailSender javaMailSender() {
+        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+        javaMailSender.setHost(mailSenderHost);
+        javaMailSender.setPort(mailSenderPort);
+        javaMailSender.setUsername(gmailUsername);
+        javaMailSender.setPassword(gmailPassword);
+
+        Properties properties = new Properties();
+        properties.put("mail.debug", debug);
+        properties.put("mail.smtp.auth", auth);
+        properties.put("mail.smtp.timeout", timeout);
+        properties.put("mail.smtp.starttls.enable", starttls);
+        javaMailSender.setJavaMailProperties(properties);
+
+        return javaMailSender;
+    }
 
     @Bean
     public MessageSource messageSource() {
