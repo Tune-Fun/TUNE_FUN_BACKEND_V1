@@ -4,10 +4,9 @@ spring:
       enabled: false
   datasource:
     # 인프라 구축 필요
-    url:
-    username:
-    password:
-    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc-secretsmanager:mariadb://~~~~~~~~~~~~
+    username: tunefun_staging_rds_secret
+    driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerMySQLDriver
   jpa:
     hibernate:
       ddl-auto: validate
@@ -21,23 +20,45 @@ spring:
   data:
     # 인프라 구축 필요
     redis:
-      host:
-      port:
+      host: ${redis-host}
+      port: ${redis-port}
     mongodb:
-      host:
-      port:
-      database:
-      username:
-      password:
-
+      host: ${mongodb-host}
+      port: ${mongodb-port}
+      database: ${mongodb-databasse}
+      username: ${mongodb-username}
+      password: ${mongodb-password}
 
   thymeleaf:
     enabled: false
 
+  flyway:
+    enabled: false
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        debug: true
+        smtp:
+          timeout: 5000
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
+  config:
+    import: optional:aws-secretsmanager:tunefun_staging_secrets
+
 jwt:
   accessTokenValidity: 3m
   refreshTokenValidity: 30d
-  secret: x/A?D(G+KbPeShVmYq3t6v9y$B&E)H@McQfTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z$C&F)H@McQfTjWnZr4u7x!A%D*G-KaNdRgUkX
+  secret: ${jwt-secret}
+
+fcm:
+  sdk-file: tunefun-firebase-adminsdk.json
+  project-id: tunefun-9186f
 
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
@@ -47,8 +68,5 @@ springdoc:
     path: /swagger
 
 aws:
-  # 인프라 구축 필요
-  access-key-id:
-  secret-access-key:
-  default-region:
-  s3-bucket-name:
+  secretsmanager:
+    region: ap-northeast-2
