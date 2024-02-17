@@ -43,8 +43,8 @@ public class JwtTokenPersistenceAdapter implements
     private SecretKey secretKey;
     private final JwtProperty jwtProperty;
 
-    private final RedisTemplate<String, AccessToken> redisTemplateAccess;
-    private final RedisTemplate<String, RefreshToken> redisTemplateRefresh;
+    private final RedisTemplate<String, AccessTokenRedisEntity> redisTemplateAccess;
+    private final RedisTemplate<String, RefreshTokenRedisEntity> redisTemplateRefresh;
     private final RedisTemplate<String, Object> redisTemplateObject;
 
     @Override
@@ -75,8 +75,8 @@ public class JwtTokenPersistenceAdapter implements
         Date expireDate = new Date(now.getTime() + jwtProperty.getAccessTokenValidity());
         String tokenValue = buildJwts(saveJwtToken, now, expireDate);
 
-        ValueOperations<String, AccessToken> operations = redisTemplateAccess.opsForValue();
-        AccessToken buildAccessToken = new AccessToken(saveJwtToken.username(), tokenValue);
+        ValueOperations<String, AccessTokenRedisEntity> operations = redisTemplateAccess.opsForValue();
+        AccessTokenRedisEntity buildAccessToken = new AccessTokenRedisEntity(saveJwtToken.username(), tokenValue);
 
         String accessTokenKey = getAccessTokenKey(saveJwtToken.username());
         operations.set(accessTokenKey, buildAccessToken);
@@ -91,8 +91,8 @@ public class JwtTokenPersistenceAdapter implements
         Date expireDate = new Date(now.getTime() + jwtProperty.getRefreshTokenValidity());
         String tokenValue = buildJwts(saveJwtToken, now, expireDate);
 
-        ValueOperations<String, RefreshToken> operations = redisTemplateRefresh.opsForValue();
-        RefreshToken buildRefreshToken = new RefreshToken(saveJwtToken.username(), tokenValue);
+        ValueOperations<String, RefreshTokenRedisEntity> operations = redisTemplateRefresh.opsForValue();
+        RefreshTokenRedisEntity buildRefreshToken = new RefreshTokenRedisEntity(saveJwtToken.username(), tokenValue);
 
         String refreshTokenKey = getRefreshTokenKey(saveJwtToken.username());
         operations.set(refreshTokenKey, buildRefreshToken);
@@ -143,7 +143,7 @@ public class JwtTokenPersistenceAdapter implements
         String username = loadUsernameByToken(refreshTokenValue);
         String refreshTokenKey = getRefreshTokenKey(username);
 
-        RefreshToken refreshToken = redisTemplateRefresh.opsForValue().get(refreshTokenKey);
+        RefreshTokenRedisEntity refreshToken = redisTemplateRefresh.opsForValue().get(refreshTokenKey);
 
         if (refreshToken == null && refreshToken.getToken().equals(refreshTokenValue))
             throw new CommonApplicationException(MessageCode.EXCEPTION_AUTHENTICATION_INVALID_TOKEN);

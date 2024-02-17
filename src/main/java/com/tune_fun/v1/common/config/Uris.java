@@ -4,13 +4,16 @@ public class Uris {
 
     public static final String API_V1_ROOT = "/v1";
 
+    public static final String REST_NAME_ID = "/{id}";
+    public static final String REST_NAME_UUID = "/{uuid}";
+
     public static final String REGISTER = API_V1_ROOT + "/register";
     public static final String LOGIN = API_V1_ROOT + "/login";
     public static final String LOGOUT = API_V1_ROOT + "/logout";
     public static final String REFRESH = API_V1_ROOT + "/refresh";
 
-    public static final String REST_NAME_ID = "/{id}";
-    public static final String REST_NAME_UUID = "/{uuid}";
+    public static final String FORGOT_PASSWORD_SEND_OTP = API_V1_ROOT + "/forgot-password/send-otp";
+
 
     public static final String SWAGGER_UI_ROOT = "/swagger-ui";
     public static final String SWAGGER_UI = "/swagger-ui.html";

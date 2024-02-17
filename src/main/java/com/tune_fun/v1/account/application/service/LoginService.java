@@ -12,6 +12,7 @@ import com.tune_fun.v1.account.domain.state.RegisteredAccount;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,13 +43,23 @@ public class LoginService implements LoginUseCase {
 
         String authorities = String.join(",", registeredAccount.roles());
 
-        SaveJwtToken saveJwtToken = new SaveJwtToken(registeredAccount.username(), authorities);
+        SaveJwtToken saveJwtToken = getSaveJwtToken(registeredAccount, authorities);
 
         String accessToken = createAccessTokenPort.createAccessToken(saveJwtToken);
         String refreshToken = createRefreshTokenPort.createRefreshToken(saveJwtToken);
 
         recordLastLoginAtPort.recordLastLoginAt(registeredAccount.username());
 
+        return getLoginResult(registeredAccount, accessToken, refreshToken);
+    }
+
+    @NotNull
+    private static SaveJwtToken getSaveJwtToken(RegisteredAccount registeredAccount, String authorities) {
+        return new SaveJwtToken(registeredAccount.username(), authorities);
+    }
+
+    @NotNull
+    private static LoginResult getLoginResult(RegisteredAccount registeredAccount, String accessToken, String refreshToken) {
         return new LoginResult(registeredAccount.username(), registeredAccount.roles(), accessToken, refreshToken);
     }
 }

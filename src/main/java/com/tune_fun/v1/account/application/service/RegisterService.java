@@ -14,6 +14,7 @@ import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.StringUtil;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,14 +37,10 @@ public class RegisterService implements RegisterUseCase {
     @Override
     @Transactional
     public RegisterResult register(final AccountCommands.Register command) {
-        loadAccountPort.accountInfo(command.username()).ifPresent(accountInfo -> {
-            throw new CommonApplicationException(USER_POLICY_ACCOUNT_REGISTERED);
-        });
+        checkRegisterdAccount(command);
 
         String encodedPassword = passwordEncoder.encode(command.password());
-        SaveAccount saveAccount = new SaveAccount(
-                StringUtil.uuid(), command.username(), encodedPassword,
-                command.email(), command.nickname());
+        SaveAccount saveAccount = getSaveAccount(command, encodedPassword);
         CurrentAccount savedAccount = saveAccountPort.saveAccount(saveAccount);
 
         String authorities = String.join(",", savedAccount.roles());
@@ -53,6 +50,25 @@ public class RegisterService implements RegisterUseCase {
         String accessToken = createAccessTokenPort.createAccessToken(saveJwtToken);
         String refreshToken = createRefreshTokenPort.createRefreshToken(saveJwtToken);
 
+        return getRegisterResult(savedAccount, accessToken, refreshToken);
+    }
+
+    @Transactional(readOnly = true)
+    public void checkRegisterdAccount(AccountCommands.Register command) {
+        loadAccountPort.accountInfo(command.username()).ifPresent(accountInfo -> {
+            throw new CommonApplicationException(USER_POLICY_ACCOUNT_REGISTERED);
+        });
+    }
+
+    @NotNull
+    private static SaveAccount getSaveAccount(AccountCommands.Register command, String encodedPassword) {
+        return new SaveAccount(
+                StringUtil.uuid(), command.username(), encodedPassword,
+                command.email(), command.nickname());
+    }
+
+    @NotNull
+    private static RegisterResult getRegisterResult(CurrentAccount savedAccount, String accessToken, String refreshToken) {
         return new RegisterResult(savedAccount.username(), savedAccount.roles(), accessToken, refreshToken);
     }
 }

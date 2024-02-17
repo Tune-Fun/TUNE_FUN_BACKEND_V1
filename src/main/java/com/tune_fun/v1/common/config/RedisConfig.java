@@ -1,10 +1,9 @@
 package com.tune_fun.v1.common.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
-import com.tune_fun.v1.account.adapter.output.persistence.jwt.AccessToken;
-import com.tune_fun.v1.account.adapter.output.persistence.jwt.RefreshToken;
+import com.tune_fun.v1.account.adapter.output.persistence.jwt.AccessTokenRedisEntity;
+import com.tune_fun.v1.account.adapter.output.persistence.jwt.RefreshTokenRedisEntity;
+import com.tune_fun.v1.otp.adapter.output.persistence.OtpRedisEntity;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
 import lombok.RequiredArgsConstructor;
@@ -77,20 +76,29 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, AccessToken> redisTemplateForAccessToken() throws JsonProcessingException {
-        RedisTemplate<String, AccessToken> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, AccessTokenRedisEntity> redisTemplateForAccessToken() throws JsonProcessingException {
+        RedisTemplate<String, AccessTokenRedisEntity> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(AccessToken.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(AccessTokenRedisEntity.class));
         return redisTemplate;
     }
 
     @Bean
-    public RedisTemplate<String, RefreshToken> redisTemplateForRefreshToken() throws JsonProcessingException {
-        RedisTemplate<String, RefreshToken> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, RefreshTokenRedisEntity> redisTemplateForRefreshToken() throws JsonProcessingException {
+        RedisTemplate<String, RefreshTokenRedisEntity> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(RefreshToken.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(RefreshTokenRedisEntity.class));
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, OtpRedisEntity> redisTemplateForOtp() throws JsonProcessingException {
+        RedisTemplate<String, OtpRedisEntity> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(OtpRedisEntity.class));
         return redisTemplate;
     }
 
