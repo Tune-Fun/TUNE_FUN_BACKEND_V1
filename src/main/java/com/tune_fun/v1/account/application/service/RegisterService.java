@@ -64,7 +64,9 @@ public class RegisterService implements RegisterUseCase {
     private static SaveAccount getSaveAccount(AccountCommands.Register command, String encodedPassword) {
         return new SaveAccount(
                 StringUtil.uuid(), command.username(), encodedPassword,
-                command.email(), command.nickname());
+                command.email(), command.nickname(), command.notification().voteDeliveryNotification(),
+                command.notification().voteEndNotification(), command.notification().voteDeliveryNotification()
+        );
     }
 
     @NotNull

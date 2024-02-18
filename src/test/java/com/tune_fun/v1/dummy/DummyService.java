@@ -57,7 +57,8 @@ public class DummyService extends AbstractIntegrationTest {
         defaultEmail = StringUtil.randomAlphabetic(7) + "@" + StringUtil.randomAlphabetic(5) + ".com";
         String nickname = StringUtil.randomAlphabetic(5);
 
-        AccountCommands.Register command = new AccountCommands.Register(defaultUsername, defaultPassword, defaultEmail, nickname);
+        AccountCommands.Notification notification = new AccountCommands.Notification(true, true, true);
+        AccountCommands.Register command = new AccountCommands.Register(defaultUsername, defaultPassword, defaultEmail, nickname, notification);
 
         registerUseCase.register(command);
 

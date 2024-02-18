@@ -1,6 +1,7 @@
 package com.tune_fun.v1.account.application.port.input.command;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class AccountCommands {
 
@@ -12,7 +13,18 @@ public class AccountCommands {
             @NotBlank
             String email,
             @NotBlank
-            String nickname
+            String nickname,
+
+            @NotNull
+            Notification notification
+    ) {
+
+    }
+
+    public record Notification(
+            Boolean voteProgressNotification,
+            Boolean voteEndNotification,
+            Boolean voteDeliveryNotification
     ) {
 
     }

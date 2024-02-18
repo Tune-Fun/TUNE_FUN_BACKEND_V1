@@ -49,7 +49,8 @@ class RegisterControllerTest extends ControllerBaseTest {
         String email = StringUtil.randomAlphabetic(7) + "@" + StringUtil.randomAlphabetic(5) + ".com";
         String nickname = StringUtil.randomAlphabetic(5);
 
-        AccountCommands.Register command = new AccountCommands.Register(username, password, email, nickname);
+        AccountCommands.Notification notification = new AccountCommands.Notification(true, true, true);
+        AccountCommands.Register command = new AccountCommands.Register(username, password, email, nickname, notification);
 
         ResultActions resultActions = mockMvc.perform(
                         post(Uris.REGISTER)
@@ -80,7 +81,11 @@ class RegisterControllerTest extends ControllerBaseTest {
                 fieldWithPath("username").description("아이디").attributes(constraint("NOT BLANK")),
                 fieldWithPath("password").description("비밀번호").attributes(constraint("NOT BLANK")),
                 fieldWithPath("email").description("이메일").attributes(constraint("NOT BLANK")),
-                fieldWithPath("nickname").description("닉네임").attributes(constraint("NOT BLANK"))
+                fieldWithPath("nickname").description("닉네임").attributes(constraint("NOT BLANK")),
+                fieldWithPath("notification").description("알림 설정").attributes(constraint("NOT NULL")),
+                fieldWithPath("notification.vote_progress_notification").description("투표 진행 알림 여부 설정").attributes(constraint("NOT NULL")),
+                fieldWithPath("notification.vote_end_notification").description("투표 종료 알림 여부 설정").attributes(constraint("NOT NULL")),
+                fieldWithPath("notification.vote_delivery_notification").description("종료된 투표 영상 업로드 알림 여부").attributes(constraint("NOT NULL"))
         };
 
         FieldDescriptor[] responseDescriptors = ArrayUtils.addAll(baseResponseFields,
