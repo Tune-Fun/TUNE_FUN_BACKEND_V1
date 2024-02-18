@@ -6,7 +6,7 @@ spring:
     # 인프라 구축 필요
     url: jdbc-secretsmanager:mariadb://~~~~~~~~~~~~
     username: tunefun_staging_rds_secret
-    driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerMySQLDriver
+    driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerMariaDBDriver
   jpa:
     hibernate:
       ddl-auto: validate
@@ -50,6 +50,10 @@ spring:
             enable: true
   config:
     import: optional:aws-secretsmanager:tunefun_staging_secrets
+  cloud:
+    aws:
+      secretsmanager:
+        region: ap-northeast-2
 
 jwt:
   accessTokenValidity: 3m
@@ -66,7 +70,3 @@ springdoc:
   swagger-ui:
     url: /docs/com.tune_fun-open-api-3.0.1.json
     path: /swagger
-
-aws:
-  secretsmanager:
-    region: ap-northeast-2
