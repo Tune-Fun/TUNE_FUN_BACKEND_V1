@@ -90,6 +90,7 @@ public class LocalStackConfig {
         GetSecretValueResponse secretValue = getSecretValue(secretsManagerClient);
         log.info("Got secret value for secret with name: {}, secret: {}", LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME, secretValue.secretString());
 
+
         return secretsManagerClient;
     }
 
