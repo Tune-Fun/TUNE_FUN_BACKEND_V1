@@ -1,6 +1,6 @@
 package com.tune_fun.v1.common.config;
 
-import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -21,20 +21,21 @@ import java.util.function.Predicate;
 
 import static org.zalando.logbook.core.Conditions.exclude;
 
+@Slf4j
 @Configuration
 public class CommonBeans {
-
-    @Value("${gmail-username}")
-    private String gmailUsername;
-
-    @Value("${gmail-password}")
-    private String gmailPassword;
 
     @Value("${spring.mail.host}")
     private String mailSenderHost;
 
     @Value("${spring.mail.port}")
     private int mailSenderPort;
+
+    @Value("${spring.mail.username}")
+    private String mailUsername;
+
+    @Value("${spring.mail.password}")
+    private String mailPassword;
 
     @Value("${spring.mail.properties.mail.debug}")
     private boolean debug;
@@ -47,13 +48,14 @@ public class CommonBeans {
 
     @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
     private boolean starttls;
+
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(mailSenderHost);
         javaMailSender.setPort(mailSenderPort);
-        javaMailSender.setUsername(gmailUsername);
-        javaMailSender.setPassword(gmailPassword);
+        javaMailSender.setUsername(mailUsername);
+        javaMailSender.setPassword(mailPassword);
 
         Properties properties = new Properties();
         properties.put("mail.debug", debug);

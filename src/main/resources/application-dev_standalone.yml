@@ -35,6 +35,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
+    username: ${gmail-username}
+    password: ${gmail-password}
     properties:
       mail:
         debug: true
@@ -47,6 +49,10 @@ spring:
             enable: true
   config:
     import: optional:aws-secretsmanager:tunefun_dev_secrets
+  cloud:
+    aws:
+      secretsmanager:
+        region: ap-northeast-2
 
 jwt:
   accessTokenValidity: 3d
@@ -63,7 +69,3 @@ springdoc:
   swagger-ui:
     url: /docs/com.tune_fun-open-api-3.0.1.json
     path: /swagger
-
-aws:
-  secretsmanager:
-    region: ap-northeast-2

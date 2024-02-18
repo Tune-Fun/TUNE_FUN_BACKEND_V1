@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * @see com.habin.demo.common.response.ResponseMapper#error(MessageCode)
+ * @see com.tune_fun.v1.common.response.ResponseMapper#error(MessageCode)
  */
 @Getter
 @AllArgsConstructor

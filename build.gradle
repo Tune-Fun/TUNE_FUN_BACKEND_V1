@@ -71,9 +71,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'com.google.firebase:firebase-admin:9.2.0'
     implementation 'software.amazon.awssdk:s3:2.21.29'
-    implementation 'org.springframework.cloud:spring-cloud-aws-core'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.1.0'
     implementation 'com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:2.0.2'
-    implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config'
     implementation 'com.slack.api:slack-app-backend:1.38.0' // Chat
     implementation 'com.atlassian.jira:jira-rest-java-client-core:5.2.7' // Issue Tracking
     compileOnly 'io.atlassian.fugue:fugue:5.0.0'
@@ -220,6 +219,5 @@ dependencyManagement {
     imports {
         mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-        mavenBom 'io.awspring.cloud:spring-cloud-aws-dependencies:2.4.4'
     }
 }
