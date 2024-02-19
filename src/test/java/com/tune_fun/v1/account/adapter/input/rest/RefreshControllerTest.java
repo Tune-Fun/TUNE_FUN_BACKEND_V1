@@ -43,7 +43,7 @@ class RefreshControllerTest extends ControllerBaseTest {
 
         AccountCommands.Refresh command = new AccountCommands.Refresh(refreshToken);
 
-        FieldDescriptor requestDescriptor = fieldWithPath("refreshToken").description("Refresh Token")
+        FieldDescriptor requestDescriptor = fieldWithPath("refresh_token").description("Refresh Token")
                 .attributes(constraint("NOT BLANK"));
         FieldDescriptor[] responseDescriptors = ArrayUtils.addAll(baseResponseFields,
                 fieldWithPath("data").description("Response Data"),
