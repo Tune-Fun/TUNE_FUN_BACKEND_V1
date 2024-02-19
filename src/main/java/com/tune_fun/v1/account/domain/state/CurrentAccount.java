@@ -13,5 +13,7 @@ public record CurrentAccount(
         LocalDateTime createdAt,
         @NotNull @Size(max = 255) String uuid,
         @Size(max = 255) String username,
+        String nickname,
+        String email,
         List<String> roles) {
 }

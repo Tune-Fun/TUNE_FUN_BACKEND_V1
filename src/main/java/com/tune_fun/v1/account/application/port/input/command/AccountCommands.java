@@ -20,7 +20,6 @@ public class AccountCommands {
             @NotNull
             Notification notification
     ) {
-
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -29,7 +28,6 @@ public class AccountCommands {
             Boolean voteEndNotification,
             Boolean voteDeliveryNotification
     ) {
-
     }
 
     public record Login(
@@ -38,7 +36,6 @@ public class AccountCommands {
             @NotBlank
             String password
     ) {
-
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -46,7 +43,12 @@ public class AccountCommands {
             @NotBlank
             String refreshToken
     ) {
+    }
 
+    public record SendForgotPasswordOtp(
+            @NotBlank
+            String username
+    ) {
     }
 
 }
