@@ -3,14 +3,8 @@ package com.tune_fun.v1.base.aws;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.icegreen.greenmail.configuration.GreenMailConfiguration;
-import com.icegreen.greenmail.junit5.GreenMailExtension;
-import com.icegreen.greenmail.user.GreenMailUser;
-import com.icegreen.greenmail.util.ServerSetupTest;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Rule;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
@@ -25,6 +19,8 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
 
+import static com.tune_fun.v1.base.mail.MailConfig.SMTP_PASSWORD;
+import static com.tune_fun.v1.base.mail.MailConfig.SMTP_USERNAME;
 import static java.lang.String.format;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SECRETSMANAGER;
@@ -40,13 +36,6 @@ public class LocalStackConfig {
     private static final String LOCAL_STACK_S3_BUCKET_NAME = "test";
     private static final String LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME = "test_secret";
 
-    public static final String SMTP_USERNAME = "habin";
-    public static final String SMTP_PASSWORD = "qpalzm0915()";
-
-    @RegisterExtension
-    protected static GreenMailExtension smtp = new GreenMailExtension(ServerSetupTest.SMTP)
-            .withConfiguration(GreenMailConfiguration.aConfig().withUser(SMTP_USERNAME, SMTP_PASSWORD))
-            .withPerMethodLifecycle(false);
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public static LocalStackContainer localStackContainer() {
@@ -69,7 +58,7 @@ public class LocalStackConfig {
 
     @Primary
     @Bean
-    @DependsOn("localStackContainer")
+    @DependsOn({"localStackContainer", "greenMail"})
     protected SecretsManagerClient secretsManagerClient(LocalStackContainer localStackContainer) {
         SecretsManagerClient secretsManagerClient = SecretsManagerClient.builder()
                 .endpointOverride(localStackContainer.getEndpointOverride(SECRETSMANAGER))
@@ -77,19 +66,16 @@ public class LocalStackConfig {
                 .region(of(localStackContainer.getRegion()))
                 .build();
 
-        GreenMailUser smtpUser = smtp.getUserManager().getUser(SMTP_USERNAME);
-
         log.info("Creating secret with name: {}", LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME);
         secretsManagerClient.createSecret(b -> b.name(LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME));
 
-        String mailSecret = getMailSecret(smtpUser);
+        String mailSecret = getMailSecret(SMTP_USERNAME, SMTP_PASSWORD);
         log.info("Putting secret value for secret with name: {}, secret: {}", LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME, mailSecret);
         secretsManagerClient.putSecretValue(b -> b.secretId(LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME)
                 .secretString(mailSecret));
 
         GetSecretValueResponse secretValue = getSecretValue(secretsManagerClient);
         log.info("Got secret value for secret with name: {}, secret: {}", LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME, secretValue.secretString());
-
 
         return secretsManagerClient;
     }
@@ -111,13 +97,13 @@ public class LocalStackConfig {
         return secretsManagerClient.getSecretValue(b -> b.secretId(LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME));
     }
 
-    private static String getMailSecret(GreenMailUser smtpUser) {
-        return format("{\"gmail-username\": \"%s\", \"gmail-password\": \"%s\"}", smtpUser.getLogin(), smtpUser.getPassword());
+    private static String getMailSecret(String username, String password) {
+        return format("{\"gmail-username\": \"%s\", \"gmail-password\": \"%s\"}", username, password);
     }
 
     private record SecretInfo(
             @JsonProperty("gmail-username")
-            String gmailUsername ,
+            String gmailUsername,
 
             @JsonProperty("gmail-password")
             String gmailPassword) {

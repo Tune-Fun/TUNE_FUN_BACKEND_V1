@@ -1,5 +1,7 @@
 package com.tune_fun.v1.account.application.port.input.command;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -21,6 +23,7 @@ public class AccountCommands {
 
     }
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public record Notification(
             Boolean voteProgressNotification,
             Boolean voteEndNotification,
@@ -38,6 +41,7 @@ public class AccountCommands {
 
     }
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public record Refresh(
             @NotBlank
             String refreshToken

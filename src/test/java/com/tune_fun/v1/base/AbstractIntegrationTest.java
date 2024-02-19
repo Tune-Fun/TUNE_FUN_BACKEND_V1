@@ -3,9 +3,12 @@ package com.tune_fun.v1.base;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.ServerSetup;
 import com.tune_fun.v1.TuneFunV1Application;
 import com.tune_fun.v1.base.aws.LocalStackConfig;
 import com.tune_fun.v1.base.docker.TestContainersConfig;
+import com.tune_fun.v1.base.mail.MailConfig;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +27,7 @@ import static org.testcontainers.utility.DockerImageName.parse;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = "spring.main.allow-bean-definition-overriding=true"
 )
-@Import({TestContainersConfig.class, LocalStackConfig.class})
+@Import({TestContainersConfig.class, LocalStackConfig.class, MailConfig.class})
 @ActiveProfiles("test_standalone")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public abstract class AbstractIntegrationTest {

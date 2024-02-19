@@ -50,9 +50,11 @@ public class CommonBeans {
     @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
     private boolean starttls;
 
-//    @Profile("!test & !test_standalone")
     @Bean
     public JavaMailSender javaMailSender() {
+        log.info("mailUsername: {}", mailUsername);
+        log.info("mailPassword: {}", mailPassword);
+
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(mailSenderHost);
         javaMailSender.setPort(mailSenderPort);
