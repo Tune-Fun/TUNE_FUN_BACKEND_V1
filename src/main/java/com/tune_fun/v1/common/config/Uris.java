@@ -33,6 +33,7 @@ public class Uris {
             REGISTER,
             LOGIN,
             REFRESH,
+            FORGOT_PASSWORD_SEND_OTP,
             SWAGGER_UI,
             SWAGGER_INDEX_HTML,
             SWAGGER_INDEX_CSS,

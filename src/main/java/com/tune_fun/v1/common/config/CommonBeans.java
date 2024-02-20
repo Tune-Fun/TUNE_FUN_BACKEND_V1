@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,6 +23,7 @@ import java.util.function.Predicate;
 
 import static org.zalando.logbook.core.Conditions.exclude;
 
+@Lazy
 @Slf4j
 @Configuration
 public class CommonBeans {

@@ -3,6 +3,8 @@ package com.tune_fun.v1.base.aws;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icegreen.greenmail.user.GreenMailUser;
+import com.icegreen.greenmail.util.GreenMail;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -59,7 +61,10 @@ public class LocalStackConfig {
     @Primary
     @Bean
     @DependsOn({"localStackContainer", "greenMail"})
-    protected SecretsManagerClient secretsManagerClient(LocalStackContainer localStackContainer) {
+    protected SecretsManagerClient secretsManagerClient(
+            LocalStackContainer localStackContainer,
+            GreenMail greenMail
+    ) {
         SecretsManagerClient secretsManagerClient = SecretsManagerClient.builder()
                 .endpointOverride(localStackContainer.getEndpointOverride(SECRETSMANAGER))
                 .credentialsProvider(getCredentialsProvider(localStackContainer))
@@ -69,7 +74,10 @@ public class LocalStackConfig {
         log.info("Creating secret with name: {}", LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME);
         secretsManagerClient.createSecret(b -> b.name(LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME));
 
-        String mailSecret = getMailSecret(SMTP_USERNAME, SMTP_PASSWORD);
+        GreenMailUser greenMailUser = greenMail.getUserManager().getUser(SMTP_USERNAME);
+        log.info("GreenMail user: {}", greenMailUser);
+        String mailSecret = getMailSecret(greenMailUser.getLogin(), greenMailUser.getPassword());
+
         log.info("Putting secret value for secret with name: {}, secret: {}", LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME, mailSecret);
         secretsManagerClient.putSecretValue(b -> b.secretId(LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME)
                 .secretString(mailSecret));
