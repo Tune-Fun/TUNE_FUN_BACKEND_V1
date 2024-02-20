@@ -72,6 +72,7 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
         assertEquals(defaultAccount.getEmail(), receivedMessage.getAllRecipients()[0].toString());
         assertEquals("TuneFun - " + defaultAccount.getNickname() + "님의 인증번호입니다.", receivedMessage.getSubject());
 
+
         LoadOtp loadOtpBehavior = new LoadOtp(username, FORGOT_PASSWORD);
         CurrentDecryptedOtp decryptedOtp = loadOtpPort.loadOtp(loadOtpBehavior);
 
