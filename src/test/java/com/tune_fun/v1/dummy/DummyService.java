@@ -46,12 +46,12 @@ public class DummyService extends AbstractIntegrationTest {
 
     @Transactional
     public void initAndLogin() throws NoSuchAlgorithmException {
-        initUser();
+        initAccount();
         login(defaultAccount);
     }
 
     @Transactional
-    public void initUser() throws NoSuchAlgorithmException {
+    public void initAccount() throws NoSuchAlgorithmException {
         defaultUsername = StringUtil.randomAlphanumeric(10, 15);
         defaultPassword = StringUtil.randomAlphaNumericSymbol(15, 20);
         defaultEmail = StringUtil.randomAlphabetic(7) + "@" + StringUtil.randomAlphabetic(5) + ".com";

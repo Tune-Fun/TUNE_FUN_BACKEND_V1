@@ -39,7 +39,7 @@ class LoginControllerTest extends ControllerBaseTest {
     @Order(1)
     @DisplayName("로그인, 성공")
     void loginSuccess() throws Exception {
-        dummyService.initUser();
+        dummyService.initAccount();
 
         AccountCommands.Login command =
                 new AccountCommands.Login(dummyService.getDefaultUsername(), dummyService.getDefaultPassword());
