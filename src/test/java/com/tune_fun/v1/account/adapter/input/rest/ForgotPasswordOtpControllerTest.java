@@ -7,7 +7,6 @@ import com.tune_fun.v1.base.ControllerBaseTest;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.dummy.DummyService;
-import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
 import com.tune_fun.v1.otp.application.port.output.LoadOtpPort;
 import com.tune_fun.v1.otp.application.port.output.VerifyOtpPort;
 import com.tune_fun.v1.otp.domain.behavior.LoadOtp;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
-import static com.icegreen.greenmail.util.GreenMailUtil.getBody;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -53,7 +51,7 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
     @Order(1)
     @DisplayName("비밀번호 찾기 OTP 발송, 성공")
     void sendForgotPasswordOtpSuccess() throws Exception {
-        dummyService.initUser();
+        dummyService.initAccount();
         AccountJpaEntity defaultAccount = dummyService.getDefaultAccount();
 
         String username = dummyService.getDefaultUsername();
