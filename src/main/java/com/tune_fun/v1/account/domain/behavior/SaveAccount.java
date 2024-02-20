@@ -5,7 +5,10 @@ public record SaveAccount(
         String username,
         String password,
         String email,
-        String nickname
+        String nickname,
+        Boolean voteProgressNotification,
+        Boolean voteEndNotification,
+        Boolean voteDeliveryNotification
 
 ) {
 }

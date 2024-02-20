@@ -22,7 +22,8 @@ public class StringUtil {
     }
 
     public String randomNumeric(final int count) throws NoSuchAlgorithmException {
-        return generateRandomString(count, false, true);
+        String characters = "123456789";
+        return generateRandomString(count, characters.toCharArray());
     }
 
     public String randomNumeric(final int minLength, final int maxLength) throws NoSuchAlgorithmException {

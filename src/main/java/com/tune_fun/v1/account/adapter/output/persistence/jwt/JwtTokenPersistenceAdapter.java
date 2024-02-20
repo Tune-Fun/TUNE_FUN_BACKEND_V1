@@ -176,7 +176,7 @@ public class JwtTokenPersistenceAdapter implements
         } catch (IllegalArgumentException ignored) {
         } catch (ExpiredJwtException e) {
             username = e.getClaims().getSubject(); // 만료된 access token으로부터 username를 가져옴
-            log.info("username from expired access token : " + username);
+            log.info("username from expired access otp : " + username);
         }
 
         return username;

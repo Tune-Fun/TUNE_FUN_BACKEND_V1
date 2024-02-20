@@ -15,6 +15,26 @@ spring:
   flyway:
     enabled: false
 
+  mail:
+    host: 127.0.0.1
+    port: 3025
+    username: habin
+    password: qpalzm0915()
+    properties:
+      mail:
+        debug: true
+        smtp:
+          timeout: 5000
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
+      transport:
+        protocol: smtp
+      default-encoding: UTF-8
+    protocol: smtp
+
 fcm:
   sdk-file: tunefun-firebase-adminsdk.json
   project-id: tunefun-9186f
@@ -23,3 +43,6 @@ jwt:
   accessTokenValidity: 3m
   refreshTokenValidity: 30d
   secret: x/A?D(G+KbPeShVmYq3t6v9y$B&E)H@McQfTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z$C&F)H@McQfTjWnZr4u7x!A%D*G-KaNdRgUkX
+
+otp:
+  validity: 3m

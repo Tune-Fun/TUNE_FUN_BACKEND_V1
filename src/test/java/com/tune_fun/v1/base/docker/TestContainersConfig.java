@@ -58,19 +58,6 @@ public class TestContainersConfig {
                 .build();
     }
 
-//    private static final ComposeContainer DOCKER_COMPOSE_CONTAINER;
-//
-//    static {
-//        try {
-//            DOCKER_COMPOSE_CONTAINER = new ComposeContainer(new ClassPathResource("compose-test.yaml").getFile())
-//                    .withLocalCompose(true)
-//                    .withExposedService("redis", 6378, Wait.forListeningPort())
-//                    .waitingFor("redis", Wait.forLogMessage("started", 1));
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
     private static final DockerImageName MONGODB_IMAGE = parse("mongo:latest");
 
     /**
@@ -100,6 +87,7 @@ public class TestContainersConfig {
         return new KafkaContainer(KAFKA_IMAGE)
                 .withExposedPorts(9092, 9093);
     }
+
 //
 //    @DynamicPropertySource
 //    @DependsOn("dockerComposeContainer")
