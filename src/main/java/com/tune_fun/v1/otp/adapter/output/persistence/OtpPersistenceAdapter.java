@@ -4,6 +4,7 @@ import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.EncryptUtil;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.otp.application.port.output.DeleteOtpPort;
 import com.tune_fun.v1.otp.application.port.output.LoadOtpPort;
 import com.tune_fun.v1.otp.application.port.output.SaveOtpPort;
 import com.tune_fun.v1.otp.application.port.output.VerifyOtpPort;
@@ -27,7 +28,7 @@ import static java.lang.String.format;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOtpPort {
+public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOtpPort, DeleteOtpPort {
 
     private final RedisTemplate<String, OtpRedisEntity> redisTemplate;
     private final EncryptUtil encryptUtil;
@@ -69,13 +70,22 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
 
         if (otpRedisEntity == null) throw new CommonApplicationException(EXCEPTION_OTP_NOT_FOUND);
 
-        if(checkRedisExpiration(ops, otpKey))
+        if (checkRedisExpiration(ops, otpKey))
             throw new CommonApplicationException(EXCEPTION_OTP_EXPIRED);
 
         if (!checkMatchValue(verifyOtp.otp(), otpRedisEntity))
             throw new CommonApplicationException(EXCEPTION_OTP_NOT_MATCH);
 
-        redisTemplate.delete(otpKey);
+        expire(otpKey);
+    }
+
+    @Override
+    public void expire(final OtpType otpType, final String username) {
+        expire(setOtpKey(otpType, username));
+    }
+
+    private void expire(final String otpKey) {
+        redisTemplate.expire(otpKey, Duration.ZERO);
     }
 
     private Boolean checkRedisExpiration(final ValueOperations<String, OtpRedisEntity> ops, final String key) {

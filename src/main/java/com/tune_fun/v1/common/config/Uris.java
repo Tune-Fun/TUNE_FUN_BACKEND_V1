@@ -14,6 +14,8 @@ public class Uris {
 
     public static final String FORGOT_PASSWORD_SEND_OTP = API_V1_ROOT + "/forgot-password/send-otp";
 
+    public static final String VERIFY_OTP = API_V1_ROOT + "/otp/verify";
+    public static final String VERIFY_OTP_WITH_TOKEN = API_V1_ROOT + "/otp/verify-with-token";
 
     public static final String SWAGGER_UI_ROOT = "/swagger-ui";
     public static final String SWAGGER_UI = "/swagger-ui.html";
@@ -34,6 +36,7 @@ public class Uris {
             LOGIN,
             REFRESH,
             FORGOT_PASSWORD_SEND_OTP,
+            VERIFY_OTP,
             SWAGGER_UI,
             SWAGGER_INDEX_HTML,
             SWAGGER_INDEX_CSS,

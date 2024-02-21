@@ -29,6 +29,10 @@ public class ResponseMapper {
         );
     }
 
+    public <T extends BasePayload> ResponseEntity<Response<T>> ok(final MessageCode messageCode) {
+        return ok(messageCode, null);
+    }
+
     public <T extends BasePayload> ResponseEntity<Response<T>> ok(final T source) {
         return ok(MessageCode.SUCCESS, source);
     }
