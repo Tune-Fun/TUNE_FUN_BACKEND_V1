@@ -16,6 +16,7 @@ import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.Issue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.web.servlet.ResultActions;
@@ -48,6 +49,7 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
 
     @Transactional
     @Test
+    @Issue("T1-162")
     @Order(1)
     @DisplayName("비밀번호 찾기 OTP 발송, 성공")
     void sendForgotPasswordOtpSuccess() throws Exception {
