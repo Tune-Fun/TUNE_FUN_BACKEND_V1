@@ -7,7 +7,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum OtpType {
 
-    FORGOT_PASSWORD("forgot-password");
+    FORGOT_PASSWORD("forgot-password"),
+    VERIFY_EMAIL("verify-email"),
+    CHANGE_EMAIL ("change-email"),
+    CHANGE_PASSWORD ("change-password"),
+    WITHDRAWAL ("withdrawal");
 
     private final String label;
 

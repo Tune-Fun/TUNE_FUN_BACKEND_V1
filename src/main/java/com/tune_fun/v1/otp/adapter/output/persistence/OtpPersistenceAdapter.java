@@ -4,6 +4,7 @@ import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.EncryptUtil;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.otp.application.port.output.DeleteOtpPort;
 import com.tune_fun.v1.otp.application.port.output.LoadOtpPort;
 import com.tune_fun.v1.otp.application.port.output.SaveOtpPort;
 import com.tune_fun.v1.otp.application.port.output.VerifyOtpPort;
@@ -27,7 +28,7 @@ import static java.lang.String.format;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOtpPort {
+public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOtpPort, DeleteOtpPort {
 
     private final RedisTemplate<String, OtpRedisEntity> redisTemplate;
     private final EncryptUtil encryptUtil;
@@ -54,7 +55,7 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
     }
 
     @Override
-    public CurrentDecryptedOtp loadOtp(LoadOtp loadOtp) throws Exception {
+    public CurrentDecryptedOtp loadOtp(final LoadOtp loadOtp) throws Exception {
         ValueOperations<String, OtpRedisEntity> ops = redisTemplate.opsForValue();
         OtpRedisEntity otpRedisEntity = ops.get(setOtpKey(loadOtp.otpType(), loadOtp.username()));
         String decrypted = encryptUtil.decrypt(otpRedisEntity.getToken());
@@ -62,20 +63,29 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
     }
 
     @Override
-    public void verifyOtp(VerifyOtp verifyOtp) throws Exception {
+    public void verifyOtp(final VerifyOtp verifyOtp) throws Exception {
         String otpKey = setOtpKey(verifyOtp.otpType(), verifyOtp.username());
         ValueOperations<String, OtpRedisEntity> ops = redisTemplate.opsForValue();
         OtpRedisEntity otpRedisEntity = ops.get(otpKey);
 
         if (otpRedisEntity == null) throw new CommonApplicationException(EXCEPTION_OTP_NOT_FOUND);
 
-        if(checkRedisExpiration(ops, otpKey))
+        if (checkRedisExpiration(ops, otpKey))
             throw new CommonApplicationException(EXCEPTION_OTP_EXPIRED);
 
         if (!checkMatchValue(verifyOtp.otp(), otpRedisEntity))
             throw new CommonApplicationException(EXCEPTION_OTP_NOT_MATCH);
 
-        redisTemplate.delete(otpKey);
+        expire(otpKey);
+    }
+
+    @Override
+    public void expire(final OtpType otpType, final String username) {
+        expire(setOtpKey(otpType, username));
+    }
+
+    private void expire(final String otpKey) {
+        redisTemplate.expire(otpKey, Duration.ZERO);
     }
 
     private Boolean checkRedisExpiration(final ValueOperations<String, OtpRedisEntity> ops, final String key) {

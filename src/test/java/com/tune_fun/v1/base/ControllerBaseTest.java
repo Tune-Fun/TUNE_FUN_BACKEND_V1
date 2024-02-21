@@ -94,7 +94,7 @@ public abstract class ControllerBaseTest extends AbstractIntegrationTest {
             fieldWithPath("result.empty").description("현재 페이지 요소 미존재 여부")
     };
 
-    protected ResultMatcher[] baseAssertion(MessageCode messageCode) {
+    protected ResultMatcher[] baseAssertion(final MessageCode messageCode) {
         return new ResultMatcher[]{
                 status().is(messageCode.getHttpStatus().value()),
                 jsonPath("$.message", notNullValue()),
