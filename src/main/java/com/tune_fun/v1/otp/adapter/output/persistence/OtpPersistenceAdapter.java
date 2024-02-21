@@ -54,7 +54,7 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
     }
 
     @Override
-    public CurrentDecryptedOtp loadOtp(LoadOtp loadOtp) throws Exception {
+    public CurrentDecryptedOtp loadOtp(final LoadOtp loadOtp) throws Exception {
         ValueOperations<String, OtpRedisEntity> ops = redisTemplate.opsForValue();
         OtpRedisEntity otpRedisEntity = ops.get(setOtpKey(loadOtp.otpType(), loadOtp.username()));
         String decrypted = encryptUtil.decrypt(otpRedisEntity.getToken());
@@ -62,7 +62,7 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
     }
 
     @Override
-    public void verifyOtp(VerifyOtp verifyOtp) throws Exception {
+    public void verifyOtp(final VerifyOtp verifyOtp) throws Exception {
         String otpKey = setOtpKey(verifyOtp.otpType(), verifyOtp.username());
         ValueOperations<String, OtpRedisEntity> ops = redisTemplate.opsForValue();
         OtpRedisEntity otpRedisEntity = ops.get(otpKey);

@@ -11,7 +11,7 @@ import org.springframework.data.redis.core.RedisHash;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@RedisHash("AccessToken")
+@RedisHash("Otp")
 public class OtpRedisEntity {
 
     @Id
