@@ -12,6 +12,8 @@ import com.tune_fun.v1.base.AbstractIntegrationTest;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpPersistenceAdapter;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
+import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
+import com.tune_fun.v1.otp.application.port.input.usecase.VerifyOtpUseCase;
 import com.tune_fun.v1.otp.domain.behavior.LoadOtp;
 import com.tune_fun.v1.otp.domain.state.CurrentDecryptedOtp;
 import lombok.Getter;
@@ -42,6 +44,9 @@ public class DummyService extends AbstractIntegrationTest {
 
     @Autowired
     private SendForgotPasswordOtpUseCase sendForgotPasswordOtpUseCase;
+
+    @Autowired
+    private VerifyOtpUseCase verifyOtpUseCase;
 
     @Autowired
     private AccountPersistenceAdapter accountPersistenceAdapter;
@@ -98,6 +103,11 @@ public class DummyService extends AbstractIntegrationTest {
         AccountCommands.SendForgotPasswordOtp command = new AccountCommands.SendForgotPasswordOtp(defaultUsername);
         assertDoesNotThrow(() -> sendForgotPasswordOtpUseCase.sendOtp(command));
         forgotPasswordOtp = otpPersistenceAdapter.loadOtp(new LoadOtp(defaultUsername, FORGOT_PASSWORD));
+    }
+
+    @Transactional
+    public void verifyOtp(OtpType otpType, String token ) throws Exception {
+        verifyOtpUseCase.verify(new OtpQueries.Verify(defaultUsername, otpType, token));
     }
 
     public void expireOtp(OtpType otpType) {
