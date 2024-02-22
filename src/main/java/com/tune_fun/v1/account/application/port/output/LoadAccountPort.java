@@ -8,10 +8,12 @@ import java.util.Optional;
 
 public interface LoadAccountPort {
 
-    Optional<User> loadCustomUserByUsername(String username);
+    Optional<User> loadCustomUserByUsername(final String username);
 
-    Optional<CurrentAccount> currentAccountInfo(String username);
+    Optional<CurrentAccount> currentAccountInfo(final String username);
 
-    Optional<RegisteredAccount> registeredAccountInfo(String username);
+    Optional<RegisteredAccount> registeredAccountInfoByUsername(final String username);
+
+    Optional<RegisteredAccount> registeredAccountInfoByEmail(final String email);
 
 }

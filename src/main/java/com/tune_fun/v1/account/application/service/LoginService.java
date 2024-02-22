@@ -35,7 +35,7 @@ public class LoginService implements LoginUseCase {
     @Override
     @Transactional
     public LoginResult login(final AccountCommands.Login command) {
-        RegisteredAccount registeredAccount = loadAccountPort.registeredAccountInfo(command.username())
+        RegisteredAccount registeredAccount = loadAccountPort.registeredAccountInfoByUsername(command.username())
                 .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
 
         if (!passwordEncoder.matches(command.password(), registeredAccount.password()))
