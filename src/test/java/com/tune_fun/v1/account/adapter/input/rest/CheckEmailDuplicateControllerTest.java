@@ -1,5 +1,6 @@
 package com.tune_fun.v1.account.adapter.input.rest;
 
+import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.base.ControllerBaseTest;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.response.MessageCode;
@@ -19,23 +20,24 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 
-class CheckUsernameDuplicateControllerTest extends ControllerBaseTest {
+class CheckEmailDuplicateControllerTest extends ControllerBaseTest {
 
     @Autowired
     private DummyService dummyService;
-    private static final ParameterDescriptor REQUEST_DESCRIPTOR = parameterWithName("username").description("아이디")
+
+    private static final ParameterDescriptor REQUEST_DESCRIPTOR = parameterWithName("email").description("이메일")
             .attributes(constraint("NOT BLANK"));
 
     @Transactional
     @Test
     @Order(1)
-    @DisplayName("아이디 중복확인, 성공 Case 1. 중복되지 않은 아이디")
-    void checkUsernameDuplicateSuccessCase1() throws Exception {
+    @DisplayName("이메일 중복확인, 성공 Case 1. 중복되지 않은 이메일")
+    void checkEmailDuplicateSuccessCase1() throws Exception {
         dummyService.initAccount();
 
         mockMvc.perform(
-                        get(Uris.CHECK_USERNAME_DUPLICATE)
-                                .param("username", "test")
+                        get(Uris.CHECK_EMAIL_DUPLICATE)
+                                .param("email", "test")
                 )
                 .andExpectAll(baseAssertion(MessageCode.SUCCESS))
                 .andDo(
@@ -44,7 +46,7 @@ class CheckUsernameDuplicateControllerTest extends ControllerBaseTest {
                                 responseFields(baseResponseFields),
                                 resource(
                                         builder().
-                                                description("아이디 중복확인, 성공 Case 1. 중복되지 않은 아이디").
+                                                description("이메일 중복확인, 성공 Case 1. 중복되지 않은 이메일").
                                                 queryParameters(REQUEST_DESCRIPTOR).
                                                 responseFields(baseResponseFields)
                                                 .build()
@@ -56,22 +58,23 @@ class CheckUsernameDuplicateControllerTest extends ControllerBaseTest {
     @Transactional
     @Test
     @Order(2)
-    @DisplayName("아이디 중복확인, 성공 Case 2. 중복된 아이디")
-    void checkUsernameDuplicateSuccessCase2() throws Exception {
+    @DisplayName("이메일 중복확인, 성공 Case 2. 중복된 이메일")
+    void checkEmailDuplicateSuccessCase2() throws Exception {
         dummyService.initAccount();
+        AccountJpaEntity account = dummyService.getDefaultAccount();
 
         mockMvc.perform(
-                        get(Uris.CHECK_USERNAME_DUPLICATE)
-                                .param("username", dummyService.getDefaultUsername())
+                        get(Uris.CHECK_EMAIL_DUPLICATE)
+                                .param("email", account.getEmail())
                 )
-                .andExpectAll(baseAssertion(MessageCode.USER_POLICY_USERNAME_REGISTERED))
+                .andExpectAll(baseAssertion(MessageCode.USER_POLICY_EMAIL_REGISTERED))
                 .andDo(
                         restDocs.document(
                                 queryParameters(REQUEST_DESCRIPTOR),
                                 responseFields(baseResponseFields),
                                 resource(
                                         builder().
-                                                description("아이디 중복확인, 성공 Case 2. 중복된 아이디").
+                                                description("이메일 중복확인, 성공 Case 2. 중복된 이메일").
                                                 queryParameters(REQUEST_DESCRIPTOR).
                                                 responseFields(baseResponseFields)
                                                 .build()

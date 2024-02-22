@@ -36,15 +36,13 @@ public class AccountPersistenceAdapter implements
     @Override
     @Transactional(readOnly = true)
     public Optional<CurrentAccount> currentAccountInfo(final String username) {
-        return loadAccountByUsername(username)
-                .map(accountMapper::accountInfo);
+        return loadAccountByUsername(username).map(accountMapper::accountInfo);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<RegisteredAccount> registeredAccountInfoByUsername(final String username) {
-        return loadAccountByUsername(username)
-                .map(accountMapper::registeredAccountInfo);
+        return loadAccountByUsername(username).map(accountMapper::registeredAccountInfo);
     }
 
     @Override
