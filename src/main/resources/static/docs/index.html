@@ -472,14 +472,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /v1/register HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 126
+Content-Length: 269
 Host: localhost:8080
 
 {
-  "username" : "yRuDJbXjaFU",
-  "password" : "bHkgqwCW88nIW0Igt6",
-  "email" : "rhMonng@huUfR.com",
-  "nickname" : "eWUYO"
+  "username" : "07pt4AkiOq",
+  "password" : "J3r1OYHmjofBK9mxn3G",
+  "email" : "BhLvnBL@dcBqA.com",
+  "nickname" : "ACXOs",
+  "notification" : {
+    "vote_progress_notification" : true,
+    "vote_end_notification" : true,
+    "vote_delivery_notification" : true
+  }
 }</code></pre>
 </div>
 </div>
@@ -500,16 +505,16 @@ Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
 Content-Security-Policy: script-src 'self'
-Content-Length: 849
+Content-Length: 846
 
 {
   "message" : "요청이 성공적으로 처리되었습니다.",
   "code" : "0000",
   "data" : {
-    "username" : "yRuDJbXjaFU",
+    "username" : "07pt4AkiOq",
     "roles" : [ "CLIENT_0" ],
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI2YTE1MTI4My04Yzc2LTRlYjMtYTZmNS1mNGZmNWMwYzIyZTkiLCJzdWIiOiJ5UnVESmJYamFGVSIsImlhdCI6MTcwNzMwNDYyNCwibmJmIjoxNzA3MzA0NjI0LCJleHAiOjE3MDczMDQ4MDR9.xfKKEiV45TUUkYsDCA8IRE778tDLhp12-UleMO0fest3OrAlsuelwZqJwPZ2xES96_q7JTxRW-nn0r39v3P2xQ",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIwNDMyZjJlYS01OGY1LTRlYzMtOGE1OS0xOWY3NzQ5OTE1MzYiLCJzdWIiOiJ5UnVESmJYamFGVSIsImlhdCI6MTcwNzMwNDYyNCwibmJmIjoxNzA3MzA0NjI0LCJleHAiOjE3MDk4OTY2MjR9.Gefvr__4wSqOSWCoinLCBwtiBO7tHnU2jgX1ClTQq7sgetGsBKc21fwV476S1J1bqlpGuhbQv7C6csKxCfTuBg"
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI5YjI3MzFkZS01NDY2LTRkMjMtODUwMC0yOTNiMGFkYTAwMTkiLCJzdWIiOiIwN3B0NEFraU9xIiwiaWF0IjoxNzA4NTI2MTEwLCJuYmYiOjE3MDg1MjYxMTAsImV4cCI6MTcwODUyNjI5MH0.1SQgpL_M2ObyGxGOFZPT4IWlrYTmpjAvdPwLieG7Qv5Udgt8x9gVRqH1ugUV3EZZnzIgfB0Nz-MiUOXoUOQltQ",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI5YTJmNzE1ZC1lZjBhLTRjZWItYTg1Mi0wZDgxZDM5ZGVhMTMiLCJzdWIiOiIwN3B0NEFraU9xIiwiaWF0IjoxNzA4NTI2MTEwLCJuYmYiOjE3MDg1MjYxMTAsImV4cCI6MTcxMTExODExMH0.0uKapeTBO5yo74hgapAkMfTvLhTODQbf1dsYGXdONAKTdI8oEq_HL9XhBrwpnrO4V9fRq4jbvukhYU5EsBIhpg"
   }
 }</code></pre>
 </div>
@@ -562,6 +567,34 @@ Content-Length: 849
 <td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>false</em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">NOT BLANK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>notification</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 설정</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>false</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NOT NULL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>notification.vote_progress_notification</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">투표 진행 알림 여부 설정</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>false</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NOT NULL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>notification.vote_end_notification</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">투표 종료 알림 여부 설정</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>false</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NOT NULL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>notification.vote_delivery_notification</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">종료된 투표 영상 업로드 알림 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>false</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NOT NULL</p></td>
 </tr>
 </tbody>
 </table>
@@ -632,12 +665,12 @@ Content-Length: 849
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /v1/login HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 71
+Content-Length: 66
 Host: localhost:8080
 
 {
-  "username" : "cqwkhXeEB5Nm4b",
-  "password" : "HX803Rip9G0xEv2n6"
+  "username" : "fhcwP6Wm11w",
+  "password" : "hQtv3VYRwyBcd01"
 }</code></pre>
 </div>
 </div>
@@ -658,16 +691,16 @@ Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
 Content-Security-Policy: script-src 'self'
-Content-Length: 860
+Content-Length: 849
 
 {
   "message" : "요청이 성공적으로 처리되었습니다.",
   "code" : "0000",
   "data" : {
-    "username" : "cqwkhXeEB5Nm4b",
+    "username" : "fhcwP6Wm11w",
     "roles" : [ "CLIENT_0" ],
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI1MjQyZjM2My1mODBkLTQxMDItYTQzYS1hNWJhODNhYzgxNzYiLCJzdWIiOiJjcXdraFhlRUI1Tm00YiIsImlhdCI6MTcwNzMwNDYyMywibmJmIjoxNzA3MzA0NjIzLCJleHAiOjE3MDczMDQ4MDN9.158Uk4GMeLCgk5c7wIulyA_-Hl8ArzBvrqlL2vjOEz9uMwbcdf9NC-ASSDjX_EXazV5qTnF28WdMzIbEfzIiuQ",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJiMWE3Y2I3Yy1lZTc5LTRkZjMtYTI4MC1hMmYyYjVmZjVlMmIiLCJzdWIiOiJjcXdraFhlRUI1Tm00YiIsImlhdCI6MTcwNzMwNDYyMywibmJmIjoxNzA3MzA0NjIzLCJleHAiOjE3MDk4OTY2MjN9.31vP2SEQYKAwyCz-tOiw43cZP5RHhlmipuHV_zI6f0Qxvmn7S1VMCsctzzAG5T45ThVJcR_uBgZavnqkAPplgQ"
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIwNjg5ZjNmMi00MDlmLTRjNWUtYTZmZS0xMzc2MzVjMDgzZWUiLCJzdWIiOiJmaGN3UDZXbTExdyIsImlhdCI6MTcwODUyNjEwOSwibmJmIjoxNzA4NTI2MTA5LCJleHAiOjE3MDg1MjYyODl9.-UeGifcmJz2VovqqYSLyYAlgGKQnRMthVFGQYdWkjM1kdvgk9hrFGy3XdU892If8fpApFkoPn4xMUzJ_jcScHg",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJmNTU5MDMyNS1hZWMzLTRiYmUtODQ2My01MzljYmQwNGE5NTQiLCJzdWIiOiJmaGN3UDZXbTExdyIsImlhdCI6MTcwODUyNjEwOSwibmJmIjoxNzA4NTI2MTA5LCJleHAiOjE3MTExMTgxMDl9.Xfy0LWZPAuhF926YQrblRmx4CWMKewXxOyik105dYSLRo7sJHtpdPID4NdlzSsMlQMZqD9brgU9J3CZKkljwjg"
   }
 }</code></pre>
 </div>
@@ -775,7 +808,7 @@ Content-Length: 860
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /v1/logout HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6Ijk4MDY3MjBmLTgzMjYtNGYxZC05MjkyLWNjNzBmNGQ4ZTlmMCIsInN1YiI6Im5SNk9pZVNOSDVuZSIsImlhdCI6MTcwNzMwNDYyNCwibmJmIjoxNzA3MzA0NjI0LCJleHAiOjE3MDczMDQ4MDR9.P5amVgzgXcNEqeDf1NjqNkaUzIsd6sMch1SRIh1l3U2a3uu0CphzJdrSp8ITmLgdlc3wDhCAngAW1MHLDqlO1A
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjZmNzI4ZTBmLWFkOTUtNDI3MC1hYzY0LWMzMTY0MjYzZmUzNCIsInN1YiI6IlNZcU9TZTZ4WnFHIiwiaWF0IjoxNzA4NTI2MTA5LCJuYmYiOjE3MDg1MjYxMDksImV4cCI6MTcwODUyNjI4OX0.9xRfwfdCbCMRpnjA6kTV-8Cfg8BTAVrQUx8S4Jr_2yXU4J-Qd4kuTrLHjPaqKSLS1rRBxrpR3F3VH8ZRGlvfwA
 Host: localhost:8080
 Content-Type: application/x-www-form-urlencoded</code></pre>
 </div>
@@ -847,11 +880,11 @@ Content-Length: 87
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /v1/refresh HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 348
+Content-Length: 349
 Host: localhost:8080
 
 {
-  "refreshToken" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImVhYmI1MjQ2LWNmZTAtNGRlMS1hNTdhLWY5YzgzMzE3MDA1MSIsInN1YiI6IjBXYW53MDRSTWxrIiwiaWF0IjoxNzA3MzA0NjI0LCJuYmYiOjE3MDczMDQ2MjQsImV4cCI6MTcwOTg5NjYyNH0.uaUW5rm07x-ztLv7mOK69wbAYPdvAjZ8Z6qblkihGoyH0cnLKxUHmAvdVu8hUpbk37oKJtHYcc35qOUtxifKNg"
+  "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImY1NmJhNWJmLWQzNTYtNDdhZC1hMzliLWE3YjFmYTYyNjI4MyIsInN1YiI6IkkxVHdqV0h6ZjMxIiwiaWF0IjoxNzA4NTI2MTEwLCJuYmYiOjE3MDg1MjYxMTAsImV4cCI6MTcxMTExODExMH0.gv_wp-XPFYFwwfums012vG6XfRO1M3k7CuvFN3MyHxzhUSbRurFCaO9L-e1hh1stsfw-ZG5Ia9gUvwgmV87t5Q"
 }</code></pre>
 </div>
 </div>
@@ -878,7 +911,7 @@ Content-Length: 452
   "message" : "요청이 성공적으로 처리되었습니다.",
   "code" : "0000",
   "data" : {
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6Ijc5NTM0OWE2LTY5YzUtNDg5ZS1iOWI2LTQ3Y2MwZmVhMmFhZiIsInN1YiI6IjBXYW53MDRSTWxrIiwiaWF0IjoxNzA3MzA0NjI0LCJuYmYiOjE3MDczMDQ2MjQsImV4cCI6MTcwNzMwNDgwNH0.U5JQLNlcgKNJPrIHb9yANGusHJkyiYI_Rqmw70_gfX02z5RAhnFTAeYGFrIgoplhDgUz7i-qR9Vc84VOlt1IvA"
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjRmOGU5NDZlLTM5ZGYtNGIxNS1iMWYxLWY0ODAzN2FkY2YxMSIsInN1YiI6IkkxVHdqV0h6ZjMxIiwiaWF0IjoxNzA4NTI2MTEwLCJuYmYiOjE3MDg1MjYxMTAsImV4cCI6MTcwODUyNjI5MH0.e20oYL_4EQBl_-sRYK58oAZrQxcrs_-BYBzrR7myAhgtl01OUi8Az3f3YNapVUBC-eXCRgsM_Sdj3wvriA5Wmw"
   }
 }</code></pre>
 </div>
@@ -905,7 +938,7 @@ Content-Length: 452
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>refreshToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>refresh_token</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Refresh Token</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>false</em></p></td>
@@ -961,7 +994,7 @@ Content-Length: 452
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-02-07 19:14:17 +0900
+Last updated 2024-02-19 23:04:59 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

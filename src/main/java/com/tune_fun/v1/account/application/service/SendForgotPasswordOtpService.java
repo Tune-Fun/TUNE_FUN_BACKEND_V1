@@ -43,7 +43,7 @@ public class SendForgotPasswordOtpService implements SendForgotPasswordOtpUseCas
 
     @Transactional(readOnly = true)
     public CurrentAccount getCurrentAccount(final AccountCommands.SendForgotPasswordOtp command) {
-        return loadAccountPort.accountInfo(command.username())
+        return loadAccountPort.currentAccountInfo(command.username())
                 .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
     }
 

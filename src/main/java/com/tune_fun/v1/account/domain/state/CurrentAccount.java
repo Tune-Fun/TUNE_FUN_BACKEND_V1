@@ -7,10 +7,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * DTO for {@link com.habin.demo.account.adapter.output.persistence.AccountJpaEntity}
+ * DTO for {@link com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity}
  */
 public record CurrentAccount(
         LocalDateTime createdAt,
+        LocalDateTime emailVerifiedAt,
         @NotNull @Size(max = 255) String uuid,
         @Size(max = 255) String username,
         String nickname,

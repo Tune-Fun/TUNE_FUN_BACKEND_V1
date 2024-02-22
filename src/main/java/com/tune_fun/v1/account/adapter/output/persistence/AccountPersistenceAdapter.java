@@ -1,6 +1,7 @@
 package com.tune_fun.v1.account.adapter.output.persistence;
 
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
+import com.tune_fun.v1.account.application.port.output.RecordEmailVerifiedAtPort;
 import com.tune_fun.v1.account.application.port.output.RecordLastLoginAtPort;
 import com.tune_fun.v1.account.application.port.output.SaveAccountPort;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
@@ -20,7 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AccountPersistenceAdapter implements
         LoadAccountPort, SaveAccountPort,
-        RecordLastLoginAtPort {
+        RecordLastLoginAtPort, RecordEmailVerifiedAtPort {
 
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
@@ -34,7 +35,7 @@ public class AccountPersistenceAdapter implements
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<CurrentAccount> accountInfo(String username) {
+    public Optional<CurrentAccount> currentAccountInfo(String username) {
         return loadAccountByUsername(username)
                 .map(accountMapper::accountInfo);
     }
@@ -48,11 +49,22 @@ public class AccountPersistenceAdapter implements
 
     @Override
     @Transactional
-    public void recordLastLoginAt(String username) {
+    public void recordLastLoginAt(final String username) {
         loadAccountByUsername(username)
                 .ifPresent(account -> {
                     AccountJpaEntity updatedAccount = account.toBuilder()
                             .lastLoginAt(LocalDateTime.now()).build();
+                    accountRepository.save(updatedAccount);
+                });
+    }
+
+    @Override
+    @Transactional
+    public void recordEmailVerifiedAt(final String username) {
+        loadAccountByUsername(username)
+                .ifPresent(account -> {
+                    AccountJpaEntity updatedAccount = account.toBuilder()
+                            .emailVerifiedAt(LocalDateTime.now()).build();
                     accountRepository.save(updatedAccount);
                 });
     }

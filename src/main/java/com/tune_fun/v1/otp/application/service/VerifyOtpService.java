@@ -1,5 +1,6 @@
 package com.tune_fun.v1.otp.application.service;
 
+import com.tune_fun.v1.account.application.port.output.RecordEmailVerifiedAtPort;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
 import com.tune_fun.v1.otp.application.port.input.usecase.VerifyOtpUseCase;
@@ -14,11 +15,13 @@ import org.springframework.stereotype.Service;
 public class VerifyOtpService implements VerifyOtpUseCase {
 
     private final VerifyOtpPort verifyOtpPort;
+    private final RecordEmailVerifiedAtPort recordEmailVerifiedAtPort;
 
     @Override
     public void verify(final OtpQueries.Verify query) throws Exception {
         VerifyOtp verifyOtpBehavior = getVerifyOtpBehavior(query);
         verifyOtpPort.verifyOtp(verifyOtpBehavior);
+        recordEmailVerifiedAtPort.recordEmailVerifiedAt(query.username());
     }
 
     private static VerifyOtp getVerifyOtpBehavior(final OtpQueries.Verify query) {

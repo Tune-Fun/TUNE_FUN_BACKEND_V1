@@ -10,7 +10,7 @@ public interface LoadAccountPort {
 
     Optional<User> loadCustomUserByUsername(String username);
 
-    Optional<CurrentAccount> accountInfo(String username);
+    Optional<CurrentAccount> currentAccountInfo(String username);
 
     Optional<RegisteredAccount> registeredAccountInfo(String username);
 
