@@ -20,7 +20,7 @@ public class CheckUsernameDuplicateService implements CheckUsernameDuplicateUseC
     @Override
     @Transactional(readOnly = true)
     public void checkUsernameDuplicate(final String username) {
-        loadAccountPort.registeredAccountInfo(username)
+        loadAccountPort.registeredAccountInfoByUsername(username)
                 .ifPresent(account -> {throw new CommonApplicationException(USER_POLICY_USERNAME_REGISTERED);});
     }
 }

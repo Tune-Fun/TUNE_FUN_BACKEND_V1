@@ -28,23 +28,28 @@ public class AccountPersistenceAdapter implements
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<User> loadCustomUserByUsername(String username) {
+    public Optional<User> loadCustomUserByUsername(final String username) {
         return loadAccountByUsername(username)
                 .map(account -> new User(account.getUsername(), account.getPassword(), account.getAuthorities()));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<CurrentAccount> currentAccountInfo(String username) {
+    public Optional<CurrentAccount> currentAccountInfo(final String username) {
         return loadAccountByUsername(username)
                 .map(accountMapper::accountInfo);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<RegisteredAccount> registeredAccountInfo(String username) {
+    public Optional<RegisteredAccount> registeredAccountInfoByUsername(final String username) {
         return loadAccountByUsername(username)
                 .map(accountMapper::registeredAccountInfo);
+    }
+
+    @Override
+    public Optional<RegisteredAccount> registeredAccountInfoByEmail(final String email) {
+        return findByEmail(email).map(accountMapper::registeredAccountInfo);
     }
 
     @Override
@@ -70,9 +75,13 @@ public class AccountPersistenceAdapter implements
     }
 
     @Transactional(readOnly = true)
-    public Optional<AccountJpaEntity> loadAccountByUsername(String username) {
-        return accountRepository.findByUsernameActive(username);
+    public Optional<AccountJpaEntity> loadAccountByUsername(final String username) {
+        return accountRepository.findActive(username, null);
     }
+    
+    public Optional<AccountJpaEntity> findByEmail(final String email) {
+        return accountRepository.findActive(null, email);
+    } 
 
     @Override
     @Transactional
