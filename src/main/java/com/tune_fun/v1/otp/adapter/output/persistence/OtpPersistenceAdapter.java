@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.Objects;
 
 import static com.tune_fun.v1.common.response.MessageCode.*;
+import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.fromLabel;
 import static java.lang.String.format;
 
 @PersistenceAdapter
@@ -38,8 +39,9 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
 
     @Override
     public CurrentOtp saveOtp(final SaveOtp saveOtp) throws Exception {
+        OtpType otpTypeConstant = getConstant(saveOtp.otpType());
         String token = StringUtil.randomNumeric(6);
-        String otpKey = setOtpKey(saveOtp.otpType(), saveOtp.username());
+        String otpKey = setOtpKey(otpTypeConstant, saveOtp.username());
         String encryptedToken = encryptUtil.encrypt(token);
 
         OtpRedisEntity otpRedisEntity = new OtpRedisEntity(saveOtp.username(), encryptedToken);
@@ -51,20 +53,22 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
         Date expireDate = new Date(now.getTime() + otpValidity.toMillis());
         redisTemplate.expireAt(otpKey, expireDate);
 
-        return new CurrentOtp(saveOtp.username(), OtpType.FORGOT_PASSWORD, encryptedToken);
+        return new CurrentOtp(saveOtp.username(), otpTypeConstant.getLabel(), encryptedToken);
     }
 
     @Override
     public CurrentDecryptedOtp loadOtp(final LoadOtp loadOtp) throws Exception {
+        OtpType otpTypeConstant = getConstant(loadOtp.otpType());
         ValueOperations<String, OtpRedisEntity> ops = redisTemplate.opsForValue();
-        OtpRedisEntity otpRedisEntity = ops.get(setOtpKey(loadOtp.otpType(), loadOtp.username()));
+        OtpRedisEntity otpRedisEntity = ops.get(setOtpKey(otpTypeConstant, loadOtp.username()));
         String decrypted = encryptUtil.decrypt(otpRedisEntity.getToken());
-        return new CurrentDecryptedOtp(loadOtp.username(), loadOtp.otpType(), decrypted);
+        return new CurrentDecryptedOtp(loadOtp.username(), otpTypeConstant.getLabel(), decrypted);
     }
 
     @Override
     public void verifyOtp(final VerifyOtp verifyOtp) throws Exception {
-        String otpKey = setOtpKey(verifyOtp.otpType(), verifyOtp.username());
+        OtpType otpTypeConstant = getConstant(verifyOtp.otpType());
+        String otpKey = setOtpKey(otpTypeConstant, verifyOtp.username());
         ValueOperations<String, OtpRedisEntity> ops = redisTemplate.opsForValue();
         OtpRedisEntity otpRedisEntity = ops.get(otpKey);
 
@@ -80,8 +84,10 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
     }
 
     @Override
-    public void expire(final OtpType otpType, final String username) {
-        expire(setOtpKey(otpType, username));
+    public void expire(final String otpType, final String username) {
+        OtpType constant = getConstant(otpType);
+        String otpKey = setOtpKey(constant, username);
+        expire(otpKey);
     }
 
     private void expire(final String otpKey) {
@@ -94,6 +100,10 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
 
     private Boolean checkMatchValue(@NotNull String value, @NotNull OtpRedisEntity otpRedisEntity) throws Exception {
         return Objects.equals(value, encryptUtil.decrypt(otpRedisEntity.getToken()));
+    }
+
+    private OtpType getConstant(final String otpType) {
+        return fromLabel(otpType);
     }
 
     private String setOtpKey(final OtpType otpType, final String username) {

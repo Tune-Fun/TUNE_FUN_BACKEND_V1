@@ -7,6 +7,7 @@ public class Uris {
     public static final String REST_NAME_ID = "/{id}";
     public static final String REST_NAME_UUID = "/{uuid}";
 
+    public static final String CHECK_USERNAME_DUPLICATE = API_V1_ROOT + "/check-username-duplicate";
     public static final String REGISTER = API_V1_ROOT + "/register";
     public static final String LOGIN = API_V1_ROOT + "/login";
     public static final String LOGOUT = API_V1_ROOT + "/logout";
@@ -34,6 +35,7 @@ public class Uris {
     public static final String SWAGGER_API_DOCS_SWAGGER_CONFIG = SWAGGER_API_DOCS + "/swagger-config";
 
     public static final String[] PERMIT_ALL_URIS = {
+            CHECK_USERNAME_DUPLICATE,
             REGISTER,
             LOGIN,
             REFRESH,

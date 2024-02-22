@@ -54,9 +54,6 @@ public class CommonBeans {
 
     @Bean
     public JavaMailSender javaMailSender() {
-        log.info("mailUsername: {}", mailUsername);
-        log.info("mailPassword: {}", mailPassword);
-
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(mailSenderHost);
         javaMailSender.setPort(mailSenderPort);
