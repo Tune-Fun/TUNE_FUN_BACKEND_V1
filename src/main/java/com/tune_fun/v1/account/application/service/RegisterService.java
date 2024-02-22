@@ -55,7 +55,7 @@ public class RegisterService implements RegisterUseCase {
 
     @Transactional(readOnly = true)
     public void checkRegisterdAccount(AccountCommands.Register command) {
-        loadAccountPort.accountInfo(command.username()).ifPresent(accountInfo -> {
+        loadAccountPort.currentAccountInfo(command.username()).ifPresent(accountInfo -> {
             throw new CommonApplicationException(USER_POLICY_ACCOUNT_REGISTERED);
         });
     }
