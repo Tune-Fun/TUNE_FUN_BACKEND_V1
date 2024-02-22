@@ -4,7 +4,6 @@ import com.tune_fun.v1.base.ControllerBaseTest;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.dummy.DummyService;
-import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
 import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
 import com.tune_fun.v1.otp.domain.state.CurrentDecryptedOtp;
 import org.junit.jupiter.api.DisplayName;

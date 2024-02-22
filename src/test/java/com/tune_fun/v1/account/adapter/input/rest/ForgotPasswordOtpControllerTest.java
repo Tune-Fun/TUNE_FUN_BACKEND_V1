@@ -16,8 +16,6 @@ import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.web.servlet.ResultActions;
@@ -48,7 +46,6 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
     @Autowired
     private GreenMail greenMail;
 
-    @Execution(ExecutionMode.SAME_THREAD)
     @Transactional
     @Test
     @Order(1)
@@ -56,6 +53,8 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
     void sendForgotPasswordOtpSuccess() throws Exception {
         dummyService.initAccount();
         AccountJpaEntity defaultAccount = dummyService.getDefaultAccount();
+
+        greenMail.purgeEmailFromAllMailboxes();
 
         String username = dummyService.getDefaultUsername();
         AccountCommands.SendForgotPasswordOtp command = new AccountCommands.SendForgotPasswordOtp(username);
