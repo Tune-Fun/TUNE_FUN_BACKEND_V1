@@ -39,6 +39,7 @@ public class Uris {
     public static final String[] PERMIT_ALL_URIS = {
             CHECK_USERNAME_DUPLICATE,
             CHECK_EMAIL_DUPLICATE,
+            FIND_USERNAME,
             REGISTER,
             LOGIN,
             REFRESH,
