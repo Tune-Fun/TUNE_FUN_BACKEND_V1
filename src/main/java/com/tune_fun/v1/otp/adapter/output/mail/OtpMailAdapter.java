@@ -14,8 +14,8 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class OtpMailAdapter implements SendOtpPort {
+    private static final String OTP_SEND_MAIL_TEMPLATE = "otp_send";
 
-    public static final String OTP_SEND_MAIL_TEMPLATE = "otp_send";
     private final MailHandler mailHandler;
     private final EncryptUtil encryptUtil;
     private final ObjectMapper objectMapper;
@@ -37,8 +37,5 @@ public class OtpMailAdapter implements SendOtpPort {
         return "TuneFun - " + nickname + "님의 인증번호입니다.";
     }
 
-    private record OtpSendMailVariables(
-            String otp
-    ) {
-    }
+    private record OtpSendMailVariables(String otp) {}
 }
