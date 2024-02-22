@@ -16,6 +16,8 @@ import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.web.servlet.ResultActions;
@@ -46,6 +48,7 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
     @Autowired
     private GreenMail greenMail;
 
+    @Execution(ExecutionMode.SAME_THREAD)
     @Transactional
     @Test
     @Order(1)
@@ -71,10 +74,10 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
         assertEquals("TuneFun - " + defaultAccount.getNickname() + "님의 인증번호입니다.", receivedMessage.getSubject());
 
 
-        LoadOtp loadOtpBehavior = new LoadOtp(username, FORGOT_PASSWORD);
+        LoadOtp loadOtpBehavior = new LoadOtp(username, FORGOT_PASSWORD.getLabel());
         CurrentDecryptedOtp decryptedOtp = loadOtpPort.loadOtp(loadOtpBehavior);
 
-        VerifyOtp verifyOtpBehavior = new VerifyOtp(username, FORGOT_PASSWORD, decryptedOtp.token());
+        VerifyOtp verifyOtpBehavior = new VerifyOtp(username, FORGOT_PASSWORD.getLabel(), decryptedOtp.token());
         assertDoesNotThrow(() -> verifyOtpPort.verifyOtp(verifyOtpBehavior));
 
         FieldDescriptor requestDescriptors = fieldWithPath("username").description("아이디")

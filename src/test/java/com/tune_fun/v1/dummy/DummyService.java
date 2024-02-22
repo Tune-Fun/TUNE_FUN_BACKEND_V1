@@ -102,15 +102,16 @@ public class DummyService extends AbstractIntegrationTest {
     public void forgotPasswordOtp() throws Exception {
         AccountCommands.SendForgotPasswordOtp command = new AccountCommands.SendForgotPasswordOtp(defaultUsername);
         assertDoesNotThrow(() -> sendForgotPasswordOtpUseCase.sendOtp(command));
-        forgotPasswordOtp = otpPersistenceAdapter.loadOtp(new LoadOtp(defaultUsername, FORGOT_PASSWORD));
+        forgotPasswordOtp = otpPersistenceAdapter.loadOtp(new LoadOtp(defaultUsername, FORGOT_PASSWORD.getLabel()));
     }
 
     @Transactional
-    public void verifyOtp(OtpType otpType, String token ) throws Exception {
-        verifyOtpUseCase.verify(new OtpQueries.Verify(defaultUsername, otpType, token));
+    public void verifyOtp(OtpType otpType, String token) throws Exception {
+        OtpQueries.Verify query = new OtpQueries.Verify(defaultUsername, otpType.getLabel(), token);
+        verifyOtpUseCase.verify(query);
     }
 
     public void expireOtp(OtpType otpType) {
-        otpPersistenceAdapter.expire(otpType, defaultUsername);
+        otpPersistenceAdapter.expire(otpType.getLabel(), defaultUsername);
     }
 }
