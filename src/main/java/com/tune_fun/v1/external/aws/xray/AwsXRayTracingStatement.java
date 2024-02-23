@@ -29,7 +29,7 @@ public class AwsXRayTracingStatement {
      */
     public static Statement decorateStatement(Statement statement) {
         return (Statement) Proxy.newProxyInstance(AwsXRayTracingStatement.class.getClassLoader(),
-                new Class[] { Statement.class },
+                new Class[]{Statement.class},
                 new TracingStatementHandler(statement));
     }
 
@@ -38,12 +38,12 @@ public class AwsXRayTracingStatement {
      * to decorate your {@link PreparedStatement} in order to have the queries recorded with an X-Ray Subsegment.
      *
      * @param statement the {@link PreparedStatement} to decorate
-     * @param sql the sql query to execute
+     * @param sql       the sql query to execute
      * @return a {@link PreparedStatement} that traces all SQL queries in X-Ray
      */
     public static PreparedStatement decoratePreparedStatement(PreparedStatement statement, String sql) {
         return (PreparedStatement) Proxy.newProxyInstance(AwsXRayTracingStatement.class.getClassLoader(),
-                new Class[] { PreparedStatement.class },
+                new Class[]{PreparedStatement.class},
                 new TracingStatementHandler(statement));
     }
 
@@ -52,12 +52,12 @@ public class AwsXRayTracingStatement {
      * to decorate your {@link CallableStatement}in order to have the queries recorded with an X-Ray Subsegment.
      *
      * @param statement the {@link CallableStatement} to decorate
-     * @param sql the sql query to execute
+     * @param sql       the sql query to execute
      * @return a {@link CallableStatement} that traces all SQL queries in X-Ray
      */
     public static CallableStatement decorateCallableStatement(CallableStatement statement, String sql) {
         return (CallableStatement) Proxy.newProxyInstance(AwsXRayTracingStatement.class.getClassLoader(),
-                new Class[] { CallableStatement.class },
+                new Class[]{CallableStatement.class},
                 new TracingStatementHandler(statement));
     }
 
@@ -75,6 +75,7 @@ public class AwsXRayTracingStatement {
         private static final String DRIVER_VERSION = "driver_version";
         private static final String DATABASE_TYPE = "database_type";
         private static final String DATABASE_VERSION = "database_version";
+        private static final String SANITIZED_QUERY = "sanitized_query";
 
         private final Statement delegate;
 
@@ -135,15 +136,13 @@ public class AwsXRayTracingStatement {
                 String subsegmentName = "ExecuteQuery";
                 try {
                     URI normalizedURI = new URI(new URI(dbmetadata.getURL()).getSchemeSpecificPart());
-                    subsegmentName += "-" + connection.getCatalog() + "@" + Optional.ofNullable(normalizedURI.getHost()).orElseGet(()->"Memory");
+                    subsegmentName += "-" + connection.getCatalog() + "@" + Optional.ofNullable(normalizedURI.getHost()).orElseGet(() -> "Memory");
                 } catch (URISyntaxException e) {
                     log.warn("Unable to parse database URI. Falling back to default '" + DEFAULT_DATABASE_NAME + "' for subsegment name.", e);
                 }
-                
+
                 Subsegment subsegment = AWSXRay.beginSubsegment(subsegmentName);
-                if (subsegment == null) {
-                    return null;
-                }
+                if (subsegment == null) return null;
 
                 subsegment.setNamespace(Namespace.REMOTE.toString());
                 Map<String, Object> sqlParams = new HashMap<>();
@@ -152,22 +151,26 @@ public class AwsXRayTracingStatement {
                 sqlParams.put(DRIVER_VERSION, dbmetadata.getDriverVersion());
                 sqlParams.put(DATABASE_TYPE, dbmetadata.getDatabaseProductName());
                 sqlParams.put(DATABASE_VERSION, dbmetadata.getDatabaseProductVersion());
+                // TODO : SQL 가져올 방법 찾아야함
+//                log.info("Method Name : {}", method.getName());
+//                if (EXECUTE.equals(method.getName())) sqlParams.put(SANITIZED_QUERY, args[0]);
+
                 subsegment.putAllSql(sqlParams);
-                
+
                 Map<String, Map<String, Object>> metadata = new HashMap<>();
                 Map<String, Object> queryInfo = new HashMap<>();
                 queryInfo.put(QUERY, delegate.toString());
                 queryInfo.put(METHOD, method.getName());
                 metadata.put("queryInfo", queryInfo);
                 subsegment.setMetadata(metadata);
-                
+
                 return subsegment;
             } catch (Exception exception) {
                 log.warn("Failed to create X-Ray subsegment for the statement execution.", exception);
                 return null;
             }
         }
-        
+
     }
-        
+
 }

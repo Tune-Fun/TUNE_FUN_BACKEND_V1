@@ -1,5 +1,6 @@
 package com.tune_fun.v1.account.adapter.output.persistence;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.application.port.output.RecordEmailVerifiedAtPort;
 import com.tune_fun.v1.account.application.port.output.RecordLastLoginAtPort;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@XRayEnabled
 @Component
 @PersistenceAdapter
 @RequiredArgsConstructor

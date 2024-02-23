@@ -29,7 +29,6 @@ public class AwsXRayHikariConfig {
     @Bean(name = "dataSource")
     @Primary
     public DataSource dataSource(HikariDataSource hikariDataSource) {
-        //wrap the spring ds into xray tracing ds
         return new AwsXRayTracingDataSource(hikariDataSource);
     }
 

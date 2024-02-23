@@ -27,7 +27,7 @@ public class LoggingAspect {
         return LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName());
     }
 
-    @AfterThrowing(pointcut = "com.tune_fun.v1.common.aspect.PointCuts.springBeanPointcut()", throwing = "e")
+    @AfterThrowing(pointcut = "com.tune_fun.v1.common.aspect.CustomPointCuts.springBeanPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Exception e) {
         logger(joinPoint)
                 .error(
@@ -38,9 +38,9 @@ public class LoggingAspect {
                 );
     }
 
-    @Around("com.tune_fun.v1.common.aspect.PointCuts.restApi() " +
-            "|| com.tune_fun.v1.common.aspect.PointCuts.persistence() " +
-            "|| com.tune_fun.v1.common.aspect.PointCuts.useCase()")
+    @Around("com.tune_fun.v1.common.aspect.CustomPointCuts.restApi() " +
+            "|| com.tune_fun.v1.common.aspect.CustomPointCuts.persistence() " +
+            "|| com.tune_fun.v1.common.aspect.CustomPointCuts.useCase()")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         StopWatch stopWatch = new StopWatch("LogExecutionTime Aop");
 

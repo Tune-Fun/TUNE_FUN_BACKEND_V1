@@ -2,7 +2,7 @@ package com.tune_fun.v1.common.aspect;
 
 import org.aspectj.lang.annotation.Pointcut;
 
-public final class PointCuts {
+public final class CustomPointCuts {
 
     @Pointcut("execution(* org.springdoc.webmvc.api.*.*(..))")
     public void swaggerUI() {
