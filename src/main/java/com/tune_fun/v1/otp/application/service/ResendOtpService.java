@@ -1,5 +1,6 @@
 package com.tune_fun.v1.otp.application.service;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@XRayEnabled
 @Service
 @UseCase
 @RequiredArgsConstructor

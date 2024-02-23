@@ -1,11 +1,15 @@
 package com.tune_fun.v1.account.application.service.jwt;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.input.usecase.jwt.ValidateAccessTokenUseCase;
 import com.tune_fun.v1.account.application.port.output.jwt.CheckAccessTokenExpirePort;
 import com.tune_fun.v1.account.application.port.output.jwt.ValidateJwtTokenPort;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@XRayEnabled
+@Service
 @UseCase
 @RequiredArgsConstructor
 public class ValidateAccessTokenService implements ValidateAccessTokenUseCase {
