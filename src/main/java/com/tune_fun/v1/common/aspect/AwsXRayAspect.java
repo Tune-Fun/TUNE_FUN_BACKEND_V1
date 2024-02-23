@@ -46,12 +46,9 @@ public class AwsXRayAspect extends AbstractXRayInterceptor {
 
     private String generateSubsegmentName(ProceedingJoinPoint pjp){
         String[] declaringTypeName = pjp.getSignature().getDeclaringTypeName().split("\\.");
-        if(declaringTypeName.length > 0) {
+        if(declaringTypeName.length > 0)
             return declaringTypeName[declaringTypeName.length - 1] + "." + pjp.getSignature().getName();
-        }
-        else{
-            return pjp.getSignature().getName();
-        }
+        else return pjp.getSignature().getName();
     }
 
     @Override
