@@ -5,3 +5,13 @@ services:
     restart: always
     ports:
       - '6378:6379'
+
+  aws-xray:
+    image: 'amazon/aws-xray-daemon'
+    container_name: 'tune_fun_aws_xray'
+    restart: always
+    environment:
+      - AWS_REGION=ap-northeast-2
+    ports:
+      - '2000:2000/udp'
+      - '2000:2000/tcp'
