@@ -29,22 +29,22 @@ class CheckUsernameDuplicateControllerTest extends ControllerBaseTest {
     @Transactional
     @Test
     @Order(1)
-    @DisplayName("아이디 중복확인, 성공 Case 1. 중복되지 않은 아이디")
-    void checkUsernameDuplicateSuccessCase1() throws Exception {
+    @DisplayName("아이디 중복확인, 성공")
+    void checkUsernameDuplicateSuccess() throws Exception {
         dummyService.initAccount();
 
         mockMvc.perform(
                         get(Uris.CHECK_USERNAME_DUPLICATE)
                                 .param("username", "test")
                 )
-                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS_USERNAME_UNIQUE))
                 .andDo(
                         restDocs.document(
                                 queryParameters(REQUEST_DESCRIPTOR),
                                 responseFields(baseResponseFields),
                                 resource(
                                         builder().
-                                                description("아이디 중복확인, 성공 Case 1. 중복되지 않은 아이디").
+                                                description("아이디 중복확인").
                                                 queryParameters(REQUEST_DESCRIPTOR).
                                                 responseFields(baseResponseFields)
                                                 .build()
@@ -56,8 +56,8 @@ class CheckUsernameDuplicateControllerTest extends ControllerBaseTest {
     @Transactional
     @Test
     @Order(2)
-    @DisplayName("아이디 중복확인, 성공 Case 2. 중복된 아이디")
-    void checkUsernameDuplicateSuccessCase2() throws Exception {
+    @DisplayName("아이디 중복확인, 실패 - 중복된 아이디")
+    void checkUsernameDuplicateSuccessFailed() throws Exception {
         dummyService.initAccount();
 
         mockMvc.perform(
@@ -71,7 +71,7 @@ class CheckUsernameDuplicateControllerTest extends ControllerBaseTest {
                                 responseFields(baseResponseFields),
                                 resource(
                                         builder().
-                                                description("아이디 중복확인, 성공 Case 2. 중복된 아이디").
+                                                description("아이디 중복확인").
                                                 queryParameters(REQUEST_DESCRIPTOR).
                                                 responseFields(baseResponseFields)
                                                 .build()

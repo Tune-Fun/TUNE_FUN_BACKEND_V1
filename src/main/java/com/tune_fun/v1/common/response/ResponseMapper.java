@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import static com.tune_fun.v1.common.response.MessageCode.SUCCESS;
+
 @Component
 @AllArgsConstructor
 public class ResponseMapper {
@@ -12,21 +14,14 @@ public class ResponseMapper {
     private final MessageSourceUtil messageSourceUtil;
 
     public ResponseEntity<Response<?>> ok() {
-        return ResponseEntity.ok().body(
-                new Response<>(messageSourceUtil.getMessage(MessageCode.SUCCESS.getCode()), MessageCode.SUCCESS.getCode(), null)
-        );
+        return ResponseEntity.ok()
+                .body(new Response<>(messageSourceUtil.getMessage(SUCCESS.getCode()), SUCCESS.getCode(), null));
     }
 
-    private <T extends BasePayload> ResponseEntity<Response<T>> ok(final MessageCode messageCode, final T source) {
-        return ResponseEntity.ok().body(
-                new Response<>(messageSourceUtil.getMessage(messageCode.getCode()), messageCode.getCode(), source)
-        );
-    }
-
-    private <T extends BasePayload> ResponseEntity<Response<T>> created(final MessageCode messageCode, final T source) {
-        return ResponseEntity.created(null).body(
-                new Response<>(messageSourceUtil.getMessage(messageCode.name()), messageCode.getCode(), source)
-        );
+    public <T extends BasePayload> ResponseEntity<Response<T>> ok(final MessageCode messageCode, final T source) {
+        return ResponseEntity
+                .status(messageCode.getHttpStatus())
+                .body(new Response<>(messageSourceUtil.getMessage(messageCode.getCode()), messageCode.getCode(), source));
     }
 
     public <T extends BasePayload> ResponseEntity<Response<T>> ok(final MessageCode messageCode) {
@@ -34,7 +29,7 @@ public class ResponseMapper {
     }
 
     public <T extends BasePayload> ResponseEntity<Response<T>> ok(final T source) {
-        return ok(MessageCode.SUCCESS, source);
+        return ok(SUCCESS, source);
     }
 
     public ResponseEntity<ExceptionResponse> error(final MessageCode messageCode) {

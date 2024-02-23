@@ -42,7 +42,7 @@ class CheckEmailVerifiedControllerTest extends ControllerBaseTest {
                         get(Uris.CHECK_EMAIL_VERIFIED)
                                 .header(AUTHORIZATION, bearerToken(accessToken))
                 )
-                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS_EMAIL_VERIFIED))
                 .andDo(
                         restDocs.document(
                                 requestHeaders(authorizationHeader),

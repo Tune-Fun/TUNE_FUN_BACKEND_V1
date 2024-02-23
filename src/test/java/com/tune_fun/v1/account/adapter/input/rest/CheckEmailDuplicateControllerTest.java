@@ -31,22 +31,22 @@ class CheckEmailDuplicateControllerTest extends ControllerBaseTest {
     @Transactional
     @Test
     @Order(1)
-    @DisplayName("이메일 중복확인, 성공 Case 1. 중복되지 않은 이메일")
-    void checkEmailDuplicateSuccessCase1() throws Exception {
+    @DisplayName("이메일 중복확인, 성공")
+    void checkEmailDuplicateSuccess() throws Exception {
         dummyService.initAccount();
 
         mockMvc.perform(
                         get(Uris.CHECK_EMAIL_DUPLICATE)
                                 .param("email", "test")
                 )
-                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS_EMAIL_UNIQUE))
                 .andDo(
                         restDocs.document(
                                 queryParameters(REQUEST_DESCRIPTOR),
                                 responseFields(baseResponseFields),
                                 resource(
                                         builder().
-                                                description("이메일 중복확인, 성공 Case 1. 중복되지 않은 이메일").
+                                                description("이메일 중복확인").
                                                 queryParameters(REQUEST_DESCRIPTOR).
                                                 responseFields(baseResponseFields)
                                                 .build()
@@ -58,8 +58,8 @@ class CheckEmailDuplicateControllerTest extends ControllerBaseTest {
     @Transactional
     @Test
     @Order(2)
-    @DisplayName("이메일 중복확인, 성공 Case 2. 중복된 이메일")
-    void checkEmailDuplicateSuccessCase2() throws Exception {
+    @DisplayName("이메일 중복확인, 실패 - 중복된 이메일")
+    void checkEmailDuplicateFailed() throws Exception {
         dummyService.initAccount();
         AccountJpaEntity account = dummyService.getDefaultAccount();
 
@@ -74,7 +74,7 @@ class CheckEmailDuplicateControllerTest extends ControllerBaseTest {
                                 responseFields(baseResponseFields),
                                 resource(
                                         builder().
-                                                description("이메일 중복확인, 성공 Case 2. 중복된 이메일").
+                                                description("이메일 중복확인").
                                                 queryParameters(REQUEST_DESCRIPTOR).
                                                 responseFields(baseResponseFields)
                                                 .build()

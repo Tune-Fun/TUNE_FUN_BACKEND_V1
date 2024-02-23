@@ -5,18 +5,20 @@ import com.tune_fun.v1.account.domain.state.CurrentUser;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.WebAdapter;
-import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
 import com.tune_fun.v1.common.util.StringUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
+import static com.tune_fun.v1.common.response.MessageCode.EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @SecurityRequirement(name = AUTHORIZATION)
@@ -29,11 +31,9 @@ public class LogoutController {
     private final ResponseMapper responseMapper;
 
     @PutMapping(value = Uris.LOGOUT)
-    public ResponseEntity<Response<?>> logout(
-            @RequestHeader(value = AUTHORIZATION) String authorizationValue,
-            @CurrentUser final User user) {
-        if (authorizationValue == null)
-            throw new CommonApplicationException(MessageCode.EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND);
+    public ResponseEntity<Response<?>> logout(final HttpServletRequest request, @CurrentUser final User user) {
+        String authorizationValue = Optional.ofNullable(request.getHeader(AUTHORIZATION))
+                .orElseThrow(() -> new CommonApplicationException(EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND));
         String accessToken = StringUtil.removeBearerPrefix(authorizationValue);
 
         logoutUseCase.logout(accessToken);
