@@ -26,7 +26,7 @@ public class VerifyOtpController {
     @PostMapping(value = Uris.VERIFY_OTP)
     public ResponseEntity<Response<BasePayload>> verifyOtp(@Valid @RequestBody final OtpQueries.Verify query) throws Exception {
         verifyOtpUseCase.verify(query);
-        return responseMapper.ok(MessageCode.OTP_VERIFIED_SUCCESS);
+        return responseMapper.ok(MessageCode.SUCCESS_OTP_VERIFIED);
     }
 
 

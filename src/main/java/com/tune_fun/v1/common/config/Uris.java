@@ -46,6 +46,7 @@ public class Uris {
             LOGIN,
             REFRESH,
             FORGOT_PASSWORD_SEND_OTP,
+            RESEND_OTP,
             VERIFY_OTP,
             SWAGGER_UI,
             SWAGGER_INDEX_HTML,

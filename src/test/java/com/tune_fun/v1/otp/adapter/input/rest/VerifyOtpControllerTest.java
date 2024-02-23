@@ -49,7 +49,7 @@ class VerifyOtpControllerTest extends ControllerBaseTest {
                                 .contentType(APPLICATION_JSON_VALUE)
                                 .content(toJson(query))
                 )
-                .andExpectAll(baseAssertion(MessageCode.OTP_VERIFIED_SUCCESS))
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS_OTP_VERIFIED))
                 .andDo(
                         restDocs.document(
                                 requestFields(REQUEST_DESCRIPTORS), responseFields(baseResponseFields),

@@ -1,12 +1,14 @@
-package com.tune_fun.v1.account.adapter.input.rest;
+package com.tune_fun.v1.otp.adapter.input.rest;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
+import com.tune_fun.v1.account.application.port.input.usecase.SendForgotPasswordOtpUseCase;
 import com.tune_fun.v1.base.ControllerBaseTest;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.dummy.DummyService;
+import com.tune_fun.v1.otp.application.port.input.command.OtpCommands;
 import com.tune_fun.v1.otp.application.port.output.LoadOtpPort;
 import com.tune_fun.v1.otp.application.port.output.VerifyOtpPort;
 import com.tune_fun.v1.otp.domain.behavior.LoadOtp;
@@ -28,14 +30,16 @@ import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASS
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
-
-class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
+class ResendOtpControllerTest extends ControllerBaseTest {
 
     @Autowired
     private DummyService dummyService;
+
+    @Autowired
+    private SendForgotPasswordOtpUseCase sendForgotPasswordOtpUseCase;
 
     @Autowired
     private LoadOtpPort loadOtpPort;
@@ -49,22 +53,27 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
     @Transactional
     @Test
     @Order(1)
-    @DisplayName("비밀번호 찾기 OTP 전송, 성공")
-    void sendForgotPasswordOtpSuccess() throws Exception {
+    @DisplayName("OTP 재전송, 성공")
+    void resendOtpSuccess() throws Exception {
         dummyService.initAccount();
         AccountJpaEntity defaultAccount = dummyService.getDefaultAccount();
 
         greenMail.purgeEmailFromAllMailboxes();
 
         String username = dummyService.getDefaultUsername();
-        AccountCommands.SendForgotPasswordOtp command = new AccountCommands.SendForgotPasswordOtp(username);
+        AccountCommands.SendForgotPasswordOtp sendForgotPasswordOtpCommand = new AccountCommands.SendForgotPasswordOtp(username);
+        sendForgotPasswordOtpUseCase.sendOtp(sendForgotPasswordOtpCommand);
+
+        greenMail.purgeEmailFromAllMailboxes();
+
+        OtpCommands.Resend resendOtpCommand = new OtpCommands.Resend(username, FORGOT_PASSWORD.getLabel());
 
         ResultActions resultActions = mockMvc.perform(
-                        post(Uris.FORGOT_PASSWORD_SEND_OTP)
-                                .content(toJson(command))
+                        put(Uris.RESEND_OTP)
+                                .content(toJson(resendOtpCommand))
                                 .contentType(APPLICATION_JSON_VALUE)
                 )
-                .andExpectAll(baseAssertion(MessageCode.SUCCESS_FORGOT_PASSWORD_OTP_SENT));
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS_OTP_RESEND));
 
         greenMail.waitForIncomingEmail(1);
 
@@ -79,14 +88,17 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
         VerifyOtp verifyOtpBehavior = new VerifyOtp(username, FORGOT_PASSWORD.getLabel(), decryptedOtp.token());
         assertDoesNotThrow(() -> verifyOtpPort.verifyOtp(verifyOtpBehavior));
 
-        FieldDescriptor requestDescriptors = fieldWithPath("username").description("아이디")
-                .attributes(constraint("NOT BLANK"));
+        FieldDescriptor[] requestDescriptors = {
+                fieldWithPath("username").description("아이디").attributes(constraint("NOT BLANK")),
+                fieldWithPath("otp_type").description("Otp Type").attributes(constraint("NOT BLANK"))
+        };
+
 
         resultActions.andDo(restDocs.document(
                         requestFields(requestDescriptors), responseFields(baseResponseFields),
                         resource(
                                 builder().
-                                        description("비밀번호 찾기 OTP 발송").
+                                        description("OTP 재전송").
                                         requestFields(requestDescriptors).
                                         responseFields(baseResponseFields)
                                         .build()
@@ -95,6 +107,5 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
         );
 
     }
-
 
 }
