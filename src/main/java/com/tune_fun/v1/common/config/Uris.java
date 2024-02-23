@@ -25,6 +25,7 @@ public class Uris {
 
     public static final String SWAGGER_UI_ROOT = "/swagger-ui";
     public static final String SWAGGER_UI = "/swagger-ui.html";
+    public static final String SWAGGER_DOCS = "/docs/com.tune_fun-open-api-3.0.1.json";
 
     public static final String SWAGGER_INDEX_HTML = SWAGGER_UI_ROOT + "/index.html";
     public static final String SWAGGER_INDEX_CSS = SWAGGER_UI_ROOT + "/index.css";
@@ -48,6 +49,7 @@ public class Uris {
             VERIFY_OTP,
             SWAGGER_UI,
             SWAGGER_INDEX_HTML,
+            SWAGGER_DOCS,
             SWAGGER_INDEX_CSS,
             SWAGGER_BUNDLE_JS,
             SWAGGER_CSS,

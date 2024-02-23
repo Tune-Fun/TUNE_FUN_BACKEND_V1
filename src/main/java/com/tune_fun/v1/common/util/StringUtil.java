@@ -10,6 +10,8 @@ import java.security.SecureRandom;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import static java.util.regex.Pattern.matches;
+
 @UtilityClass
 public class StringUtil {
 
@@ -76,7 +78,7 @@ public class StringUtil {
     }
 
     public String removeBearerPrefix(String accessTokenFromRequest) {
-        return Pattern.matches("^Bearer .*", accessTokenFromRequest) ? accessTokenFromRequest.substring(7) : null;
+        return matches("^Bearer .*", accessTokenFromRequest) ? accessTokenFromRequest.substring(7) : null;
     }
 
 }

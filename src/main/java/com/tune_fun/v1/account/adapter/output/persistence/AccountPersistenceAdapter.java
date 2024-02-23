@@ -30,7 +30,9 @@ public class AccountPersistenceAdapter implements
     @Transactional(readOnly = true)
     public Optional<User> loadCustomUserByUsername(final String username) {
         return loadAccountByUsername(username)
-                .map(account -> new User(account.getUsername(), account.getPassword(), account.getAuthorities()));
+                .map(account -> new User(account.getUsername(), account.getPassword(),
+                        account.isEnabled(), account.isAccountNonExpired(), account.isCredentialsNonExpired(),
+                        account.isAccountNonLocked(), account.getAuthorities()));
     }
 
     @Override
