@@ -10,7 +10,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.Issue;
+import org.junit.jupiter.api.parallel.Execution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.web.servlet.ResultActions;
@@ -22,6 +22,7 @@ import static com.tune_fun.v1.account.adapter.output.persistence.Role.CLIENT_0;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -37,7 +38,6 @@ class LoginControllerTest extends ControllerBaseTest {
 
     @Transactional
     @Test
-    @Issue("T1-178")
     @Order(1)
     @DisplayName("로그인, 성공")
     void loginSuccess() throws Exception {

@@ -7,6 +7,9 @@ public class Uris {
     public static final String REST_NAME_ID = "/{id}";
     public static final String REST_NAME_UUID = "/{uuid}";
 
+    public static final String CHECK_USERNAME_DUPLICATE = API_V1_ROOT + "/check-username-duplicate";
+    public static final String CHECK_EMAIL_DUPLICATE = API_V1_ROOT + "/check-email-duplicate";
+    public static final String FIND_USERNAME = API_V1_ROOT + "/find-username";
     public static final String REGISTER = API_V1_ROOT + "/register";
     public static final String LOGIN = API_V1_ROOT + "/login";
     public static final String LOGOUT = API_V1_ROOT + "/logout";
@@ -14,9 +17,15 @@ public class Uris {
 
     public static final String FORGOT_PASSWORD_SEND_OTP = API_V1_ROOT + "/forgot-password/send-otp";
 
+    public static final String CHECK_EMAIL_VERIFIED = API_V1_ROOT + "/check-email-verified";
+
+    public static final String VERIFY_OTP = API_V1_ROOT + "/otp/verify";
+    public static final String VERIFY_OTP_WITH_TOKEN = API_V1_ROOT + "/otp/verify-with-token";
+    public static final String RESEND_OTP = API_V1_ROOT + "/otp/resend";
 
     public static final String SWAGGER_UI_ROOT = "/swagger-ui";
     public static final String SWAGGER_UI = "/swagger-ui.html";
+    public static final String SWAGGER_DOCS = "/docs/com.tune_fun-open-api-3.0.1.json";
 
     public static final String SWAGGER_INDEX_HTML = SWAGGER_UI_ROOT + "/index.html";
     public static final String SWAGGER_INDEX_CSS = SWAGGER_UI_ROOT + "/index.css";
@@ -30,12 +39,18 @@ public class Uris {
     public static final String SWAGGER_API_DOCS_SWAGGER_CONFIG = SWAGGER_API_DOCS + "/swagger-config";
 
     public static final String[] PERMIT_ALL_URIS = {
+            CHECK_USERNAME_DUPLICATE,
+            CHECK_EMAIL_DUPLICATE,
+            FIND_USERNAME,
             REGISTER,
             LOGIN,
             REFRESH,
             FORGOT_PASSWORD_SEND_OTP,
+            RESEND_OTP,
+            VERIFY_OTP,
             SWAGGER_UI,
             SWAGGER_INDEX_HTML,
+            SWAGGER_DOCS,
             SWAGGER_INDEX_CSS,
             SWAGGER_BUNDLE_JS,
             SWAGGER_CSS,

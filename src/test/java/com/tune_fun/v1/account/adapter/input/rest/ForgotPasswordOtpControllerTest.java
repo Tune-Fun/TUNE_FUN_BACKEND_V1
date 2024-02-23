@@ -51,10 +51,12 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
     @Test
     @Issue("T1-162")
     @Order(1)
-    @DisplayName("비밀번호 찾기 OTP 발송, 성공")
+    @DisplayName("비밀번호 찾기 OTP 전송, 성공")
     void sendForgotPasswordOtpSuccess() throws Exception {
         dummyService.initAccount();
         AccountJpaEntity defaultAccount = dummyService.getDefaultAccount();
+
+        greenMail.purgeEmailFromAllMailboxes();
 
         String username = dummyService.getDefaultUsername();
         AccountCommands.SendForgotPasswordOtp command = new AccountCommands.SendForgotPasswordOtp(username);
@@ -64,7 +66,7 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
                                 .content(toJson(command))
                                 .contentType(APPLICATION_JSON_VALUE)
                 )
-                .andExpectAll(baseAssertion(MessageCode.SUCCESS));
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS_FORGOT_PASSWORD_OTP_SENT));
 
         greenMail.waitForIncomingEmail(1);
 
@@ -73,10 +75,10 @@ class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
         assertEquals("TuneFun - " + defaultAccount.getNickname() + "님의 인증번호입니다.", receivedMessage.getSubject());
 
 
-        LoadOtp loadOtpBehavior = new LoadOtp(username, FORGOT_PASSWORD);
+        LoadOtp loadOtpBehavior = new LoadOtp(username, FORGOT_PASSWORD.getLabel());
         CurrentDecryptedOtp decryptedOtp = loadOtpPort.loadOtp(loadOtpBehavior);
 
-        VerifyOtp verifyOtpBehavior = new VerifyOtp(username, FORGOT_PASSWORD, decryptedOtp.token());
+        VerifyOtp verifyOtpBehavior = new VerifyOtp(username, FORGOT_PASSWORD.getLabel(), decryptedOtp.token());
         assertDoesNotThrow(() -> verifyOtpPort.verifyOtp(verifyOtpBehavior));
 
         FieldDescriptor requestDescriptors = fieldWithPath("username").description("아이디")

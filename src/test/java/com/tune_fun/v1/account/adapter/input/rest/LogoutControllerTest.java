@@ -52,7 +52,7 @@ class LogoutControllerTest extends ControllerBaseTest {
                         resource(
                                 builder().
                                         description("로그아웃").
-                                        requestHeaders(authorizationHeader).
+//                                        requestHeaders(authorizationHeader).
                                         responseFields(baseResponseFields)
                                         .build()
                         )

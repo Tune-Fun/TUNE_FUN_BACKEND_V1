@@ -67,7 +67,7 @@ class RegisterControllerTest extends ControllerBaseTest {
                 .andExpect(jsonPath("$.data.access_token", notNullValue()))
                 .andExpect(jsonPath("$.data.refresh_token", notNullValue()));
 
-        loadAccountPort.registeredAccountInfo(username).ifPresentOrElse(
+        loadAccountPort.registeredAccountInfoByUsername(username).ifPresentOrElse(
                 accountInfo -> assertAll(
                         () -> assertEquals(username, accountInfo.username()),
                         () -> assertTrue(passwordEncoder.matches(password, accountInfo.password())),

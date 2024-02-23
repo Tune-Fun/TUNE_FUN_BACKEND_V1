@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
+import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
 
 @Service
 @UseCase
@@ -43,12 +44,12 @@ public class SendForgotPasswordOtpService implements SendForgotPasswordOtpUseCas
 
     @Transactional(readOnly = true)
     public CurrentAccount getCurrentAccount(final AccountCommands.SendForgotPasswordOtp command) {
-        return loadAccountPort.accountInfo(command.username())
+        return loadAccountPort.currentAccountInfo(command.username())
                 .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
     }
 
     @NotNull
     private static SaveOtp getSaveOtp(String username) {
-        return new SaveOtp(username, OtpType.FORGOT_PASSWORD);
+        return new SaveOtp(username, FORGOT_PASSWORD.getLabel());
     }
 }

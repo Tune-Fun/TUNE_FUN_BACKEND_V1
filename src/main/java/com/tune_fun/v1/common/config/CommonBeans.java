@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.function.Predicate;
 
+import static com.tune_fun.v1.common.config.Uris.NOT_LOGGING_URIS;
+import static java.util.Arrays.stream;
 import static org.zalando.logbook.core.Conditions.exclude;
 
 @Lazy
@@ -54,9 +56,6 @@ public class CommonBeans {
 
     @Bean
     public JavaMailSender javaMailSender() {
-        log.info("mailUsername: {}", mailUsername);
-        log.info("mailPassword: {}", mailPassword);
-
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(mailSenderHost);
         javaMailSender.setPort(mailSenderPort);
@@ -90,7 +89,7 @@ public class CommonBeans {
 
     @Bean
     public Logbook logbook() {
-        Predicate<HttpRequest> excludePredicate = exclude(Arrays.stream(Uris.NOT_LOGGING_URIS).map(Conditions::requestTo));
+        Predicate<HttpRequest> excludePredicate = exclude(stream(NOT_LOGGING_URIS).map(Conditions::requestTo));
 
         return Logbook.builder()
                 .bodyFilter(new PrettyPrintingJsonBodyFilter())

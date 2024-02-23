@@ -5,10 +5,17 @@ import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.AccountPersistenceAdapter;
 import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.RegisterUseCase;
+import com.tune_fun.v1.account.application.port.input.usecase.SendForgotPasswordOtpUseCase;
 import com.tune_fun.v1.account.application.port.input.usecase.jwt.GenerateAccessTokenUseCase;
 import com.tune_fun.v1.account.application.port.input.usecase.jwt.GenerateRefreshTokenUseCase;
 import com.tune_fun.v1.base.AbstractIntegrationTest;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.otp.adapter.output.persistence.OtpPersistenceAdapter;
+import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
+import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
+import com.tune_fun.v1.otp.application.port.input.usecase.VerifyOtpUseCase;
+import com.tune_fun.v1.otp.domain.behavior.LoadOtp;
+import com.tune_fun.v1.otp.domain.state.CurrentDecryptedOtp;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
+
+import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @Getter
 @Service
@@ -33,7 +43,16 @@ public class DummyService extends AbstractIntegrationTest {
     private GenerateRefreshTokenUseCase generateRefreshTokenUseCase;
 
     @Autowired
+    private SendForgotPasswordOtpUseCase sendForgotPasswordOtpUseCase;
+
+    @Autowired
+    private VerifyOtpUseCase verifyOtpUseCase;
+
+    @Autowired
     private AccountPersistenceAdapter accountPersistenceAdapter;
+
+    @Autowired
+    private OtpPersistenceAdapter otpPersistenceAdapter;
 
     private AccountJpaEntity defaultAccount = null;
 
@@ -43,6 +62,8 @@ public class DummyService extends AbstractIntegrationTest {
 
     private String defaultAccessToken = null;
     private String defaultRefreshToken = null;
+
+    private CurrentDecryptedOtp forgotPasswordOtp = null;
 
     @Transactional
     public void initAndLogin() throws NoSuchAlgorithmException {
@@ -75,5 +96,22 @@ public class DummyService extends AbstractIntegrationTest {
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    @Transactional
+    public void forgotPasswordOtp() throws Exception {
+        AccountCommands.SendForgotPasswordOtp command = new AccountCommands.SendForgotPasswordOtp(defaultUsername);
+        assertDoesNotThrow(() -> sendForgotPasswordOtpUseCase.sendOtp(command));
+        forgotPasswordOtp = otpPersistenceAdapter.loadOtp(new LoadOtp(defaultUsername, FORGOT_PASSWORD.getLabel()));
+    }
+
+    @Transactional
+    public void verifyOtp(OtpType otpType, String token) throws Exception {
+        OtpQueries.Verify query = new OtpQueries.Verify(defaultUsername, otpType.getLabel(), token);
+        verifyOtpUseCase.verify(query);
+    }
+
+    public void expireOtp(OtpType otpType) {
+        otpPersistenceAdapter.expire(otpType.getLabel(), defaultUsername);
     }
 }
