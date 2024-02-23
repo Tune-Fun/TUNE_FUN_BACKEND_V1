@@ -1,6 +1,8 @@
 package com.tune_fun.v1.external.aws.xray;
 
 import com.amazonaws.xray.sql.TracingDataSource;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

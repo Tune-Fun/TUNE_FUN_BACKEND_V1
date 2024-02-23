@@ -30,7 +30,7 @@ public class AwsXRayTracingStatement {
     public static Statement decorateStatement(Statement statement) {
         return (Statement) Proxy.newProxyInstance(AwsXRayTracingStatement.class.getClassLoader(),
                 new Class[]{Statement.class},
-                new TracingStatementHandler(statement));
+                new TracingStatementHandler(statement, null));
     }
 
     /**
@@ -44,7 +44,7 @@ public class AwsXRayTracingStatement {
     public static PreparedStatement decoratePreparedStatement(PreparedStatement statement, String sql) {
         return (PreparedStatement) Proxy.newProxyInstance(AwsXRayTracingStatement.class.getClassLoader(),
                 new Class[]{PreparedStatement.class},
-                new TracingStatementHandler(statement));
+                new TracingStatementHandler(statement, sql));
     }
 
     /**
@@ -58,7 +58,7 @@ public class AwsXRayTracingStatement {
     public static CallableStatement decorateCallableStatement(CallableStatement statement, String sql) {
         return (CallableStatement) Proxy.newProxyInstance(AwsXRayTracingStatement.class.getClassLoader(),
                 new Class[]{CallableStatement.class},
-                new TracingStatementHandler(statement));
+                new TracingStatementHandler(statement, sql));
     }
 
     private static class TracingStatementHandler implements InvocationHandler {
@@ -78,9 +78,11 @@ public class AwsXRayTracingStatement {
         private static final String SANITIZED_QUERY = "sanitized_query";
 
         private final Statement delegate;
+        private final String sql;
 
-        TracingStatementHandler(Statement statement) {
+        TracingStatementHandler(Statement statement, String sql) {
             this.delegate = statement;
+            this.sql = sql;
         }
 
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -151,9 +153,7 @@ public class AwsXRayTracingStatement {
                 sqlParams.put(DRIVER_VERSION, dbmetadata.getDriverVersion());
                 sqlParams.put(DATABASE_TYPE, dbmetadata.getDatabaseProductName());
                 sqlParams.put(DATABASE_VERSION, dbmetadata.getDatabaseProductVersion());
-                // TODO : SQL 가져올 방법 찾아야함
-//                log.info("Method Name : {}", method.getName());
-//                if (EXECUTE.equals(method.getName())) sqlParams.put(SANITIZED_QUERY, args[0]);
+                if (sql != null) sqlParams.put(SANITIZED_QUERY, sql);
 
                 subsegment.putAllSql(sqlParams);
 
