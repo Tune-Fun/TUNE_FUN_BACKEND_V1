@@ -78,10 +78,10 @@ public class AccountPersistenceAdapter implements
     public Optional<AccountJpaEntity> loadAccountByUsername(final String username) {
         return accountRepository.findActive(username, null);
     }
-    
+
     public Optional<AccountJpaEntity> findByEmail(final String email) {
         return accountRepository.findActive(null, email);
-    } 
+    }
 
     @Override
     @Transactional

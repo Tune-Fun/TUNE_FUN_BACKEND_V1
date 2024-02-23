@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class AccountMailAdapter implements SendUsernamePort  {
+public class AccountMailAdapter implements SendUsernamePort {
 
     private static final String USERNAME_SEND_MAIL_TEMPLATE = "username_send";
 
