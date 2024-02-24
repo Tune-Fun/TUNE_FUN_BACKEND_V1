@@ -41,6 +41,9 @@ public class Uris {
     public static final String SWAGGER_API_DOCS_SWAGGER_CONFIG = SWAGGER_API_DOCS + "/swagger-config";
     public static final String SWAGGER_API_DOCS_JSON = "/docs/com.tune_fun-open-api-3.0.1.json";
 
+    public static final String STATIC_PACKAGE = "/static/**";
+    public static final String FAVICON = "/favicon.ico";
+
     public static final String[] PERMIT_ALL_URIS = {
             CHECK_USERNAME_DUPLICATE,
             CHECK_EMAIL_DUPLICATE,
@@ -62,7 +65,9 @@ public class Uris {
             SWAGGER_API_DOCS,
             SWAGGER_API_DOCS_SWAGGER_CONFIG,
             SWAGGER_FAVICON,
-            SWAGGER_API_DOCS_JSON
+            SWAGGER_API_DOCS_JSON,
+            STATIC_PACKAGE,
+            FAVICON
     };
 
     public static final String[] ADMIN_URIS = {

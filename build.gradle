@@ -73,7 +73,8 @@ dependencies {
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.1.0'
     implementation 'com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:2.0.2'
     implementation 'com.amazonaws:aws-xray-recorder-sdk-spring:2.15.1'
-    implementation 'com.amazonaws:aws-xray-recorder-sdk-log4j:2.15.1'
+//    implementation 'com.amazonaws:aws-xray-recorder-sdk-apache-http:2.15.1'
+    implementation 'com.amazonaws:aws-xray-recorder-sdk-slf4j:2.15.1'
     implementation 'com.amazonaws:aws-xray-recorder-sdk-sql-mysql:2.15.1'
     implementation 'com.amazonaws:aws-xray-recorder-sdk-sql:2.15.1'
     implementation 'com.slack.api:slack-app-backend:1.38.0' // Chat
@@ -87,6 +88,7 @@ dependencies {
 
     // Authentication, Authorization
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation "io.jsonwebtoken:jjwt-api:${jwtVersion}"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:${jwtVersion}"
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jwtVersion}"
