@@ -12,11 +12,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.zalando.logbook.HttpRequest;
-import org.zalando.logbook.Logbook;
+import org.zalando.logbook.*;
 import org.zalando.logbook.core.Conditions;
 import org.zalando.logbook.json.PrettyPrintingJsonBodyFilter;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.function.Predicate;

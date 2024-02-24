@@ -2,6 +2,7 @@ package com.tune_fun.v1.common.config;
 
 import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StringSerializer;
+import com.tune_fun.v1.common.config.annotation.OnlyDevelopmentConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@Configuration
+@OnlyDevelopmentConfiguration
 public class KafkaConfig {
 
     @Bean

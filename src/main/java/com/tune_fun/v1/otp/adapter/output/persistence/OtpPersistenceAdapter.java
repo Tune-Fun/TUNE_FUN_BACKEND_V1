@@ -1,5 +1,6 @@
 package com.tune_fun.v1.otp.adapter.output.persistence;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.EncryptUtil;
@@ -9,10 +10,10 @@ import com.tune_fun.v1.otp.application.port.output.LoadOtpPort;
 import com.tune_fun.v1.otp.application.port.output.SaveOtpPort;
 import com.tune_fun.v1.otp.application.port.output.VerifyOtpPort;
 import com.tune_fun.v1.otp.domain.behavior.LoadOtp;
+import com.tune_fun.v1.otp.domain.behavior.SaveOtp;
 import com.tune_fun.v1.otp.domain.behavior.VerifyOtp;
 import com.tune_fun.v1.otp.domain.state.CurrentDecryptedOtp;
 import com.tune_fun.v1.otp.domain.state.CurrentOtp;
-import com.tune_fun.v1.otp.domain.behavior.SaveOtp;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,7 @@ import static com.tune_fun.v1.common.response.MessageCode.*;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.fromLabel;
 import static java.lang.String.format;
 
+@XRayEnabled
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOtpPort, DeleteOtpPort {

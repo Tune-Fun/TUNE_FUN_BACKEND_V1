@@ -1,5 +1,6 @@
 package com.tune_fun.v1.otp.application.service;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.output.RecordEmailVerifiedAtPort;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
@@ -9,6 +10,7 @@ import com.tune_fun.v1.otp.domain.behavior.VerifyOtp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@XRayEnabled
 @Service
 @UseCase
 @RequiredArgsConstructor

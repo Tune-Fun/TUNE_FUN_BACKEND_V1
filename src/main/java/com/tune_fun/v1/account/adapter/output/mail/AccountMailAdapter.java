@@ -1,5 +1,6 @@
 package com.tune_fun.v1.account.adapter.output.mail;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tune_fun.v1.account.application.port.output.SendUsernamePort;
@@ -10,9 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@XRayEnabled
 @Component
 @RequiredArgsConstructor
-public class AccountMailAdapter implements SendUsernamePort  {
+public class AccountMailAdapter implements SendUsernamePort {
 
     private static final String USERNAME_SEND_MAIL_TEMPLATE = "username_send";
 
