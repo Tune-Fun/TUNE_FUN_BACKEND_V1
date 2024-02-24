@@ -1,14 +1,13 @@
 package com.tune_fun.v1.common.config.aws;
 
+import com.tune_fun.v1.common.config.annotation.OnlyDevelopmentConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.services.s3.S3Client;
 
 import static software.amazon.awssdk.regions.Region.AP_NORTHEAST_2;
 
-@Profile("!test & !test_standalone")
-@Configuration
+@OnlyDevelopmentConfiguration
 public class AwsS3Config {
 
     @Bean

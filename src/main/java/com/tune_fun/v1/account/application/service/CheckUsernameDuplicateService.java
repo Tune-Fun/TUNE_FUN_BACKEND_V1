@@ -1,5 +1,6 @@
 package com.tune_fun.v1.account.application.service;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.input.usecase.CheckUsernameDuplicateUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.tune_fun.v1.common.response.MessageCode.USER_POLICY_USERNAME_REGISTERED;
 
+@XRayEnabled
 @Service
 @UseCase
 @RequiredArgsConstructor

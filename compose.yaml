@@ -24,8 +24,20 @@ services:
     container_name: 'tune_fun_mongodb'
     restart: always
     environment:
-      - 'MONGO_INITDB_DATABASE=mydatabase'
-      - 'MONGO_INITDB_ROOT_PASSWORD=secret'
-      - 'MONGO_INITDB_ROOT_USERNAME=root'
+      MONGO_INITDB_DATABASE: mydatabase
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_INITDB_ROOT_USERNAME: root
     ports:
       - '27016:27017'
+
+  aws-xray:
+    image: 'amazon/aws-xray-daemon:latest'
+    container_name: 'tune_fun_aws_xray'
+    restart: always
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ap-northeast-2
+    ports:
+      - '2000:2000/udp'
+      - '2000:2000/tcp'

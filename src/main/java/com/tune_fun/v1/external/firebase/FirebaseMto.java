@@ -10,7 +10,7 @@ public class FirebaseMto {
 
     @Getter
     @NoArgsConstructor
-    public static class Base {
+    protected static class Base {
         private String title;
         private String body;
         private Map<String, String> data;

@@ -20,9 +20,9 @@ public class RateLimitAspect {
 
     private final TokenBucketResolver tokenBucketResolver;
 
-    @Around("com.tune_fun.v1.common.aspect.PointCuts.restController() " +
-            "&& !com.tune_fun.v1.common.aspect.PointCuts.swaggerUI()" +
-            "&& !com.tune_fun.v1.common.aspect.PointCuts.springdoc() ")
+    @Around("com.tune_fun.v1.common.aspect.CustomPointCuts.restController() " +
+            "&& !com.tune_fun.v1.common.aspect.CustomPointCuts.swaggerUI()" +
+            "&& !com.tune_fun.v1.common.aspect.CustomPointCuts.springdoc() ")
     public Object rateLimit(ProceedingJoinPoint joinPoint) throws Throwable {
         log.info("Call rateLimit : {}", joinPoint.getClass());
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();

@@ -57,7 +57,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}"
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
@@ -73,6 +72,10 @@ dependencies {
     implementation 'software.amazon.awssdk:s3:2.21.29'
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.1.0'
     implementation 'com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:2.0.2'
+    implementation 'com.amazonaws:aws-xray-recorder-sdk-spring:2.15.1'
+    implementation 'com.amazonaws:aws-xray-recorder-sdk-log4j:2.15.1'
+    implementation 'com.amazonaws:aws-xray-recorder-sdk-sql-mysql:2.15.1'
+    implementation 'com.amazonaws:aws-xray-recorder-sdk-sql:2.15.1'
     implementation 'com.slack.api:slack-app-backend:1.38.0' // Chat
     implementation 'com.atlassian.jira:jira-rest-java-client-core:5.2.7' // Issue Tracking
     compileOnly 'io.atlassian.fugue:fugue:5.0.0'
@@ -115,6 +118,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.apache.commons:commons-lang3:3.13.0'
+    testImplementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     testImplementation 'com.tngtech.archunit:archunit-junit5:1.1.0' // Architecture Rule Test
     testImplementation "com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.12" // Test Double
     testImplementation 'org.quickperf:quick-perf-junit5:1.1.0' // Performance Test

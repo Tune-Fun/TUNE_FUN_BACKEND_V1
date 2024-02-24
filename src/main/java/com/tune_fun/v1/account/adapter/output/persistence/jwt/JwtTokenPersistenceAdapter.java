@@ -1,12 +1,16 @@
 package com.tune_fun.v1.account.adapter.output.persistence.jwt;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.output.jwt.*;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.property.JwtProperty;
 import com.tune_fun.v1.common.response.MessageCode;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -24,6 +28,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 /**
  * Account - Output Adapter - Persistence - JwtToken
  */
+@XRayEnabled
 @Slf4j
 @Component
 @PersistenceAdapter

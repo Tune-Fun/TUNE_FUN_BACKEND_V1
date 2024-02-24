@@ -1,5 +1,6 @@
 package com.tune_fun.v1.account.application.service;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.input.usecase.LogoutUseCase;
 import com.tune_fun.v1.account.application.port.output.jwt.DeleteAccessTokenPort;
 import com.tune_fun.v1.account.application.port.output.jwt.DeleteRefreshTokenPort;
@@ -7,6 +8,7 @@ import com.tune_fun.v1.common.hexagon.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@XRayEnabled
 @Service
 @UseCase
 @RequiredArgsConstructor
