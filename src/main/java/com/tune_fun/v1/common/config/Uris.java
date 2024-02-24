@@ -14,6 +14,7 @@ public class Uris {
     public static final String LOGIN = API_V1_ROOT + "/login";
     public static final String LOGOUT = API_V1_ROOT + "/logout";
     public static final String REFRESH = API_V1_ROOT + "/refresh";
+    public static final String SET_NEW_PASSWORD = API_V1_ROOT + "/set-new-password";
 
     public static final String FORGOT_PASSWORD_SEND_OTP = API_V1_ROOT + "/forgot-password/send-otp";
 

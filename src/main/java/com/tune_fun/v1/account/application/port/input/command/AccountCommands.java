@@ -30,25 +30,18 @@ public class AccountCommands {
     ) {
     }
 
-    public record Login(
-            @NotBlank
-            String username,
-            @NotBlank
-            String password
-    ) {
+    public record Login(@NotBlank String username, @NotBlank String password) {
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public record Refresh(
-            @NotBlank
-            String refreshToken
-    ) {
+    public record Refresh(@NotBlank String refreshToken) {
     }
 
-    public record SendForgotPasswordOtp(
-            @NotBlank
-            String username
-    ) {
+    public record SendForgotPasswordOtp(@NotBlank String username) {
+    }
+
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public record SetNewPassword(@NotBlank String newPassword) {
     }
 
 }
