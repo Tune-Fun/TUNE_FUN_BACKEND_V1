@@ -106,7 +106,8 @@ public abstract class ControllerBaseTest extends AbstractIntegrationTest {
 
     protected static final FieldDescriptor[] baseResponseFields = {
             fieldWithPath("message").description("시스템 메시지"),
-            fieldWithPath("code").description("상태 코드")
+            fieldWithPath("code").description("상태 코드"),
+            fieldWithPath("data").description("데이터").optional()
     };
 
 

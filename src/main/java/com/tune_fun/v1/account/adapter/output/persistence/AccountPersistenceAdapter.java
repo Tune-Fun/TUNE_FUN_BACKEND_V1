@@ -1,14 +1,13 @@
 package com.tune_fun.v1.account.adapter.output.persistence;
 
 import com.amazonaws.xray.spring.aop.XRayEnabled;
-import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
-import com.tune_fun.v1.account.application.port.output.RecordEmailVerifiedAtPort;
-import com.tune_fun.v1.account.application.port.output.RecordLastLoginAtPort;
-import com.tune_fun.v1.account.application.port.output.SaveAccountPort;
+import com.tune_fun.v1.account.application.port.output.*;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
+import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
+import com.tune_fun.v1.common.response.MessageCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
@@ -23,7 +22,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AccountPersistenceAdapter implements
         LoadAccountPort, SaveAccountPort,
-        RecordLastLoginAtPort, RecordEmailVerifiedAtPort {
+        RecordLastLoginAtPort, RecordEmailVerifiedAtPort,
+        UpdatePasswordPort {
 
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
@@ -90,5 +90,16 @@ public class AccountPersistenceAdapter implements
     public CurrentAccount saveAccount(SaveAccount saveAccount) {
         AccountJpaEntity saved = accountRepository.save(accountMapper.fromSaveAccountValue(saveAccount));
         return accountMapper.accountInfo(saved);
+    }
+
+    @Override
+    @Transactional
+    public void updatePassword(final String username, final String encodedPassword) {
+        loadAccountByUsername(username)
+                .ifPresent(account -> {
+                    AccountJpaEntity updatedAccount = account.toBuilder()
+                            .password(encodedPassword).build();
+                    accountRepository.save(updatedAccount);
+                });
     }
 }
