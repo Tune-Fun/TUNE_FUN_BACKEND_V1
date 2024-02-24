@@ -9,7 +9,6 @@ import org.springframework.restdocs.snippet.Attributes.Attribute;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 
 @TestConfiguration
-@Profile({"test", "test_standalone"})
 public class RestDocsConfig {
 
     @Bean
