@@ -1,7 +1,7 @@
 package com.tune_fun.v1.base;
 
-import com.tune_fun.v1.base.doc.RestDocsConfig;
 import com.jayway.jsonpath.JsonPath;
+import com.tune_fun.v1.base.doc.RestDocsConfig;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.util.i18n.MessageSourceUtil;
 import org.junit.jupiter.api.BeforeEach;

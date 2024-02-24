@@ -8,7 +8,6 @@ import com.amazonaws.xray.strategy.LogErrorContextMissingStrategy;
 import com.tune_fun.v1.common.config.annotation.OnlyDevelopmentConfiguration;
 import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 

@@ -453,6 +453,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_로그인_api">로그인 API</a></li>
 <li><a href="#_로그아웃_api">로그아웃 API</a></li>
 <li><a href="#_access_token_재발급_api">Access Token 재발급 API</a></li>
+<li><a href="#_이메일_중복확인_api">이메일 중복확인 API</a></li>
+<li><a href="#_아이디_중복확인_api">아이디 중복확인 API</a></li>
+<li><a href="#_이메일_인증여부_확인_api">이메일 인증여부 확인 API</a></li>
+<li><a href="#_비밀번호_재설정_api">비밀번호 재설정 API</a></li>
+<li><a href="#_닉네임_변경_api">닉네임 변경 API</a></li>
 </ul>
 </li>
 </ul>
@@ -476,10 +481,10 @@ Content-Length: 266
 Host: localhost:8080
 
 {
-  "username" : "NiZO9F2EHTd",
-  "password" : "oAwlHQCk152WBVj",
-  "email" : "PQDlwep@AzTex.com",
-  "nickname" : "NMRSm",
+  "username" : "BwnhKJG4tC",
+  "password" : "q1vHotBnGAucTXQj",
+  "email" : "qnyPVsY@vOfYI.com",
+  "nickname" : "sblpl",
   "notification" : {
     "vote_progress_notification" : true,
     "vote_end_notification" : true,
@@ -505,16 +510,16 @@ Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
 Content-Security-Policy: script-src 'self'
-Content-Length: 849
+Content-Length: 846
 
 {
   "message" : "요청이 성공적으로 처리되었습니다.",
   "code" : "0000",
   "data" : {
-    "username" : "NiZO9F2EHTd",
+    "username" : "BwnhKJG4tC",
     "roles" : [ "CLIENT_0" ],
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI0ZmQwYmZkYy1jYWVmLTQ2NzYtOWIwMS1mMmYyMmM4MWJjZDIiLCJzdWIiOiJOaVpPOUYyRUhUZCIsImlhdCI6MTcwODY1OTgxOCwibmJmIjoxNzA4NjU5ODE4LCJleHAiOjE3MDg2NTk5OTh9.Y-M1_6_iTr5_p8CPw43ayASKVCVG6Epsfo74yYu0ZhYPkg8-xgX9Zb2zJIeYxlCd8R0mS5OOErIrlFeRjj5Y8Q",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIyZDUwOTU0My05OGI1LTQ3NTEtYmMyMC1iYTZhMDgyNzg4NjAiLCJzdWIiOiJOaVpPOUYyRUhUZCIsImlhdCI6MTcwODY1OTgxOCwibmJmIjoxNzA4NjU5ODE4LCJleHAiOjE3MTEyNTE4MTh9.Zj-UFMDjS2QgzRVd8MiU-4fbLa1FnyTZHmSJTck7OEpJgjEMZ4_tFRv0FguOsrjY5NbI7EDo0tOGob3kDJ-0pA"
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJjOWViMmNlZC1iZmEzLTQ0YjgtOTU5Zi00ZGM1OWM1MDRmODYiLCJzdWIiOiJCd25oS0pHNHRDIiwiaWF0IjoxNzA4NzUzODI5LCJuYmYiOjE3MDg3NTM4MjksImV4cCI6MTcwODc1NDAwOX0.9ghdOKySGUX_ZSS4A9VCPgDf1Xj69hwL7QKV7wLTHdUMF9vBBFE4NlZErVTytw7HwxfxxVb6ngarzpxGmGaYzg",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI3YzkxNGZmYS00NDAzLTQ1M2YtODgwZC00NGIzZGQ3M2YwNmUiLCJzdWIiOiJCd25oS0pHNHRDIiwiaWF0IjoxNzA4NzUzODI5LCJuYmYiOjE3MDg3NTM4MjksImV4cCI6MTcxMTM0NTgyOX0.hvot7dLX9_p_4GxSeBz8uLKZX-5_Usj4YyCDslIeQPoeXcZ4LbjdGOVdO44N8k18flgi0N7a5L6UeL_hq_Lj6A"
   }
 }</code></pre>
 </div>
@@ -665,12 +670,12 @@ Content-Length: 849
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /v1/login HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 66
+Content-Length: 69
 Host: localhost:8080
 
 {
-  "username" : "7WQvEwdbme",
-  "password" : "yRPA93J0za4Kx0Bv"
+  "username" : "5uPya2AYqSTqCm",
+  "password" : "1QPWzKfqZvVpcUE"
 }</code></pre>
 </div>
 </div>
@@ -691,16 +696,16 @@ Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
 Content-Security-Policy: script-src 'self'
-Content-Length: 846
+Content-Length: 860
 
 {
   "message" : "요청이 성공적으로 처리되었습니다.",
   "code" : "0000",
   "data" : {
-    "username" : "7WQvEwdbme",
+    "username" : "5uPya2AYqSTqCm",
     "roles" : [ "CLIENT_0" ],
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI5NjM0MjUyMS1kOGQxLTQ3ZWYtYjY3YS0zOThhZjI3YjU5ODIiLCJzdWIiOiI3V1F2RXdkYm1lIiwiaWF0IjoxNzA4NjU5ODE4LCJuYmYiOjE3MDg2NTk4MTgsImV4cCI6MTcwODY1OTk5OH0.yyaScqvQ2mzsEeTMuxHsJIhGkkKQ8w0xXxLCMWwmyxgESfVuQGKWieJVQ6ofvTD2nu6CvW9mrFrwilOqn1N-2A",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI2MmI5MjFkOS1hMDllLTQ1OGQtYTliNy1mNDZjZGY2YmRhZjYiLCJzdWIiOiI3V1F2RXdkYm1lIiwiaWF0IjoxNzA4NjU5ODE4LCJuYmYiOjE3MDg2NTk4MTgsImV4cCI6MTcxMTI1MTgxOH0.aozd4PMtKc3go9ukL1EUEZD21o_gvxujWiIbjm-G7l44B2pMhJSWR3Arz-dhAuUTdOAvfPcGPuRK-01Rtd_Z0g"
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJlYzI5NmI2Yi04MTA1LTRiNTctODJhMC1jMDFmZGI2M2ZkZWMiLCJzdWIiOiI1dVB5YTJBWXFTVHFDbSIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MDg3NTQwMDl9.Gbxfnp0VstAo2tLbYXA8dZtQenLGPNK4FNVnvzvGTwrNbF20lzTqHJi1dRtAcPlr1CRpqWjk5b5_ZDpdcZEj2A",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI0ZDE1ZGQ3OS03MTU1LTRlMzItODRhZS1mZDM1MTIyYzU1NTciLCJzdWIiOiI1dVB5YTJBWXFTVHFDbSIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MTEzNDU4Mjl9.CdAmJnGl8Hkpwxs2yf1T-quC8gtc5Q1Mqivn9xI6w_DqGXAvFdRi-xeb4UU1VPS0LCnfmg31tRUAbmqzFG0OLw"
   }
 }</code></pre>
 </div>
@@ -808,7 +813,7 @@ Content-Length: 846
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /v1/logout HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6Ijc3MzgzMjZhLWNiNzUtNDllMC1iNWM4LTAwNDg4NGY5MWRjYyIsInN1YiI6IkNINjE1UUJkcE8iLCJpYXQiOjE3MDg2NTk4MTgsIm5iZiI6MTcwODY1OTgxOCwiZXhwIjoxNzA4NjU5OTk4fQ.vNikMXeyX2aIexvkkaEniD7_GskvsknO5I_e77XwKCfDo8IMVfRv_HwZtj2e6Nc4A5cDOGjETdTiQUqg0WuqTA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjIxNzdhYjk1LTEwOTQtNGJiZi04ODdjLWNmZDk1OWFiMmUzOSIsInN1YiI6InhpUXpuMWlJQ21MTSIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MDg3NTQwMDl9.TmW7-yByTgZ98EQRv_PeVOIplEa77Hj4oIGw7wG4UYmVmMpMhcQe4o67nrk8Nd6hebTYwu-uSfpUkO-3dDuEwQ
 Host: localhost:8080
 Content-Type: application/x-www-form-urlencoded</code></pre>
 </div>
@@ -884,7 +889,7 @@ Content-Length: 350
 Host: localhost:8080
 
 {
-  "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImI3YTNlZGE1LWI3NTMtNDRlYy1iMjdhLWM0ODc1YmZhZDM4NiIsInN1YiI6ImRXUHhtVlY0R0pveCIsImlhdCI6MTcwODY1OTgxOCwibmJmIjoxNzA4NjU5ODE4LCJleHAiOjE3MTEyNTE4MTh9._IvJD16NDg2uTIWrrtWpjYbWKdj4wX2I0wtuDOkgnTQGHbmhV4UnjT8-zhVCuUapxuOadvj4MGw6zxauHcP78w"
+  "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImZlYTM3YTRhLTY4MTQtNGZjOS1hNjcyLWE1ZDRlYzNiMTJhMyIsInN1YiI6IjJDVlV5ZVRJOFB0eCIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MTEzNDU4Mjl9.jkvSWkOkE-dEqTIL2SV0WYKP9uPXUPnTa4wsvaKToSfoPzymPzRl9A6s64GbueVCYFDB1Txo-6ak8buKmRtblg"
 }</code></pre>
 </div>
 </div>
@@ -911,7 +916,7 @@ Content-Length: 453
   "message" : "요청이 성공적으로 처리되었습니다.",
   "code" : "0000",
   "data" : {
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjAwNzk2ZGE1LTc5MzctNGQxOS1iN2YyLWE2ZDczNWJjMmQ0MiIsInN1YiI6ImRXUHhtVlY0R0pveCIsImlhdCI6MTcwODY1OTgxOCwibmJmIjoxNzA4NjU5ODE4LCJleHAiOjE3MDg2NTk5OTh9.mJH_OCjhUM_ubu13eSYMRJO8Omdbpo20TnFOsfXDbpzFd0xjS-wXTgeK6ENlKuDSfm5RI5mHtEcTCu5HUS7-ug"
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjNjNjY5OTExLTI5ZTctNDNkYi1hNzI3LWE4M2Y1NWY3OGY1ZSIsInN1YiI6IjJDVlV5ZVRJOFB0eCIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MDg3NTQwMDl9.xf9Sbq-aXgnp5gIs7i60BiKK9d692JrPXaE3u4de1_ELhP1FQ9mi3xioGC6_E88ZTlOcojqanFBulXoI0Zi7EQ"
   }
 }</code></pre>
 </div>
@@ -988,13 +993,518 @@ Content-Length: 453
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_이메일_중복확인_api"><a class="link" href="#_이메일_중복확인_api">이메일 중복확인 API</a></h3>
+<div class="sect3">
+<h4 id="_성공_5"><a class="link" href="#_성공_5">성공</a></h4>
+<div class="sect4">
+<h5 id="_성공_5_http_request"><a class="link" href="#_성공_5_http_request">HTTP request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/check-email-duplicate?email=test HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_성공_5_http_response"><a class="link" href="#_성공_5_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Security-Policy: script-src 'self'
+Content-Length: 74
+
+{
+  "message" : "사용가능한 이메일입니다.",
+  "code" : "2008"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_성공_5_query_parameters"><a class="link" href="#_성공_5_query_parameters">Query parameters</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>false</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NOT BLANK</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_성공_5_response_fields"><a class="link" href="#_성공_5_response_fields">Response fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시스템 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_실패"><a class="link" href="#_실패">실패</a></h4>
+<div class="sect4">
+<h5 id="_실패_http_request"><a class="link" href="#_실패_http_request">HTTP request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/check-email-duplicate?email=oQklfJi%40gmake.com HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_실패_http_response"><a class="link" href="#_실패_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Security-Policy: script-src 'self'
+Content-Length: 68
+
+{
+  "message" : "이메일이 중복입니다.",
+  "code" : "2006"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_실패_query_parameters"><a class="link" href="#_실패_query_parameters">Query parameters</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>false</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NOT BLANK</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_실패_response_fields"><a class="link" href="#_실패_response_fields">Response fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시스템 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_아이디_중복확인_api"><a class="link" href="#_아이디_중복확인_api">아이디 중복확인 API</a></h3>
+<div class="sect3">
+<h4 id="_성공_6"><a class="link" href="#_성공_6">성공</a></h4>
+<div class="sect4">
+<h5 id="_성공_6_http_request"><a class="link" href="#_성공_6_http_request">HTTP request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/check-username-duplicate?username=test HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_성공_6_http_response"><a class="link" href="#_성공_6_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Security-Policy: script-src 'self'
+Content-Length: 74
+
+{
+  "message" : "사용가능한 아이디입니다.",
+  "code" : "2007"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_성공_6_query_parameters"><a class="link" href="#_성공_6_query_parameters">Query parameters</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>username</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>false</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NOT BLANK</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_성공_6_response_fields"><a class="link" href="#_성공_6_response_fields">Response fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시스템 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_실패_2"><a class="link" href="#_실패_2">실패</a></h4>
+<div class="sect4">
+<h5 id="_실패_2_http_request"><a class="link" href="#_실패_2_http_request">HTTP request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/check-username-duplicate?username=rbkzy227HBO3jS HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_실패_2_http_response"><a class="link" href="#_실패_2_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Security-Policy: script-src 'self'
+Content-Length: 68
+
+{
+  "message" : "아이디가 중복입니다.",
+  "code" : "2005"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_이메일_인증여부_확인_api"><a class="link" href="#_이메일_인증여부_확인_api">이메일 인증여부 확인 API</a></h3>
+<div class="sect3">
+<h4 id="_성공_7"><a class="link" href="#_성공_7">성공</a></h4>
+<div class="sect4">
+<h5 id="_성공_7_http_request"><a class="link" href="#_성공_7_http_request">HTTP request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/check-email-verified HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImIzZTJmZTUwLTRlYTItNDdkMS04ZmVlLWM1MDliOTBhNzFkMCIsInN1YiI6IkVkNDZKeFE4RHlzTSIsImlhdCI6MTcwODc1MzgyOCwibmJmIjoxNzA4NzUzODI4LCJleHAiOjE3MDg3NTQwMDh9.etwUnhuf0X-tV6o9tcgA8OIJ2VRDLM76fL1zLxqn5SgvXiF8YYcyv4zg3hNuhrJbQ2U74RDeVkrQEwpoKwW9mw
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_성공_7_http_response"><a class="link" href="#_성공_7_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Security-Policy: script-src 'self'
+Content-Length: 85
+
+{
+  "message" : "이메일 인증이 완료된 계정입니다.",
+  "code" : "2009"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_성공_7_response_fields"><a class="link" href="#_성공_7_response_fields">Response fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시스템 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_비밀번호_재설정_api"><a class="link" href="#_비밀번호_재설정_api">비밀번호 재설정 API</a></h3>
+<div class="sect3">
+<h4 id="_성공_8"><a class="link" href="#_성공_8">성공</a></h4>
+<div class="sect4">
+<h5 id="_성공_8_http_request"><a class="link" href="#_성공_8_http_request">HTTP request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /v1/set-new-password HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIxNDE5ODFkOC05ZTcyLTRlNWQtYjc4ZS0wM2JkN2RmNTJhYmUiLCJzdWIiOiI0eUNRbW5zZm91T1NVIiwiaWF0IjoxNzA4NzUzODI5LCJuYmYiOjE3MDg3NTM4MjksImV4cCI6MTcwODc1NDAwOX0.WdHwOsFfXAdmVtD9XXuCkcIupNQn4HPiCp1lGsHuZs4-GkW42P_Q1DGLdLs7FzDBRsO-xyktmSpJI-C-JY2HfA
+Content-Length: 40
+Host: localhost:8080
+
+{
+  "new_password" : "pkWKX9eBlavXBtv"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_성공_8_http_response"><a class="link" href="#_성공_8_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Security-Policy: script-src 'self'
+Content-Length: 87
+
+{
+  "message" : "비밀번호 재설정이 완료되었습니다.",
+  "code" : "2010"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_성공_8_request_fields"><a class="link" href="#_성공_8_request_fields">Request fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>new_password</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">새로운 비밀번호</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>false</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NOT BLANK</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_성공_8_response_fields"><a class="link" href="#_성공_8_response_fields">Response fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시스템 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_닉네임_변경_api"><a class="link" href="#_닉네임_변경_api">닉네임 변경 API</a></h3>
+<div class="sect3">
+<h4 id="_성공_9"><a class="link" href="#_성공_9">성공</a></h4>
+
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-02-07 13:54:28 +0900
+Last updated 2024-02-19 23:04:59 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

@@ -1,0 +1,15 @@
+[[OTP-API]]
+== OTP API
+
+=== OTP 인증 API (Token 인증 X)
+
+==== 성공
+
+operation::verify-otp-success[snippets='http-request,http-response,request-fields,response-fields']
+
+
+=== OTP 재전송
+
+==== 성공
+
+operation::resend-otp-success[snippets='http-request,http-response,request-fields,response-fields']

@@ -21,7 +21,6 @@ import java.util.Optional;
 import static com.tune_fun.v1.common.response.MessageCode.EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-@SecurityRequirement(name = AUTHORIZATION)
 @RestController
 @WebAdapter
 @RequiredArgsConstructor

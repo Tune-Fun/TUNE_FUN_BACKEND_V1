@@ -172,7 +172,7 @@ test {
 
 openapi3 { // Swagger OAS Generate
     server = "http://localhost:8080"
-    title = "Tune Fun REST API V1 Documentation - #{LocalDate.now()}"
+    title = "Tune Fun REST API V1 Documentation"
     description = "Spring REST Docs with SwaggerUI."
     version = "${version}"
     outputFileNamePrefix = "${group}-open-api-3.0.1"

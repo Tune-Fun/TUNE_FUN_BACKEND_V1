@@ -10,6 +10,7 @@ import java.util.Optional;
 import static org.springframework.http.HttpStatus.*;
 
 /**
+ * @see com.tune_fun.v1.common.response.ResponseMapper#ok(MessageCode)
  * @see com.tune_fun.v1.common.response.ResponseMapper#error(MessageCode)
  */
 @Getter

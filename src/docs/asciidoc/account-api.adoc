@@ -24,3 +24,46 @@ operation::logout-success[snippets='http-request,http-response,response-fields']
 ==== 성공
 
 operation::refresh-success[snippets='http-request,http-response,request-fields,response-fields']
+
+=== 이메일 중복확인 API
+
+==== 성공
+
+operation::check-email-duplicate-success[snippets='http-request,http-response,query-parameters,response-fields']
+
+==== 실패
+
+operation::check-email-duplicate-failed[snippets='http-request,http-response,query-parameters,response-fields']
+
+=== 아이디 중복확인 API
+
+==== 성공
+
+operation::check-username-duplicate-success[snippets='http-request,http-response,query-parameters,response-fields']
+
+==== 실패
+
+operation::check-username-duplicate-success-failed[snippets='http-request,http-response']
+
+=== 이메일 인증여부 확인 API
+
+==== 성공
+
+operation::check-email-verified-success[snippets='http-request,http-response,response-fields']
+
+=== 비밀번호 찾기 OTP 전송 API
+
+==== 성공
+operation::send-forgot-password-otp-success[snippets='http-request,http-response,request-fields,response-fields']
+
+=== 비밀번호 재설정 API
+
+==== 성공
+
+operation::set-new-password-success[snippets='http-request,http-response,request-fields,response-fields']
+
+=== 닉네임 변경 API
+
+==== 성공
+
+operation::update-nickname-success[snippets='http-request,http-response,request-fields,response-fields']

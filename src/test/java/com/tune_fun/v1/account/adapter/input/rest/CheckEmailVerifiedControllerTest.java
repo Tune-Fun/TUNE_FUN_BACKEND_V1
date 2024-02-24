@@ -28,7 +28,7 @@ class CheckEmailVerifiedControllerTest extends ControllerBaseTest {
     @Test
     @Order(1)
     @DisplayName("이메일 인증 여부 확인, 성공")
-    void verifyOtpSuccess() throws Exception {
+    void checkEmailVerifiedSuccess() throws Exception {
         dummyService.initAccount();
         dummyService.forgotPasswordOtp();
 
