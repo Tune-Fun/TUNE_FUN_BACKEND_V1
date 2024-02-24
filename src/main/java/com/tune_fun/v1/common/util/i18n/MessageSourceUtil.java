@@ -2,16 +2,21 @@ package com.tune_fun.v1.common.util.i18n;
 
 import com.tune_fun.v1.common.response.MessageCode;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
 @Component
-@AllArgsConstructor
 public class MessageSourceUtil {
 
     private final MessageSource messageSource;
+
+    public MessageSourceUtil(@Qualifier("message") MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     public String getMessage(String code) {
         return messageSource.getMessage(code, null, Locale.getDefault());

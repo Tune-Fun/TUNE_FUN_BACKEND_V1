@@ -8,11 +8,11 @@ public class OtpQueries {
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public record Verify(
-            @NotBlank
+            @NotBlank(message = "{username.not_blank}")
             String username,
-            @NotBlank
+            @NotBlank(message = "{otpType.not_blank}")
             String otpType,
-            @NotBlank
+            @NotBlank(message = "{otp.not_blank}")
             String otp
     ) {
 

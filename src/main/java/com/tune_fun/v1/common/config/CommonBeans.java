@@ -1,6 +1,7 @@
 package com.tune_fun.v1.common.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -74,6 +75,7 @@ public class CommonBeans {
     }
 
     @Bean
+    @Qualifier("message")
     public MessageSource messageSource() {
         String basename = "messages/messages";
         String charSet = "UTF-8";
@@ -84,13 +86,19 @@ public class CommonBeans {
     }
 
     @Bean
-    public LocalValidatorFactoryBean getValidator() {
+    @Qualifier("validation")
+    public MessageSource validationMessageSource() {
         String basename = "messages/validation";
         String charSet = "UTF-8";
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename(basename);
         messageSource.setDefaultEncoding(charSet);
 
+        return messageSource;
+    }
+
+    @Bean
+    public LocalValidatorFactoryBean getValidator(@Qualifier("validation") MessageSource messageSource) {
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
         bean.setValidationMessageSource(messageSource);
         return bean;

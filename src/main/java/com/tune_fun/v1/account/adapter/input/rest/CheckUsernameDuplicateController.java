@@ -10,6 +10,7 @@ import com.tune_fun.v1.common.response.ResponseMapper;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import static com.tune_fun.v1.common.response.MessageCode.SUCCESS_USERNAME_UNIQU
 
 @RestController
 @WebAdapter
+@Validated
 @RequiredArgsConstructor
 public class CheckUsernameDuplicateController {
 
@@ -25,7 +27,8 @@ public class CheckUsernameDuplicateController {
     private final ResponseMapper responseMapper;
 
     @GetMapping(value = Uris.CHECK_USERNAME_DUPLICATE)
-    public ResponseEntity<Response<BasePayload>> checkUsernameDuplicate(@RequestParam(name = "username") final String username) {
+    public ResponseEntity<Response<BasePayload>> checkUsernameDuplicate(@RequestParam(name = "username")
+                                                                            @NotBlank(message = "{username.not_blank}") final String username) {
         checkUsernameDuplicateUseCase.checkUsernameDuplicate(username);
         return responseMapper.ok(SUCCESS_USERNAME_UNIQUE);
     }
