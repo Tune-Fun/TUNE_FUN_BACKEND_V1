@@ -23,7 +23,7 @@ import java.util.Optional;
 public class AccountPersistenceAdapter implements
         LoadAccountPort, SaveAccountPort,
         RecordLastLoginAtPort, RecordEmailVerifiedAtPort,
-        UpdatePasswordPort {
+        UpdatePasswordPort, UpdateNicknamePort {
 
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
@@ -50,8 +50,15 @@ public class AccountPersistenceAdapter implements
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<RegisteredAccount> registeredAccountInfoByEmail(final String email) {
         return findByEmail(email).map(accountMapper::registeredAccountInfo);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<RegisteredAccount> registeredAccountInfoByNickname(final String nickname) {
+        return findByNickname(nickname).map(accountMapper::registeredAccountInfo);
     }
 
     @Override
@@ -78,11 +85,17 @@ public class AccountPersistenceAdapter implements
 
     @Transactional(readOnly = true)
     public Optional<AccountJpaEntity> loadAccountByUsername(final String username) {
-        return accountRepository.findActive(username, null);
+        return accountRepository.findActive(username, null, null);
     }
 
+    @Transactional(readOnly = true)
     public Optional<AccountJpaEntity> findByEmail(final String email) {
-        return accountRepository.findActive(null, email);
+        return accountRepository.findActive(null, email, null);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<AccountJpaEntity> findByNickname(final String nickname) {
+        return accountRepository.findActive(null, null, nickname);
     }
 
     @Override
@@ -99,6 +112,17 @@ public class AccountPersistenceAdapter implements
                 .ifPresent(account -> {
                     AccountJpaEntity updatedAccount = account.toBuilder()
                             .password(encodedPassword).build();
+                    accountRepository.save(updatedAccount);
+                });
+    }
+
+    @Override
+    @Transactional
+    public void updateNickname(final String username, final String nickname) {
+        loadAccountByUsername(username)
+                .ifPresent(account -> {
+                    AccountJpaEntity updatedAccount = account.toBuilder()
+                            .nickname(nickname).build();
                     accountRepository.save(updatedAccount);
                 });
     }

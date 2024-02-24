@@ -44,4 +44,8 @@ public class AccountCommands {
     public record SetNewPassword(@NotBlank String newPassword) {
     }
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public record UpdateNickname(@NotBlank String newNickname) {
+    }
+
 }

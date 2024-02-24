@@ -16,4 +16,6 @@ public interface LoadAccountPort {
 
     Optional<RegisteredAccount> registeredAccountInfoByEmail(final String email);
 
+    Optional<RegisteredAccount> registeredAccountInfoByNickname(final String nickname);
+
 }

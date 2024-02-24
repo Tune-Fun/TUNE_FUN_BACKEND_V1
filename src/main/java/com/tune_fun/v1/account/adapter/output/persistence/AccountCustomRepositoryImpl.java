@@ -15,10 +15,11 @@ public class AccountCustomRepositoryImpl implements AccountCustomRepository {
     private static final QAccountJpaEntity ACCOUNT = QAccountJpaEntity.accountJpaEntity;
 
     @Override
-    public Optional<AccountJpaEntity> findActive(final String username, final String email) {
+    public Optional<AccountJpaEntity> findActive(final String username, final String email, final String nickname) {
         Predicate predicate = PredicateBuilder.builder()
                 .and().eqString(ACCOUNT.username, username)
                 .and().eqString(ACCOUNT.email, email)
+                .and().eqString(ACCOUNT.nickname, nickname)
                 .build();
 
         return Optional.ofNullable(
