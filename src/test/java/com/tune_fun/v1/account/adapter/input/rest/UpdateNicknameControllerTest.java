@@ -37,7 +37,7 @@ class UpdateNicknameControllerTest extends ControllerBaseTest {
     @Test
     @Order(1)
     @DisplayName("닉네임, 성공")
-    void findUsernameSuccess() throws Exception {
+    void updateNicknameSuccess() throws Exception {
         dummyService.initAndLogin();
 
         String accessToken = dummyService.getDefaultAccessToken();

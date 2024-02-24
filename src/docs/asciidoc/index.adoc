@@ -7,3 +7,4 @@
 :sectlinks:
 
 include::account-api.adoc[]
+include::otp-api.adoc[]
