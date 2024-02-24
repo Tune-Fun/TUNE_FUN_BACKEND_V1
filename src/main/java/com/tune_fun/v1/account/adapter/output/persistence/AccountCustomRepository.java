@@ -4,6 +4,6 @@ import java.util.Optional;
 
 public interface AccountCustomRepository {
 
-    Optional<AccountJpaEntity> findActive(final String username, final String email);
+    Optional<AccountJpaEntity> findActive(final String username, final String email, final String nickname);
 
 }
