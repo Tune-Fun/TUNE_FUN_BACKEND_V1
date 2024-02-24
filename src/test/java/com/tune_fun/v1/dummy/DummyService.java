@@ -16,6 +16,7 @@ import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
 import com.tune_fun.v1.otp.application.port.input.usecase.VerifyOtpUseCase;
 import com.tune_fun.v1.otp.domain.behavior.LoadOtp;
 import com.tune_fun.v1.otp.domain.state.CurrentDecryptedOtp;
+import com.tune_fun.v1.otp.domain.state.VerifyResult;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -108,7 +109,10 @@ public class DummyService extends AbstractIntegrationTest {
     @Transactional
     public void verifyOtp(OtpType otpType, String token) throws Exception {
         OtpQueries.Verify query = new OtpQueries.Verify(defaultUsername, otpType.getLabel(), token);
-        verifyOtpUseCase.verify(query);
+        VerifyResult verifyResult = verifyOtpUseCase.verify(query);
+
+        defaultAccessToken = verifyResult.accessToken();
+        defaultRefreshToken = verifyResult.refreshToken();
     }
 
     public void expireOtp(OtpType otpType) {
