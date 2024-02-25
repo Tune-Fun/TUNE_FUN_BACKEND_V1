@@ -95,6 +95,7 @@ dependencies {
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     implementation "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     compileOnly 'org.projectlombok:lombok'
+    implementation 'com.google.guava:guava:33.0.0-jre'
     implementation 'org.apache.commons:commons-lang3:3.13.0'
     implementation 'org.apache.commons:commons-rng-simple:1.5'
     implementation 'commons-io:commons-io:2.15.1'
