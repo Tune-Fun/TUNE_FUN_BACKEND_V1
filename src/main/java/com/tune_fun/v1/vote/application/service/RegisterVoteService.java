@@ -21,7 +21,6 @@ public class RegisterVoteService implements RegisterVoteUseCase {
     private final SaveVotePort saveVotePort;
     private final SaveVoteImagePort saveVoteImagePort;
     private final SendVoteUploadFcmPort sendVoteUploadFcmPort;
-    private final ProduceVoteUploadEventPort produceVoteUploadEventPort;
 
     @Override
     @DistributionLock(key = "registerVote")
