@@ -77,8 +77,6 @@ dependencies {
     implementation 'com.amazonaws:aws-xray-recorder-sdk-sql-mysql:2.15.1'
     implementation 'com.amazonaws:aws-xray-recorder-sdk-sql:2.15.1'
     implementation 'com.slack.api:slack-app-backend:1.38.0' // Chat
-    implementation 'com.atlassian.jira:jira-rest-java-client-core:5.2.7' // Issue Tracking
-    compileOnly 'io.atlassian.fugue:fugue:5.0.0'
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 
     // Message Broker

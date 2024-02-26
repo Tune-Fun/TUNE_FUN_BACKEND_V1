@@ -11,6 +11,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.Issue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,6 +42,7 @@ class RegisterControllerTest extends ControllerBaseTest {
 
     @Transactional
     @Test
+    @Issue("T1-159")
     @Order(1)
     @DisplayName("회원가입, 성공")
     void registerSuccess() throws Exception {
