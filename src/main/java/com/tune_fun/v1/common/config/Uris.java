@@ -25,6 +25,8 @@ public class Uris {
     public static final String VERIFY_OTP_WITH_TOKEN = API_V1_ROOT + "/otp/verify-with-token";
     public static final String RESEND_OTP = API_V1_ROOT + "/otp/resend";
 
+    public static final String REGISTER_VOTE = API_V1_ROOT + "/vote/register";
+
     public static final String SWAGGER_UI_ROOT = "/swagger-ui";
     public static final String SWAGGER_UI = "/swagger-ui.html";
     public static final String SWAGGER_DOCS = "/docs/com.tune_fun-open-api-3.0.1.json";

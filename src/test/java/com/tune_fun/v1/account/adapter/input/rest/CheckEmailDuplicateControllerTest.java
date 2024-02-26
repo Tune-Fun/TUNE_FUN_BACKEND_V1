@@ -8,6 +8,7 @@ import com.tune_fun.v1.dummy.DummyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.Issue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ class CheckEmailDuplicateControllerTest extends ControllerBaseTest {
 
     @Transactional
     @Test
+    @Issue("T1-163")
     @Order(1)
     @DisplayName("이메일 중복확인, 성공")
     void checkEmailDuplicateSuccess() throws Exception {
@@ -57,6 +59,7 @@ class CheckEmailDuplicateControllerTest extends ControllerBaseTest {
 
     @Transactional
     @Test
+    @Issue("T1-163")
     @Order(2)
     @DisplayName("이메일 중복확인, 실패 - 중복된 이메일")
     void checkEmailDuplicateFailed() throws Exception {

@@ -21,3 +21,4 @@ public class OtpRedisEntity {
     private String token;
 
 }
+
