@@ -15,6 +15,10 @@ spring:
   flyway:
     enabled: false
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   mail:
     host: 127.0.0.1
     port: 3025

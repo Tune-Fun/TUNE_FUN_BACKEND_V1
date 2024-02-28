@@ -44,7 +44,7 @@ class SetNewPasswordControllerTest extends ControllerBaseTest {
     @Order(1)
     @DisplayName("비밀번호 재설정, 성공")
     void setNewPasswordSuccess() throws Exception {
-        dummyService.initAccount();
+        dummyService.initAndLogin();
         dummyService.forgotPasswordOtp();
 
         CurrentDecryptedOtp forgotPasswordOtp = dummyService.getForgotPasswordOtp();

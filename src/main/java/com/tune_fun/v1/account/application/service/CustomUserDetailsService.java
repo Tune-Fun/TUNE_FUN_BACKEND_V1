@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
 
@@ -21,6 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final LoadAccountPort loadAccountPort;
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return loadAccountPort.loadCustomUserByUsername(username)
                 .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
