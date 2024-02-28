@@ -11,4 +11,9 @@ import org.springframework.stereotype.Component;
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class VotePersistenceAdapter implements SaveVotePort {
+
+    private final VoteRepository voteRepository;
+    private final VotePaperRepository votePaperRepository;
+    private final VoteChoiceRepository voteChoiceRepository;
+
 }

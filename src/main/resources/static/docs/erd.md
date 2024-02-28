@@ -1,4 +1,7 @@
 ```mermaid
+---
+title : Tunefun ERD V1
+---
 erDiagram
     ACCOUNT {
         id BIGINT
@@ -40,8 +43,8 @@ erDiagram
     }
     VOTE_PAPER {
         id string
-        article_uuid string
         uuid string
+        username VARCHAR(255)
         vote_end_at datetime
         option boolean
         delievery_at datetime
@@ -51,33 +54,74 @@ erDiagram
     }
     VOTE {
         id BIGINT
-        vote_paper_uuid string
+        vote_paper string
         username VARCHAR(255)
         created_at datetime
         updated_at datetime
     }
     VOTE_CHOICE {
         id BIGINT
-        vote_uuid string
+        vote_paper string
         username VARCHAR(255)
         created_at datetime
         updated_at datetime
     }
     FAVORITE {
         id BIGINT
-        vote_paper_uuid string
+        vote_paper string
         username VARCHAR(255)
         created_at datetime
     }
     REPORT {
         id BIGINT
-        username VARCHAR(255)
+        report_type ENUM
+        reporter VARCHAR(255)
+        target_id VARCHAR(255)
+        content VARCHAR(255)
         created_at datetime
     }
     FOLLOW {
         id string
-        follower_username VARCHAR(255)
-        target_username VARCHAR(255)
+        follower VARCHAR(255)
+        target VARCHAR(255)
         created_at datetime
     }
+    INQUIRY {
+        id BIGINT
+        category ENUM
+        inquiry_content VARCHAR(100)
+        answer_content VARCHAR(100)
+        status ENUM
+        inquirer VARCHAR(255)
+        created_at datetime
+        answer_at datetime
+    }
+    SOCIAL_ACCOUNT {
+        id BIGINT
+        username VARCHAR(255)
+        sns_platform ENUM
+        created_at datetime
+    }
+    TERMS {
+        id BIGINT
+        order INT
+        category VARCHAR(255)
+        content VARCHAR(255)
+    }
+    OTP }o--|| ACCOUNT: username
+    ARTICLE }o--|| ACCOUNT: username
+    VOTE_PAPER }o--|| ACCOUNT : username
+    VOTE }o--|| ACCOUNT: username
+    VOTE }o--|| VOTE_PAPER: vote_paper
+    VOTE_CHOICE }o--|| ACCOUNT: username
+    VOTE_CHOICE }o--|| VOTE_PAPER: vote_paper
+    FAVORITE }o--|| VOTE_PAPER: vote_paper
+    FAVORITE }o--|| ACCOUNT: username
+    REPORT }o--|| ACCOUNT: reporter
+    REPORT }o--|| ACCOUNT: target_id
+    REPORT }o--|| ARTICLE : target_id
+    FOLLOW }o--|| ACCOUNT: follower
+    FOLLOW }o--|| ACCOUNT: target
+    INQUIRY }o--|| ACCOUNT: inquirer
+    SOCIAL_ACCOUNT }o--|| ACCOUNT: username
 ```
