@@ -40,7 +40,19 @@ public class AccountCommands {
             @NotBlank(message = "{username.not_blank}")
             String username,
             @NotBlank(message = "{password.not_blank}")
-            String password) {
+            String password,
+            @Valid
+            Device device
+    ) {
+    }
+
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public record Device(
+            @NotBlank(message = "{fcm_token.not_blank}")
+            String fcmToken,
+            @NotBlank(message = "{device_token.not_blank}")
+            String deviceToken
+    ) {
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

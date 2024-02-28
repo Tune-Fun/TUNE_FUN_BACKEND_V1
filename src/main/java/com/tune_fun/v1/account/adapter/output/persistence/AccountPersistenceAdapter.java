@@ -29,7 +29,6 @@ public class AccountPersistenceAdapter implements
     private final AccountMapper accountMapper;
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<User> loadCustomUserByUsername(final String username) {
         return loadAccountByUsername(username)
                 .map(account -> new User(account.getUsername(), account.getPassword(),
@@ -38,31 +37,26 @@ public class AccountPersistenceAdapter implements
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<CurrentAccount> currentAccountInfo(final String username) {
         return loadAccountByUsername(username).map(accountMapper::accountInfo);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<RegisteredAccount> registeredAccountInfoByUsername(final String username) {
         return loadAccountByUsername(username).map(accountMapper::registeredAccountInfo);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<RegisteredAccount> registeredAccountInfoByEmail(final String email) {
         return findByEmail(email).map(accountMapper::registeredAccountInfo);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<RegisteredAccount> registeredAccountInfoByNickname(final String nickname) {
         return findByNickname(nickname).map(accountMapper::registeredAccountInfo);
     }
 
     @Override
-    @Transactional
     public void recordLastLoginAt(final String username) {
         loadAccountByUsername(username)
                 .ifPresent(account -> {
@@ -73,7 +67,6 @@ public class AccountPersistenceAdapter implements
     }
 
     @Override
-    @Transactional
     public void recordEmailVerifiedAt(final String username) {
         loadAccountByUsername(username)
                 .ifPresent(account -> {
@@ -83,30 +76,25 @@ public class AccountPersistenceAdapter implements
                 });
     }
 
-    @Transactional(readOnly = true)
     public Optional<AccountJpaEntity> loadAccountByUsername(final String username) {
         return accountRepository.findActive(username, null, null);
     }
 
-    @Transactional(readOnly = true)
     public Optional<AccountJpaEntity> findByEmail(final String email) {
         return accountRepository.findActive(null, email, null);
     }
 
-    @Transactional(readOnly = true)
     public Optional<AccountJpaEntity> findByNickname(final String nickname) {
         return accountRepository.findActive(null, null, nickname);
     }
 
     @Override
-    @Transactional
     public CurrentAccount saveAccount(SaveAccount saveAccount) {
         AccountJpaEntity saved = accountRepository.save(accountMapper.fromSaveAccountValue(saveAccount));
         return accountMapper.accountInfo(saved);
     }
 
     @Override
-    @Transactional
     public void updatePassword(final String username, final String encodedPassword) {
         loadAccountByUsername(username)
                 .ifPresent(account -> {
@@ -117,7 +105,6 @@ public class AccountPersistenceAdapter implements
     }
 
     @Override
-    @Transactional
     public void updateNickname(final String username, final String nickname) {
         loadAccountByUsername(username)
                 .ifPresent(account -> {
