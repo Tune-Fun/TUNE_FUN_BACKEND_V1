@@ -5,6 +5,7 @@ import com.tune_fun.v1.account.application.port.input.usecase.jwt.ValidateAccess
 import com.tune_fun.v1.base.ControllerBaseTest;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.response.MessageCode;
+import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.dummy.DummyService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +21,7 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.account.adapter.output.persistence.Role.CLIENT_0;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.*;
+import static com.tune_fun.v1.common.util.StringUtil.randomAlphaNumericSymbol;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
@@ -43,8 +45,9 @@ class LoginControllerTest extends ControllerBaseTest {
     void loginSuccess() throws Exception {
         dummyService.initAccount();
 
+        AccountCommands.Device deviceInfo = new AccountCommands.Device(randomAlphaNumericSymbol(15), randomAlphaNumericSymbol(15));
         AccountCommands.Login command =
-                new AccountCommands.Login(dummyService.getDefaultUsername(), dummyService.getDefaultPassword());
+                new AccountCommands.Login(dummyService.getDefaultUsername(), dummyService.getDefaultPassword(), deviceInfo);
 
         ResultActions resultActions = mockMvc.perform(
                         post(Uris.LOGIN)
@@ -63,7 +66,10 @@ class LoginControllerTest extends ControllerBaseTest {
 
         FieldDescriptor[] requestDescriptors = {
                 fieldWithPath("username").description("아이디").attributes(constraint("NOT BLANK")),
-                fieldWithPath("password").description("비밀번호").attributes(constraint("NOT BLANK"))
+                fieldWithPath("password").description("비밀번호").attributes(constraint("NOT BLANK")),
+                fieldWithPath("device").description("로그인 디바이스 정보").attributes(constraint("NOT NULL")),
+                fieldWithPath("device.fcm_token").description("FCM 토큰").attributes(constraint("NOT BLANK")),
+                fieldWithPath("device.device_token").description("디바이스 토큰").attributes(constraint("NOT BLANK"))
         };
 
         FieldDescriptor[] responseDescriptors = ArrayUtils.addAll(baseResponseFields,

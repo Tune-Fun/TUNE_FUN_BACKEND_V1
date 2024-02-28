@@ -5,8 +5,10 @@ import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.LoginUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.application.port.output.RecordLastLoginAtPort;
+import com.tune_fun.v1.account.application.port.output.device.SaveDevicePort;
 import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort;
 import com.tune_fun.v1.account.application.port.output.jwt.CreateRefreshTokenPort;
+import com.tune_fun.v1.account.domain.behavior.SaveDevice;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.state.LoginResult;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
@@ -31,6 +33,7 @@ public class LoginService implements LoginUseCase {
     private final RecordLastLoginAtPort recordLastLoginAtPort;
     private final CreateAccessTokenPort createAccessTokenPort;
     private final CreateRefreshTokenPort createRefreshTokenPort;
+    private final SaveDevicePort saveDevicePort;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -45,12 +48,14 @@ public class LoginService implements LoginUseCase {
 
         String authorities = String.join(",", registeredAccount.roles());
 
-        SaveJwtToken saveJwtToken = getSaveJwtToken(registeredAccount, authorities);
+        SaveJwtToken saveJwtTokenBehavior = getSaveJwtToken(registeredAccount, authorities);
 
-        String accessToken = createAccessTokenPort.createAccessToken(saveJwtToken);
-        String refreshToken = createRefreshTokenPort.createRefreshToken(saveJwtToken);
+        String accessToken = createAccessTokenPort.createAccessToken(saveJwtTokenBehavior);
+        String refreshToken = createRefreshTokenPort.createRefreshToken(saveJwtTokenBehavior);
 
         recordLastLoginAtPort.recordLastLoginAt(registeredAccount.username());
+        SaveDevice saveDeviceBehavior = new SaveDevice(registeredAccount.username(), command.device().fcmToken(), command.device().deviceToken());
+        saveDevicePort.saveDevice(saveDeviceBehavior);
 
         return getLoginResult(registeredAccount, accessToken, refreshToken);
     }

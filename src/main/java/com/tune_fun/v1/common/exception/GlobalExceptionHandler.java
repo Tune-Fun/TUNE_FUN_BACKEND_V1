@@ -1,17 +1,13 @@
 package com.tune_fun.v1.common.exception;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.tune_fun.v1.common.response.*;
-import com.tune_fun.v1.common.util.i18n.MessageSourceUtil;
+import com.tune_fun.v1.common.response.ExceptionResponse;
+import com.tune_fun.v1.common.response.Response;
+import com.tune_fun.v1.common.response.ResponseMapper;
+import com.tune_fun.v1.common.response.ValidationErrorData;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,14 +15,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
+import static com.google.common.base.CaseFormat.LOWER_CAMEL;
+import static com.google.common.base.CaseFormat.LOWER_UNDERSCORE;
 import static com.tune_fun.v1.common.response.MessageCode.ERROR;
 import static com.tune_fun.v1.common.response.MessageCode.EXCEPTION_ILLEGAL_ARGUMENT;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
 
 @Slf4j
@@ -65,11 +59,11 @@ public class GlobalExceptionHandler {
 
     private Map<String, String> getValidationErrorPair(MethodArgumentNotValidException ex) {
         List<FieldError> fieldErrorList = ex.getBindingResult().getFieldErrors();
-        return fieldErrorList.stream().collect(toMap(FieldError::getField, FieldError::getDefaultMessage));
-    }
-
-    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-    protected record ValidationErrorData(@JsonUnwrapped Map<String, String> errors) implements BasePayload {
+        return fieldErrorList.stream().collect(toMap(
+                        fieldError -> LOWER_CAMEL.to(LOWER_UNDERSCORE, fieldError.getField()),
+                        FieldError::getDefaultMessage
+                )
+        );
     }
 
     protected static String getPropertyName(String propertyPath) {

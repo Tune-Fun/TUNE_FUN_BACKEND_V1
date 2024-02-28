@@ -71,19 +71,13 @@ public class LocalStackConfig {
                 .region(of(localStackContainer.getRegion()))
                 .build();
 
-        log.info("Creating secret with name: {}", LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME);
         secretsManagerClient.createSecret(b -> b.name(LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME));
 
         GreenMailUser greenMailUser = greenMail.getUserManager().getUser(SMTP_USERNAME);
-        log.info("GreenMail user: {}", greenMailUser);
         String mailSecret = getMailSecret(greenMailUser.getLogin(), greenMailUser.getPassword());
 
-        log.info("Putting secret value for secret with name: {}, secret: {}", LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME, mailSecret);
         secretsManagerClient.putSecretValue(b -> b.secretId(LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME)
                 .secretString(mailSecret));
-
-        GetSecretValueResponse secretValue = getSecretValue(secretsManagerClient);
-        log.info("Got secret value for secret with name: {}, secret: {}", LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME, secretValue.secretString());
 
         return secretsManagerClient;
     }
