@@ -31,7 +31,7 @@ public class SocialAccountMongoEntity {
     private String profileImageUrl;
 
     @Field("oauth_provider")
-    private OAuthProvider oauthProvider;
+    private String oauthProvider;
 
     @Field("oauth_id")
     private String oauthId;

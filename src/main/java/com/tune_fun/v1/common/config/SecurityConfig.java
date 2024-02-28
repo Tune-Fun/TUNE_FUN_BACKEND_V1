@@ -1,6 +1,10 @@
 package com.tune_fun.v1.common.config;
 
 import com.tune_fun.v1.account.adapter.input.security.JwtAuthenticationFilter;
+import com.tune_fun.v1.account.application.service.oauth2.CustomOAuth2UserService;
+import com.tune_fun.v1.account.application.service.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.tune_fun.v1.account.application.service.oauth2.OAuth2AuthenticationFailureHandler;
+import com.tune_fun.v1.account.application.service.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +40,11 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
@@ -80,6 +89,12 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2Login(configure ->
+                        configure.authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))
+                                .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
+                                .successHandler(oAuth2AuthenticationSuccessHandler)
+                                .failureHandler(oAuth2AuthenticationFailureHandler)
+                )
                 .userDetailsService(userDetailsService)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
