@@ -1,6 +1,5 @@
 package com.tune_fun.v1.account.application.service;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.LoginUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
 
 
-@XRayEnabled
 @Service
 @UseCase
 @RequiredArgsConstructor
@@ -36,6 +34,16 @@ public class LoginService implements LoginUseCase {
     private final SaveDevicePort saveDevicePort;
 
     private final PasswordEncoder passwordEncoder;
+
+    @NotNull
+    private static SaveJwtToken getSaveJwtToken(RegisteredAccount registeredAccount, String authorities) {
+        return new SaveJwtToken(registeredAccount.username(), authorities);
+    }
+
+    @NotNull
+    private static LoginResult getLoginResult(RegisteredAccount registeredAccount, String accessToken, String refreshToken) {
+        return new LoginResult(registeredAccount.username(), registeredAccount.roles(), accessToken, refreshToken);
+    }
 
     @Override
     @Transactional
@@ -58,15 +66,5 @@ public class LoginService implements LoginUseCase {
         saveDevicePort.saveDevice(saveDeviceBehavior);
 
         return getLoginResult(registeredAccount, accessToken, refreshToken);
-    }
-
-    @NotNull
-    private static SaveJwtToken getSaveJwtToken(RegisteredAccount registeredAccount, String authorities) {
-        return new SaveJwtToken(registeredAccount.username(), authorities);
-    }
-
-    @NotNull
-    private static LoginResult getLoginResult(RegisteredAccount registeredAccount, String accessToken, String refreshToken) {
-        return new LoginResult(registeredAccount.username(), registeredAccount.roles(), accessToken, refreshToken);
     }
 }

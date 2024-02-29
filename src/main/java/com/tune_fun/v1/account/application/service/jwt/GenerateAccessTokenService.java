@@ -1,6 +1,5 @@
 package com.tune_fun.v1.account.application.service.jwt;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.input.usecase.jwt.GenerateAccessTokenUseCase;
 import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
-@XRayEnabled
+
 @Service
 @UseCase
 @RequiredArgsConstructor

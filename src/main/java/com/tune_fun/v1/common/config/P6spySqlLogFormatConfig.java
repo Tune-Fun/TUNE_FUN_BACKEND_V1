@@ -1,4 +1,4 @@
-package com.tune_fun.v1.base.sql;
+package com.tune_fun.v1.common.config;
 
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.P6SpyOptions;
@@ -8,14 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.engine.jdbc.internal.FormatStyle;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Locale;
 
 @Slf4j
-@TestConfiguration
-@Profile({"test", "test_standalone"})
+@Configuration
 public class P6spySqlLogFormatConfig implements MessageFormattingStrategy {
 
     @PostConstruct

@@ -1,6 +1,5 @@
 package com.tune_fun.v1.account.adapter.output.persistence.device;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.adapter.output.persistence.AccountPersistenceAdapter;
 import com.tune_fun.v1.account.application.port.output.device.SaveDevicePort;
 import com.tune_fun.v1.account.domain.behavior.SaveDevice;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@XRayEnabled
+
 @Component
 @PersistenceAdapter
 @RequiredArgsConstructor

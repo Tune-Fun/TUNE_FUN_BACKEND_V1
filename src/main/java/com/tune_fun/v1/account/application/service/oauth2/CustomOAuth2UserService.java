@@ -1,6 +1,5 @@
 package com.tune_fun.v1.account.application.service.oauth2;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserInfo;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserInfoFactory;
 import com.tune_fun.v1.common.hexagon.UseCase;
@@ -14,7 +13,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-@XRayEnabled
+
 @Service
 @UseCase
 @RequiredArgsConstructor

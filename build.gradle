@@ -57,7 +57,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}"
-    implementation "io.github.openfeign.querydsl:querydsl-mongodb:${queryDslVersion}"
+    implementation ("io.github.openfeign.querydsl:querydsl-mongodb:${queryDslVersion}") {
+        exclude group: 'org.mongodb', module: 'mongo-java-driver'
+    }
+    implementation "io.github.openfeign.querydsl:querydsl-collections:${queryDslVersion}"
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
@@ -73,11 +77,6 @@ dependencies {
     implementation 'software.amazon.awssdk:s3:2.21.29'
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.1.0'
     implementation 'com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:2.0.2'
-    implementation 'com.amazonaws:aws-xray-recorder-sdk-spring:2.15.1'
-//    implementation 'com.amazonaws:aws-xray-recorder-sdk-apache-http:2.15.1'
-    implementation 'com.amazonaws:aws-xray-recorder-sdk-slf4j:2.15.1'
-    implementation 'com.amazonaws:aws-xray-recorder-sdk-sql-mysql:2.15.1'
-    implementation 'com.amazonaws:aws-xray-recorder-sdk-sql:2.15.1'
     implementation 'com.slack.api:slack-app-backend:1.38.0' // Chat
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 
@@ -110,6 +109,7 @@ dependencies {
             'org.springframework.boot:spring-boot-configuration-processor',
             "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}",
             "io.github.openfeign.querydsl:querydsl-mongodb:${queryDslVersion}",
+            'org.springframework.boot:spring-boot-starter-data-mongodb',
             'org.projectlombok:lombok',
             "org.mapstruct:mapstruct-processor:${mapstructVersion}",
             'org.projectlombok:lombok-mapstruct-binding:0.2.0'
@@ -121,7 +121,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.apache.commons:commons-lang3:3.13.0'
-    testImplementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     testImplementation 'com.tngtech.archunit:archunit-junit5:1.1.0' // Architecture Rule Test
     testImplementation "com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.12" // Test Double
     testImplementation 'org.quickperf:quick-perf-junit5:1.1.0' // Performance Test
@@ -152,6 +151,12 @@ sourceSets {
 }
 
 tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += [
+            "-processor", 'lombok.launch.AnnotationProcessorHider$AnnotationProcessor,' +
+            'org.springframework.data.mongodb.repository.support.MongoAnnotationProcessor,' +
+            'com.querydsl.apt.jpa.JPAAnnotationProcessor,' +
+            'org.mapstruct.ap.MappingProcessor'
+    ]
     options.annotationProcessorGeneratedSourcesDirectory(file(generated))
 }
 
@@ -198,7 +203,7 @@ asciidoctor {
     inputs.dir snippetsDir
     configurations 'asciidoctorExt'
 
-    sources{
+    sources {
         include("**/index.adoc")
     }
 

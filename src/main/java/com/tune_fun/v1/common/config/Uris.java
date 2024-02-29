@@ -45,10 +45,21 @@ public class Uris {
     public static final String SWAGGER_API_DOCS = "/v3/api-docs";
     public static final String SWAGGER_API_DOCS_SWAGGER_CONFIG = SWAGGER_API_DOCS + "/swagger-config";
     public static final String SWAGGER_API_DOCS_JSON = "/docs/com.tune_fun-open-api-3.0.1.json";
-
+    public static final String[] NOT_LOGGING_URIS = {
+            SWAGGER_UI,
+            SWAGGER_INDEX_HTML,
+            SWAGGER_INDEX_CSS,
+            SWAGGER_BUNDLE_JS,
+            SWAGGER_CSS,
+            SWAGGER_STANDALONE_PRESET_JS,
+            SWAGGER_INITIALIZER_JS,
+            SWAGGER_API_DOCS,
+            SWAGGER_API_DOCS_SWAGGER_CONFIG,
+            SWAGGER_FAVICON,
+            SWAGGER_API_DOCS_JSON
+    };
     public static final String STATIC_PACKAGE = "/static/**";
     public static final String FAVICON = "/favicon.ico";
-
     public static final String[] PERMIT_ALL_URIS = {
             CHECK_USERNAME_DUPLICATE,
             CHECK_EMAIL_DUPLICATE,
@@ -74,23 +85,8 @@ public class Uris {
             STATIC_PACKAGE,
             FAVICON
     };
-
     public static final String[] ADMIN_URIS = {
 
-    };
-
-    public static final String[] NOT_LOGGING_URIS = {
-            SWAGGER_UI,
-            SWAGGER_INDEX_HTML,
-            SWAGGER_INDEX_CSS,
-            SWAGGER_BUNDLE_JS,
-            SWAGGER_CSS,
-            SWAGGER_STANDALONE_PRESET_JS,
-            SWAGGER_INITIALIZER_JS,
-            SWAGGER_API_DOCS,
-            SWAGGER_API_DOCS_SWAGGER_CONFIG,
-            SWAGGER_FAVICON,
-            SWAGGER_API_DOCS_JSON
     };
 
 

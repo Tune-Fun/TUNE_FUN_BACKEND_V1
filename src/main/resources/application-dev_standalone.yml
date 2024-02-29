@@ -21,6 +21,7 @@ spring:
       repositories:
         enabled: false
     mongodb:
+      uri: mongodb://localhost:27016/mydatabase
       host: localhost
       port: 27016
       database: mydatabase
@@ -93,12 +94,15 @@ spring:
             authorization-grant-type: authorization_code
             client-authentication-method: client_secret_post
             scope:
-             - user_profile
-             - user_media
+              - user_profile
+              - user_media
         provider:
           apple:
             authorization-uri: https://appleid.apple.com/auth/authorize?scope=name%20email&response_mode=form_post
             token-uri: https://appleid.apple.com/auth/token
+          instagram:
+            authorization-uri: https://api.instagram.com/oauth/authorize
+            token-uri: https://api.instagram.com/oauth/access_token
 
 
 jwt:
@@ -118,7 +122,3 @@ springdoc:
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:
     url: /docs/com.tune_fun-open-api-3.0.1.json
-
-logging:
-  level:
-    com.amazonaws.xray: INFO

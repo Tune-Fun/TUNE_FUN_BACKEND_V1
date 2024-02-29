@@ -19,7 +19,8 @@ import java.time.LocalDateTime;
 public class VotePaperMongoEntity {
 
     @Id
-    private String id;
+    @Field("vote_paper_id")
+    private String votePaperId;
 
     @Field("uuid")
     private String uuid;

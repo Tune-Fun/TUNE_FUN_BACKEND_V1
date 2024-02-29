@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 public class OtpCommands {
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public record Resend(@NotBlank(message = "{username.not_blank}") String username, @NotBlank(message = "{otp_type.not_blank}") String otpType) {}
+    public record Resend(@NotBlank(message = "{username.not_blank}") String username,
+                         @NotBlank(message = "{otp_type.not_blank}") String otpType) {
+    }
 
 }

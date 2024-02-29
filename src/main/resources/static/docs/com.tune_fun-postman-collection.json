@@ -1,770 +1,899 @@
 {
-  "info" : {
-    "name" : "Tune Fun REST API V1 Documentation",
-    "version" : "1.0.0",
-    "schema" : "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  "info": {
+    "name": "Tune Fun REST API V1 Documentation",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "item" : [ {
-    "id" : "check-email-duplicate-success",
-    "name" : "/v1/check-email-duplicate",
-    "description" : "이메일 중복확인",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/check-email-duplicate",
-        "port" : "8080",
-        "query" : [ {
-          "key" : "email",
-          "disabled" : false,
-          "description" : "이메일"
-        } ]
+  "item": [
+    {
+      "id": "check-email-duplicate-success",
+      "name": "/v1/check-email-duplicate",
+      "description": "이메일 중복확인",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/check-email-duplicate",
+          "port": "8080",
+          "query": [
+            {
+              "key": "email",
+              "disabled": false,
+              "description": "이메일"
+            }
+          ]
+        },
+        "method": "GET"
       },
-      "method" : "GET"
+      "response": [
+        {
+          "id": "check-email-duplicate-success",
+          "name": "check-email-duplicate-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/check-email-duplicate",
+              "port": "8080",
+              "query": [
+                {
+                  "key": "email",
+                  "disabled": false,
+                  "description": "이메일"
+                }
+              ]
+            },
+            "method": "GET"
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"사용가능한 이메일입니다.\",\n  \"code\" : \"2008\"\n}",
+          "code": 200
+        },
+        {
+          "id": "check-email-duplicate-failed",
+          "name": "check-email-duplicate-failed",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/check-email-duplicate",
+              "port": "8080",
+              "query": [
+                {
+                  "key": "email",
+                  "disabled": false,
+                  "description": "이메일"
+                }
+              ]
+            },
+            "method": "GET"
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"이메일이 중복입니다.\",\n  \"code\" : \"2006\"\n}",
+          "code": 400
+        }
+      ]
     },
-    "response" : [ {
-      "id" : "check-email-duplicate-success",
-      "name" : "check-email-duplicate-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/check-email-duplicate",
-          "port" : "8080",
-          "query" : [ {
-            "key" : "email",
-            "disabled" : false,
-            "description" : "이메일"
-          } ]
+    {
+      "id": "check-email-verified-success",
+      "name": "/v1/check-email-verified",
+      "description": "이메일 인증 여부 확인",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/check-email-verified",
+          "port": "8080"
         },
-        "method" : "GET"
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImIzZTJmZTUwLTRlYTItNDdkMS04ZmVlLWM1MDliOTBhNzFkMCIsInN1YiI6IkVkNDZKeFE4RHlzTSIsImlhdCI6MTcwODc1MzgyOCwibmJmIjoxNzA4NzUzODI4LCJleHAiOjE3MDg3NTQwMDh9.etwUnhuf0X-tV6o9tcgA8OIJ2VRDLM76fL1zLxqn5SgvXiF8YYcyv4zg3hNuhrJbQ2U74RDeVkrQEwpoKwW9mw",
+            "disabled": false,
+            "description": "AccessToken \"Bearer \" prefix"
+          }
+        ]
       },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"사용가능한 이메일입니다.\",\n  \"code\" : \"2008\"\n}",
-      "code" : 200
-    }, {
-      "id" : "check-email-duplicate-failed",
-      "name" : "check-email-duplicate-failed",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/check-email-duplicate",
-          "port" : "8080",
-          "query" : [ {
-            "key" : "email",
-            "disabled" : false,
-            "description" : "이메일"
-          } ]
-        },
-        "method" : "GET"
-      },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"이메일이 중복입니다.\",\n  \"code\" : \"2006\"\n}",
-      "code" : 400
-    } ]
-  }, {
-    "id" : "check-email-verified-success",
-    "name" : "/v1/check-email-verified",
-    "description" : "이메일 인증 여부 확인",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/check-email-verified",
-        "port" : "8080"
-      },
-      "method" : "GET",
-      "header" : [ {
-        "key" : "Authorization",
-        "value" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImIzZTJmZTUwLTRlYTItNDdkMS04ZmVlLWM1MDliOTBhNzFkMCIsInN1YiI6IkVkNDZKeFE4RHlzTSIsImlhdCI6MTcwODc1MzgyOCwibmJmIjoxNzA4NzUzODI4LCJleHAiOjE3MDg3NTQwMDh9.etwUnhuf0X-tV6o9tcgA8OIJ2VRDLM76fL1zLxqn5SgvXiF8YYcyv4zg3hNuhrJbQ2U74RDeVkrQEwpoKwW9mw",
-        "disabled" : false,
-        "description" : "AccessToken \"Bearer \" prefix"
-      } ]
+      "response": [
+        {
+          "id": "check-email-verified-success",
+          "name": "check-email-verified-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/check-email-verified",
+              "port": "8080"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImIzZTJmZTUwLTRlYTItNDdkMS04ZmVlLWM1MDliOTBhNzFkMCIsInN1YiI6IkVkNDZKeFE4RHlzTSIsImlhdCI6MTcwODc1MzgyOCwibmJmIjoxNzA4NzUzODI4LCJleHAiOjE3MDg3NTQwMDh9.etwUnhuf0X-tV6o9tcgA8OIJ2VRDLM76fL1zLxqn5SgvXiF8YYcyv4zg3hNuhrJbQ2U74RDeVkrQEwpoKwW9mw",
+                "disabled": false,
+                "description": "AccessToken \"Bearer \" prefix"
+              }
+            ]
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"이메일 인증이 완료된 계정입니다.\",\n  \"code\" : \"2009\"\n}",
+          "code": 200
+        }
+      ]
     },
-    "response" : [ {
-      "id" : "check-email-verified-success",
-      "name" : "check-email-verified-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/check-email-verified",
-          "port" : "8080"
+    {
+      "id": "check-username-duplicate-success",
+      "name": "/v1/check-username-duplicate",
+      "description": "아이디 중복확인",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/check-username-duplicate",
+          "port": "8080",
+          "query": [
+            {
+              "key": "username",
+              "disabled": false,
+              "description": "아이디"
+            }
+          ]
         },
-        "method" : "GET",
-        "header" : [ {
-          "key" : "Authorization",
-          "value" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImIzZTJmZTUwLTRlYTItNDdkMS04ZmVlLWM1MDliOTBhNzFkMCIsInN1YiI6IkVkNDZKeFE4RHlzTSIsImlhdCI6MTcwODc1MzgyOCwibmJmIjoxNzA4NzUzODI4LCJleHAiOjE3MDg3NTQwMDh9.etwUnhuf0X-tV6o9tcgA8OIJ2VRDLM76fL1zLxqn5SgvXiF8YYcyv4zg3hNuhrJbQ2U74RDeVkrQEwpoKwW9mw",
-          "disabled" : false,
-          "description" : "AccessToken \"Bearer \" prefix"
-        } ]
+        "method": "GET"
       },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"이메일 인증이 완료된 계정입니다.\",\n  \"code\" : \"2009\"\n}",
-      "code" : 200
-    } ]
-  }, {
-    "id" : "check-username-duplicate-success",
-    "name" : "/v1/check-username-duplicate",
-    "description" : "아이디 중복확인",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/check-username-duplicate",
-        "port" : "8080",
-        "query" : [ {
-          "key" : "username",
-          "disabled" : false,
-          "description" : "아이디"
-        } ]
-      },
-      "method" : "GET"
+      "response": [
+        {
+          "id": "check-username-duplicate-success",
+          "name": "check-username-duplicate-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/check-username-duplicate",
+              "port": "8080",
+              "query": [
+                {
+                  "key": "username",
+                  "disabled": false,
+                  "description": "아이디"
+                }
+              ]
+            },
+            "method": "GET"
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"사용가능한 아이디입니다.\",\n  \"code\" : \"2007\"\n}",
+          "code": 200
+        },
+        {
+          "id": "check-username-duplicate-success-failed",
+          "name": "check-username-duplicate-success-failed",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/check-username-duplicate",
+              "port": "8080",
+              "query": [
+                {
+                  "key": "username",
+                  "disabled": false,
+                  "description": "아이디"
+                }
+              ]
+            },
+            "method": "GET"
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"아이디가 중복입니다.\",\n  \"code\" : \"2005\"\n}",
+          "code": 400
+        }
+      ]
     },
-    "response" : [ {
-      "id" : "check-username-duplicate-success",
-      "name" : "check-username-duplicate-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/check-username-duplicate",
-          "port" : "8080",
-          "query" : [ {
-            "key" : "username",
-            "disabled" : false,
-            "description" : "아이디"
-          } ]
+    {
+      "id": "find-username-success",
+      "name": "/v1/find-username",
+      "description": "아이디 발송",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/find-username",
+          "port": "8080"
         },
-        "method" : "GET"
-      },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"사용가능한 아이디입니다.\",\n  \"code\" : \"2007\"\n}",
-      "code" : 200
-    }, {
-      "id" : "check-username-duplicate-success-failed",
-      "name" : "check-username-duplicate-success-failed",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/check-username-duplicate",
-          "port" : "8080",
-          "query" : [ {
-            "key" : "username",
-            "disabled" : false,
-            "description" : "아이디"
-          } ]
-        },
-        "method" : "GET"
-      },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"아이디가 중복입니다.\",\n  \"code\" : \"2005\"\n}",
-      "code" : 400
-    } ]
-  }, {
-    "id" : "find-username-success",
-    "name" : "/v1/find-username",
-    "description" : "아이디 발송",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/find-username",
-        "port" : "8080"
-      },
-      "method" : "POST",
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "body" : {
-        "mode" : "raw",
-        "raw" : "{\n  \"email\" : \"PrYkPQM@pwQPS.com\"\n}",
-        "urlencoded" : [ ]
-      }
-    },
-    "response" : [ {
-      "id" : "find-username-success",
-      "name" : "find-username-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/find-username",
-          "port" : "8080"
-        },
-        "method" : "POST",
-        "header" : [ {
-          "key" : "Content-Type",
-          "value" : "application/json;charset=UTF-8",
-          "disabled" : false
-        } ],
-        "body" : {
-          "mode" : "raw",
-          "raw" : "{\n  \"email\" : \"PrYkPQM@pwQPS.com\"\n}",
-          "urlencoded" : [ ]
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json;charset=UTF-8",
+            "disabled": false
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\" : \"PrYkPQM@pwQPS.com\"\n}",
+          "urlencoded": []
         }
       },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\"\n}",
-      "code" : 200
-    } ]
-  }, {
-    "id" : "login-success",
-    "name" : "/v1/login",
-    "description" : "로그인",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/login",
-        "port" : "8080"
-      },
-      "method" : "POST",
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "body" : {
-        "mode" : "raw",
-        "raw" : "{\n  \"username\" : \"5uPya2AYqSTqCm\",\n  \"password\" : \"1QPWzKfqZvVpcUE\"\n}",
-        "urlencoded" : [ ]
-      }
+      "response": [
+        {
+          "id": "find-username-success",
+          "name": "find-username-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/find-username",
+              "port": "8080"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json;charset=UTF-8",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\" : \"PrYkPQM@pwQPS.com\"\n}",
+              "urlencoded": []
+            }
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\"\n}",
+          "code": 200
+        }
+      ]
     },
-    "response" : [ {
-      "id" : "login-success",
-      "name" : "login-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/login",
-          "port" : "8080"
+    {
+      "id": "login-success",
+      "name": "/v1/login",
+      "description": "로그인",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/login",
+          "port": "8080"
         },
-        "method" : "POST",
-        "header" : [ {
-          "key" : "Content-Type",
-          "value" : "application/json;charset=UTF-8",
-          "disabled" : false
-        } ],
-        "body" : {
-          "mode" : "raw",
-          "raw" : "{\n  \"username\" : \"5uPya2AYqSTqCm\",\n  \"password\" : \"1QPWzKfqZvVpcUE\"\n}",
-          "urlencoded" : [ ]
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json;charset=UTF-8",
+            "disabled": false
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\" : \"5uPya2AYqSTqCm\",\n  \"password\" : \"1QPWzKfqZvVpcUE\"\n}",
+          "urlencoded": []
         }
       },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"5uPya2AYqSTqCm\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJlYzI5NmI2Yi04MTA1LTRiNTctODJhMC1jMDFmZGI2M2ZkZWMiLCJzdWIiOiI1dVB5YTJBWXFTVHFDbSIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MDg3NTQwMDl9.Gbxfnp0VstAo2tLbYXA8dZtQenLGPNK4FNVnvzvGTwrNbF20lzTqHJi1dRtAcPlr1CRpqWjk5b5_ZDpdcZEj2A\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI0ZDE1ZGQ3OS03MTU1LTRlMzItODRhZS1mZDM1MTIyYzU1NTciLCJzdWIiOiI1dVB5YTJBWXFTVHFDbSIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MTEzNDU4Mjl9.CdAmJnGl8Hkpwxs2yf1T-quC8gtc5Q1Mqivn9xI6w_DqGXAvFdRi-xeb4UU1VPS0LCnfmg31tRUAbmqzFG0OLw\"\n  }\n}",
-      "code" : 200
-    } ]
-  }, {
-    "id" : "logout-success",
-    "name" : "/v1/logout",
-    "description" : "로그아웃",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/logout",
-        "port" : "8080"
-      },
-      "method" : "PUT"
+      "response": [
+        {
+          "id": "login-success",
+          "name": "login-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/login",
+              "port": "8080"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json;charset=UTF-8",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\" : \"5uPya2AYqSTqCm\",\n  \"password\" : \"1QPWzKfqZvVpcUE\"\n}",
+              "urlencoded": []
+            }
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"5uPya2AYqSTqCm\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJlYzI5NmI2Yi04MTA1LTRiNTctODJhMC1jMDFmZGI2M2ZkZWMiLCJzdWIiOiI1dVB5YTJBWXFTVHFDbSIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MDg3NTQwMDl9.Gbxfnp0VstAo2tLbYXA8dZtQenLGPNK4FNVnvzvGTwrNbF20lzTqHJi1dRtAcPlr1CRpqWjk5b5_ZDpdcZEj2A\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI0ZDE1ZGQ3OS03MTU1LTRlMzItODRhZS1mZDM1MTIyYzU1NTciLCJzdWIiOiI1dVB5YTJBWXFTVHFDbSIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MTEzNDU4Mjl9.CdAmJnGl8Hkpwxs2yf1T-quC8gtc5Q1Mqivn9xI6w_DqGXAvFdRi-xeb4UU1VPS0LCnfmg31tRUAbmqzFG0OLw\"\n  }\n}",
+          "code": 200
+        }
+      ]
     },
-    "response" : [ {
-      "id" : "logout-success",
-      "name" : "logout-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/logout",
-          "port" : "8080"
+    {
+      "id": "logout-success",
+      "name": "/v1/logout",
+      "description": "로그아웃",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/logout",
+          "port": "8080"
         },
-        "method" : "PUT"
+        "method": "PUT"
       },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\"\n}",
-      "code" : 200
-    } ]
-  }, {
-    "id" : "refresh-success",
-    "name" : "/v1/refresh",
-    "description" : "Access Token 재발급",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/refresh",
-        "port" : "8080"
-      },
-      "method" : "POST",
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "body" : {
-        "mode" : "raw",
-        "raw" : "{\n  \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImZlYTM3YTRhLTY4MTQtNGZjOS1hNjcyLWE1ZDRlYzNiMTJhMyIsInN1YiI6IjJDVlV5ZVRJOFB0eCIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MTEzNDU4Mjl9.jkvSWkOkE-dEqTIL2SV0WYKP9uPXUPnTa4wsvaKToSfoPzymPzRl9A6s64GbueVCYFDB1Txo-6ak8buKmRtblg\"\n}",
-        "urlencoded" : [ ]
-      }
+      "response": [
+        {
+          "id": "logout-success",
+          "name": "logout-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/logout",
+              "port": "8080"
+            },
+            "method": "PUT"
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\"\n}",
+          "code": 200
+        }
+      ]
     },
-    "response" : [ {
-      "id" : "refresh-success",
-      "name" : "refresh-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/refresh",
-          "port" : "8080"
+    {
+      "id": "refresh-success",
+      "name": "/v1/refresh",
+      "description": "Access Token 재발급",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/refresh",
+          "port": "8080"
         },
-        "method" : "POST",
-        "header" : [ {
-          "key" : "Content-Type",
-          "value" : "application/json;charset=UTF-8",
-          "disabled" : false
-        } ],
-        "body" : {
-          "mode" : "raw",
-          "raw" : "{\n  \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImZlYTM3YTRhLTY4MTQtNGZjOS1hNjcyLWE1ZDRlYzNiMTJhMyIsInN1YiI6IjJDVlV5ZVRJOFB0eCIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MTEzNDU4Mjl9.jkvSWkOkE-dEqTIL2SV0WYKP9uPXUPnTa4wsvaKToSfoPzymPzRl9A6s64GbueVCYFDB1Txo-6ak8buKmRtblg\"\n}",
-          "urlencoded" : [ ]
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json;charset=UTF-8",
+            "disabled": false
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImZlYTM3YTRhLTY4MTQtNGZjOS1hNjcyLWE1ZDRlYzNiMTJhMyIsInN1YiI6IjJDVlV5ZVRJOFB0eCIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MTEzNDU4Mjl9.jkvSWkOkE-dEqTIL2SV0WYKP9uPXUPnTa4wsvaKToSfoPzymPzRl9A6s64GbueVCYFDB1Txo-6ak8buKmRtblg\"\n}",
+          "urlencoded": []
         }
       },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjNjNjY5OTExLTI5ZTctNDNkYi1hNzI3LWE4M2Y1NWY3OGY1ZSIsInN1YiI6IjJDVlV5ZVRJOFB0eCIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MDg3NTQwMDl9.xf9Sbq-aXgnp5gIs7i60BiKK9d692JrPXaE3u4de1_ELhP1FQ9mi3xioGC6_E88ZTlOcojqanFBulXoI0Zi7EQ\"\n  }\n}",
-      "code" : 200
-    } ]
-  }, {
-    "id" : "register-success",
-    "name" : "/v1/register",
-    "description" : "회원가입",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/register",
-        "port" : "8080"
-      },
-      "method" : "POST",
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "body" : {
-        "mode" : "raw",
-        "raw" : "{\n  \"username\" : \"BwnhKJG4tC\",\n  \"password\" : \"q1vHotBnGAucTXQj\",\n  \"email\" : \"qnyPVsY@vOfYI.com\",\n  \"nickname\" : \"sblpl\",\n  \"notification\" : {\n    \"vote_progress_notification\" : true,\n    \"vote_end_notification\" : true,\n    \"vote_delivery_notification\" : true\n  }\n}",
-        "urlencoded" : [ ]
-      }
+      "response": [
+        {
+          "id": "refresh-success",
+          "name": "refresh-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/refresh",
+              "port": "8080"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json;charset=UTF-8",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImZlYTM3YTRhLTY4MTQtNGZjOS1hNjcyLWE1ZDRlYzNiMTJhMyIsInN1YiI6IjJDVlV5ZVRJOFB0eCIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MTEzNDU4Mjl9.jkvSWkOkE-dEqTIL2SV0WYKP9uPXUPnTa4wsvaKToSfoPzymPzRl9A6s64GbueVCYFDB1Txo-6ak8buKmRtblg\"\n}",
+              "urlencoded": []
+            }
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjNjNjY5OTExLTI5ZTctNDNkYi1hNzI3LWE4M2Y1NWY3OGY1ZSIsInN1YiI6IjJDVlV5ZVRJOFB0eCIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MDg3NTQwMDl9.xf9Sbq-aXgnp5gIs7i60BiKK9d692JrPXaE3u4de1_ELhP1FQ9mi3xioGC6_E88ZTlOcojqanFBulXoI0Zi7EQ\"\n  }\n}",
+          "code": 200
+        }
+      ]
     },
-    "response" : [ {
-      "id" : "register-success",
-      "name" : "register-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/register",
-          "port" : "8080"
+    {
+      "id": "register-success",
+      "name": "/v1/register",
+      "description": "회원가입",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/register",
+          "port": "8080"
         },
-        "method" : "POST",
-        "header" : [ {
-          "key" : "Content-Type",
-          "value" : "application/json;charset=UTF-8",
-          "disabled" : false
-        } ],
-        "body" : {
-          "mode" : "raw",
-          "raw" : "{\n  \"username\" : \"BwnhKJG4tC\",\n  \"password\" : \"q1vHotBnGAucTXQj\",\n  \"email\" : \"qnyPVsY@vOfYI.com\",\n  \"nickname\" : \"sblpl\",\n  \"notification\" : {\n    \"vote_progress_notification\" : true,\n    \"vote_end_notification\" : true,\n    \"vote_delivery_notification\" : true\n  }\n}",
-          "urlencoded" : [ ]
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json;charset=UTF-8",
+            "disabled": false
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\" : \"BwnhKJG4tC\",\n  \"password\" : \"q1vHotBnGAucTXQj\",\n  \"email\" : \"qnyPVsY@vOfYI.com\",\n  \"nickname\" : \"sblpl\",\n  \"notification\" : {\n    \"vote_progress_notification\" : true,\n    \"vote_end_notification\" : true,\n    \"vote_delivery_notification\" : true\n  }\n}",
+          "urlencoded": []
         }
       },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"BwnhKJG4tC\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJjOWViMmNlZC1iZmEzLTQ0YjgtOTU5Zi00ZGM1OWM1MDRmODYiLCJzdWIiOiJCd25oS0pHNHRDIiwiaWF0IjoxNzA4NzUzODI5LCJuYmYiOjE3MDg3NTM4MjksImV4cCI6MTcwODc1NDAwOX0.9ghdOKySGUX_ZSS4A9VCPgDf1Xj69hwL7QKV7wLTHdUMF9vBBFE4NlZErVTytw7HwxfxxVb6ngarzpxGmGaYzg\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI3YzkxNGZmYS00NDAzLTQ1M2YtODgwZC00NGIzZGQ3M2YwNmUiLCJzdWIiOiJCd25oS0pHNHRDIiwiaWF0IjoxNzA4NzUzODI5LCJuYmYiOjE3MDg3NTM4MjksImV4cCI6MTcxMTM0NTgyOX0.hvot7dLX9_p_4GxSeBz8uLKZX-5_Usj4YyCDslIeQPoeXcZ4LbjdGOVdO44N8k18flgi0N7a5L6UeL_hq_Lj6A\"\n  }\n}",
-      "code" : 200
-    } ]
-  }, {
-    "id" : "set-new-password-success",
-    "name" : "/v1/set-new-password",
-    "description" : "비밀번호 재설정",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/set-new-password",
-        "port" : "8080"
-      },
-      "method" : "PATCH",
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "body" : {
-        "mode" : "raw",
-        "raw" : "{\n  \"new_password\" : \"pkWKX9eBlavXBtv\"\n}",
-        "urlencoded" : [ ]
-      }
+      "response": [
+        {
+          "id": "register-success",
+          "name": "register-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/register",
+              "port": "8080"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json;charset=UTF-8",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\" : \"BwnhKJG4tC\",\n  \"password\" : \"q1vHotBnGAucTXQj\",\n  \"email\" : \"qnyPVsY@vOfYI.com\",\n  \"nickname\" : \"sblpl\",\n  \"notification\" : {\n    \"vote_progress_notification\" : true,\n    \"vote_end_notification\" : true,\n    \"vote_delivery_notification\" : true\n  }\n}",
+              "urlencoded": []
+            }
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"BwnhKJG4tC\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJjOWViMmNlZC1iZmEzLTQ0YjgtOTU5Zi00ZGM1OWM1MDRmODYiLCJzdWIiOiJCd25oS0pHNHRDIiwiaWF0IjoxNzA4NzUzODI5LCJuYmYiOjE3MDg3NTM4MjksImV4cCI6MTcwODc1NDAwOX0.9ghdOKySGUX_ZSS4A9VCPgDf1Xj69hwL7QKV7wLTHdUMF9vBBFE4NlZErVTytw7HwxfxxVb6ngarzpxGmGaYzg\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI3YzkxNGZmYS00NDAzLTQ1M2YtODgwZC00NGIzZGQ3M2YwNmUiLCJzdWIiOiJCd25oS0pHNHRDIiwiaWF0IjoxNzA4NzUzODI5LCJuYmYiOjE3MDg3NTM4MjksImV4cCI6MTcxMTM0NTgyOX0.hvot7dLX9_p_4GxSeBz8uLKZX-5_Usj4YyCDslIeQPoeXcZ4LbjdGOVdO44N8k18flgi0N7a5L6UeL_hq_Lj6A\"\n  }\n}",
+          "code": 200
+        }
+      ]
     },
-    "response" : [ {
-      "id" : "set-new-password-success",
-      "name" : "set-new-password-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/set-new-password",
-          "port" : "8080"
+    {
+      "id": "set-new-password-success",
+      "name": "/v1/set-new-password",
+      "description": "비밀번호 재설정",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/set-new-password",
+          "port": "8080"
         },
-        "method" : "PATCH",
-        "header" : [ {
-          "key" : "Content-Type",
-          "value" : "application/json;charset=UTF-8",
-          "disabled" : false
-        } ],
-        "body" : {
-          "mode" : "raw",
-          "raw" : "{\n  \"new_password\" : \"pkWKX9eBlavXBtv\"\n}",
-          "urlencoded" : [ ]
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json;charset=UTF-8",
+            "disabled": false
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"new_password\" : \"pkWKX9eBlavXBtv\"\n}",
+          "urlencoded": []
         }
       },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"비밀번호 재설정이 완료되었습니다.\",\n  \"code\" : \"2010\"\n}",
-      "code" : 200
-    } ]
-  }, {
-    "id" : "update-nickname-success",
-    "name" : "/v1/update-nickname",
-    "description" : "닉네임 변경",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/update-nickname",
-        "port" : "8080"
-      },
-      "method" : "PATCH",
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "body" : {
-        "mode" : "raw",
-        "raw" : "{\n  \"new_nickname\" : \"6us7S2\"\n}",
-        "urlencoded" : [ ]
-      }
+      "response": [
+        {
+          "id": "set-new-password-success",
+          "name": "set-new-password-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/set-new-password",
+              "port": "8080"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json;charset=UTF-8",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"new_password\" : \"pkWKX9eBlavXBtv\"\n}",
+              "urlencoded": []
+            }
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"비밀번호 재설정이 완료되었습니다.\",\n  \"code\" : \"2010\"\n}",
+          "code": 200
+        }
+      ]
     },
-    "response" : [ {
-      "id" : "update-nickname-success",
-      "name" : "update-nickname-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/update-nickname",
-          "port" : "8080"
+    {
+      "id": "update-nickname-success",
+      "name": "/v1/update-nickname",
+      "description": "닉네임 변경",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/update-nickname",
+          "port": "8080"
         },
-        "method" : "PATCH",
-        "header" : [ {
-          "key" : "Content-Type",
-          "value" : "application/json;charset=UTF-8",
-          "disabled" : false
-        } ],
-        "body" : {
-          "mode" : "raw",
-          "raw" : "{\n  \"new_nickname\" : \"6us7S2\"\n}",
-          "urlencoded" : [ ]
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json;charset=UTF-8",
+            "disabled": false
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"new_nickname\" : \"6us7S2\"\n}",
+          "urlencoded": []
         }
       },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"닉네임 변경이 완료되었습니다.\",\n  \"code\" : \"2011\"\n}",
-      "code" : 200
-    } ]
-  }, {
-    "id" : "send-forgot-password-otp-success",
-    "name" : "/v1/forgot-password/send-otp",
-    "description" : "비밀번호 찾기 OTP 발송",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/forgot-password/send-otp",
-        "port" : "8080"
-      },
-      "method" : "POST",
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "body" : {
-        "mode" : "raw",
-        "raw" : "{\n  \"username\" : \"Y3ykyzqcqAKdpV\"\n}",
-        "urlencoded" : [ ]
-      }
+      "response": [
+        {
+          "id": "update-nickname-success",
+          "name": "update-nickname-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/update-nickname",
+              "port": "8080"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json;charset=UTF-8",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"new_nickname\" : \"6us7S2\"\n}",
+              "urlencoded": []
+            }
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"닉네임 변경이 완료되었습니다.\",\n  \"code\" : \"2011\"\n}",
+          "code": 200
+        }
+      ]
     },
-    "response" : [ {
-      "id" : "send-forgot-password-otp-success",
-      "name" : "send-forgot-password-otp-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/forgot-password/send-otp",
-          "port" : "8080"
+    {
+      "id": "send-forgot-password-otp-success",
+      "name": "/v1/forgot-password/send-otp",
+      "description": "비밀번호 찾기 OTP 발송",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/forgot-password/send-otp",
+          "port": "8080"
         },
-        "method" : "POST",
-        "header" : [ {
-          "key" : "Content-Type",
-          "value" : "application/json;charset=UTF-8",
-          "disabled" : false
-        } ],
-        "body" : {
-          "mode" : "raw",
-          "raw" : "{\n  \"username\" : \"Y3ykyzqcqAKdpV\"\n}",
-          "urlencoded" : [ ]
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json;charset=UTF-8",
+            "disabled": false
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\" : \"Y3ykyzqcqAKdpV\"\n}",
+          "urlencoded": []
         }
       },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"비밀번호 찾기 인증번호가 전송되었습니다.\",\n  \"code\" : \"3106\"\n}",
-      "code" : 201
-    } ]
-  }, {
-    "id" : "resend-otp-success",
-    "name" : "/v1/otp/resend",
-    "description" : "OTP 재전송",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/otp/resend",
-        "port" : "8080"
-      },
-      "method" : "PUT",
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "body" : {
-        "mode" : "raw",
-        "raw" : "{\n  \"username\" : \"V4vndBIO7dn\",\n  \"otp_type\" : \"forgot-password\"\n}",
-        "urlencoded" : [ ]
-      }
+      "response": [
+        {
+          "id": "send-forgot-password-otp-success",
+          "name": "send-forgot-password-otp-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/forgot-password/send-otp",
+              "port": "8080"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json;charset=UTF-8",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\" : \"Y3ykyzqcqAKdpV\"\n}",
+              "urlencoded": []
+            }
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"비밀번호 찾기 인증번호가 전송되었습니다.\",\n  \"code\" : \"3106\"\n}",
+          "code": 201
+        }
+      ]
     },
-    "response" : [ {
-      "id" : "resend-otp-success",
-      "name" : "resend-otp-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/otp/resend",
-          "port" : "8080"
+    {
+      "id": "resend-otp-success",
+      "name": "/v1/otp/resend",
+      "description": "OTP 재전송",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/otp/resend",
+          "port": "8080"
         },
-        "method" : "PUT",
-        "header" : [ {
-          "key" : "Content-Type",
-          "value" : "application/json;charset=UTF-8",
-          "disabled" : false
-        } ],
-        "body" : {
-          "mode" : "raw",
-          "raw" : "{\n  \"username\" : \"V4vndBIO7dn\",\n  \"otp_type\" : \"forgot-password\"\n}",
-          "urlencoded" : [ ]
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json;charset=UTF-8",
+            "disabled": false
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\" : \"V4vndBIO7dn\",\n  \"otp_type\" : \"forgot-password\"\n}",
+          "urlencoded": []
         }
       },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"인증번호가 재전송되었습니다.\",\n  \"code\" : \"3107\"\n}",
-      "code" : 201
-    } ]
-  }, {
-    "id" : "verify-otp-success",
-    "name" : "/v1/otp/verify",
-    "description" : "OTP 인증",
-    "variable" : [ ],
-    "event" : [ ],
-    "request" : {
-      "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/otp/verify",
-        "port" : "8080"
-      },
-      "method" : "POST",
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "body" : {
-        "mode" : "raw",
-        "raw" : "{\n  \"username\" : \"kUjazP7kkL9\",\n  \"otp_type\" : \"forgot-password\",\n  \"otp\" : \"827496\"\n}",
-        "urlencoded" : [ ]
-      }
+      "response": [
+        {
+          "id": "resend-otp-success",
+          "name": "resend-otp-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/otp/resend",
+              "port": "8080"
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json;charset=UTF-8",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\" : \"V4vndBIO7dn\",\n  \"otp_type\" : \"forgot-password\"\n}",
+              "urlencoded": []
+            }
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"인증번호가 재전송되었습니다.\",\n  \"code\" : \"3107\"\n}",
+          "code": 201
+        }
+      ]
     },
-    "response" : [ {
-      "id" : "verify-otp-success",
-      "name" : "verify-otp-success",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/otp/verify",
-          "port" : "8080"
+    {
+      "id": "verify-otp-success",
+      "name": "/v1/otp/verify",
+      "description": "OTP 인증",
+      "variable": [],
+      "event": [],
+      "request": {
+        "url": {
+          "protocol": "http",
+          "host": "localhost",
+          "path": "/v1/otp/verify",
+          "port": "8080"
         },
-        "method" : "POST",
-        "header" : [ {
-          "key" : "Content-Type",
-          "value" : "application/json;charset=UTF-8",
-          "disabled" : false
-        } ],
-        "body" : {
-          "mode" : "raw",
-          "raw" : "{\n  \"username\" : \"kUjazP7kkL9\",\n  \"otp_type\" : \"forgot-password\",\n  \"otp\" : \"827496\"\n}",
-          "urlencoded" : [ ]
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json;charset=UTF-8",
+            "disabled": false
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\" : \"kUjazP7kkL9\",\n  \"otp_type\" : \"forgot-password\",\n  \"otp\" : \"827496\"\n}",
+          "urlencoded": []
         }
       },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"인증번호가 인증되었습니다.\",\n  \"code\" : \"3104\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI4MGRiYzI5Mi04MjY1LTQ2MTUtYjM5OS00ODA0NDI0MTU4OTAiLCJzdWIiOiJrVWphelA3a2tMOSIsImlhdCI6MTcwODc1MzgzMCwibmJmIjoxNzA4NzUzODMwLCJleHAiOjE3MDg3NTQwMTB9.WOhKbG-zlMJeORhUs2s93woiNXzhCyPEp3EmgqNBbY6iPGhs4cpPepKB6FvjgP-6AtV7qXCMA_ZKlasm6Dvx9w\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJlYmEyNjlmYy0zMjlhLTQyMTEtOWI3My1kZmYwZGFhOTc5ZTQiLCJzdWIiOiJrVWphelA3a2tMOSIsImlhdCI6MTcwODc1MzgzMCwibmJmIjoxNzA4NzUzODMwLCJleHAiOjE3MTEzNDU4MzB9.IxuzqquIsAd8gEfaui83dsH9Gadfv-fPZAhR2BdNKujFw5TOXR0xEzANV5qhm59MaduojuQRMWCMDj-yPxZLeA\"\n  }\n}",
-      "code" : 200
-    }, {
-      "id" : "otp-verify-fail-case1",
-      "name" : "otp-verify-fail-case1",
-      "originalRequest" : {
-        "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/otp/verify",
-          "port" : "8080"
+      "response": [
+        {
+          "id": "verify-otp-success",
+          "name": "verify-otp-success",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/otp/verify",
+              "port": "8080"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json;charset=UTF-8",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\" : \"kUjazP7kkL9\",\n  \"otp_type\" : \"forgot-password\",\n  \"otp\" : \"827496\"\n}",
+              "urlencoded": []
+            }
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"인증번호가 인증되었습니다.\",\n  \"code\" : \"3104\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI4MGRiYzI5Mi04MjY1LTQ2MTUtYjM5OS00ODA0NDI0MTU4OTAiLCJzdWIiOiJrVWphelA3a2tMOSIsImlhdCI6MTcwODc1MzgzMCwibmJmIjoxNzA4NzUzODMwLCJleHAiOjE3MDg3NTQwMTB9.WOhKbG-zlMJeORhUs2s93woiNXzhCyPEp3EmgqNBbY6iPGhs4cpPepKB6FvjgP-6AtV7qXCMA_ZKlasm6Dvx9w\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJlYmEyNjlmYy0zMjlhLTQyMTEtOWI3My1kZmYwZGFhOTc5ZTQiLCJzdWIiOiJrVWphelA3a2tMOSIsImlhdCI6MTcwODc1MzgzMCwibmJmIjoxNzA4NzUzODMwLCJleHAiOjE3MTEzNDU4MzB9.IxuzqquIsAd8gEfaui83dsH9Gadfv-fPZAhR2BdNKujFw5TOXR0xEzANV5qhm59MaduojuQRMWCMDj-yPxZLeA\"\n  }\n}",
+          "code": 200
         },
-        "method" : "POST",
-        "header" : [ {
-          "key" : "Content-Type",
-          "value" : "application/json;charset=UTF-8",
-          "disabled" : false
-        } ],
-        "body" : {
-          "mode" : "raw",
-          "raw" : "{\n  \"username\" : \"EsuovsKwdyuQIj\",\n  \"otp_type\" : \"verify-email\",\n  \"otp\" : \"283314\"\n}",
-          "urlencoded" : [ ]
+        {
+          "id": "otp-verify-fail-case1",
+          "name": "otp-verify-fail-case1",
+          "originalRequest": {
+            "url": {
+              "protocol": "http",
+              "host": "localhost",
+              "path": "/v1/otp/verify",
+              "port": "8080"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json;charset=UTF-8",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\" : \"EsuovsKwdyuQIj\",\n  \"otp_type\" : \"verify-email\",\n  \"otp\" : \"283314\"\n}",
+              "urlencoded": []
+            }
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json;charset=UTF-8",
+              "disabled": false
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\" : \"인증번호가 일치하지 않습니다.\",\n  \"code\" : \"3101\"\n}",
+          "code": 400
         }
-      },
-      "header" : [ {
-        "key" : "Content-Type",
-        "value" : "application/json;charset=UTF-8",
-        "disabled" : false
-      } ],
-      "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"인증번호가 일치하지 않습니다.\",\n  \"code\" : \"3101\"\n}",
-      "code" : 400
-    } ]
-  } ],
-  "event" : [ ],
-  "variable" : [ ]
+      ]
+    }
+  ],
+  "event": [],
+  "variable": []
 }

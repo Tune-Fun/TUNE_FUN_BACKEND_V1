@@ -1,22 +1,18 @@
 package com.tune_fun.v1.account.adapter.output.persistence;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.output.*;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
-import com.tune_fun.v1.common.response.MessageCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@XRayEnabled
+
 @Component
 @PersistenceAdapter
 @RequiredArgsConstructor

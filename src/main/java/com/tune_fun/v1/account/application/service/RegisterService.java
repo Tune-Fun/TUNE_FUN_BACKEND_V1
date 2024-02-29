@@ -1,6 +1,5 @@
 package com.tune_fun.v1.account.application.service;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.RegisterUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
@@ -22,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.tune_fun.v1.common.response.MessageCode.USER_POLICY_ACCOUNT_REGISTERED;
 
-@XRayEnabled
+
 @Service
 @UseCase
 @RequiredArgsConstructor
@@ -34,6 +33,20 @@ public class RegisterService implements RegisterUseCase {
     private final CreateRefreshTokenPort createRefreshTokenPort;
 
     private final PasswordEncoder passwordEncoder;
+
+    @NotNull
+    private static SaveAccount getSaveAccount(AccountCommands.Register command, String encodedPassword) {
+        return new SaveAccount(
+                StringUtil.uuid(), command.username(), encodedPassword,
+                command.email(), command.nickname(), command.notification().voteDeliveryNotification(),
+                command.notification().voteEndNotification(), command.notification().voteDeliveryNotification()
+        );
+    }
+
+    @NotNull
+    private static RegisterResult getRegisterResult(CurrentAccount savedAccount, String accessToken, String refreshToken) {
+        return new RegisterResult(savedAccount.username(), savedAccount.roles(), accessToken, refreshToken);
+    }
 
     @Override
     @Transactional
@@ -59,19 +72,5 @@ public class RegisterService implements RegisterUseCase {
         loadAccountPort.currentAccountInfo(command.username()).ifPresent(accountInfo -> {
             throw new CommonApplicationException(USER_POLICY_ACCOUNT_REGISTERED);
         });
-    }
-
-    @NotNull
-    private static SaveAccount getSaveAccount(AccountCommands.Register command, String encodedPassword) {
-        return new SaveAccount(
-                StringUtil.uuid(), command.username(), encodedPassword,
-                command.email(), command.nickname(), command.notification().voteDeliveryNotification(),
-                command.notification().voteEndNotification(), command.notification().voteDeliveryNotification()
-        );
-    }
-
-    @NotNull
-    private static RegisterResult getRegisterResult(CurrentAccount savedAccount, String accessToken, String refreshToken) {
-        return new RegisterResult(savedAccount.username(), savedAccount.roles(), accessToken, refreshToken);
     }
 }

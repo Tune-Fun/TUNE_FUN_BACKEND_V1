@@ -1,6 +1,5 @@
 package com.tune_fun.v1.otp.adapter.output.mail;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tune_fun.v1.common.util.EncryptUtil;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@XRayEnabled
+
 @Component
 @RequiredArgsConstructor
 public class OtpMailAdapter implements SendOtpPort {
@@ -21,6 +20,10 @@ public class OtpMailAdapter implements SendOtpPort {
     private final MailHandler mailHandler;
     private final EncryptUtil encryptUtil;
     private final ObjectMapper objectMapper;
+
+    private static String getSubject(String nickname) {
+        return "TuneFun - " + nickname + "님의 인증번호입니다.";
+    }
 
     @Override
     public void sendOtp(SendOtp sendOtp) throws Exception {
@@ -35,9 +38,6 @@ public class OtpMailAdapter implements SendOtpPort {
         });
     }
 
-    private static String getSubject(String nickname) {
-        return "TuneFun - " + nickname + "님의 인증번호입니다.";
+    private record OtpSendMailVariables(String otp) {
     }
-
-    private record OtpSendMailVariables(String otp) {}
 }

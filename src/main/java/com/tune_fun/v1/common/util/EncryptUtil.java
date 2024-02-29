@@ -26,12 +26,6 @@ public class EncryptUtil implements InitializingBean {
     private SecretKey secretKey;
     private IvParameterSpec ivParameterSpec;
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        this.secretKey = generateKey();
-        this.ivParameterSpec = generateIv();
-    }
-
     private static SecretKey generateKey() throws NoSuchAlgorithmException {
         KeyGenerator keyGenerator = KeyGenerator.getInstance(BLOCK_ALGORITHM);
         keyGenerator.init(256);
@@ -42,6 +36,12 @@ public class EncryptUtil implements InitializingBean {
         byte[] iv = new byte[16];
         new SecureRandom().nextBytes(iv);
         return new IvParameterSpec(iv);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.secretKey = generateKey();
+        this.ivParameterSpec = generateIv();
     }
 
     public String encrypt(@NotBlank final String plainText) throws Exception {

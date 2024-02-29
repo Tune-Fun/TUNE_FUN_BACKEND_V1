@@ -19,7 +19,8 @@ import java.time.LocalDateTime;
 public class VoteChoiceMongoEntity {
 
     @Id
-    private String id;
+    @Field("vote_choice_id")
+    private String voteChoiceId;
 
     @DocumentReference(collection = "votePaper", lazy = true)
     private VotePaperMongoEntity votePaper;

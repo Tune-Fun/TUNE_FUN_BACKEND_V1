@@ -1,6 +1,5 @@
 package com.tune_fun.v1.account.adapter.output.persistence.oauth2;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.output.oauth2.RemoveAuthorizationRequestCookiePort;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.CookieUtil;
@@ -12,7 +11,7 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-@XRayEnabled
+
 @Component
 @PersistenceAdapter
 @RequiredArgsConstructor

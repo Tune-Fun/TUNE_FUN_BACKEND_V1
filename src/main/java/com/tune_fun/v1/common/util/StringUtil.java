@@ -8,7 +8,6 @@ import org.apache.commons.rng.simple.RandomSource;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.matches;
 

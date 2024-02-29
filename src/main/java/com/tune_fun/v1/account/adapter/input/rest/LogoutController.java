@@ -8,7 +8,6 @@ import com.tune_fun.v1.common.hexagon.WebAdapter;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
 import com.tune_fun.v1.common.util.StringUtil;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

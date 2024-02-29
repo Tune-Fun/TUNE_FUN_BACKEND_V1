@@ -13,7 +13,8 @@ public class OAuth2UserInfoFactory {
             case GOOGLE -> new GoogleOAuth2UserInfo(accessToken, attributes);
             case APPLE -> new AppleOAuth2UserInfo(accessToken, attributes);
             case INSTAGRAM -> new InstagramOAuth2UserInfo(accessToken, attributes);
-            case null -> throw new OAuth2AuthenticationProcessingException("Login with " + registrationId + " is not supported");
+            case null ->
+                    throw new OAuth2AuthenticationProcessingException("Login with " + registrationId + " is not supported");
         };
     }
 

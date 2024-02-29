@@ -16,7 +16,7 @@ import org.hibernate.annotations.Comment;
 @AllArgsConstructor
 @Getter
 @Entity
-@Table(name = "account")
+@Table(name = "oauth2_account")
 public class OAuth2AccountJpaEntity extends BaseEntity {
 
     @Id
@@ -42,7 +42,7 @@ public class OAuth2AccountJpaEntity extends BaseEntity {
     private String nickname;
 
     @NotNull
-    @Column(name = "oauth2_provider", nullable = false, updatable = false)
+    @Column(name = "oauth2_provider", nullable = false)
     @Comment("OAuth2 플랫폼")
     private String oauth2Provider;
 

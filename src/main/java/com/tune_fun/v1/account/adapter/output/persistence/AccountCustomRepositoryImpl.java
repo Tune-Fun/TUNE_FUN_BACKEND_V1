@@ -10,9 +10,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AccountCustomRepositoryImpl implements AccountCustomRepository {
 
-    private final JPAQueryFactory queryFactory;
-
     private static final QAccountJpaEntity ACCOUNT = QAccountJpaEntity.accountJpaEntity;
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public Optional<AccountJpaEntity> findActive(final String username, final String email, final String nickname) {
@@ -25,10 +24,10 @@ public class AccountCustomRepositoryImpl implements AccountCustomRepository {
         return Optional.ofNullable(
                 queryFactory.selectFrom(ACCOUNT)
                         .where(predicate)
-                        .where(ACCOUNT.isEnabled.eq(true))
-                        .where(ACCOUNT.isAccountNonLocked.eq(true))
-                        .where(ACCOUNT.isAccountNonExpired.eq(true))
-                        .where(ACCOUNT.isCredentialsNonExpired.eq(true))
+                        .where(ACCOUNT.enabled.eq(true))
+                        .where(ACCOUNT.accountNonLocked.eq(true))
+                        .where(ACCOUNT.accountNonExpired.eq(true))
+                        .where(ACCOUNT.credentialsNonExpired.eq(true))
                         .fetchOne()
         );
     }

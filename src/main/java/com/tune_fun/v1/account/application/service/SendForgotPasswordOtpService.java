@@ -1,18 +1,16 @@
 package com.tune_fun.v1.account.application.service;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.SendForgotPasswordOtpUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
-import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
 import com.tune_fun.v1.otp.application.port.output.SaveOtpPort;
 import com.tune_fun.v1.otp.application.port.output.SendOtpPort;
+import com.tune_fun.v1.otp.domain.behavior.SaveOtp;
 import com.tune_fun.v1.otp.domain.behavior.SendOtp;
 import com.tune_fun.v1.otp.domain.state.CurrentOtp;
-import com.tune_fun.v1.otp.domain.behavior.SaveOtp;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
 
-@XRayEnabled
+
 @Service
 @UseCase
 @RequiredArgsConstructor
@@ -30,6 +28,11 @@ public class SendForgotPasswordOtpService implements SendForgotPasswordOtpUseCas
     private final LoadAccountPort loadAccountPort;
     private final SaveOtpPort saveOtpPort;
     private final SendOtpPort sendOtpPort;
+
+    @NotNull
+    private static SaveOtp getSaveOtp(String username) {
+        return new SaveOtp(username, FORGOT_PASSWORD.getLabel());
+    }
 
     @Override
     @Transactional
@@ -43,15 +46,9 @@ public class SendForgotPasswordOtpService implements SendForgotPasswordOtpUseCas
         sendOtpPort.sendOtp(sendOtp);
     }
 
-
     @Transactional(readOnly = true)
     public CurrentAccount getCurrentAccount(final AccountCommands.SendForgotPasswordOtp command) {
         return loadAccountPort.currentAccountInfo(command.username())
                 .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
-    }
-
-    @NotNull
-    private static SaveOtp getSaveOtp(String username) {
-        return new SaveOtp(username, FORGOT_PASSWORD.getLabel());
     }
 }

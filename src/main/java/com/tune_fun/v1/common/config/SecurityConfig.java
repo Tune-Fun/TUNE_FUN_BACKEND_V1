@@ -1,8 +1,8 @@
 package com.tune_fun.v1.common.config;
 
 import com.tune_fun.v1.account.adapter.input.security.JwtAuthenticationFilter;
-import com.tune_fun.v1.account.application.service.oauth2.CustomOAuth2UserService;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.HttpCookieOAuth2AuthorizationRequestPersistenceAdapter;
+import com.tune_fun.v1.account.application.service.oauth2.CustomOAuth2UserService;
 import com.tune_fun.v1.account.application.service.oauth2.handler.OAuth2AuthenticationFailureHandler;
 import com.tune_fun.v1.account.application.service.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;

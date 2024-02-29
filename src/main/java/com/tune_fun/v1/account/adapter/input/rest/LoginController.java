@@ -1,6 +1,5 @@
 package com.tune_fun.v1.account.adapter.input.rest;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.LoginUseCase;
 import com.tune_fun.v1.account.domain.state.LoginResult;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@XRayEnabled
+
 @RestController
 @WebAdapter
 @RequiredArgsConstructor
