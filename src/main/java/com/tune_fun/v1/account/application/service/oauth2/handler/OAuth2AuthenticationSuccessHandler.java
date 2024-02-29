@@ -1,13 +1,17 @@
-package com.tune_fun.v1.account.application.service.oauth2;
+package com.tune_fun.v1.account.application.service.oauth2.handler;
 
 import com.tune_fun.v1.account.application.port.output.SaveAccountPort;
 import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort;
 import com.tune_fun.v1.account.application.port.output.jwt.CreateRefreshTokenPort;
+import com.tune_fun.v1.account.application.port.output.oauth2.RemoveAuthorizationRequestCookiePort;
+import com.tune_fun.v1.account.application.service.oauth2.OAuth2UserPrincipal;
+import com.tune_fun.v1.account.application.service.oauth2.unlink.OAuth2UserUnlinkFacade;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.CookieUtil;
+import com.tune_fun.v1.common.util.StringUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,8 +27,8 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.tune_fun.v1.account.application.service.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.MODE_PARAM_COOKIE_NAME;
-import static com.tune_fun.v1.account.application.service.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.HttpCookieOAuth2AuthorizationRequestPersistenceAdapter.MODE_PARAM_COOKIE_NAME;
+import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.HttpCookieOAuth2AuthorizationRequestPersistenceAdapter.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Slf4j
 @Component
@@ -32,8 +36,9 @@ import static com.tune_fun.v1.account.application.service.oauth2.HttpCookieOAuth
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
-    private final OAuth2UserUnlinkManager oAuth2UserUnlinkManager;
+    private final OAuth2UserUnlinkFacade oAuth2UserUnlinkFacade;
+    private final RemoveAuthorizationRequestCookiePort removeAuthorizationRequestCookiePort;
+
     private final SaveAccountPort saveAccountPort;
     private final CreateAccessTokenPort createAccessTokenPort;
     private final CreateRefreshTokenPort createRefreshTokenPort;
@@ -82,8 +87,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     principal.userInfo().getNickname(),
                     principal.userInfo().getAccessToken()
             );
-            // TODO: DB 저장
-            SaveAccount saveAccountBehavior = new SaveAccount(...);
+
+            SaveAccount saveAccountBehavior = new SaveAccount(StringUtil.uuid(), principal.userInfo().getEmail(),
+                    "social", principal.userInfo().getEmail(), principal.userInfo().getNickname(),
+                    true, true, true);
             saveAccountPort.saveAccount(saveAccountBehavior);
 
             String authorities = principal.getAuthorities().stream()
@@ -106,7 +113,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
             // TODO: DB 삭제
             // TODO: 리프레시 토큰 삭제
-            oAuth2UserUnlinkManager.unlink(provider, accessToken);
+            oAuth2UserUnlinkFacade.unlink(provider, accessToken);
 
             return UriComponentsBuilder.fromUriString(targetUrl)
                     .build().toUriString();
@@ -126,6 +133,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
-        httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
+        removeAuthorizationRequestCookiePort.remove(request, response);
     }
 }

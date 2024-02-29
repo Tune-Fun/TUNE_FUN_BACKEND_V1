@@ -1,5 +1,8 @@
-package com.tune_fun.v1.account.application.service.oauth2;
+package com.tune_fun.v1.account.adapter.output.persistence.oauth2;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
+import com.tune_fun.v1.account.application.port.output.oauth2.RemoveAuthorizationRequestCookiePort;
+import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,10 +12,13 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-@RequiredArgsConstructor
+@XRayEnabled
 @Component
-public class HttpCookieOAuth2AuthorizationRequestRepository
-        implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
+@PersistenceAdapter
+@RequiredArgsConstructor
+public class HttpCookieOAuth2AuthorizationRequestPersistenceAdapter
+        implements AuthorizationRequestRepository<OAuth2AuthorizationRequest>, RemoveAuthorizationRequestCookiePort {
+
     public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
     public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
     public static final String MODE_PARAM_COOKIE_NAME = "mode";
@@ -63,9 +69,14 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
         return this.loadAuthorizationRequest(request);
     }
 
-    public void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
+    private void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
         CookieUtil.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
         CookieUtil.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
         CookieUtil.deleteCookie(request, response, MODE_PARAM_COOKIE_NAME);
+    }
+
+    @Override
+    public void remove(HttpServletRequest request, HttpServletResponse response) {
+        removeAuthorizationRequestCookies(request, response);
     }
 }

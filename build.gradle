@@ -54,8 +54,8 @@ dependencies {
 
     // Persistence Layer
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}"
     implementation "io.github.openfeign.querydsl:querydsl-mongodb:${queryDslVersion}"
     implementation 'org.flywaydb:flyway-core'

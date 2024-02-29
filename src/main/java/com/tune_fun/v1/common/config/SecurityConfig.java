@@ -2,9 +2,9 @@ package com.tune_fun.v1.common.config;
 
 import com.tune_fun.v1.account.adapter.input.security.JwtAuthenticationFilter;
 import com.tune_fun.v1.account.application.service.oauth2.CustomOAuth2UserService;
-import com.tune_fun.v1.account.application.service.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.tune_fun.v1.account.application.service.oauth2.OAuth2AuthenticationFailureHandler;
-import com.tune_fun.v1.account.application.service.oauth2.OAuth2AuthenticationSuccessHandler;
+import com.tune_fun.v1.account.adapter.output.persistence.oauth2.HttpCookieOAuth2AuthorizationRequestPersistenceAdapter;
+import com.tune_fun.v1.account.application.service.oauth2.handler.OAuth2AuthenticationFailureHandler;
+import com.tune_fun.v1.account.application.service.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -44,7 +44,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final HttpCookieOAuth2AuthorizationRequestPersistenceAdapter httpCookieOAuth2AuthorizationRequestPersistenceAdapter;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
@@ -90,7 +90,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(configure ->
-                        configure.authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))
+                        configure.authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestPersistenceAdapter))
                                 .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
                                 .failureHandler(oAuth2AuthenticationFailureHandler)
