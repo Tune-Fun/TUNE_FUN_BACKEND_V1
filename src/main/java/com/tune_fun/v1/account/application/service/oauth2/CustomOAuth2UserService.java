@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
-    public OAuth2User loadUser(final OAuth2UserRequest request) throws OAuth2AuthenticationException {
+    public OAuth2UserPrincipal loadUser(final OAuth2UserRequest request) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(request);
 
         try {
@@ -32,15 +32,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
     }
 
-    private OAuth2User processOAuth2User(final OAuth2UserRequest request, final OAuth2User oAuth2User) {
-        String registrationId = request.getClientRegistration()
-                .getRegistrationId();
+    private OAuth2UserPrincipal processOAuth2User(final OAuth2UserRequest request, final OAuth2User oAuth2User) {
+        String registrationId = request.getClientRegistration().getRegistrationId();
 
         String accessToken = request.getAccessToken().getTokenValue();
 
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId,
-                accessToken,
-                oAuth2User.getAttributes());
+        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, accessToken, oAuth2User.getAttributes());
 
         if (!StringUtils.hasText(oAuth2UserInfo.getEmail()))
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");

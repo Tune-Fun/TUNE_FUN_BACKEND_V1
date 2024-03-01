@@ -1,62 +1,56 @@
 {
-  "openapi": "3.0.1",
-  "info": {
-    "title": "Tune Fun REST API V1 Documentation - #{LocalDate.now()}",
-    "description": "Spring REST Docs with SwaggerUI.",
-    "version": "1.0.0"
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "Tune Fun REST API V1 Documentation",
+    "description" : "Spring REST Docs with SwaggerUI.",
+    "version" : "1.0.0"
   },
-  "servers": [
-    {
-      "url": "http://localhost:8080"
-    }
-  ],
-  "tags": [],
-  "paths": {
-    "/v1/check-email-duplicate": {
-      "get": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "이메일 중복확인",
-        "description": "이메일 중복확인",
-        "operationId": "check-email-duplicate-",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "description": "이메일",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+  "servers" : [ {
+    "url" : "http://localhost:8080"
+  } ],
+  "tags" : [ ],
+  "paths" : {
+    "/v1/check-email-duplicate" : {
+      "get" : {
+        "tags" : [ "v1" ],
+        "summary" : "이메일 중복확인",
+        "description" : "이메일 중복확인",
+        "operationId" : "check-email-duplicate-",
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "query",
+          "description" : "이메일",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-resend-640416564"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-find-username-640416564"
                 },
-                "examples": {
-                  "check-email-duplicate-success": {
-                    "value": "{\n  \"message\" : \"사용가능한 이메일입니다.\",\n  \"code\" : \"2008\"\n}"
+                "examples" : {
+                  "check-email-duplicate-success" : {
+                    "value" : "{\n  \"message\" : \"사용가능한 이메일입니다.\",\n  \"code\" : \"2008\"\n}"
                   }
                 }
               }
             }
           },
-          "400": {
-            "description": "400",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-resend-640416564"
+          "400" : {
+            "description" : "400",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-find-username-640416564"
                 },
-                "examples": {
-                  "check-email-duplicate-failed": {
-                    "value": "{\n  \"message\" : \"이메일이 중복입니다.\",\n  \"code\" : \"2006\"\n}"
+                "examples" : {
+                  "check-email-duplicate-failed" : {
+                    "value" : "{\n  \"message\" : \"이메일이 중복입니다.\",\n  \"code\" : \"2006\"\n}"
                   }
                 }
               }
@@ -65,95 +59,85 @@
         }
       }
     },
-    "/v1/check-email-verified": {
-      "get": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "이메일 인증 여부 확인",
-        "description": "이메일 인증 여부 확인",
-        "operationId": "check-email-verified-success",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "AccessToken \"Bearer \" prefix",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImIzZTJmZTUwLTRlYTItNDdkMS04ZmVlLWM1MDliOTBhNzFkMCIsInN1YiI6IkVkNDZKeFE4RHlzTSIsImlhdCI6MTcwODc1MzgyOCwibmJmIjoxNzA4NzUzODI4LCJleHAiOjE3MDg3NTQwMDh9.etwUnhuf0X-tV6o9tcgA8OIJ2VRDLM76fL1zLxqn5SgvXiF8YYcyv4zg3hNuhrJbQ2U74RDeVkrQEwpoKwW9mw"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-resend-640416564"
+    "/v1/check-email-verified" : {
+      "get" : {
+        "tags" : [ "v1" ],
+        "summary" : "이메일 인증 여부 확인",
+        "description" : "이메일 인증 여부 확인",
+        "operationId" : "check-email-verified-success",
+        "parameters" : [ {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "AccessToken \"Bearer \" prefix",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImNkMTVkNjlmLTVhZGYtNGRmOC04NTNlLTZkZWJmZDQ4MjIwOSIsInN1YiI6IkxqcWFjWnVsT1YiLCJpYXQiOjE3MDkyNTg3NDEsIm5iZiI6MTcwOTI1ODc0MSwiZXhwIjoxNzA5MjU4OTIxfQ.4RXhFBOm-Rd83oPBF8VV0Dx6u3Ck-yF2H10rIRcUvNIfxRgWGsHHWkRXTjK_RENwu1c0q-9kToiSXHoCMkTKRw"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-find-username-640416564"
                 },
-                "examples": {
-                  "check-email-verified-success": {
-                    "value": "{\n  \"message\" : \"이메일 인증이 완료된 계정입니다.\",\n  \"code\" : \"2009\"\n}"
+                "examples" : {
+                  "check-email-verified-success" : {
+                    "value" : "{\n  \"message\" : \"이메일 인증이 완료된 계정입니다.\",\n  \"code\" : \"2009\"\n}"
                   }
                 }
               }
             }
           }
         },
-        "security": [
-          {
-            "bearerAuthJWT": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuthJWT" : [ ]
+        } ]
       }
     },
-    "/v1/check-username-duplicate": {
-      "get": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "아이디 중복확인",
-        "description": "아이디 중복확인",
-        "operationId": "check-username-duplicate-success",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "query",
-            "description": "아이디",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+    "/v1/check-username-duplicate" : {
+      "get" : {
+        "tags" : [ "v1" ],
+        "summary" : "아이디 중복확인",
+        "description" : "아이디 중복확인",
+        "operationId" : "check-username-duplicate-success",
+        "parameters" : [ {
+          "name" : "username",
+          "in" : "query",
+          "description" : "아이디",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-resend-640416564"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-find-username-640416564"
                 },
-                "examples": {
-                  "check-username-duplicate-success": {
-                    "value": "{\n  \"message\" : \"사용가능한 아이디입니다.\",\n  \"code\" : \"2007\"\n}"
+                "examples" : {
+                  "check-username-duplicate-success" : {
+                    "value" : "{\n  \"message\" : \"사용가능한 아이디입니다.\",\n  \"code\" : \"2007\"\n}"
                   }
                 }
               }
             }
           },
-          "400": {
-            "description": "400",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-resend-640416564"
+          "400" : {
+            "description" : "400",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-find-username-640416564"
                 },
-                "examples": {
-                  "check-username-duplicate-success-failed": {
-                    "value": "{\n  \"message\" : \"아이디가 중복입니다.\",\n  \"code\" : \"2005\"\n}"
+                "examples" : {
+                  "check-username-duplicate-success-failed" : {
+                    "value" : "{\n  \"message\" : \"아이디가 중복입니다.\",\n  \"code\" : \"2005\"\n}"
                   }
                 }
               }
@@ -162,39 +146,37 @@
         }
       }
     },
-    "/v1/find-username": {
-      "post": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "아이디 발송",
-        "description": "아이디 발송",
-        "operationId": "find-username-success",
-        "requestBody": {
-          "content": {
-            "application/json;charset=UTF-8": {
-              "schema": {
-                "$ref": "#/components/schemas/v1-find-username-272417006"
+    "/v1/find-username" : {
+      "post" : {
+        "tags" : [ "v1" ],
+        "summary" : "아이디 발송",
+        "description" : "아이디 발송",
+        "operationId" : "find-username-success",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/v1-find-username-272417006"
               },
-              "examples": {
-                "find-username-success": {
-                  "value": "{\n  \"email\" : \"PrYkPQM@pwQPS.com\"\n}"
+              "examples" : {
+                "find-username-success" : {
+                  "value" : "{\n  \"email\" : \"orXCsit@IrPzT.com\"\n}"
                 }
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-resend-640416564"
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-find-username-640416564"
                 },
-                "examples": {
-                  "find-username-success": {
-                    "value": "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\"\n}"
+                "examples" : {
+                  "find-username-success" : {
+                    "value" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\"\n}"
                   }
                 }
               }
@@ -203,39 +185,37 @@
         }
       }
     },
-    "/v1/login": {
-      "post": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "로그인",
-        "description": "로그인",
-        "operationId": "login-success",
-        "requestBody": {
-          "content": {
-            "application/json;charset=UTF-8": {
-              "schema": {
-                "$ref": "#/components/schemas/v1-login-434021498"
+    "/v1/login" : {
+      "post" : {
+        "tags" : [ "v1" ],
+        "summary" : "로그인",
+        "description" : "로그인",
+        "operationId" : "login-success",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/v1-login1041369120"
               },
-              "examples": {
-                "login-success": {
-                  "value": "{\n  \"username\" : \"5uPya2AYqSTqCm\",\n  \"password\" : \"1QPWzKfqZvVpcUE\"\n}"
+              "examples" : {
+                "login-success" : {
+                  "value" : "{\n  \"username\" : \"4jNLHMBVoVvwT8\",\n  \"password\" : \"5d6Yne1zhadZyCib1LJ\",\n  \"device\" : {\n    \"fcm_token\" : \"iCWwUHOjJ691l7l\",\n    \"device_token\" : \"Q3NPhn3au2NK8RP\"\n  }\n}"
                 }
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-login-985494254"
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-login-985494254"
                 },
-                "examples": {
-                  "login-success": {
-                    "value": "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"5uPya2AYqSTqCm\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJlYzI5NmI2Yi04MTA1LTRiNTctODJhMC1jMDFmZGI2M2ZkZWMiLCJzdWIiOiI1dVB5YTJBWXFTVHFDbSIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MDg3NTQwMDl9.Gbxfnp0VstAo2tLbYXA8dZtQenLGPNK4FNVnvzvGTwrNbF20lzTqHJi1dRtAcPlr1CRpqWjk5b5_ZDpdcZEj2A\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI0ZDE1ZGQ3OS03MTU1LTRlMzItODRhZS1mZDM1MTIyYzU1NTciLCJzdWIiOiI1dVB5YTJBWXFTVHFDbSIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MTEzNDU4Mjl9.CdAmJnGl8Hkpwxs2yf1T-quC8gtc5Q1Mqivn9xI6w_DqGXAvFdRi-xeb4UU1VPS0LCnfmg31tRUAbmqzFG0OLw\"\n  }\n}"
+                "examples" : {
+                  "login-success" : {
+                    "value" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"4jNLHMBVoVvwT8\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJmMDJlNjljNi0wZWJiLTQ2ODgtOGYzZi0zOTU2ZTNmOWMwM2YiLCJzdWIiOiI0ak5MSE1CVm9WdndUOCIsImlhdCI6MTcwOTI1ODc0MSwibmJmIjoxNzA5MjU4NzQxLCJleHAiOjE3MDkyNTg5MjF9.7ArdzdOSj1GHNdLAAADS3d09MAMXJm0zvqhcPSJxGFudAsAZwnrqJOMqNr4O23qd5vklJktcxGotitYn5faUfA\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI1MDRhZTY4OC1mMzk5LTQ5NTUtOWIxOC1mMjk4M2ZjMGI0NzYiLCJzdWIiOiI0ak5MSE1CVm9WdndUOCIsImlhdCI6MTcwOTI1ODc0MSwibmJmIjoxNzA5MjU4NzQxLCJleHAiOjE3MTE4NTA3NDF9.iWuAju8emwI0JpvEVKNHZUQWdU3412uXzzwjSB-vQS7xJylJGQBum2FgurABODj94w0-pVccO5qR1BhjQfKOJw\"\n  }\n}"
                   }
                 }
               }
@@ -244,71 +224,65 @@
         }
       }
     },
-    "/v1/logout": {
-      "put": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "로그아웃",
-        "description": "로그아웃",
-        "operationId": "logout-success",
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-resend-640416564"
+    "/v1/logout" : {
+      "put" : {
+        "tags" : [ "v1" ],
+        "summary" : "로그아웃",
+        "description" : "로그아웃",
+        "operationId" : "logout-success",
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-find-username-640416564"
                 },
-                "examples": {
-                  "logout-success": {
-                    "value": "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\"\n}"
+                "examples" : {
+                  "logout-success" : {
+                    "value" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\"\n}"
                   }
                 }
               }
             }
           }
         },
-        "security": [
-          {
-            "bearerAuthJWT": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuthJWT" : [ ]
+        } ]
       }
     },
-    "/v1/refresh": {
-      "post": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "Access Token 재발급",
-        "description": "Access Token 재발급",
-        "operationId": "refresh-success",
-        "requestBody": {
-          "content": {
-            "application/json;charset=UTF-8": {
-              "schema": {
-                "$ref": "#/components/schemas/v1-refresh-73082285"
+    "/v1/refresh" : {
+      "post" : {
+        "tags" : [ "v1" ],
+        "summary" : "Access Token 재발급",
+        "description" : "Access Token 재발급",
+        "operationId" : "refresh-success",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/v1-refresh-73082285"
               },
-              "examples": {
-                "refresh-success": {
-                  "value": "{\n  \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImZlYTM3YTRhLTY4MTQtNGZjOS1hNjcyLWE1ZDRlYzNiMTJhMyIsInN1YiI6IjJDVlV5ZVRJOFB0eCIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MTEzNDU4Mjl9.jkvSWkOkE-dEqTIL2SV0WYKP9uPXUPnTa4wsvaKToSfoPzymPzRl9A6s64GbueVCYFDB1Txo-6ak8buKmRtblg\"\n}"
+              "examples" : {
+                "refresh-success" : {
+                  "value" : "{\n  \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImVhNjU2M2QzLWViYjEtNGUxMS04ZGI3LWNiYThkMzM3ZGJmYSIsInN1YiI6IlRuaDVWbWFjZm9qeSIsImlhdCI6MTcwOTI1ODc0MiwibmJmIjoxNzA5MjU4NzQyLCJleHAiOjE3MTE4NTA3NDJ9.mlRM5V_PQE6AP2haYsAuLyM3FNzcl-bRcEh78QRUugmlQbLI1rTsWWQr6OkFrF6Z6ECF-2gxh0FKZ4bVCB_mgA\"\n}"
                 }
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-refresh1697318922"
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-refresh1697318922"
                 },
-                "examples": {
-                  "refresh-success": {
-                    "value": "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjNjNjY5OTExLTI5ZTctNDNkYi1hNzI3LWE4M2Y1NWY3OGY1ZSIsInN1YiI6IjJDVlV5ZVRJOFB0eCIsImlhdCI6MTcwODc1MzgyOSwibmJmIjoxNzA4NzUzODI5LCJleHAiOjE3MDg3NTQwMDl9.xf9Sbq-aXgnp5gIs7i60BiKK9d692JrPXaE3u4de1_ELhP1FQ9mi3xioGC6_E88ZTlOcojqanFBulXoI0Zi7EQ\"\n  }\n}"
+                "examples" : {
+                  "refresh-success" : {
+                    "value" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjJjYTYzMGUxLTAxMmYtNDMxZi05ZjViLTBjMTQ1ZWQ0NWNlNSIsInN1YiI6IlRuaDVWbWFjZm9qeSIsImlhdCI6MTcwOTI1ODc0MiwibmJmIjoxNzA5MjU4NzQyLCJleHAiOjE3MDkyNTg5MjJ9.bHprMTHT6Yi0_VW-vuLA28Gqsst0dsW6eVH9ufnXGdtpWoCcgFfvvacfG4eO2NcG5aMGlJDrIq4OuembcwWKKg\"\n  }\n}"
                   }
                 }
               }
@@ -317,39 +291,37 @@
         }
       }
     },
-    "/v1/register": {
-      "post": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "회원가입",
-        "description": "회원가입",
-        "operationId": "register-success",
-        "requestBody": {
-          "content": {
-            "application/json;charset=UTF-8": {
-              "schema": {
-                "$ref": "#/components/schemas/v1-register171397375"
+    "/v1/register" : {
+      "post" : {
+        "tags" : [ "v1" ],
+        "summary" : "회원가입",
+        "description" : "회원가입",
+        "operationId" : "register-success",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/v1-register171397375"
               },
-              "examples": {
-                "register-success": {
-                  "value": "{\n  \"username\" : \"BwnhKJG4tC\",\n  \"password\" : \"q1vHotBnGAucTXQj\",\n  \"email\" : \"qnyPVsY@vOfYI.com\",\n  \"nickname\" : \"sblpl\",\n  \"notification\" : {\n    \"vote_progress_notification\" : true,\n    \"vote_end_notification\" : true,\n    \"vote_delivery_notification\" : true\n  }\n}"
+              "examples" : {
+                "register-success" : {
+                  "value" : "{\n  \"username\" : \"mrd2Yedr7Lp7ai\",\n  \"password\" : \"eazrUZr0YEsxJeuj\",\n  \"email\" : \"GMZCcvn@MOwCa.com\",\n  \"nickname\" : \"TQTbT\",\n  \"notification\" : {\n    \"vote_progress_notification\" : true,\n    \"vote_end_notification\" : true,\n    \"vote_delivery_notification\" : true\n  }\n}"
                 }
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-login-985494254"
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-login-985494254"
                 },
-                "examples": {
-                  "register-success": {
-                    "value": "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"BwnhKJG4tC\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJjOWViMmNlZC1iZmEzLTQ0YjgtOTU5Zi00ZGM1OWM1MDRmODYiLCJzdWIiOiJCd25oS0pHNHRDIiwiaWF0IjoxNzA4NzUzODI5LCJuYmYiOjE3MDg3NTM4MjksImV4cCI6MTcwODc1NDAwOX0.9ghdOKySGUX_ZSS4A9VCPgDf1Xj69hwL7QKV7wLTHdUMF9vBBFE4NlZErVTytw7HwxfxxVb6ngarzpxGmGaYzg\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI3YzkxNGZmYS00NDAzLTQ1M2YtODgwZC00NGIzZGQ3M2YwNmUiLCJzdWIiOiJCd25oS0pHNHRDIiwiaWF0IjoxNzA4NzUzODI5LCJuYmYiOjE3MDg3NTM4MjksImV4cCI6MTcxMTM0NTgyOX0.hvot7dLX9_p_4GxSeBz8uLKZX-5_Usj4YyCDslIeQPoeXcZ4LbjdGOVdO44N8k18flgi0N7a5L6UeL_hq_Lj6A\"\n  }\n}"
+                "examples" : {
+                  "register-success" : {
+                    "value" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"mrd2Yedr7Lp7ai\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJkOTQ4MjIyMS1iZmM5LTRlMzctYTAzNy03ZjA0NGZhNTkwNTQiLCJzdWIiOiJtcmQyWWVkcjdMcDdhaSIsImlhdCI6MTcwOTI1ODc0MiwibmJmIjoxNzA5MjU4NzQyLCJleHAiOjE3MDkyNTg5MjJ9._dBR0aBv7PUp1glal0QlI0DoVkDvrOtTNXWeDru2L9tiqBCsAd7vJ-ZuwFfjRDFDb-DukgV1_kxIyPr1wmIjqQ\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJhYjAyYWFjZS02OGJhLTRiZWMtYWE5YS1kNDJiMmVhYzdlODAiLCJzdWIiOiJtcmQyWWVkcjdMcDdhaSIsImlhdCI6MTcwOTI1ODc0MiwibmJmIjoxNzA5MjU4NzQyLCJleHAiOjE3MTE4NTA3NDJ9.ux4NGmV6FdhBgHtNu3TEpuN518oy6hG1ccKWTU_azrfWq-VNWwkxkM3wix4b8YjfNIu65W7Ze_P8lHDbkZya_Q\"\n  }\n}"
                   }
                 }
               }
@@ -358,131 +330,121 @@
         }
       }
     },
-    "/v1/set-new-password": {
-      "patch": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "비밀번호 재설정",
-        "description": "비밀번호 재설정",
-        "operationId": "set-new-password-success",
-        "requestBody": {
-          "content": {
-            "application/json;charset=UTF-8": {
-              "schema": {
-                "$ref": "#/components/schemas/v1-set-new-password-35676860"
+    "/v1/set-new-password" : {
+      "patch" : {
+        "tags" : [ "v1" ],
+        "summary" : "비밀번호 재설정",
+        "description" : "비밀번호 재설정",
+        "operationId" : "set-new-password-success",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/v1-set-new-password-35676860"
               },
-              "examples": {
-                "set-new-password-success": {
-                  "value": "{\n  \"new_password\" : \"pkWKX9eBlavXBtv\"\n}"
+              "examples" : {
+                "set-new-password-success" : {
+                  "value" : "{\n  \"new_password\" : \"LiusJxrv2jr9tuw\"\n}"
                 }
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-resend-640416564"
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-find-username-640416564"
                 },
-                "examples": {
-                  "set-new-password-success": {
-                    "value": "{\n  \"message\" : \"비밀번호 재설정이 완료되었습니다.\",\n  \"code\" : \"2010\"\n}"
+                "examples" : {
+                  "set-new-password-success" : {
+                    "value" : "{\n  \"message\" : \"비밀번호 재설정이 완료되었습니다.\",\n  \"code\" : \"2010\"\n}"
                   }
                 }
               }
             }
           }
         },
-        "security": [
-          {
-            "bearerAuthJWT": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuthJWT" : [ ]
+        } ]
       }
     },
-    "/v1/update-nickname": {
-      "patch": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "닉네임 변경",
-        "description": "닉네임 변경",
-        "operationId": "update-nickname-success",
-        "requestBody": {
-          "content": {
-            "application/json;charset=UTF-8": {
-              "schema": {
-                "$ref": "#/components/schemas/v1-update-nickname-1740837738"
+    "/v1/update-nickname" : {
+      "patch" : {
+        "tags" : [ "v1" ],
+        "summary" : "닉네임 변경",
+        "description" : "닉네임 변경",
+        "operationId" : "update-nickname-success",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/v1-update-nickname-1740837738"
               },
-              "examples": {
-                "update-nickname-success": {
-                  "value": "{\n  \"new_nickname\" : \"6us7S2\"\n}"
+              "examples" : {
+                "update-nickname-success" : {
+                  "value" : "{\n  \"new_nickname\" : \"rA4l66\"\n}"
                 }
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-resend-640416564"
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-find-username-640416564"
                 },
-                "examples": {
-                  "update-nickname-success": {
-                    "value": "{\n  \"message\" : \"닉네임 변경이 완료되었습니다.\",\n  \"code\" : \"2011\"\n}"
+                "examples" : {
+                  "update-nickname-success" : {
+                    "value" : "{\n  \"message\" : \"닉네임 변경이 완료되었습니다.\",\n  \"code\" : \"2011\"\n}"
                   }
                 }
               }
             }
           }
         },
-        "security": [
-          {
-            "bearerAuthJWT": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuthJWT" : [ ]
+        } ]
       }
     },
-    "/v1/forgot-password/send-otp": {
-      "post": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "비밀번호 찾기 OTP 발송",
-        "description": "비밀번호 찾기 OTP 발송",
-        "operationId": "send-forgot-password-otp-success",
-        "requestBody": {
-          "content": {
-            "application/json;charset=UTF-8": {
-              "schema": {
-                "$ref": "#/components/schemas/v1-forgot-password-send-otp-631624128"
+    "/v1/forgot-password/send-otp" : {
+      "post" : {
+        "tags" : [ "v1" ],
+        "summary" : "비밀번호 찾기 OTP 발송",
+        "description" : "비밀번호 찾기 OTP 발송",
+        "operationId" : "send-forgot-password-otp-success",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/v1-forgot-password-send-otp-631624128"
               },
-              "examples": {
-                "send-forgot-password-otp-success": {
-                  "value": "{\n  \"username\" : \"Y3ykyzqcqAKdpV\"\n}"
+              "examples" : {
+                "send-forgot-password-otp-success" : {
+                  "value" : "{\n  \"username\" : \"WR1AdG3FU6LA\"\n}"
                 }
               }
             }
           }
         },
-        "responses": {
-          "201": {
-            "description": "201",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-resend-640416564"
+        "responses" : {
+          "201" : {
+            "description" : "201",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-find-username-640416564"
                 },
-                "examples": {
-                  "send-forgot-password-otp-success": {
-                    "value": "{\n  \"message\" : \"비밀번호 찾기 인증번호가 전송되었습니다.\",\n  \"code\" : \"3106\"\n}"
+                "examples" : {
+                  "send-forgot-password-otp-success" : {
+                    "value" : "{\n  \"message\" : \"비밀번호 찾기 인증번호가 전송되었습니다.\",\n  \"code\" : \"3106\"\n}"
                   }
                 }
               }
@@ -491,39 +453,37 @@
         }
       }
     },
-    "/v1/otp/resend": {
-      "put": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "OTP 재전송",
-        "description": "OTP 재전송",
-        "operationId": "resend-otp-success",
-        "requestBody": {
-          "content": {
-            "application/json;charset=UTF-8": {
-              "schema": {
-                "$ref": "#/components/schemas/v1-otp-resend411037104"
+    "/v1/otp/resend" : {
+      "put" : {
+        "tags" : [ "v1" ],
+        "summary" : "OTP 재전송",
+        "description" : "OTP 재전송",
+        "operationId" : "resend-otp-success",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/v1-otp-resend411037104"
               },
-              "examples": {
-                "resend-otp-success": {
-                  "value": "{\n  \"username\" : \"V4vndBIO7dn\",\n  \"otp_type\" : \"forgot-password\"\n}"
+              "examples" : {
+                "resend-otp-success" : {
+                  "value" : "{\n  \"username\" : \"tVpD6Mp6uLK\",\n  \"otp_type\" : \"forgot-password\"\n}"
                 }
               }
             }
           }
         },
-        "responses": {
-          "201": {
-            "description": "201",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-resend-640416564"
+        "responses" : {
+          "201" : {
+            "description" : "201",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-find-username-640416564"
                 },
-                "examples": {
-                  "resend-otp-success": {
-                    "value": "{\n  \"message\" : \"인증번호가 재전송되었습니다.\",\n  \"code\" : \"3107\"\n}"
+                "examples" : {
+                  "resend-otp-success" : {
+                    "value" : "{\n  \"message\" : \"인증번호가 재전송되었습니다.\",\n  \"code\" : \"3107\"\n}"
                   }
                 }
               }
@@ -532,57 +492,55 @@
         }
       }
     },
-    "/v1/otp/verify": {
-      "post": {
-        "tags": [
-          "v1"
-        ],
-        "summary": "OTP 인증",
-        "description": "OTP 인증",
-        "operationId": "otp-verify-fail-case1verify-otp-success",
-        "requestBody": {
-          "content": {
-            "application/json;charset=UTF-8": {
-              "schema": {
-                "$ref": "#/components/schemas/v1-otp-verify-1050633976"
+    "/v1/otp/verify" : {
+      "post" : {
+        "tags" : [ "v1" ],
+        "summary" : "OTP 인증",
+        "description" : "OTP 인증",
+        "operationId" : "otp-verify-fail-case1verify-otp-success",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/v1-otp-verify-1050633976"
               },
-              "examples": {
-                "verify-otp-success": {
-                  "value": "{\n  \"username\" : \"kUjazP7kkL9\",\n  \"otp_type\" : \"forgot-password\",\n  \"otp\" : \"827496\"\n}"
+              "examples" : {
+                "verify-otp-success" : {
+                  "value" : "{\n  \"username\" : \"RLlWe0GOysGKe\",\n  \"otp_type\" : \"forgot-password\",\n  \"otp\" : \"678597\"\n}"
                 },
-                "otp-verify-fail-case1": {
-                  "value": "{\n  \"username\" : \"EsuovsKwdyuQIj\",\n  \"otp_type\" : \"verify-email\",\n  \"otp\" : \"283314\"\n}"
+                "otp-verify-fail-case1" : {
+                  "value" : "{\n  \"username\" : \"RDB8lXvVuA\",\n  \"otp_type\" : \"verify-email\",\n  \"otp\" : \"735896\"\n}"
                 }
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-verify1422706013"
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-otp-verify1422706013"
                 },
-                "examples": {
-                  "verify-otp-success": {
-                    "value": "{\n  \"message\" : \"인증번호가 인증되었습니다.\",\n  \"code\" : \"3104\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI4MGRiYzI5Mi04MjY1LTQ2MTUtYjM5OS00ODA0NDI0MTU4OTAiLCJzdWIiOiJrVWphelA3a2tMOSIsImlhdCI6MTcwODc1MzgzMCwibmJmIjoxNzA4NzUzODMwLCJleHAiOjE3MDg3NTQwMTB9.WOhKbG-zlMJeORhUs2s93woiNXzhCyPEp3EmgqNBbY6iPGhs4cpPepKB6FvjgP-6AtV7qXCMA_ZKlasm6Dvx9w\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJlYmEyNjlmYy0zMjlhLTQyMTEtOWI3My1kZmYwZGFhOTc5ZTQiLCJzdWIiOiJrVWphelA3a2tMOSIsImlhdCI6MTcwODc1MzgzMCwibmJmIjoxNzA4NzUzODMwLCJleHAiOjE3MTEzNDU4MzB9.IxuzqquIsAd8gEfaui83dsH9Gadfv-fPZAhR2BdNKujFw5TOXR0xEzANV5qhm59MaduojuQRMWCMDj-yPxZLeA\"\n  }\n}"
+                "examples" : {
+                  "verify-otp-success" : {
+                    "value" : "{\n  \"message\" : \"인증번호가 인증되었습니다.\",\n  \"code\" : \"3104\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJiMDhjZmM3NS01MzU2LTQ4NTMtYTMyOC1iMDJkZjJmNzg2MTkiLCJzdWIiOiJSTGxXZTBHT3lzR0tlIiwiaWF0IjoxNzA5MjU4NzQ0LCJuYmYiOjE3MDkyNTg3NDQsImV4cCI6MTcwOTI1ODkyNH0.aqWnE2MM2SoD_8zIIfHKE3Qc-AHmISYY9oWirsZ4FNKCWg912us9gsP0dF23x-xx1eLNj1WVacM-eW6onMjsQw\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIwZDdlZWZkNi1mNzU2LTQyMTAtYWRjMS1kMWY5ZWRlY2VmYjUiLCJzdWIiOiJSTGxXZTBHT3lzR0tlIiwiaWF0IjoxNzA5MjU4NzQ0LCJuYmYiOjE3MDkyNTg3NDQsImV4cCI6MTcxMTg1MDc0NH0.sG3frBHM0LwW2T8wNZBK3uGT41I9LHPfmFtNkTKHAn-now56IGq9oTmoB4xwf1ZVCnKcYGzvqkvRtzE3la0Y9w\"\n  }\n}"
                   }
                 }
               }
             }
           },
-          "400": {
-            "description": "400",
-            "content": {
-              "application/json;charset=UTF-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1-otp-resend-640416564"
+          "400" : {
+            "description" : "400",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-find-username-640416564"
                 },
-                "examples": {
-                  "otp-verify-fail-case1": {
-                    "value": "{\n  \"message\" : \"인증번호가 일치하지 않습니다.\",\n  \"code\" : \"3101\"\n}"
+                "examples" : {
+                  "otp-verify-fail-case1" : {
+                    "value" : "{\n  \"message\" : \"인증번호가 일치하지 않습니다.\",\n  \"code\" : \"3101\"\n}"
                   }
                 }
               }
@@ -592,254 +550,263 @@
       }
     }
   },
-  "components": {
-    "schemas": {
-      "v1-refresh1697318922": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string",
-            "description": "상태 코드"
+  "components" : {
+    "schemas" : {
+      "v1-refresh1697318922" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "상태 코드"
           },
-          "data": {
-            "type": "object",
-            "properties": {
-              "access_token": {
-                "type": "string",
-                "description": "Access Token"
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "access_token" : {
+                "type" : "string",
+                "description" : "Access Token"
               }
             },
-            "description": "Response Data"
+            "description" : "Response Data"
           },
-          "message": {
-            "type": "string",
-            "description": "시스템 메시지"
+          "message" : {
+            "type" : "string",
+            "description" : "시스템 메시지"
           }
         }
       },
-      "v1-login-434021498": {
-        "type": "object",
-        "properties": {
-          "password": {
-            "type": "string",
-            "description": "비밀번호"
+      "v1-otp-verify-1050633976" : {
+        "type" : "object",
+        "properties" : {
+          "otp" : {
+            "type" : "string",
+            "description" : "OTP"
           },
-          "username": {
-            "type": "string",
-            "description": "아이디"
+          "otp_type" : {
+            "type" : "string",
+            "description" : "비밀번호"
+          },
+          "username" : {
+            "type" : "string",
+            "description" : "아이디"
           }
         }
       },
-      "v1-register171397375": {
-        "type": "object",
-        "properties": {
-          "notification": {
-            "type": "object",
-            "properties": {
-              "vote_delivery_notification": {
-                "type": "boolean",
-                "description": "종료된 투표 영상 업로드 알림 여부"
+      "v1-register171397375" : {
+        "type" : "object",
+        "properties" : {
+          "notification" : {
+            "type" : "object",
+            "properties" : {
+              "vote_delivery_notification" : {
+                "type" : "boolean",
+                "description" : "종료된 투표 영상 업로드 알림 여부"
               },
-              "vote_progress_notification": {
-                "type": "boolean",
-                "description": "투표 진행 알림 여부 설정"
+              "vote_progress_notification" : {
+                "type" : "boolean",
+                "description" : "투표 진행 알림 여부 설정"
               },
-              "vote_end_notification": {
-                "type": "boolean",
-                "description": "투표 종료 알림 여부 설정"
+              "vote_end_notification" : {
+                "type" : "boolean",
+                "description" : "투표 종료 알림 여부 설정"
               }
             },
-            "description": "알림 설정"
+            "description" : "알림 설정"
           },
-          "password": {
-            "type": "string",
-            "description": "비밀번호"
+          "password" : {
+            "type" : "string",
+            "description" : "비밀번호"
           },
-          "nickname": {
-            "type": "string",
-            "description": "닉네임"
+          "nickname" : {
+            "type" : "string",
+            "description" : "닉네임"
           },
-          "email": {
-            "type": "string",
-            "description": "이메일"
+          "email" : {
+            "type" : "string",
+            "description" : "이메일"
           },
-          "username": {
-            "type": "string",
-            "description": "아이디"
+          "username" : {
+            "type" : "string",
+            "description" : "아이디"
           }
         }
       },
-      "v1-otp-verify-1050633976": {
-        "type": "object",
-        "properties": {
-          "otp": {
-            "type": "string",
-            "description": "OTP"
-          },
-          "otp_type": {
-            "type": "string",
-            "description": "비밀번호"
-          },
-          "username": {
-            "type": "string",
-            "description": "아이디"
+      "v1-update-nickname-1740837738" : {
+        "type" : "object",
+        "properties" : {
+          "new_nickname" : {
+            "type" : "string",
+            "description" : "새로운 닉네임"
           }
         }
       },
-      "v1-update-nickname-1740837738": {
-        "type": "object",
-        "properties": {
-          "new_nickname": {
-            "type": "string",
-            "description": "새로운 닉네임"
+      "v1-otp-resend411037104" : {
+        "type" : "object",
+        "properties" : {
+          "otp_type" : {
+            "type" : "string",
+            "description" : "Otp Type"
+          },
+          "username" : {
+            "type" : "string",
+            "description" : "아이디"
           }
         }
       },
-      "v1-otp-resend411037104": {
-        "type": "object",
-        "properties": {
-          "otp_type": {
-            "type": "string",
-            "description": "Otp Type"
+      "v1-login-985494254" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "상태 코드"
           },
-          "username": {
-            "type": "string",
-            "description": "아이디"
-          }
-        }
-      },
-      "v1-login-985494254": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string",
-            "description": "상태 코드"
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "access_token": {
-                "type": "string",
-                "description": "Access Token"
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "access_token" : {
+                "type" : "string",
+                "description" : "Access Token"
               },
-              "refresh_token": {
-                "type": "string",
-                "description": "Refresh Token"
+              "refresh_token" : {
+                "type" : "string",
+                "description" : "Refresh Token"
               },
-              "roles": {
-                "type": "array",
-                "description": "권한",
-                "items": {
-                  "oneOf": [
-                    {
-                      "type": "object"
-                    },
-                    {
-                      "type": "boolean"
-                    },
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "number"
-                    }
-                  ]
+              "roles" : {
+                "type" : "array",
+                "description" : "권한",
+                "items" : {
+                  "oneOf" : [ {
+                    "type" : "object"
+                  }, {
+                    "type" : "boolean"
+                  }, {
+                    "type" : "string"
+                  }, {
+                    "type" : "number"
+                  } ]
                 }
               },
-              "username": {
-                "type": "string",
-                "description": "아이디"
+              "username" : {
+                "type" : "string",
+                "description" : "아이디"
               }
             },
-            "description": "데이터"
+            "description" : "데이터"
           },
-          "message": {
-            "type": "string",
-            "description": "시스템 메시지"
+          "message" : {
+            "type" : "string",
+            "description" : "시스템 메시지"
           }
         }
       },
-      "v1-otp-verify1422706013": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string",
-            "description": "상태 코드"
+      "v1-find-username-272417006" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "description" : "이메일"
+          }
+        }
+      },
+      "v1-otp-verify1422706013" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "상태 코드"
           },
-          "data": {
-            "type": "object",
-            "properties": {
-              "access_token": {
-                "type": "string",
-                "description": "Access Token"
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "access_token" : {
+                "type" : "string",
+                "description" : "Access Token"
               },
-              "refresh_token": {
-                "type": "string",
-                "description": "Refresh Token"
+              "refresh_token" : {
+                "type" : "string",
+                "description" : "Refresh Token"
               }
             }
           },
-          "message": {
-            "type": "string",
-            "description": "시스템 메시지"
+          "message" : {
+            "type" : "string",
+            "description" : "시스템 메시지"
           }
         }
       },
-      "v1-find-username-272417006": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "이메일"
-          }
-        }
-      },
-      "v1-refresh-73082285": {
-        "type": "object",
-        "properties": {
-          "refresh_token": {
-            "type": "string",
-            "description": "Refresh Token"
-          }
-        }
-      },
-      "v1-otp-resend-640416564": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string",
-            "description": "상태 코드"
+      "v1-login1041369120" : {
+        "type" : "object",
+        "properties" : {
+          "password" : {
+            "type" : "string",
+            "description" : "비밀번호"
           },
-          "message": {
-            "type": "string",
-            "description": "시스템 메시지"
+          "device" : {
+            "type" : "object",
+            "properties" : {
+              "device_token" : {
+                "type" : "string",
+                "description" : "디바이스 토큰"
+              },
+              "fcm_token" : {
+                "type" : "string",
+                "description" : "FCM 토큰"
+              }
+            },
+            "description" : "로그인 디바이스 정보"
+          },
+          "username" : {
+            "type" : "string",
+            "description" : "아이디"
           }
         }
       },
-      "v1-forgot-password-send-otp-631624128": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string",
-            "description": "아이디"
+      "v1-refresh-73082285" : {
+        "type" : "object",
+        "properties" : {
+          "refresh_token" : {
+            "type" : "string",
+            "description" : "Refresh Token"
           }
         }
       },
-      "v1-set-new-password-35676860": {
-        "type": "object",
-        "properties": {
-          "new_password": {
-            "type": "string",
-            "description": "새로운 비밀번호"
+      "v1-find-username-640416564" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "상태 코드"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "시스템 메시지"
+          }
+        }
+      },
+      "v1-forgot-password-send-otp-631624128" : {
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "type" : "string",
+            "description" : "아이디"
+          }
+        }
+      },
+      "v1-set-new-password-35676860" : {
+        "type" : "object",
+        "properties" : {
+          "new_password" : {
+            "type" : "string",
+            "description" : "새로운 비밀번호"
           }
         }
       }
     },
-    "securitySchemes": {
-      "bearerAuthJWT": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+    "securitySchemes" : {
+      "bearerAuthJWT" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
       }
     }
   }
