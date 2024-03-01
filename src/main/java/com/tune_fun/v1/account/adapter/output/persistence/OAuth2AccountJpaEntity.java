@@ -46,10 +46,13 @@ public class OAuth2AccountJpaEntity extends BaseEntity {
     @Comment("OAuth2 플랫폼")
     private String oauth2Provider;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", nullable = false, referencedColumnName = "id")
+    private AccountJpaEntity account;
+
     @Builder.Default
     @Column(name = "is_enabled")
     private Boolean isEnabled = true;
 
-    private String name;
 
 }

@@ -80,7 +80,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        log.info("request.getServletPath() : {}", request.getServletPath());
         Optional<String> matchedUri = Arrays.stream(Uris.PERMIT_ALL_URIS)
                 .filter(uri -> uri.equals(request.getServletPath()) || "".equals(request.getServletPath()))
                 .findFirst();

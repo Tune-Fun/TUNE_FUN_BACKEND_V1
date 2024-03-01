@@ -51,7 +51,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer configure() {
-        return (web) -> web.ignoring().requestMatchers("/static/**.js", "/static/**.html", "/favicon.ico");
+        return (web) -> web.ignoring().requestMatchers("/static/**", "/favicon.ico");
     }
 
     @Bean
@@ -90,7 +90,10 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(configure ->
-                        configure.authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestPersistenceAdapter))
+                        configure.authorizationEndpoint(config -> config
+                                        .baseUri("/oauth2")
+                                        .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestPersistenceAdapter)
+                                )
                                 .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
                                 .failureHandler(oAuth2AuthenticationFailureHandler)
