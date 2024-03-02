@@ -73,7 +73,6 @@ spring:
           google:
             client-id: ${google-oauth2-client-id}
             client-secret: ${google-oauth2-client-secret}
-            redirect-uri: "${backend-rooturl-origin}/login/oauth2/code/google"
             scope:
               - profile
               - email
@@ -81,7 +80,7 @@ spring:
             client-name: Apple
             client-id: ${apple-oauth2-client-id}
             client-secret: ${apple-oauth2-client-secret}
-            redirect-uri: "${backend-rooturl-origin}/login/oauth2/code/apple"
+            redirect-uri: "${backend-rooturl-origin}/login/oauth2/code/{registrationId}"
             authorization-grant-type: authorization_code
             client-authentication-method: POST
             scope:
@@ -92,7 +91,7 @@ spring:
             provider: instagram
             client-id: ${instagram-oauth2-client-id}
             client-secret: ${instagram-oauth2-client-secret}
-            redirect-uri: "${backend-rooturl-origin}/login/oauth2/code/instagram"
+            redirect-uri: "${backend-rooturl-origin}/login/oauth2/code/{registrationId}"
             authorization-grant-type: authorization_code
             client-authentication-method: client_secret_post
             scope:
