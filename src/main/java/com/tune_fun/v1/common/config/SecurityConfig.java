@@ -91,7 +91,6 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(configure ->
                         configure.authorizationEndpoint(config -> config
-                                        .baseUri("/oauth2")
                                         .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestPersistenceAdapter)
                                 )
                                 .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
