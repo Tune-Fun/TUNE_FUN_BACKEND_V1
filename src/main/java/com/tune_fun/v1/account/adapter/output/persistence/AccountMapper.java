@@ -24,7 +24,7 @@ public abstract class AccountMapper {
     @Mapping(target = "notificationConfig.voteProgressNotification", source = "voteProgressNotification")
     @Mapping(target = "notificationConfig.voteEndNotification", source = "voteEndNotification")
     @Mapping(target = "notificationConfig.voteDeliveryNotification", source = "voteDeliveryNotification")
-    public abstract AccountJpaEntity fromSaveAccountValue(final SaveAccount saveAccount);
+    public abstract AccountJpaEntity fromSaveAccountBehavior(final SaveAccount behavior);
 
     @Mapping(target = "roles", source = "roles", qualifiedByName = "roleValues")
     public abstract RegisteredAccount registeredAccountInfo(AccountJpaEntity accountJpaEntity);

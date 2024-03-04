@@ -1,5 +1,6 @@
-package com.tune_fun.v1.account.adapter.output.persistence;
+package com.tune_fun.v1.account.adapter.output.persistence.oauth2;
 
+import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
