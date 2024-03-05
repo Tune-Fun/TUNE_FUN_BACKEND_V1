@@ -60,7 +60,9 @@ public class Uris {
             SWAGGER_API_DOCS,
             SWAGGER_API_DOCS_SWAGGER_CONFIG,
             SWAGGER_FAVICON,
-            SWAGGER_API_DOCS_JSON
+            SWAGGER_API_DOCS_JSON,
+            API_DOC_HTML,
+            FAVICON
     };
     public static final String[] PERMIT_ALL_URIS = {
             CHECK_USERNAME_DUPLICATE,
