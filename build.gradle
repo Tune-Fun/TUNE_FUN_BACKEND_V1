@@ -189,7 +189,7 @@ test {
 
 openapi3 { // Swagger OAS Generate
     servers = [
-            { url = "http://....:8080" },
+            { url = "https://api.tunefun.net" },
             { url = "http://localhost:8080"}
     ]
     title = "Tune Fun REST API V1 Documentation"

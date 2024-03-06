@@ -48,6 +48,7 @@ public class Uris {
 
     public static final String API_DOC_HTML = "/static/docs/index.html";
     public static final String FAVICON = "/favicon.ico";
+    public static final String HEALTH_CHECK = "/health-check";
 
     public static final String[] NOT_LOGGING_URIS = {
             SWAGGER_UI,
@@ -62,7 +63,8 @@ public class Uris {
             SWAGGER_FAVICON,
             SWAGGER_API_DOCS_JSON,
             API_DOC_HTML,
-            FAVICON
+            FAVICON,
+            HEALTH_CHECK
     };
     public static final String[] PERMIT_ALL_URIS = {
             CHECK_USERNAME_DUPLICATE,
@@ -87,7 +89,8 @@ public class Uris {
             SWAGGER_FAVICON,
             SWAGGER_API_DOCS_JSON,
             API_DOC_HTML,
-            FAVICON
+            FAVICON,
+            HEALTH_CHECK
     };
     public static final String[] ADMIN_URIS = {
 
