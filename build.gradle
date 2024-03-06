@@ -34,7 +34,7 @@ ext {
     set('generated', file("src/main/generated"))
     set('docsDir', "src/main/resources/static/docs")
     set('springCloudVersion', "2023.0.0")
-    set('testcontainersVersion', "1.19.3")
+    set('testcontainersVersion', "1.19.7")
     set('jwtVersion', '0.12.3')
     set('queryDslVersion', "6.1")
     set('mapstructVersion', "1.5.5.Final")
@@ -119,6 +119,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.c4-soft.springaddons:spring-addons-oauth2-test:7.6.3'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.apache.commons:commons-lang3:3.13.0'
     testImplementation 'com.tngtech.archunit:archunit-junit5:1.1.0' // Architecture Rule Test

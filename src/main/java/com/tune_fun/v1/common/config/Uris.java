@@ -12,7 +12,7 @@ public class Uris {
     public static final String FIND_USERNAME = API_V1_ROOT + "/find-username";
     public static final String REGISTER = API_V1_ROOT + "/register";
     public static final String LOGIN = API_V1_ROOT + "/login";
-    public static final String LOGIN_GOOGLE = API_V1_ROOT + "/login/google";
+    public static final String LOGIN_GOOGLE = "/oauth2/authorization/google";
     public static final String LOGIN_APPLE = API_V1_ROOT + "/login/apple";
     public static final String LOGIN_INSTAGRAM = API_V1_ROOT + "/login/instagram";
     public static final String LOGOUT = API_V1_ROOT + "/logout";
