@@ -71,10 +71,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        String mode = CookieUtil.getCookie(request, MODE_PARAM_COOKIE_NAME)
-                .map(Cookie::getValue)
-                .orElse("");
-
         OAuth2UserPrincipal principal = getOAuth2UserPrincipal(authentication);
 
         if (principal == null) {
@@ -83,7 +79,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .build().toUriString();
         }
 
-//        if ("login".equalsIgnoreCase(mode)) {
         log.info("email={}, name={}, nickname={}, accessToken={}",
                 principal.userInfo().getEmail(),
                 principal.userInfo().getName(),
@@ -115,22 +110,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .queryParam("refresh_token", refreshToken)
                 .build().toUriString();
 
-//        } else if ("unlink".equalsIgnoreCase(mode)) {
-//
-//            String accessToken = principal.userInfo().getAccessToken();
-//            OAuth2Provider provider = principal.userInfo().getProvider();
-//
-//            // TODO: DB 삭제
-//            // TODO: 리프레시 토큰 삭제
-//            oAuth2UserUnlinkFacade.unlink(provider, accessToken);
-//
-//            return UriComponentsBuilder.fromUriString(targetUrl)
-//                    .build().toUriString();
-//        }
-
-//        return UriComponentsBuilder.fromUriString(targetUrl)
-//                .queryParam("error", "Login failed")
-//                .build().toUriString();
     }
 
     private OAuth2UserPrincipal getOAuth2UserPrincipal(Authentication authentication) {
