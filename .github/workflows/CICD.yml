@@ -55,11 +55,4 @@ jobs:
 
       # Deploy
       - name: Deploy
-        run: |
-          aws deploy create-deployment \
-          --application-name tuenfun-dev \
-          --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name tuenfun-dev-deploy \
-          --file-exists-behavior OVERWRITE \
-          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip \
-          --region ap-northeast-2 \
+        run: aws deploy create-deployment --application-name tuenfun-dev --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name tuenfun-dev-deploy --file-exists-behavior OVERWRITE --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip --region ap-northeast-2
