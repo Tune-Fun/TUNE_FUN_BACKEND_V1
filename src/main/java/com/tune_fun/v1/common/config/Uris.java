@@ -12,6 +12,9 @@ public class Uris {
     public static final String FIND_USERNAME = API_V1_ROOT + "/find-username";
     public static final String REGISTER = API_V1_ROOT + "/register";
     public static final String LOGIN = API_V1_ROOT + "/login";
+    public static final String LOGIN_GOOGLE = "/oauth2/authorization/google";
+    public static final String LOGIN_APPLE = API_V1_ROOT + "/login/apple";
+    public static final String LOGIN_INSTAGRAM = API_V1_ROOT + "/login/instagram";
     public static final String LOGOUT = API_V1_ROOT + "/logout";
     public static final String REFRESH = API_V1_ROOT + "/refresh";
     public static final String SET_NEW_PASSWORD = API_V1_ROOT + "/set-new-password";
@@ -43,6 +46,26 @@ public class Uris {
     public static final String SWAGGER_API_DOCS_SWAGGER_CONFIG = SWAGGER_API_DOCS + "/swagger-config";
     public static final String SWAGGER_API_DOCS_JSON = "/docs/com.tune_fun-open-api-3.0.1.json";
 
+    public static final String API_DOC_HTML = "/static/docs/index.html";
+    public static final String FAVICON = "/favicon.ico";
+    public static final String HEALTH_CHECK = "/health-check";
+
+    public static final String[] NOT_LOGGING_URIS = {
+            SWAGGER_UI,
+            SWAGGER_INDEX_HTML,
+            SWAGGER_INDEX_CSS,
+            SWAGGER_BUNDLE_JS,
+            SWAGGER_CSS,
+            SWAGGER_STANDALONE_PRESET_JS,
+            SWAGGER_INITIALIZER_JS,
+            SWAGGER_API_DOCS,
+            SWAGGER_API_DOCS_SWAGGER_CONFIG,
+            SWAGGER_FAVICON,
+            SWAGGER_API_DOCS_JSON,
+            API_DOC_HTML,
+            FAVICON,
+            HEALTH_CHECK
+    };
     public static final String[] PERMIT_ALL_URIS = {
             CHECK_USERNAME_DUPLICATE,
             CHECK_EMAIL_DUPLICATE,
@@ -64,25 +87,13 @@ public class Uris {
             SWAGGER_API_DOCS,
             SWAGGER_API_DOCS_SWAGGER_CONFIG,
             SWAGGER_FAVICON,
-            SWAGGER_API_DOCS_JSON
+            SWAGGER_API_DOCS_JSON,
+            API_DOC_HTML,
+            FAVICON,
+            HEALTH_CHECK
     };
-
     public static final String[] ADMIN_URIS = {
 
-    };
-
-    public static final String[] NOT_LOGGING_URIS = {
-            SWAGGER_UI,
-            SWAGGER_INDEX_HTML,
-            SWAGGER_INDEX_CSS,
-            SWAGGER_BUNDLE_JS,
-            SWAGGER_CSS,
-            SWAGGER_STANDALONE_PRESET_JS,
-            SWAGGER_INITIALIZER_JS,
-            SWAGGER_API_DOCS,
-            SWAGGER_API_DOCS_SWAGGER_CONFIG,
-            SWAGGER_FAVICON,
-            SWAGGER_API_DOCS_JSON
     };
 
 

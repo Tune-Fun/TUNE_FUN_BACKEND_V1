@@ -1,6 +1,5 @@
 package com.tune_fun.v1.otp.application.service;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.application.port.output.RecordEmailVerifiedAtPort;
 import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort;
@@ -21,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
 
-@XRayEnabled
+
 @Service
 @UseCase
 @RequiredArgsConstructor
@@ -33,6 +32,16 @@ public class VerifyOtpService implements VerifyOtpUseCase {
 
     private final CreateAccessTokenPort createAccessTokenPort;
     private final CreateRefreshTokenPort createRefreshTokenPort;
+
+    private static VerifyOtp getVerifyOtpBehavior(final OtpQueries.Verify query) {
+        return new VerifyOtp(query.username(), query.otpType(), query.otp());
+    }
+
+    @NotNull
+    private static SaveJwtToken getSaveJwtTokenBehavior(CurrentAccount currentAccount) {
+        String authorities = String.join(",", currentAccount.roles());
+        return new SaveJwtToken(currentAccount.username(), authorities);
+    }
 
     @Override
     @Transactional
@@ -56,15 +65,5 @@ public class VerifyOtpService implements VerifyOtpUseCase {
     public CurrentAccount getCurrentAccount(OtpQueries.Verify query) {
         return loadAccountPort.currentAccountInfo(query.username())
                 .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
-    }
-
-    private static VerifyOtp getVerifyOtpBehavior(final OtpQueries.Verify query) {
-        return new VerifyOtp(query.username(), query.otpType(), query.otp());
-    }
-
-    @NotNull
-    private static SaveJwtToken getSaveJwtTokenBehavior(CurrentAccount currentAccount) {
-        String authorities = String.join(",", currentAccount.roles());
-        return new SaveJwtToken(currentAccount.username(), authorities);
     }
 }

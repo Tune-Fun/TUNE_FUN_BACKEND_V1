@@ -1,18 +1,16 @@
 package com.tune_fun.v1.account.adapter.output.persistence.device;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.adapter.output.persistence.AccountPersistenceAdapter;
 import com.tune_fun.v1.account.application.port.output.device.SaveDevicePort;
 import com.tune_fun.v1.account.domain.behavior.SaveDevice;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
+import com.tune_fun.v1.common.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-import static com.tune_fun.v1.common.util.StringUtil.uuid;
 
-@XRayEnabled
 @Component
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -37,7 +35,7 @@ public class DevicePersistenceAdapter implements SaveDevicePort {
                 .ifPresent(account -> {
                     DeviceJpaEntity deviceJpaEntity = DeviceJpaEntity.builder()
                             .account(account)
-                            .uuid(uuid())
+                            .uuid(StringUtil.uuid())
                             .fcmToken(behavior.fcmToken())
                             .deviceToken(behavior.deviceToken())
                             .build();

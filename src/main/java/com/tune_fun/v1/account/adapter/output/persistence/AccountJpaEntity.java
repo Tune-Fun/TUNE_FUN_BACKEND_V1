@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -56,7 +55,7 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
 
     @Convert(converter = EncryptConverter.class)
     @NotNull
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     @Comment("이메일")
     private String email;
 
@@ -101,48 +100,29 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
     protected LocalDateTime deletedAt;
 
     @Builder.Default
-    @Column(name = "is_account_non_expired")
-    private Boolean isAccountNonExpired = true;
+    @Column(name = "account_non_expired")
+    private boolean accountNonExpired = true;
 
     @Builder.Default
-    @Column(name = "is_account_non_locked")
-    private Boolean isAccountNonLocked = true;
+    @Column(name = "account_non_locked")
+    private boolean accountNonLocked = true;
 
     @Builder.Default
-    @Column(name = "is_credentials_non_expired")
-    private Boolean isCredentialsNonExpired = true;
+    @Column(name = "credentials_non_expired")
+    private boolean credentialsNonExpired = true;
 
     @Builder.Default
-    @Column(name = "is_enabled")
-    private Boolean isEnabled = true;
+    @Column(name = "enabled")
+    private boolean enabled = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return isAccountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return isEnabled;
-    }
 
     public boolean isAvailable() {
-        return !isAccountNonExpired && !isAccountNonLocked && !isCredentialsNonExpired && !isEnabled;
+        return !accountNonExpired && !accountNonLocked && !credentialsNonExpired && !enabled;
     }
 
 }

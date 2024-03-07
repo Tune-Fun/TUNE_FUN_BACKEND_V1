@@ -3,32 +3,37 @@ spring:
     compose:
       enabled: false
   datasource:
-    # 인프라 구축 필요
     url: ${mariadb-url}
     username: ${mariadb-username}
     password: ${mariadb-password}
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: false
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
         format_sql: false
         use_sql_comments: false
         default_batch_fetch_size: 100
 
   data:
-    # 인프라 구축 필요
     redis:
       host: ${redis-host}
       port: ${redis-port}
+      username: ${redis-username}
+      password: ${redis-password}
+      database: ${redis-database}
     mongodb:
       host: ${mongodb-host}
       port: ${mongodb-port}
-      database: ${mongodb-databasse}
+      database: tunefun
       username: ${mongodb-username}
       password: ${mongodb-password}
+    jpa:
+      repositories:
+        bootstrap-mode: deferred
 
   thymeleaf:
     enabled: false
@@ -36,9 +41,15 @@ spring:
   flyway:
     enabled: false
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   mail:
     host: smtp.gmail.com
     port: 587
+    username: ${gmail-username}
+    password: ${gmail-password}
     properties:
       mail:
         debug: true
@@ -56,14 +67,56 @@ spring:
       secretsmanager:
         region: ap-northeast-2
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${google-oauth2-client-id}
+            client-secret: ${google-oauth2-client-secret}
+            scope:
+              - profile
+              - email
+          apple:
+            client-name: Apple
+            client-id: ${apple-oauth2-client-id}
+            client-secret: ${apple-oauth2-client-secret}
+            redirect-uri: "${backend-rooturl-origin}/{action}/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+            scope:
+              - name
+              - email
+          instagram:
+            client-name: Instagram
+            provider: instagram
+            client-id: ${instagram-oauth2-client-id}
+            client-secret: ${instagram-oauth2-client-secret}
+            redirect-uri: "${backend-rooturl-origin}/{action}/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+            scope:
+              - user_profile
+              - user_media
+        provider:
+          apple:
+            authorization-uri: https://appleid.apple.com/auth/authorize?scope=name%20email&response_mode=form_post
+            token-uri: https://appleid.apple.com/auth/token
+          instagram:
+            authorization-uri: https://api.instagram.com/oauth/authorize
+            token-uri: https://api.instagram.com/oauth/access_token
+
 jwt:
   accessTokenValidity: 3d
   refreshTokenValidity: 30d
   secret: ${jwt-secret}
 
+otp:
+  validity: 3m
+
 fcm:
   sdk-file: tunefun-firebase-adminsdk.json
-  project-id: tunefun-9186f
+  project-id: tunefun-6edf5
 
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8

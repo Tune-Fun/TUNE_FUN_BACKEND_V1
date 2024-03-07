@@ -1,6 +1,7 @@
 package com.tune_fun.v1.common.config;
 
-import org.mapstruct.*;
+import org.mapstruct.MapperConfig;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;

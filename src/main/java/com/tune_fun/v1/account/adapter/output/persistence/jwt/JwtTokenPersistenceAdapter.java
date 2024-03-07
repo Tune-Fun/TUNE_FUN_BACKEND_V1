@@ -1,6 +1,5 @@
 package com.tune_fun.v1.account.adapter.output.persistence.jwt;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.account.application.port.output.jwt.*;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
@@ -28,7 +27,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 /**
  * Account - Output Adapter - Persistence - JwtToken
  */
-@XRayEnabled
+
 @Slf4j
 @Component
 @PersistenceAdapter
@@ -44,13 +43,19 @@ public class JwtTokenPersistenceAdapter implements
 
     private static final String ACCESS_TOKEN_KEY_PREFIX = "access_";
     private static final String REFRESH_TOKEN_KEY_PREFIX = "refresh_";
-
-    private SecretKey secretKey;
     private final JwtProperty jwtProperty;
-
     private final RedisTemplate<String, AccessTokenRedisEntity> redisTemplateAccess;
     private final RedisTemplate<String, RefreshTokenRedisEntity> redisTemplateRefresh;
     private final RedisTemplate<String, Object> redisTemplateObject;
+    private SecretKey secretKey;
+
+    private static String getAccessTokenKey(final String username) {
+        return ACCESS_TOKEN_KEY_PREFIX + username;
+    }
+
+    private static String getRefreshTokenKey(final String username) {
+        return REFRESH_TOKEN_KEY_PREFIX + username;
+    }
 
     @Override
     public void afterPropertiesSet() {
@@ -105,7 +110,6 @@ public class JwtTokenPersistenceAdapter implements
 
         return tokenValue;
     }
-
 
     @Override // CheckAccessTokenExpirePort
     public Boolean isAccessTokenExpired(final String accessToken) {
@@ -210,13 +214,5 @@ public class JwtTokenPersistenceAdapter implements
                 .sig().add(Jwts.SIG.HS512)
                 .and()
                 .build();
-    }
-
-    private static String getAccessTokenKey(final String username) {
-        return ACCESS_TOKEN_KEY_PREFIX + username;
-    }
-
-    private static String getRefreshTokenKey(final String username) {
-        return REFRESH_TOKEN_KEY_PREFIX + username;
     }
 }

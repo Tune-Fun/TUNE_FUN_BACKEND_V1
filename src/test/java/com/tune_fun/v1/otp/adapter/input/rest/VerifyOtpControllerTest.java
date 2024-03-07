@@ -83,7 +83,7 @@ class VerifyOtpControllerTest extends ControllerBaseTest {
     @Test
     @Order(2)
     @DisplayName("OTP 인증, 실패 Case 1. OTP 미존재")
-    void otpVerifyFailCase1() throws Exception {
+    void verifyOtpFailCase1() throws Exception {
         dummyService.initAccount();
         dummyService.forgotPasswordOtp();
 
@@ -101,7 +101,7 @@ class VerifyOtpControllerTest extends ControllerBaseTest {
                                 requestFields(REQUEST_DESCRIPTORS), responseFields(baseResponseFields),
                                 resource(
                                         builder().
-                                                description("OTP 인증, 실패 Case 1. OTP 미존재").
+                                                description("OTP 인증").
                                                 requestFields(REQUEST_DESCRIPTORS).
                                                 responseFields(baseResponseFields)
                                                 .build()

@@ -11,7 +11,7 @@ import static software.amazon.awssdk.regions.Region.AP_NORTHEAST_2;
 public class AwsS3Config {
 
     @Bean
-    @Profile("dev | dev_standalone")
+    @Profile("dev_standalone")
     public S3Client amazonS3Client() {
         return S3Client.builder()
                 .region(AP_NORTHEAST_2)
@@ -20,7 +20,7 @@ public class AwsS3Config {
     }
 
     @Bean
-    @Profile("staging | prod")
+    @Profile("dev | staging | prod")
     public S3Client amazonS3ClientStaging() {
         return S3Client.builder()
                 .region(AP_NORTHEAST_2)

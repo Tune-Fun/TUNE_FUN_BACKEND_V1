@@ -30,6 +30,10 @@ public class GlobalExceptionHandler {
 
     private final ResponseMapper responseMapper;
 
+    protected static String getPropertyName(String propertyPath) {
+        return propertyPath.substring(propertyPath.lastIndexOf('.') + 1);
+    }
+
     @ExceptionHandler(CommonApplicationException.class)
     protected ResponseEntity<ExceptionResponse> commonApplicationException(CommonApplicationException e) {
         return e.getMessageCode() == null ?
@@ -64,10 +68,6 @@ public class GlobalExceptionHandler {
                         FieldError::getDefaultMessage
                 )
         );
-    }
-
-    protected static String getPropertyName(String propertyPath) {
-        return propertyPath.substring(propertyPath.lastIndexOf('.') + 1);
     }
 
 }

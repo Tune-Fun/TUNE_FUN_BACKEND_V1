@@ -27,7 +27,7 @@ public class ValidationErrorData implements BasePayload {
     }
 
     @JsonAnyGetter
-    public Map<String,String> getMap() {
+    public Map<String, String> getMap() {
         return errors;
     }
 

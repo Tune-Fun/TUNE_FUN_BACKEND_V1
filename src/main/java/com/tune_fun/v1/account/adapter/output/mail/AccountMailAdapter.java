@@ -1,6 +1,5 @@
 package com.tune_fun.v1.account.adapter.output.mail;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tune_fun.v1.account.application.port.output.SendUsernamePort;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@XRayEnabled
+
 @Component
 @RequiredArgsConstructor
 public class AccountMailAdapter implements SendUsernamePort {
@@ -20,6 +19,10 @@ public class AccountMailAdapter implements SendUsernamePort {
 
     private final MailHandler mailHandler;
     private final ObjectMapper objectMapper;
+
+    private static String getSubject() {
+        return "TuneFun - 아이디 찾기 결과입니다.";
+    }
 
     @Override
     public void sendUsername(final SendUsername sendUsername) throws Exception {
@@ -33,9 +36,6 @@ public class AccountMailAdapter implements SendUsernamePort {
         });
     }
 
-    private static String getSubject() {
-        return "TuneFun - 아이디 찾기 결과입니다.";
+    private record UsernameSendMailVariables(String username) {
     }
-
-    private record UsernameSendMailVariables(String username) {}
 }

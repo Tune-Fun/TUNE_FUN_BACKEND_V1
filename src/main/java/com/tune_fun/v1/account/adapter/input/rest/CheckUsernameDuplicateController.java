@@ -28,7 +28,7 @@ public class CheckUsernameDuplicateController {
 
     @GetMapping(value = Uris.CHECK_USERNAME_DUPLICATE)
     public ResponseEntity<Response<BasePayload>> checkUsernameDuplicate(@RequestParam(name = "username")
-                                                                            @NotBlank(message = "{username.not_blank}") final String username) {
+                                                                        @NotBlank(message = "{username.not_blank}") final String username) {
         checkUsernameDuplicateUseCase.checkUsernameDuplicate(username);
         return responseMapper.ok(SUCCESS_USERNAME_UNIQUE);
     }

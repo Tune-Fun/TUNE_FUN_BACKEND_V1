@@ -7,7 +7,8 @@ public class AccountQueries {
 
     public record Username(
             @NotBlank(message = "{email.not_blank}")
-            @Email(message = "{email.format}") String email) {}
+            @Email(message = "{email.format}") String email) {
+    }
 
     public record Info() {
 

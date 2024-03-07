@@ -4,13 +4,16 @@ import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.rng.UniformRandomProvider;
 import org.apache.commons.rng.simple.RandomSource;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Collection;
 import java.util.UUID;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.util.regex.Pattern.matches;
+import static java.util.stream.Collectors.joining;
 
 @UtilityClass
 public class StringUtil {
@@ -79,6 +82,10 @@ public class StringUtil {
 
     public String removeBearerPrefix(String accessTokenFromRequest) {
         return matches("^Bearer .*", accessTokenFromRequest) ? accessTokenFromRequest.substring(7) : null;
+    }
+
+    public static String getFlattenAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        return authorities.stream().map(GrantedAuthority::getAuthority).collect(joining(","));
     }
 
 }

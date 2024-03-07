@@ -6,7 +6,6 @@ import com.tune_fun.v1.common.hexagon.WebAdapter;
 import com.tune_fun.v1.common.response.BasePayload;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class CheckEmailDuplicateController {
 
     @GetMapping(value = Uris.CHECK_EMAIL_DUPLICATE)
     public ResponseEntity<Response<BasePayload>> checkUsernameDuplicate(@RequestParam(name = "email")
-                                                                            @NotBlank(message = "{email.not_blank}") final String email) {
+                                                                        @NotBlank(message = "{email.not_blank}") final String email) {
         checkEmailDuplicateUseCase.checkEmailDuplicate(email);
         return responseMapper.ok(SUCCESS_EMAIL_UNIQUE);
     }

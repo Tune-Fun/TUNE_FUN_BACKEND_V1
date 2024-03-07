@@ -1,31 +1,33 @@
 package com.tune_fun.v1.account.adapter.output.persistence;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
+import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountJpaEntity;
+import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountRepository;
 import com.tune_fun.v1.account.application.port.output.*;
+import com.tune_fun.v1.account.application.port.output.oauth2.SaveOAuth2AccountPort;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
+import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
-import com.tune_fun.v1.common.response.MessageCode;
+import com.tune_fun.v1.common.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@XRayEnabled
+
 @Component
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class AccountPersistenceAdapter implements
-        LoadAccountPort, SaveAccountPort,
+        LoadAccountPort, SaveAccountPort, SaveOAuth2AccountPort,
         RecordLastLoginAtPort, RecordEmailVerifiedAtPort,
         UpdatePasswordPort, UpdateNicknamePort {
 
     private final AccountRepository accountRepository;
+    private final OAuth2AccountRepository oauth2AccountRepository;
     private final AccountMapper accountMapper;
 
     @Override
@@ -89,9 +91,25 @@ public class AccountPersistenceAdapter implements
     }
 
     @Override
-    public CurrentAccount saveAccount(SaveAccount saveAccount) {
-        AccountJpaEntity saved = accountRepository.save(accountMapper.fromSaveAccountValue(saveAccount));
+    public CurrentAccount saveAccount(final SaveAccount behavior) {
+        AccountJpaEntity saved = accountRepository.save(accountMapper.fromSaveAccountBehavior(behavior));
         return accountMapper.accountInfo(saved);
+    }
+
+    @Override
+    public void saveOAuth2Account(final SaveOAuth2Account behavior) {
+        loadAccountByUsername(behavior.username())
+                .ifPresent(account -> {
+                    OAuth2AccountJpaEntity updatedAccount = OAuth2AccountJpaEntity.builder()
+                            .uuid(StringUtil.uuid())
+                            .email(behavior.email())
+                            .nickname(behavior.nickname())
+                            .oauth2Provider(behavior.oauth2Provider())
+                            .account(account)
+                            .build();
+
+                    oauth2AccountRepository.save(updatedAccount);
+                });
     }
 
     @Override

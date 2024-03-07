@@ -30,8 +30,6 @@ public enum RatePlan {
         }
     };
 
-    public abstract Bandwidth getLimit();
-
     private final String planName;
 
     public static Bandwidth resolvePlan(String targetPlan) {
@@ -42,5 +40,7 @@ public enum RatePlan {
         }
         throw new RuntimeException("RatePlan not found");
     }
+
+    public abstract Bandwidth getLimit();
 
 }

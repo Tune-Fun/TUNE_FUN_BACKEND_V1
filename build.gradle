@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.2'
+    id 'org.springframework.boot' version '3.2.3'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
     id 'com.epages.restdocs-api-spec' version '0.18.2'
@@ -34,9 +34,9 @@ ext {
     set('generated', file("src/main/generated"))
     set('docsDir', "src/main/resources/static/docs")
     set('springCloudVersion', "2023.0.0")
-    set('testcontainersVersion', "1.19.3")
+    set('testcontainersVersion', "1.19.7")
     set('jwtVersion', '0.12.3')
-    set('queryDslVersion', "6.0")
+    set('queryDslVersion', "6.1")
     set('mapstructVersion', "1.5.5.Final")
 }
 
@@ -54,9 +54,14 @@ dependencies {
 
     // Persistence Layer
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}"
+    implementation ("io.github.openfeign.querydsl:querydsl-mongodb:${queryDslVersion}") {
+        exclude group: 'org.mongodb', module: 'mongo-java-driver'
+    }
+    implementation "io.github.openfeign.querydsl:querydsl-collections:${queryDslVersion}"
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
@@ -72,10 +77,6 @@ dependencies {
     implementation 'software.amazon.awssdk:s3:2.21.29'
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.1.0'
     implementation 'com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:2.0.2'
-    implementation 'com.amazonaws:aws-xray-recorder-sdk-spring:2.15.1'
-    implementation 'com.amazonaws:aws-xray-recorder-sdk-log4j:2.15.1'
-    implementation 'com.amazonaws:aws-xray-recorder-sdk-sql-mysql:2.15.1'
-    implementation 'com.amazonaws:aws-xray-recorder-sdk-sql:2.15.1'
     implementation 'com.slack.api:slack-app-backend:1.38.0' // Chat
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 
@@ -85,6 +86,7 @@ dependencies {
 
     // Authentication, Authorization
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation "io.jsonwebtoken:jjwt-api:${jwtVersion}"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:${jwtVersion}"
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jwtVersion}"
@@ -106,6 +108,8 @@ dependencies {
     annotationProcessor(
             'org.springframework.boot:spring-boot-configuration-processor',
             "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}",
+            "io.github.openfeign.querydsl:querydsl-mongodb:${queryDslVersion}",
+            'org.springframework.boot:spring-boot-starter-data-mongodb',
             'org.projectlombok:lombok',
             "org.mapstruct:mapstruct-processor:${mapstructVersion}",
             'org.projectlombok:lombok-mapstruct-binding:0.2.0'
@@ -115,9 +119,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.c4-soft.springaddons:spring-addons-oauth2-test:7.6.3'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.apache.commons:commons-lang3:3.13.0'
-    testImplementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     testImplementation 'com.tngtech.archunit:archunit-junit5:1.1.0' // Architecture Rule Test
     testImplementation "com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.12" // Test Double
     testImplementation 'org.quickperf:quick-perf-junit5:1.1.0' // Performance Test
@@ -140,7 +144,15 @@ dependencies {
     testImplementation 'org.testcontainers:kafka'
     testImplementation 'org.testcontainers:localstack'
 
-    testAnnotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor(
+            'org.springframework.boot:spring-boot-configuration-processor',
+            "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}",
+            "io.github.openfeign.querydsl:querydsl-mongodb:${queryDslVersion}",
+            'org.springframework.boot:spring-boot-starter-data-mongodb',
+            'org.projectlombok:lombok',
+            "org.mapstruct:mapstruct-processor:${mapstructVersion}",
+            'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    )
 }
 
 sourceSets {
@@ -148,6 +160,13 @@ sourceSets {
 }
 
 tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += [
+            "-processor", 'lombok.launch.AnnotationProcessorHider$AnnotationProcessor,' +
+            'org.springframework.data.mongodb.repository.support.MongoAnnotationProcessor,' +
+            'com.querydsl.apt.jpa.JPAAnnotationProcessor,' +
+            'org.mapstruct.ap.MappingProcessor,' +
+            'org.springframework.boot.configurationprocessor.ConfigurationMetadataAnnotationProcessor'
+    ]
     options.annotationProcessorGeneratedSourcesDirectory(file(generated))
 }
 
@@ -170,7 +189,10 @@ test {
 }
 
 openapi3 { // Swagger OAS Generate
-    server = "http://localhost:8080"
+    servers = [
+            { url = "https://api.tunefun.net" },
+            { url = "http://localhost:8080"}
+    ]
     title = "Tune Fun REST API V1 Documentation"
     description = "Spring REST Docs with SwaggerUI."
     version = "${version}"
@@ -181,7 +203,7 @@ openapi3 { // Swagger OAS Generate
 }
 
 postman { // Postman API Collection
-    baseUrl = 'http://localhost:8080'
+    baseUrl = 'https://api.tunefun.net'
     title = 'Tune Fun REST API V1 Documentation'
     version = "${version}"
     outputFileNamePrefix = "${group}-postman-collection"
@@ -194,7 +216,7 @@ asciidoctor {
     inputs.dir snippetsDir
     configurations 'asciidoctorExt'
 
-    sources{
+    sources {
         include("**/index.adoc")
     }
 

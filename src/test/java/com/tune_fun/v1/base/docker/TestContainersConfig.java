@@ -1,22 +1,16 @@
 package com.tune_fun.v1.base.docker;
 
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.*;
-import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.containers.MariaDBContainer;
+import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import javax.sql.DataSource;
-
-import java.io.IOException;
 
 import static org.springframework.boot.jdbc.DataSourceBuilder.create;
 import static org.testcontainers.utility.DockerImageName.parse;

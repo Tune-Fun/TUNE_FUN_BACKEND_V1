@@ -15,6 +15,10 @@ spring:
   flyway:
     enabled: false
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   mail:
     host: 127.0.0.1
     port: 3025
@@ -34,6 +38,45 @@ spring:
         protocol: smtp
       default-encoding: UTF-8
     protocol: smtp
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: aaaa
+            client-secret: bbbb
+            redirect-uri: "cccclogin/oauth2/code/google"
+            scope:
+              - profile
+              - email
+          apple:
+            client-name: Apple
+            client-id: aaaa
+            client-secret: bbbb
+            redirect-uri: "cccc/login/oauth2/code/apple"
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+            scope:
+              - name
+              - email
+          instagram:
+            client-name: Instagram
+            provider: instagram
+            client-id: aaaa
+            client-secret: bbbb
+            redirect-uri: "cccc/login/oauth2/code/instagram"
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+            scope:
+              - user_profile
+              - user_media
+        provider:
+          apple:
+            authorization-uri: https://appleid.apple.com/auth/authorize?scope=name%20email&response_mode=form_post
+            token-uri: https://appleid.apple.com/auth/token
+          instagram:
+            authorization-uri: https://api.instagram.com/oauth/authorize
+            token-uri: https://api.instagram.com/oauth/access_token
 
 fcm:
   sdk-file: tunefun-firebase-adminsdk.json

@@ -1,6 +1,5 @@
 package com.tune_fun.v1.otp.adapter.output.persistence;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.EncryptUtil;
@@ -28,7 +27,7 @@ import static com.tune_fun.v1.common.response.MessageCode.*;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.fromLabel;
 import static java.lang.String.format;
 
-@XRayEnabled
+
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOtpPort, DeleteOtpPort {
