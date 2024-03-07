@@ -17,5 +17,6 @@ public class FcmProperty {
 
     private String sdkFile;
     private String projectId;
+    private String accessToken;
 
 }

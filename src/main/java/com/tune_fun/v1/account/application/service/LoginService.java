@@ -9,6 +9,7 @@ import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort
 import com.tune_fun.v1.account.application.port.output.jwt.CreateRefreshTokenPort;
 import com.tune_fun.v1.account.domain.behavior.SaveDevice;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
+import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.account.domain.state.LoginResult;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
@@ -18,6 +19,9 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
 

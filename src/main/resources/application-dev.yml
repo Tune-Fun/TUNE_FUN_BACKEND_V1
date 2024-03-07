@@ -116,6 +116,7 @@ otp:
 
 fcm:
   sdk-file: tunefun-firebase-adminsdk.json
+  access-token: ${firebase-oauth2-token}
   project-id: tunefun-6edf5
 
 springdoc:
