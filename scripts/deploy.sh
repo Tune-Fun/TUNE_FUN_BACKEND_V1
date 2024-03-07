@@ -1,5 +1,5 @@
 #!/bin/bash
-BUILD_JAR=$(ls /home/habin/action/build/libs/*.jar)
+BUILD_JAR=$(ls /home/habin/action/build/libs/tune_fun-0.0.1-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 echo "> build 파일명: $JAR_NAME" >> /home/habin/action/deploy.log
 
@@ -21,4 +21,4 @@ fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포"    >> /home/habin/action/deploy.log
-nohup java -jar $DEPLOY_JAR --spring.profiles.active=dev >> /home/habin/deploy.log 2>/home/habin/action/deploy_err.log &
+nohup java -jar $DEPLOY_JAR --spring.profiles.active=dev 1>/home/habin/deploy.log 2>/home/habin/action/deploy_err.log &1 &
