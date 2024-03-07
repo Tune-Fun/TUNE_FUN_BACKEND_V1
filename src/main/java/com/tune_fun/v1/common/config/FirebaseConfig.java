@@ -1,5 +1,6 @@
 package com.tune_fun.v1.common.config;
 
+import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -11,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
+import java.util.Date;
+
+import static java.lang.Long.MAX_VALUE;
 
 @Slf4j
 @OnlyDevelopmentConfiguration
@@ -21,10 +25,11 @@ public class FirebaseConfig {
 
     @PostConstruct
     public void init() throws IOException {
-        ClassPathResource classPathResource = new ClassPathResource(fcmProperty.getSdkFile());
+        AccessToken googleOAuth2AccessToken = new AccessToken(fcmProperty.getAccessToken(), new Date(MAX_VALUE));
+        GoogleCredentials googleCredentials = GoogleCredentials.create(googleOAuth2AccessToken);
 
         FirebaseOptions firebaseOptions = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(classPathResource.getInputStream()))
+                .setCredentials(googleCredentials)
                 .setProjectId(fcmProperty.getProjectId())
                 .build();
 

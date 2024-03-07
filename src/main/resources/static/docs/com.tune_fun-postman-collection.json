@@ -7,15 +7,14 @@
   "item" : [ {
     "id" : "oauth2-authorization-google-success",
     "name" : "/oauth2/authorization/google",
-    "description" : "구글 소셜 로그인 페이지 진입, 성공",
+    "description" : "구글 소셜 로그인 페이지 진입",
     "variable" : [ ],
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/oauth2/authorization/google",
-        "port" : "8080"
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
+        "path" : "/oauth2/authorization/google"
       },
       "method" : "GET"
     },
@@ -24,21 +23,20 @@
       "name" : "oauth2-authorization-google-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/oauth2/authorization/google",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/oauth2/authorization/google"
         },
         "method" : "GET"
       },
       "header" : [ {
         "key" : "Location",
-        "value" : "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=aaaa&scope=profile%20email&state=xszcxIfYwW4Pv0DuNlwGMOqBUpDzpv7OIJx549CJT7Q%3D&redirect_uri=cccclogin/oauth2/code/google",
+        "value" : "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=aaaa&scope=profile%20email&state=zsBrrSTsXOe1H5zEQ7PE9gLVA80bYtmJTqDDK50ZnhA%3D&redirect_uri=cccclogin/oauth2/code/google",
         "disabled" : false,
         "description" : "Redirect URL"
       }, {
         "key" : "Set-Cookie",
-        "value" : "oauth2_auth_request=rO0ABXNyAExvcmcuc3ByaW5nZnJhbWV3b3JrLnNlY3VyaXR5Lm9hdXRoMi5jb3JlLmVuZHBvaW50Lk9BdXRoMkF1dGhvcml6YXRpb25SZXF1ZXN0AAAAAAAAAmwCAApMABRhZGRpdGlvbmFsUGFyYW1ldGVyc3QAD0xqYXZhL3V0aWwvTWFwO0wACmF0dHJpYnV0ZXNxAH4AAUwAFmF1dGhvcml6YXRpb25HcmFudFR5cGV0AEFMb3JnL3NwcmluZ2ZyYW1ld29yay9zZWN1cml0eS9vYXV0aDIvY29yZS9BdXRob3JpemF0aW9uR3JhbnRUeXBlO0wAF2F1dGhvcml6YXRpb25SZXF1ZXN0VXJpdAASTGphdmEvbGFuZy9TdHJpbmc7TAAQYXV0aG9yaXphdGlvblVyaXEAfgADTAAIY2xpZW50SWRxAH4AA0wAC3JlZGlyZWN0VXJpcQB-AANMAAxyZXNwb25zZVR5cGV0AFNMb3JnL3NwcmluZ2ZyYW1ld29yay9zZWN1cml0eS9vYXV0aDIvY29yZS9lbmRwb2ludC9PQXV0aDJBdXRob3JpemF0aW9uUmVzcG9uc2VUeXBlO0wABnNjb3Blc3QAD0xqYXZhL3V0aWwvU2V0O0wABXN0YXRlcQB-AAN4cHNyACVqYXZhLnV0aWwuQ29sbGVjdGlvbnMkVW5tb2RpZmlhYmxlTWFw8aWo_nT1B0ICAAFMAAFtcQB-AAF4cHNyABdqYXZhLnV0aWwuTGlua2VkSGFzaE1hcDTATlwQbMD7AgABWgALYWNjZXNzT3JkZXJ4cgARamF2YS51dGlsLkhhc2hNYXAFB9rBwxZg0QMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAAdwgAAAAQAAAAAHgAc3EAfgAHc3EAfgAJP0AAAAAAAAx3CAAAABAAAAABdAAPcmVnaXN0cmF0aW9uX2lkdAAGZ29vZ2xleABzcgA_b3JnLnNwcmluZ2ZyYW1ld29yay5zZWN1cml0eS5vYXV0aDIuY29yZS5BdXRob3JpemF0aW9uR3JhbnRUeXBlAAAAAAAAAmwCAAFMAAV2YWx1ZXEAfgADeHB0ABJhdXRob3JpemF0aW9uX2NvZGV0AMNodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvdjIvYXV0aD9yZXNwb25zZV90eXBlPWNvZGUmY2xpZW50X2lkPWFhYWEmc2NvcGU9cHJvZmlsZSUyMGVtYWlsJnN0YXRlPXhzemN4SWZZd1c0UHYwRHVObHdHTU9xQlVwRHpwdjdPSUp4NTQ5Q0pUN1ElM0QmcmVkaXJlY3RfdXJpPWNjY2Nsb2dpbi9vYXV0aDIvY29kZS9nb29nbGV0ACxodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvdjIvYXV0aHQABGFhYWF0ABxjY2NjbG9naW4vb2F1dGgyL2NvZGUvZ29vZ2xlc3IAUW9yZy5zcHJpbmdmcmFtZXdvcmsuc2VjdXJpdHkub2F1dGgyLmNvcmUuZW5kcG9pbnQuT0F1dGgyQXV0aG9yaXphdGlvblJlc3BvbnNlVHlwZQAAAAAAAAJsAgABTAAFdmFsdWVxAH4AA3hwdAAEY29kZXNyACVqYXZhLnV0aWwuQ29sbGVjdGlvbnMkVW5tb2RpZmlhYmxlU2V0gB2S0Y-bgFUCAAB4cgAsamF2YS51dGlsLkNvbGxlY3Rpb25zJFVubW9kaWZpYWJsZUNvbGxlY3Rpb24ZQgCAy173HgIAAUwAAWN0ABZMamF2YS91dGlsL0NvbGxlY3Rpb247eHBzcgAXamF2YS51dGlsLkxpbmtlZEhhc2hTZXTYbNdald0qHgIAAHhyABFqYXZhLnV0aWwuSGFzaFNldLpEhZWWuLc0AwAAeHB3DAAAABA_QAAAAAAAAnQAB3Byb2ZpbGV0AAVlbWFpbHh0ACx4c3pjeElmWXdXNFB2MER1Tmx3R01PcUJVcER6cHY3T0lKeDU0OUNKVDdRPQ==; Path=/; Max-Age=180; Expires=Thu, 07 Mar 2024 02:45:59 GMT; HttpOnly",
+        "value" : "oauth2_auth_request=rO0ABXNyAExvcmcuc3ByaW5nZnJhbWV3b3JrLnNlY3VyaXR5Lm9hdXRoMi5jb3JlLmVuZHBvaW50Lk9BdXRoMkF1dGhvcml6YXRpb25SZXF1ZXN0AAAAAAAAAmwCAApMABRhZGRpdGlvbmFsUGFyYW1ldGVyc3QAD0xqYXZhL3V0aWwvTWFwO0wACmF0dHJpYnV0ZXNxAH4AAUwAFmF1dGhvcml6YXRpb25HcmFudFR5cGV0AEFMb3JnL3NwcmluZ2ZyYW1ld29yay9zZWN1cml0eS9vYXV0aDIvY29yZS9BdXRob3JpemF0aW9uR3JhbnRUeXBlO0wAF2F1dGhvcml6YXRpb25SZXF1ZXN0VXJpdAASTGphdmEvbGFuZy9TdHJpbmc7TAAQYXV0aG9yaXphdGlvblVyaXEAfgADTAAIY2xpZW50SWRxAH4AA0wAC3JlZGlyZWN0VXJpcQB-AANMAAxyZXNwb25zZVR5cGV0AFNMb3JnL3NwcmluZ2ZyYW1ld29yay9zZWN1cml0eS9vYXV0aDIvY29yZS9lbmRwb2ludC9PQXV0aDJBdXRob3JpemF0aW9uUmVzcG9uc2VUeXBlO0wABnNjb3Blc3QAD0xqYXZhL3V0aWwvU2V0O0wABXN0YXRlcQB-AAN4cHNyACVqYXZhLnV0aWwuQ29sbGVjdGlvbnMkVW5tb2RpZmlhYmxlTWFw8aWo_nT1B0ICAAFMAAFtcQB-AAF4cHNyABdqYXZhLnV0aWwuTGlua2VkSGFzaE1hcDTATlwQbMD7AgABWgALYWNjZXNzT3JkZXJ4cgARamF2YS51dGlsLkhhc2hNYXAFB9rBwxZg0QMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAAdwgAAAAQAAAAAHgAc3EAfgAHc3EAfgAJP0AAAAAAAAx3CAAAABAAAAABdAAPcmVnaXN0cmF0aW9uX2lkdAAGZ29vZ2xleABzcgA_b3JnLnNwcmluZ2ZyYW1ld29yay5zZWN1cml0eS5vYXV0aDIuY29yZS5BdXRob3JpemF0aW9uR3JhbnRUeXBlAAAAAAAAAmwCAAFMAAV2YWx1ZXEAfgADeHB0ABJhdXRob3JpemF0aW9uX2NvZGV0AMNodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvdjIvYXV0aD9yZXNwb25zZV90eXBlPWNvZGUmY2xpZW50X2lkPWFhYWEmc2NvcGU9cHJvZmlsZSUyMGVtYWlsJnN0YXRlPXpzQnJyU1RzWE9lMUg1ekVRN1BFOWdMVkE4MGJZdG1KVHFEREs1MFpuaEElM0QmcmVkaXJlY3RfdXJpPWNjY2Nsb2dpbi9vYXV0aDIvY29kZS9nb29nbGV0ACxodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvdjIvYXV0aHQABGFhYWF0ABxjY2NjbG9naW4vb2F1dGgyL2NvZGUvZ29vZ2xlc3IAUW9yZy5zcHJpbmdmcmFtZXdvcmsuc2VjdXJpdHkub2F1dGgyLmNvcmUuZW5kcG9pbnQuT0F1dGgyQXV0aG9yaXphdGlvblJlc3BvbnNlVHlwZQAAAAAAAAJsAgABTAAFdmFsdWVxAH4AA3hwdAAEY29kZXNyACVqYXZhLnV0aWwuQ29sbGVjdGlvbnMkVW5tb2RpZmlhYmxlU2V0gB2S0Y-bgFUCAAB4cgAsamF2YS51dGlsLkNvbGxlY3Rpb25zJFVubW9kaWZpYWJsZUNvbGxlY3Rpb24ZQgCAy173HgIAAUwAAWN0ABZMamF2YS91dGlsL0NvbGxlY3Rpb247eHBzcgAXamF2YS51dGlsLkxpbmtlZEhhc2hTZXTYbNdald0qHgIAAHhyABFqYXZhLnV0aWwuSGFzaFNldLpEhZWWuLc0AwAAeHB3DAAAABA_QAAAAAAAAnQAB3Byb2ZpbGV0AAVlbWFpbHh0ACx6c0JyclNUc1hPZTFINXpFUTdQRTlnTFZBODBiWXRtSlRxRERLNTBabmhBPQ==; Path=/; Max-Age=180; Expires=Thu, 07 Mar 2024 12:21:57 GMT; HttpOnly",
         "disabled" : false,
         "description" : "Set-Cookie"
       } ],
@@ -53,10 +51,9 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
         "path" : "/v1/check-email-duplicate",
-        "port" : "8080",
         "query" : [ {
           "key" : "email",
           "disabled" : false,
@@ -70,10 +67,9 @@
       "name" : "check-email-duplicate-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
           "path" : "/v1/check-email-duplicate",
-          "port" : "8080",
           "query" : [ {
             "key" : "email",
             "disabled" : false,
@@ -95,10 +91,9 @@
       "name" : "check-email-duplicate-failed",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
           "path" : "/v1/check-email-duplicate",
-          "port" : "8080",
           "query" : [ {
             "key" : "email",
             "disabled" : false,
@@ -124,15 +119,14 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/check-email-verified",
-        "port" : "8080"
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
+        "path" : "/v1/check-email-verified"
       },
       "method" : "GET",
       "header" : [ {
         "key" : "Authorization",
-        "value" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjQxODczYTJlLWQ2ODgtNDY1OS1iN2VjLTBjYTQyZjdkMWE2MSIsInN1YiI6Ik9zVkVnZ0tXMTdBIiwiaWF0IjoxNzA5Nzc5Mzc4LCJuYmYiOjE3MDk3NzkzNzgsImV4cCI6MTcwOTc3OTU1OH0.Ah5DcAaYWD6Ca626Zj4GHxQyR0G4Mc-PIWqEHMUoUvXws0u-0WjJJI9rA8CHv-50pjtxquMzbAhpPVGTASHyLw",
+        "value" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImU3Njg2ZDMyLTgwOTQtNDYyYS1iYWQxLTUyOTA5N2JmZGY1NSIsInN1YiI6IkQ5Z3VPRlk1WEpsIiwiaWF0IjoxNzA5ODEzOTM2LCJuYmYiOjE3MDk4MTM5MzYsImV4cCI6MTcwOTgxNDExNn0.89qZZ8tMl3KkLYXKj5mrT5gbuGSAbcT1Fu8tWInkGuTwrfegbF5WlH_7L0y01Ulie_wX8IIPjMFPLpExk6-Osg",
         "disabled" : false,
         "description" : "AccessToken \"Bearer \" prefix"
       } ]
@@ -142,15 +136,14 @@
       "name" : "check-email-verified-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/check-email-verified",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/check-email-verified"
         },
         "method" : "GET",
         "header" : [ {
           "key" : "Authorization",
-          "value" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjQxODczYTJlLWQ2ODgtNDY1OS1iN2VjLTBjYTQyZjdkMWE2MSIsInN1YiI6Ik9zVkVnZ0tXMTdBIiwiaWF0IjoxNzA5Nzc5Mzc4LCJuYmYiOjE3MDk3NzkzNzgsImV4cCI6MTcwOTc3OTU1OH0.Ah5DcAaYWD6Ca626Zj4GHxQyR0G4Mc-PIWqEHMUoUvXws0u-0WjJJI9rA8CHv-50pjtxquMzbAhpPVGTASHyLw",
+          "value" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImU3Njg2ZDMyLTgwOTQtNDYyYS1iYWQxLTUyOTA5N2JmZGY1NSIsInN1YiI6IkQ5Z3VPRlk1WEpsIiwiaWF0IjoxNzA5ODEzOTM2LCJuYmYiOjE3MDk4MTM5MzYsImV4cCI6MTcwOTgxNDExNn0.89qZZ8tMl3KkLYXKj5mrT5gbuGSAbcT1Fu8tWInkGuTwrfegbF5WlH_7L0y01Ulie_wX8IIPjMFPLpExk6-Osg",
           "disabled" : false,
           "description" : "AccessToken \"Bearer \" prefix"
         } ]
@@ -172,10 +165,9 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
         "path" : "/v1/check-username-duplicate",
-        "port" : "8080",
         "query" : [ {
           "key" : "username",
           "disabled" : false,
@@ -189,10 +181,9 @@
       "name" : "check-username-duplicate-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
           "path" : "/v1/check-username-duplicate",
-          "port" : "8080",
           "query" : [ {
             "key" : "username",
             "disabled" : false,
@@ -214,10 +205,9 @@
       "name" : "check-username-duplicate-success-failed",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
           "path" : "/v1/check-username-duplicate",
-          "port" : "8080",
           "query" : [ {
             "key" : "username",
             "disabled" : false,
@@ -243,10 +233,9 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/find-username",
-        "port" : "8080"
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
+        "path" : "/v1/find-username"
       },
       "method" : "POST",
       "header" : [ {
@@ -256,7 +245,7 @@
       } ],
       "body" : {
         "mode" : "raw",
-        "raw" : "{\n  \"email\" : \"ucJgaJJ@KpdrV.com\"\n}",
+        "raw" : "{\n  \"email\" : \"YrIASjh@HOrKr.com\"\n}",
         "urlencoded" : [ ]
       }
     },
@@ -265,10 +254,9 @@
       "name" : "find-username-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/find-username",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/find-username"
         },
         "method" : "POST",
         "header" : [ {
@@ -278,7 +266,7 @@
         } ],
         "body" : {
           "mode" : "raw",
-          "raw" : "{\n  \"email\" : \"ucJgaJJ@KpdrV.com\"\n}",
+          "raw" : "{\n  \"email\" : \"YrIASjh@HOrKr.com\"\n}",
           "urlencoded" : [ ]
         }
       },
@@ -299,10 +287,9 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/login",
-        "port" : "8080"
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
+        "path" : "/v1/login"
       },
       "method" : "POST",
       "header" : [ {
@@ -312,7 +299,7 @@
       } ],
       "body" : {
         "mode" : "raw",
-        "raw" : "{\n  \"username\" : \"is91g8e5DC\",\n  \"password\" : \"xjBq2gxZlx5V8ii4\",\n  \"device\" : {\n    \"fcm_token\" : \"baTKcbCCCTh2Dnw\",\n    \"device_token\" : \"QbN42gji0RabzWP\"\n  }\n}",
+        "raw" : "{\n  \"username\" : \"Mye9TSEMDJ8Yg\",\n  \"password\" : \"T9svNPQYGW56eTZYpOh\",\n  \"device\" : {\n    \"fcm_token\" : \"nAmlCO9KtrKY40h\",\n    \"device_token\" : \"b2NGs2J1CGwjRIv\"\n  }\n}",
         "urlencoded" : [ ]
       }
     },
@@ -321,10 +308,9 @@
       "name" : "login-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/login",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/login"
         },
         "method" : "POST",
         "header" : [ {
@@ -334,7 +320,7 @@
         } ],
         "body" : {
           "mode" : "raw",
-          "raw" : "{\n  \"username\" : \"is91g8e5DC\",\n  \"password\" : \"xjBq2gxZlx5V8ii4\",\n  \"device\" : {\n    \"fcm_token\" : \"baTKcbCCCTh2Dnw\",\n    \"device_token\" : \"QbN42gji0RabzWP\"\n  }\n}",
+          "raw" : "{\n  \"username\" : \"Mye9TSEMDJ8Yg\",\n  \"password\" : \"T9svNPQYGW56eTZYpOh\",\n  \"device\" : {\n    \"fcm_token\" : \"nAmlCO9KtrKY40h\",\n    \"device_token\" : \"b2NGs2J1CGwjRIv\"\n  }\n}",
           "urlencoded" : [ ]
         }
       },
@@ -344,7 +330,7 @@
         "disabled" : false
       } ],
       "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"is91g8e5DC\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIxZmVlY2JjYy04NjcwLTQ5MWMtYWIyMi04ZDJkYjYxNjM5ZDUiLCJzdWIiOiJpczkxZzhlNURDIiwiaWF0IjoxNzA5Nzc5Mzc5LCJuYmYiOjE3MDk3NzkzNzksImV4cCI6MTcwOTc3OTU1OX0.ts7U1hU-jJSLxdRuW62VdvpFNJfuUdZk0hxep5r5p-RWx4JxwKqX2xkz_5_-Sem0bP-oV1PIB3opHk6ir3kLOQ\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJjNjRjYTQxNC1iNzJiLTRkMTYtOTZmMS1lMzVlZDM2ZWY4YTQiLCJzdWIiOiJpczkxZzhlNURDIiwiaWF0IjoxNzA5Nzc5Mzc5LCJuYmYiOjE3MDk3NzkzNzksImV4cCI6MTcxMjM3MTM3OX0.qeH_pfDM1wFB_Ekvrt0zsjtxK66lwUczBQG8Sz1Yrkh0rH3mPpYiClpnbGmrEd-dVFqHNoc5eEDFcTkco24NWQ\"\n  }\n}",
+      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"Mye9TSEMDJ8Yg\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJlNjIzNTNmMS05MWJjLTQyOTktOTgzMC0xMzI3Mjg1M2YyMmUiLCJzdWIiOiJNeWU5VFNFTURKOFlnIiwiaWF0IjoxNzA5ODEzOTM3LCJuYmYiOjE3MDk4MTM5MzcsImV4cCI6MTcwOTgxNDExN30.Z4knoFWw6LhCsNgV0DMeF0jD6WNl-abR40Be3rASBxmArW43ih9nPQIagpo1ei1YviFoPDdJFzEn0DdWrYn-bg\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIyNzZhYzg4Yi04ZGUzLTQ1MzgtYjYwOC1hMzg0ZDEzYjlhZjIiLCJzdWIiOiJNeWU5VFNFTURKOFlnIiwiaWF0IjoxNzA5ODEzOTM3LCJuYmYiOjE3MDk4MTM5MzcsImV4cCI6MTcxMjQwNTkzN30.6kw4WXaGqjBS7FmjKI7IXrCWnV0YJbyfo4xeiyUBUtHQdep9oi7uswIEiD0MyowAq0JLuXUD0hYJmrtw7lEcUg\"\n  }\n}",
       "code" : 200
     } ]
   }, {
@@ -355,10 +341,9 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/logout",
-        "port" : "8080"
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
+        "path" : "/v1/logout"
       },
       "method" : "PUT"
     },
@@ -367,10 +352,9 @@
       "name" : "logout-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/logout",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/logout"
         },
         "method" : "PUT"
       },
@@ -391,10 +375,9 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/refresh",
-        "port" : "8080"
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
+        "path" : "/v1/refresh"
       },
       "method" : "POST",
       "header" : [ {
@@ -404,7 +387,7 @@
       } ],
       "body" : {
         "mode" : "raw",
-        "raw" : "{\n  \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjQxMDkwYmFlLTY4NzktNDU0NS04NTVlLTRkNjEyNjMyOGQ3YyIsInN1YiI6Ik9kUGxqVG1xR04zIiwiaWF0IjoxNzA5Nzc5Mzc5LCJuYmYiOjE3MDk3NzkzNzksImV4cCI6MTcxMjM3MTM3OX0.L52H7yXtpGeek1mEI7uuye9pZSlWUEIRCRy_ZMBrolvvJ2k2klh1ZRq3s-oPJmSOI5IYZM-xIzwEo4kB09NHbQ\"\n}",
+        "raw" : "{\n  \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjEzYzUwMmFkLWQ0MDMtNGRiYi1hZmQ0LWYzZGUxZTAxZDMxMyIsInN1YiI6IlRpYWI2ek9DdkZ2SiIsImlhdCI6MTcwOTgxMzkzOCwibmJmIjoxNzA5ODEzOTM4LCJleHAiOjE3MTI0MDU5Mzh9.7Dji_zq1hZEXC9dG1Y9VKpVHPhb1w3IWSRQmWiXMN2_EUSKr3SfGj71Rc8NLx85CGE8YHh4UYrufW5yZdaxoJQ\"\n}",
         "urlencoded" : [ ]
       }
     },
@@ -413,10 +396,9 @@
       "name" : "refresh-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/refresh",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/refresh"
         },
         "method" : "POST",
         "header" : [ {
@@ -426,7 +408,7 @@
         } ],
         "body" : {
           "mode" : "raw",
-          "raw" : "{\n  \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjQxMDkwYmFlLTY4NzktNDU0NS04NTVlLTRkNjEyNjMyOGQ3YyIsInN1YiI6Ik9kUGxqVG1xR04zIiwiaWF0IjoxNzA5Nzc5Mzc5LCJuYmYiOjE3MDk3NzkzNzksImV4cCI6MTcxMjM3MTM3OX0.L52H7yXtpGeek1mEI7uuye9pZSlWUEIRCRy_ZMBrolvvJ2k2klh1ZRq3s-oPJmSOI5IYZM-xIzwEo4kB09NHbQ\"\n}",
+          "raw" : "{\n  \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjEzYzUwMmFkLWQ0MDMtNGRiYi1hZmQ0LWYzZGUxZTAxZDMxMyIsInN1YiI6IlRpYWI2ek9DdkZ2SiIsImlhdCI6MTcwOTgxMzkzOCwibmJmIjoxNzA5ODEzOTM4LCJleHAiOjE3MTI0MDU5Mzh9.7Dji_zq1hZEXC9dG1Y9VKpVHPhb1w3IWSRQmWiXMN2_EUSKr3SfGj71Rc8NLx85CGE8YHh4UYrufW5yZdaxoJQ\"\n}",
           "urlencoded" : [ ]
         }
       },
@@ -436,7 +418,7 @@
         "disabled" : false
       } ],
       "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImRiNmZlZTg2LTE1ZDEtNDA4ZS1iNTFmLWZhNjU3YTkzODZlZSIsInN1YiI6Ik9kUGxqVG1xR04zIiwiaWF0IjoxNzA5Nzc5Mzc5LCJuYmYiOjE3MDk3NzkzNzksImV4cCI6MTcwOTc3OTU1OX0.Rn_PDhAy11ESO0UNP2h3PMBpqc1C7838t3nN-_MlyYngFMKmS9zM7dqU7_Zuk9K_VO2ev5PYRwQxCJV-woixAg\"\n  }\n}",
+      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjkzYzA0YTA1LWUzNTktNDdjNy05ZTFlLWNhZGE2MTI1YmQ4ZCIsInN1YiI6IlRpYWI2ek9DdkZ2SiIsImlhdCI6MTcwOTgxMzkzOCwibmJmIjoxNzA5ODEzOTM4LCJleHAiOjE3MDk4MTQxMTh9.gQP2WoiLQQpaLLqC3qirl3BYp1nO5Oq7MC2FbYilZ14Hi4eEF9T0MSu4dUEfX2mw2o9wJis7J769M-MFmakwgQ\"\n  }\n}",
       "code" : 200
     } ]
   }, {
@@ -447,10 +429,9 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/register",
-        "port" : "8080"
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
+        "path" : "/v1/register"
       },
       "method" : "POST",
       "header" : [ {
@@ -460,7 +441,7 @@
       } ],
       "body" : {
         "mode" : "raw",
-        "raw" : "{\n  \"username\" : \"CTONHhIPK81s7\",\n  \"password\" : \"V9fj3LYMZkqn8Qx1BXM\",\n  \"email\" : \"sokzuWX@XjMgD.com\",\n  \"nickname\" : \"mjHWE\",\n  \"notification\" : {\n    \"vote_progress_notification\" : true,\n    \"vote_end_notification\" : true,\n    \"vote_delivery_notification\" : true\n  }\n}",
+        "raw" : "{\n  \"username\" : \"X3aL9fQtoSJN\",\n  \"password\" : \"n38OvDaodzKFuoT\",\n  \"email\" : \"ShXxFTS@ifjjt.com\",\n  \"nickname\" : \"uUGOk\",\n  \"notification\" : {\n    \"vote_progress_notification\" : true,\n    \"vote_end_notification\" : true,\n    \"vote_delivery_notification\" : true\n  }\n}",
         "urlencoded" : [ ]
       }
     },
@@ -469,10 +450,9 @@
       "name" : "register-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/register",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/register"
         },
         "method" : "POST",
         "header" : [ {
@@ -482,7 +462,7 @@
         } ],
         "body" : {
           "mode" : "raw",
-          "raw" : "{\n  \"username\" : \"CTONHhIPK81s7\",\n  \"password\" : \"V9fj3LYMZkqn8Qx1BXM\",\n  \"email\" : \"sokzuWX@XjMgD.com\",\n  \"nickname\" : \"mjHWE\",\n  \"notification\" : {\n    \"vote_progress_notification\" : true,\n    \"vote_end_notification\" : true,\n    \"vote_delivery_notification\" : true\n  }\n}",
+          "raw" : "{\n  \"username\" : \"X3aL9fQtoSJN\",\n  \"password\" : \"n38OvDaodzKFuoT\",\n  \"email\" : \"ShXxFTS@ifjjt.com\",\n  \"nickname\" : \"uUGOk\",\n  \"notification\" : {\n    \"vote_progress_notification\" : true,\n    \"vote_end_notification\" : true,\n    \"vote_delivery_notification\" : true\n  }\n}",
           "urlencoded" : [ ]
         }
       },
@@ -492,7 +472,7 @@
         "disabled" : false
       } ],
       "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"CTONHhIPK81s7\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJhMDQ2ZDk2MC1jMGQyLTQ4YmMtYmVmOC04NzkyYjQ1Yjc2ODMiLCJzdWIiOiJDVE9OSGhJUEs4MXM3IiwiaWF0IjoxNzA5Nzc5Mzc5LCJuYmYiOjE3MDk3NzkzNzksImV4cCI6MTcwOTc3OTU1OX0.S-AgDH1xdNV92PdXSJmoTJJ5iKCm1kvf0Ym0SEbhJrCv55BWb5DtaVYgALs3Axfiq02bZR_LcjYlqHMthbTpiA\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJkZTk1YzQ5Zi02ZTc1LTRhN2YtOGNlNy05OWI1NGJlNWEzNjYiLCJzdWIiOiJDVE9OSGhJUEs4MXM3IiwiaWF0IjoxNzA5Nzc5Mzc5LCJuYmYiOjE3MDk3NzkzNzksImV4cCI6MTcxMjM3MTM3OX0.rFa2RzF_Njn8ninZ5l1vtLao0X3CFG6hdahPOgKHFJvSnDEH598O5dQebOGi-XwZxZw6zuIZ1CDnasIz2oRy0g\"\n  }\n}",
+      "body" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"X3aL9fQtoSJN\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI1ODcyZjgzYy04YzU4LTQ4N2UtOTAwNi1jM2I2MDI0ZWUzNDciLCJzdWIiOiJYM2FMOWZRdG9TSk4iLCJpYXQiOjE3MDk4MTM5MzgsIm5iZiI6MTcwOTgxMzkzOCwiZXhwIjoxNzA5ODE0MTE4fQ.dC44tyk_Lnhz0yc5LQ5gupKZi-oAizxuAgW_38msiPlus5MHavHcYHzzItvoBBOnV7MXvnsHqLn_em3IHoZ_ug\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI3OTllYTFiZC04Y2M1LTQxODYtYjdmMC1hYzM1Zjc5MDRhMGEiLCJzdWIiOiJYM2FMOWZRdG9TSk4iLCJpYXQiOjE3MDk4MTM5MzgsIm5iZiI6MTcwOTgxMzkzOCwiZXhwIjoxNzEyNDA1OTM4fQ.LMgquBy-HhGsuvnOIZ50XYFPxTjw5g2HB_trYG_rptchAnyjrpadzg7Rsgi8rLvPYkAvisRKs8IjhGHP3bpy3A\"\n  }\n}",
       "code" : 200
     } ]
   }, {
@@ -503,10 +483,9 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/set-new-password",
-        "port" : "8080"
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
+        "path" : "/v1/set-new-password"
       },
       "method" : "PATCH",
       "header" : [ {
@@ -516,7 +495,7 @@
       } ],
       "body" : {
         "mode" : "raw",
-        "raw" : "{\n  \"new_password\" : \"XVMvvWMwAdZVAZm\"\n}",
+        "raw" : "{\n  \"new_password\" : \"EtMC2Elizqj5R9e\"\n}",
         "urlencoded" : [ ]
       }
     },
@@ -525,10 +504,9 @@
       "name" : "set-new-password-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/set-new-password",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/set-new-password"
         },
         "method" : "PATCH",
         "header" : [ {
@@ -538,7 +516,7 @@
         } ],
         "body" : {
           "mode" : "raw",
-          "raw" : "{\n  \"new_password\" : \"XVMvvWMwAdZVAZm\"\n}",
+          "raw" : "{\n  \"new_password\" : \"EtMC2Elizqj5R9e\"\n}",
           "urlencoded" : [ ]
         }
       },
@@ -559,10 +537,9 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/update-nickname",
-        "port" : "8080"
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
+        "path" : "/v1/update-nickname"
       },
       "method" : "PATCH",
       "header" : [ {
@@ -572,7 +549,7 @@
       } ],
       "body" : {
         "mode" : "raw",
-        "raw" : "{\n  \"new_nickname\" : \"Pkz4Yx\"\n}",
+        "raw" : "{\n  \"new_nickname\" : \"NkxcB8\"\n}",
         "urlencoded" : [ ]
       }
     },
@@ -581,10 +558,9 @@
       "name" : "update-nickname-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/update-nickname",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/update-nickname"
         },
         "method" : "PATCH",
         "header" : [ {
@@ -594,7 +570,7 @@
         } ],
         "body" : {
           "mode" : "raw",
-          "raw" : "{\n  \"new_nickname\" : \"Pkz4Yx\"\n}",
+          "raw" : "{\n  \"new_nickname\" : \"NkxcB8\"\n}",
           "urlencoded" : [ ]
         }
       },
@@ -615,10 +591,9 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/forgot-password/send-otp",
-        "port" : "8080"
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
+        "path" : "/v1/forgot-password/send-otp"
       },
       "method" : "POST",
       "header" : [ {
@@ -628,7 +603,7 @@
       } ],
       "body" : {
         "mode" : "raw",
-        "raw" : "{\n  \"username\" : \"Ns4L2QJdV9c\"\n}",
+        "raw" : "{\n  \"username\" : \"2Idy9AQrBaKBC\"\n}",
         "urlencoded" : [ ]
       }
     },
@@ -637,10 +612,9 @@
       "name" : "send-forgot-password-otp-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/forgot-password/send-otp",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/forgot-password/send-otp"
         },
         "method" : "POST",
         "header" : [ {
@@ -650,7 +624,7 @@
         } ],
         "body" : {
           "mode" : "raw",
-          "raw" : "{\n  \"username\" : \"Ns4L2QJdV9c\"\n}",
+          "raw" : "{\n  \"username\" : \"2Idy9AQrBaKBC\"\n}",
           "urlencoded" : [ ]
         }
       },
@@ -671,10 +645,9 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/otp/resend",
-        "port" : "8080"
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
+        "path" : "/v1/otp/resend"
       },
       "method" : "PUT",
       "header" : [ {
@@ -684,7 +657,7 @@
       } ],
       "body" : {
         "mode" : "raw",
-        "raw" : "{\n  \"username\" : \"du5FLLR9fs4MM\",\n  \"otp_type\" : \"forgot-password\"\n}",
+        "raw" : "{\n  \"username\" : \"T8B9Ob0x6a1K\",\n  \"otp_type\" : \"forgot-password\"\n}",
         "urlencoded" : [ ]
       }
     },
@@ -693,10 +666,9 @@
       "name" : "resend-otp-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/otp/resend",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/otp/resend"
         },
         "method" : "PUT",
         "header" : [ {
@@ -706,7 +678,7 @@
         } ],
         "body" : {
           "mode" : "raw",
-          "raw" : "{\n  \"username\" : \"du5FLLR9fs4MM\",\n  \"otp_type\" : \"forgot-password\"\n}",
+          "raw" : "{\n  \"username\" : \"T8B9Ob0x6a1K\",\n  \"otp_type\" : \"forgot-password\"\n}",
           "urlencoded" : [ ]
         }
       },
@@ -727,10 +699,9 @@
     "event" : [ ],
     "request" : {
       "url" : {
-        "protocol" : "http",
-        "host" : "localhost",
-        "path" : "/v1/otp/verify",
-        "port" : "8080"
+        "protocol" : "https",
+        "host" : "api.tunefun.net",
+        "path" : "/v1/otp/verify"
       },
       "method" : "POST",
       "header" : [ {
@@ -740,7 +711,7 @@
       } ],
       "body" : {
         "mode" : "raw",
-        "raw" : "{\n  \"username\" : \"mr3uPnFw0UDSrl\",\n  \"otp_type\" : \"forgot-password\",\n  \"otp\" : \"223649\"\n}",
+        "raw" : "{\n  \"username\" : \"fVmPOroOJoUzHt\",\n  \"otp_type\" : \"forgot-password\",\n  \"otp\" : \"845735\"\n}",
         "urlencoded" : [ ]
       }
     },
@@ -749,10 +720,9 @@
       "name" : "verify-otp-success",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/otp/verify",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/otp/verify"
         },
         "method" : "POST",
         "header" : [ {
@@ -762,7 +732,7 @@
         } ],
         "body" : {
           "mode" : "raw",
-          "raw" : "{\n  \"username\" : \"mr3uPnFw0UDSrl\",\n  \"otp_type\" : \"forgot-password\",\n  \"otp\" : \"223649\"\n}",
+          "raw" : "{\n  \"username\" : \"fVmPOroOJoUzHt\",\n  \"otp_type\" : \"forgot-password\",\n  \"otp\" : \"845735\"\n}",
           "urlencoded" : [ ]
         }
       },
@@ -772,17 +742,16 @@
         "disabled" : false
       } ],
       "cookie" : [ ],
-      "body" : "{\n  \"message\" : \"인증번호가 인증되었습니다.\",\n  \"code\" : \"3104\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIxMmFlMDU3Zi0xNWVlLTQ1NGMtYjEzMy1lMDQwYmY0NDE4NjUiLCJzdWIiOiJtcjN1UG5GdzBVRFNybCIsImlhdCI6MTcwOTc3OTM4MiwibmJmIjoxNzA5Nzc5MzgyLCJleHAiOjE3MDk3Nzk1NjJ9.eSh0FOmE56s6kDrHx0vIYCTz3WayzjxyBezEA3XoL923nteZijN_5YR4xKaVZrYV_HI907n2SmbSITqBaDH0vw\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJhMmM2ODllMi01NjBlLTRkMmItYjE2Zi00YTU0OGY1OGFmMGYiLCJzdWIiOiJtcjN1UG5GdzBVRFNybCIsImlhdCI6MTcwOTc3OTM4MiwibmJmIjoxNzA5Nzc5MzgyLCJleHAiOjE3MTIzNzEzODJ9.2UIFLwisaiMik3nIBydDdh_MwL8tohZ10P2NfXCwHhByzPhBkyDS5-UBxJksieA9YEFxBwkQ-qPuDDkr1EEUQA\"\n  }\n}",
+      "body" : "{\n  \"message\" : \"인증번호가 인증되었습니다.\",\n  \"code\" : \"3104\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIxNWE1MmI0MC0zYWZhLTRiOTYtOTViYy1iZjNiMzk4MTMyZWUiLCJzdWIiOiJmVm1QT3JvT0pvVXpIdCIsImlhdCI6MTcwOTgxMzk0MCwibmJmIjoxNzA5ODEzOTQwLCJleHAiOjE3MDk4MTQxMjB9.HRDKBFEKgML6QBN-xnBODf4UAjiwJu52PHj_utePVpwhvjg4nmq_2cPK54RD2KHOglLddH8tAgWlWZLB-n1X0w\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI3NjU5OGFkYS1lNGE2LTRmZTMtOTQ4OS0xNzc0NDQ4OWJiMGQiLCJzdWIiOiJmVm1QT3JvT0pvVXpIdCIsImlhdCI6MTcwOTgxMzk0MCwibmJmIjoxNzA5ODEzOTQwLCJleHAiOjE3MTI0MDU5NDB9.2ICxyPpPdmErhTvg7tvbVBlLmwtA2Qh4i3K056VEXgu7BH0ut-5-NtyCVqDa_JJjgKWeuFQzdte7l11mXgm3AA\"\n  }\n}",
       "code" : 200
     }, {
       "id" : "otp-verify-fail-case1",
       "name" : "otp-verify-fail-case1",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/otp/verify",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/otp/verify"
         },
         "method" : "POST",
         "header" : [ {
@@ -809,10 +778,9 @@
       "name" : "verify-otp-fail-case1",
       "originalRequest" : {
         "url" : {
-          "protocol" : "http",
-          "host" : "localhost",
-          "path" : "/v1/otp/verify",
-          "port" : "8080"
+          "protocol" : "https",
+          "host" : "api.tunefun.net",
+          "path" : "/v1/otp/verify"
         },
         "method" : "POST",
         "header" : [ {
@@ -822,7 +790,7 @@
         } ],
         "body" : {
           "mode" : "raw",
-          "raw" : "{\n  \"username\" : \"oVgtG4zQw3f\",\n  \"otp_type\" : \"verify-email\",\n  \"otp\" : \"337717\"\n}",
+          "raw" : "{\n  \"username\" : \"1lC50MhDR2JeQx\",\n  \"otp_type\" : \"verify-email\",\n  \"otp\" : \"594763\"\n}",
           "urlencoded" : [ ]
         }
       },
