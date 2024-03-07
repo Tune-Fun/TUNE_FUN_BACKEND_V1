@@ -7,6 +7,10 @@
 
 operation::verify-otp-success[snippets='http-request,http-response,request-fields,response-fields']
 
+==== 실패
+
+operation::verify-otp-fail-case1[snippets='http-request,http-response,request-fields,response-fields']
+
 
 === OTP 재전송
 
