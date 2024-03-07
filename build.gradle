@@ -203,7 +203,7 @@ openapi3 { // Swagger OAS Generate
 }
 
 postman { // Postman API Collection
-    baseUrl = 'http://localhost:8080'
+    baseUrl = 'https://api.tunefun.net'
     title = 'Tune Fun REST API V1 Documentation'
     version = "${version}"
     outputFileNamePrefix = "${group}-postman-collection"

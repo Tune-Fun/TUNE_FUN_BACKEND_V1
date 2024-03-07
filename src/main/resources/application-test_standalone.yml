@@ -53,7 +53,7 @@ spring:
             client-name: Apple
             client-id: aaaa
             client-secret: bbbb
-            redirect-uri: "$cccc/login/oauth2/code/apple"
+            redirect-uri: "cccc/login/oauth2/code/apple"
             authorization-grant-type: authorization_code
             client-authentication-method: POST
             scope:
