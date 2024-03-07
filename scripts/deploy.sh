@@ -21,4 +21,4 @@ fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포"    >> /home/habin/action/deploy.log
-nohup java -jar $DEPLOY_JAR --spring.profiles.active=dev 1>/home/habin/deploy.log 2>/home/habin/action/deploy_err.log &1 &
+nohup java -jar $DEPLOY_JAR --spring.profiles.active=dev 1>/home/habin/action/deploy.log 2>/home/habin/action/deploy_err.log &1 &
