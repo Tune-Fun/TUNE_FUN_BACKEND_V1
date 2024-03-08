@@ -5,7 +5,8 @@ JAR_FILE=$PROJECT_ROOT/build/libs/tune_fun-0.0.1-SNAPSHOT.jar
 APP_LOG=$PROJECT_ROOT/app.log
 ERROR_LOG=$PROJECT_ROOT/error.log
 DEPLOY_LOG=$PROJECT_ROOT/deploy.log
-JAVA_EXECUTABLE=/usr/local/jdk-21/bin/java
+#JAVA_EXECUTABLE=/usr/local/jdk-21/bin/java
+JAVA_EXECUTABLE=$(which java)
 
 TIME_NOW=$(date +%c)
 
