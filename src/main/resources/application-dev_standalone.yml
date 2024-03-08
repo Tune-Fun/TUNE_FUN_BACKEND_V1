@@ -107,6 +107,9 @@ spring:
   docker:
     compose:
       lifecycle-management: start_and_stop
+  threads:
+    virtual:
+      enabled: true
 
 
 jwt:
