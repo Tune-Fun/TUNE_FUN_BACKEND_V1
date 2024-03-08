@@ -26,6 +26,15 @@ erDiagram
         vote_end_notification boolean
         vote_delivery_notification boolean
     }
+    DEVICE {
+        id BIGINT
+        uuid string
+        username VARCHAR(255)
+        fcm_token string
+        device_token string
+        created_at datetime
+        updated_at datetime
+    }
     OTP {
         username string
         token string
@@ -109,6 +118,7 @@ erDiagram
         content VARCHAR(255)
     }
     OTP }o--|| ACCOUNT: username
+    DEVICE }o--|| ACCOUNT: username
     ARTICLE }o--|| ACCOUNT: username
     VOTE_PAPER }o--|| ACCOUNT : username
     VOTE }o--|| ACCOUNT: username

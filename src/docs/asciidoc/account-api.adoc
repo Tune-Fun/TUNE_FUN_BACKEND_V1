@@ -23,7 +23,7 @@ operation::oauth2-authorization-google-success[snippets='http-request,http-respo
 
 ==== 성공
 
-operation::logout-success[snippets='http-request,http-response,response-fields']
+operation::logout-success[snippets='http-request,http-response,request-fields,response-fields']
 
 === Access Token 재발급 API
 

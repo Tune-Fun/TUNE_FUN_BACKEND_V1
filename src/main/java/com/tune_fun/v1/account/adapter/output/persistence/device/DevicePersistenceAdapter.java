@@ -1,7 +1,9 @@
 package com.tune_fun.v1.account.adapter.output.persistence.device;
 
 import com.tune_fun.v1.account.adapter.output.persistence.AccountPersistenceAdapter;
+import com.tune_fun.v1.account.application.port.output.device.DeleteDevicePort;
 import com.tune_fun.v1.account.application.port.output.device.SaveDevicePort;
+import com.tune_fun.v1.account.domain.behavior.DeleteDevice;
 import com.tune_fun.v1.account.domain.behavior.SaveDevice;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
@@ -14,7 +16,7 @@ import java.util.Optional;
 @Component
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class DevicePersistenceAdapter implements SaveDevicePort {
+public class DevicePersistenceAdapter implements SaveDevicePort, DeleteDevicePort {
 
     private final AccountPersistenceAdapter accountPersistenceAdapter;
     private final DeviceRepository deviceRepository;
@@ -41,5 +43,15 @@ public class DevicePersistenceAdapter implements SaveDevicePort {
                             .build();
                     deviceRepository.save(deviceJpaEntity);
                 });
+    }
+
+    @Override
+    public void delete(final DeleteDevice behavior) {
+        findByFcmTokenOrDeviceToken(behavior.username(), behavior.fcmToken(), behavior.deviceToken()).ifPresent(deviceRepository::delete);
+    }
+
+    public Optional<DeviceJpaEntity> findByFcmTokenOrDeviceToken(String username, String fcmToken, String deviceToken) {
+        return deviceRepository
+                .findByFcmTokenOrDeviceToken(username, fcmToken, deviceToken);
     }
 }

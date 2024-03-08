@@ -60,7 +60,7 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-find-username-640416564"
+                  "$ref" : "#/components/schemas/v1-set-new-password-640416564"
                 },
                 "examples" : {
                   "check-email-duplicate-success" : {
@@ -75,7 +75,7 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-find-username-640416564"
+                  "$ref" : "#/components/schemas/v1-set-new-password-640416564"
                 },
                 "examples" : {
                   "check-email-duplicate-failed" : {
@@ -102,7 +102,7 @@
           "schema" : {
             "type" : "string"
           },
-          "example" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImU3Njg2ZDMyLTgwOTQtNDYyYS1iYWQxLTUyOTA5N2JmZGY1NSIsInN1YiI6IkQ5Z3VPRlk1WEpsIiwiaWF0IjoxNzA5ODEzOTM2LCJuYmYiOjE3MDk4MTM5MzYsImV4cCI6MTcwOTgxNDExNn0.89qZZ8tMl3KkLYXKj5mrT5gbuGSAbcT1Fu8tWInkGuTwrfegbF5WlH_7L0y01Ulie_wX8IIPjMFPLpExk6-Osg"
+          "example" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjZiZTNhNmFiLWIxZGMtNGY3NC04MmVkLTQ1NTI2OGQ1NDg1YyIsInN1YiI6Imt3d1VWRHJRZnAiLCJpYXQiOjE3MDk4ODUwNjIsIm5iZiI6MTcwOTg4NTA2MiwiZXhwIjoxNzA5ODg1MjQyfQ.aCXy_-28UK_cZXoT11eL7U09lPdOZsctxM8z5h1MG0CsZMaYik-nb_EU0V1eC3zzeLv_PdC0zpMpySVa-c_yaA"
         } ],
         "responses" : {
           "200" : {
@@ -110,7 +110,7 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-find-username-640416564"
+                  "$ref" : "#/components/schemas/v1-set-new-password-640416564"
                 },
                 "examples" : {
                   "check-email-verified-success" : {
@@ -147,7 +147,7 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-find-username-640416564"
+                  "$ref" : "#/components/schemas/v1-set-new-password-640416564"
                 },
                 "examples" : {
                   "check-username-duplicate-success" : {
@@ -162,7 +162,7 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-find-username-640416564"
+                  "$ref" : "#/components/schemas/v1-set-new-password-640416564"
                 },
                 "examples" : {
                   "check-username-duplicate-success-failed" : {
@@ -189,7 +189,7 @@
               },
               "examples" : {
                 "find-username-success" : {
-                  "value" : "{\n  \"email\" : \"YrIASjh@HOrKr.com\"\n}"
+                  "value" : "{\n  \"email\" : \"zwLvbHl@dacbw.com\"\n}"
                 }
               }
             }
@@ -201,7 +201,7 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-find-username-640416564"
+                  "$ref" : "#/components/schemas/v1-set-new-password-640416564"
                 },
                 "examples" : {
                   "find-username-success" : {
@@ -228,7 +228,7 @@
               },
               "examples" : {
                 "login-success" : {
-                  "value" : "{\n  \"username\" : \"Mye9TSEMDJ8Yg\",\n  \"password\" : \"T9svNPQYGW56eTZYpOh\",\n  \"device\" : {\n    \"fcm_token\" : \"nAmlCO9KtrKY40h\",\n    \"device_token\" : \"b2NGs2J1CGwjRIv\"\n  }\n}"
+                  "value" : "{\n  \"username\" : \"Od6JV5MCJHu\",\n  \"password\" : \"mbHkbaB29je9DtCBjp\",\n  \"device\" : {\n    \"fcm_token\" : \"ijSZ8fkIHoHS7bp\",\n    \"device_token\" : \"m6f7LO3cvaH6BER\"\n  }\n}"
                 }
               }
             }
@@ -240,11 +240,11 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-register-985494254"
+                  "$ref" : "#/components/schemas/v1-login-985494254"
                 },
                 "examples" : {
                   "login-success" : {
-                    "value" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"Mye9TSEMDJ8Yg\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJlNjIzNTNmMS05MWJjLTQyOTktOTgzMC0xMzI3Mjg1M2YyMmUiLCJzdWIiOiJNeWU5VFNFTURKOFlnIiwiaWF0IjoxNzA5ODEzOTM3LCJuYmYiOjE3MDk4MTM5MzcsImV4cCI6MTcwOTgxNDExN30.Z4knoFWw6LhCsNgV0DMeF0jD6WNl-abR40Be3rASBxmArW43ih9nPQIagpo1ei1YviFoPDdJFzEn0DdWrYn-bg\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIyNzZhYzg4Yi04ZGUzLTQ1MzgtYjYwOC1hMzg0ZDEzYjlhZjIiLCJzdWIiOiJNeWU5VFNFTURKOFlnIiwiaWF0IjoxNzA5ODEzOTM3LCJuYmYiOjE3MDk4MTM5MzcsImV4cCI6MTcxMjQwNTkzN30.6kw4WXaGqjBS7FmjKI7IXrCWnV0YJbyfo4xeiyUBUtHQdep9oi7uswIEiD0MyowAq0JLuXUD0hYJmrtw7lEcUg\"\n  }\n}"
+                    "value" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"Od6JV5MCJHu\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI3OTZkMjE0YS1iZWE5LTQyYWItOTMwNS00Njk3MjJkMTI1MmEiLCJzdWIiOiJPZDZKVjVNQ0pIdSIsImlhdCI6MTcwOTg4NTA2MiwibmJmIjoxNzA5ODg1MDYyLCJleHAiOjE3MDk4ODUyNDJ9.lx6s8j3uYK30uiu830r43X6wDR7bAKIlQ_8trsn4ykRHYRaJ9s1_Dbgw7-b8SDRrN2IEWMXimq5z2YBRtg7oeg\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIwMzY2NzRkYS1lYzU5LTQ2MzgtODRlOC0yOWE1NDRiYzAyMWMiLCJzdWIiOiJPZDZKVjVNQ0pIdSIsImlhdCI6MTcwOTg4NTA2MiwibmJmIjoxNzA5ODg1MDYyLCJleHAiOjE3MTI0NzcwNjJ9.C2HYIbWQ8QQ0R6ni_sn4TcfBurxToUF4htCy7mxwWjQBvec5Dr14X7hKawItvQ_4NQQMt7XWaXZfDlmnUfrJmw\"\n  }\n}"
                   }
                 }
               }
@@ -259,13 +259,27 @@
         "summary" : "로그아웃",
         "description" : "로그아웃",
         "operationId" : "logout-success",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/v1-logout1664018147"
+              },
+              "examples" : {
+                "logout-success" : {
+                  "value" : "{\n  \"fcm_token\" : \"dKEzve24K7rLfAn\",\n  \"device_token\" : \"O1vMVg4WAdZB60w\"\n}"
+                }
+              }
+            }
+          }
+        },
         "responses" : {
           "200" : {
             "description" : "200",
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-find-username-640416564"
+                  "$ref" : "#/components/schemas/v1-set-new-password-640416564"
                 },
                 "examples" : {
                   "logout-success" : {
@@ -295,7 +309,7 @@
               },
               "examples" : {
                 "refresh-success" : {
-                  "value" : "{\n  \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjEzYzUwMmFkLWQ0MDMtNGRiYi1hZmQ0LWYzZGUxZTAxZDMxMyIsInN1YiI6IlRpYWI2ek9DdkZ2SiIsImlhdCI6MTcwOTgxMzkzOCwibmJmIjoxNzA5ODEzOTM4LCJleHAiOjE3MTI0MDU5Mzh9.7Dji_zq1hZEXC9dG1Y9VKpVHPhb1w3IWSRQmWiXMN2_EUSKr3SfGj71Rc8NLx85CGE8YHh4UYrufW5yZdaxoJQ\"\n}"
+                  "value" : "{\n  \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImJiZmNhYzVjLTY4YzAtNDhlNi04MTczLWQxNTQ2NDYzM2ZjMiIsInN1YiI6IkYycEZpSkxEc1VGIiwiaWF0IjoxNzA5ODg1MDYzLCJuYmYiOjE3MDk4ODUwNjMsImV4cCI6MTcxMjQ3NzA2M30.hN7Ky2JIZADYCuSfCjiUDna0CpQ7MYqnzdXH5jabkKFEB2Z2MI-fwwPa2GqH0ez1TrsZnA0ERjJtXUzzrQv40Q\"\n}"
                 }
               }
             }
@@ -311,7 +325,7 @@
                 },
                 "examples" : {
                   "refresh-success" : {
-                    "value" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjkzYzA0YTA1LWUzNTktNDdjNy05ZTFlLWNhZGE2MTI1YmQ4ZCIsInN1YiI6IlRpYWI2ek9DdkZ2SiIsImlhdCI6MTcwOTgxMzkzOCwibmJmIjoxNzA5ODEzOTM4LCJleHAiOjE3MDk4MTQxMTh9.gQP2WoiLQQpaLLqC3qirl3BYp1nO5Oq7MC2FbYilZ14Hi4eEF9T0MSu4dUEfX2mw2o9wJis7J769M-MFmakwgQ\"\n  }\n}"
+                    "value" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjhhMzgzNmM3LThiZDEtNDBkZC04MDU3LTc1MzRjMThhMjJiZCIsInN1YiI6IkYycEZpSkxEc1VGIiwiaWF0IjoxNzA5ODg1MDYzLCJuYmYiOjE3MDk4ODUwNjMsImV4cCI6MTcwOTg4NTI0M30.aTBJSxEsJ8cwdC4Ugxatt98wcwlzJJrR6huzpwWZRPUblNsZKO7ArbKTChR1gYuC97rhfbIPdmsh4VJzZTDqJQ\"\n  }\n}"
                   }
                 }
               }
@@ -334,7 +348,7 @@
               },
               "examples" : {
                 "register-success" : {
-                  "value" : "{\n  \"username\" : \"X3aL9fQtoSJN\",\n  \"password\" : \"n38OvDaodzKFuoT\",\n  \"email\" : \"ShXxFTS@ifjjt.com\",\n  \"nickname\" : \"uUGOk\",\n  \"notification\" : {\n    \"vote_progress_notification\" : true,\n    \"vote_end_notification\" : true,\n    \"vote_delivery_notification\" : true\n  }\n}"
+                  "value" : "{\n  \"username\" : \"BRGXhnr6ESMk\",\n  \"password\" : \"pQE6FuqTzr4gjGNf3\",\n  \"email\" : \"iHCGmvR@ErUeU.com\",\n  \"nickname\" : \"xKccz\",\n  \"notification\" : {\n    \"vote_progress_notification\" : true,\n    \"vote_end_notification\" : true,\n    \"vote_delivery_notification\" : true\n  }\n}"
                 }
               }
             }
@@ -346,11 +360,11 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-register-985494254"
+                  "$ref" : "#/components/schemas/v1-login-985494254"
                 },
                 "examples" : {
                   "register-success" : {
-                    "value" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"X3aL9fQtoSJN\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI1ODcyZjgzYy04YzU4LTQ4N2UtOTAwNi1jM2I2MDI0ZWUzNDciLCJzdWIiOiJYM2FMOWZRdG9TSk4iLCJpYXQiOjE3MDk4MTM5MzgsIm5iZiI6MTcwOTgxMzkzOCwiZXhwIjoxNzA5ODE0MTE4fQ.dC44tyk_Lnhz0yc5LQ5gupKZi-oAizxuAgW_38msiPlus5MHavHcYHzzItvoBBOnV7MXvnsHqLn_em3IHoZ_ug\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI3OTllYTFiZC04Y2M1LTQxODYtYjdmMC1hYzM1Zjc5MDRhMGEiLCJzdWIiOiJYM2FMOWZRdG9TSk4iLCJpYXQiOjE3MDk4MTM5MzgsIm5iZiI6MTcwOTgxMzkzOCwiZXhwIjoxNzEyNDA1OTM4fQ.LMgquBy-HhGsuvnOIZ50XYFPxTjw5g2HB_trYG_rptchAnyjrpadzg7Rsgi8rLvPYkAvisRKs8IjhGHP3bpy3A\"\n  }\n}"
+                    "value" : "{\n  \"message\" : \"요청이 성공적으로 처리되었습니다.\",\n  \"code\" : \"0000\",\n  \"data\" : {\n    \"username\" : \"BRGXhnr6ESMk\",\n    \"roles\" : [ \"CLIENT_0\" ],\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI0YjdhNzY1MS00OTIyLTRlMzQtOGYzZi1lYjhlNDNmYTU0YTAiLCJzdWIiOiJCUkdYaG5yNkVTTWsiLCJpYXQiOjE3MDk4ODUwNjMsIm5iZiI6MTcwOTg4NTA2MywiZXhwIjoxNzA5ODg1MjQzfQ.kf3ZHGUDLeC-3ICQyAbG7HS9p3v3Fqh1pkLaAinKuuvhRya9039YcqoybproYdiEql49g-brCtwl05QSyYOxUA\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI2YzFjZTliNi03ZTZiLTRkZDAtOTY3Zi02ODY2ZjBkMjUzMGMiLCJzdWIiOiJCUkdYaG5yNkVTTWsiLCJpYXQiOjE3MDk4ODUwNjMsIm5iZiI6MTcwOTg4NTA2MywiZXhwIjoxNzEyNDc3MDYzfQ.k5azwdw5B_hsk6nzKJxLGCn94-UKhnrl3740XZ5XsuATQnzzjvQIDLXDKHXSh71Xm_QOgmfSvl90R6iSlUFDQA\"\n  }\n}"
                   }
                 }
               }
@@ -373,7 +387,7 @@
               },
               "examples" : {
                 "set-new-password-success" : {
-                  "value" : "{\n  \"new_password\" : \"EtMC2Elizqj5R9e\"\n}"
+                  "value" : "{\n  \"new_password\" : \"49HZzHYOh6W3RFs\"\n}"
                 }
               }
             }
@@ -385,7 +399,7 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-find-username-640416564"
+                  "$ref" : "#/components/schemas/v1-set-new-password-640416564"
                 },
                 "examples" : {
                   "set-new-password-success" : {
@@ -415,7 +429,7 @@
               },
               "examples" : {
                 "update-nickname-success" : {
-                  "value" : "{\n  \"new_nickname\" : \"NkxcB8\"\n}"
+                  "value" : "{\n  \"new_nickname\" : \"jV8kSj\"\n}"
                 }
               }
             }
@@ -427,7 +441,7 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-find-username-640416564"
+                  "$ref" : "#/components/schemas/v1-set-new-password-640416564"
                 },
                 "examples" : {
                   "update-nickname-success" : {
@@ -457,7 +471,7 @@
               },
               "examples" : {
                 "send-forgot-password-otp-success" : {
-                  "value" : "{\n  \"username\" : \"2Idy9AQrBaKBC\"\n}"
+                  "value" : "{\n  \"username\" : \"nhGTlD1Jfy\"\n}"
                 }
               }
             }
@@ -469,7 +483,7 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-find-username-640416564"
+                  "$ref" : "#/components/schemas/v1-set-new-password-640416564"
                 },
                 "examples" : {
                   "send-forgot-password-otp-success" : {
@@ -496,7 +510,7 @@
               },
               "examples" : {
                 "resend-otp-success" : {
-                  "value" : "{\n  \"username\" : \"T8B9Ob0x6a1K\",\n  \"otp_type\" : \"forgot-password\"\n}"
+                  "value" : "{\n  \"username\" : \"CCH5xQNhyMymeY\",\n  \"otp_type\" : \"forgot-password\"\n}"
                 }
               }
             }
@@ -508,7 +522,7 @@
             "content" : {
               "application/json;charset=UTF-8" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/v1-find-username-640416564"
+                  "$ref" : "#/components/schemas/v1-set-new-password-640416564"
                 },
                 "examples" : {
                   "resend-otp-success" : {
@@ -534,20 +548,38 @@
                 "$ref" : "#/components/schemas/v1-otp-verify-1050633976"
               },
               "examples" : {
+                "verify-otp-fail-case1" : {
+                  "value" : "{\n  \"username\" : \"jlgqtAiAhi\",\n  \"otp_type\" : \"verify-email\",\n  \"otp\" : \"757381\"\n}"
+                },
                 "verify-otp-success" : {
-                  "value" : "{\n  \"username\" : \"fVmPOroOJoUzHt\",\n  \"otp_type\" : \"forgot-password\",\n  \"otp\" : \"845735\"\n}"
+                  "value" : "{\n  \"username\" : \"Y3FrH2TFT3K\",\n  \"otp_type\" : \"forgot-password\",\n  \"otp\" : \"583811\"\n}"
                 },
                 "otp-verify-fail-case1" : {
-                  "value" : "{\n  \"username\" : \"pGpVA2LR0Ux\",\n  \"otp_type\" : \"verify-email\",\n  \"otp\" : \"667415\"\n}"
-                },
-                "verify-otp-fail-case1" : {
-                  "value" : "{\n  \"username\" : \"1lC50MhDR2JeQx\",\n  \"otp_type\" : \"verify-email\",\n  \"otp\" : \"594763\"\n}"
+                  "value" : "{\n  \"username\" : \"ejpFqt7g7bXew\",\n  \"otp_type\" : \"verify-email\",\n  \"otp\" : \"216515\"\n}"
                 }
               }
             }
           }
         },
         "responses" : {
+          "400" : {
+            "description" : "400",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-set-new-password-640416564"
+                },
+                "examples" : {
+                  "verify-otp-fail-case1" : {
+                    "value" : "{\n  \"message\" : \"인증번호가 일치하지 않습니다.\",\n  \"code\" : \"3101\"\n}"
+                  },
+                  "otp-verify-fail-case1" : {
+                    "value" : "{\n  \"message\" : \"인증번호가 일치하지 않습니다.\",\n  \"code\" : \"3101\"\n}"
+                  }
+                }
+              }
+            }
+          },
           "200" : {
             "description" : "200",
             "content" : {
@@ -557,25 +589,7 @@
                 },
                 "examples" : {
                   "verify-otp-success" : {
-                    "value" : "{\n  \"message\" : \"인증번호가 인증되었습니다.\",\n  \"code\" : \"3104\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIxNWE1MmI0MC0zYWZhLTRiOTYtOTViYy1iZjNiMzk4MTMyZWUiLCJzdWIiOiJmVm1QT3JvT0pvVXpIdCIsImlhdCI6MTcwOTgxMzk0MCwibmJmIjoxNzA5ODEzOTQwLCJleHAiOjE3MDk4MTQxMjB9.HRDKBFEKgML6QBN-xnBODf4UAjiwJu52PHj_utePVpwhvjg4nmq_2cPK54RD2KHOglLddH8tAgWlWZLB-n1X0w\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI3NjU5OGFkYS1lNGE2LTRmZTMtOTQ4OS0xNzc0NDQ4OWJiMGQiLCJzdWIiOiJmVm1QT3JvT0pvVXpIdCIsImlhdCI6MTcwOTgxMzk0MCwibmJmIjoxNzA5ODEzOTQwLCJleHAiOjE3MTI0MDU5NDB9.2ICxyPpPdmErhTvg7tvbVBlLmwtA2Qh4i3K056VEXgu7BH0ut-5-NtyCVqDa_JJjgKWeuFQzdte7l11mXgm3AA\"\n  }\n}"
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "400",
-            "content" : {
-              "application/json;charset=UTF-8" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/v1-find-username-640416564"
-                },
-                "examples" : {
-                  "otp-verify-fail-case1" : {
-                    "value" : "{\n  \"message\" : \"인증번호가 일치하지 않습니다.\",\n  \"code\" : \"3101\"\n}"
-                  },
-                  "verify-otp-fail-case1" : {
-                    "value" : "{\n  \"message\" : \"인증번호가 일치하지 않습니다.\",\n  \"code\" : \"3101\"\n}"
+                    "value" : "{\n  \"message\" : \"인증번호가 인증되었습니다.\",\n  \"code\" : \"3104\",\n  \"data\" : {\n    \"access_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIwMWRhYWJkYy0zYjE1LTQyMDQtOWQwMC0xMjBkNTI5MjA2NjYiLCJzdWIiOiJZM0ZySDJURlQzSyIsImlhdCI6MTcwOTg4NTA2NSwibmJmIjoxNzA5ODg1MDY1LCJleHAiOjE3MDk4ODUyNDV9.OAomkjYTeya2CgaPviUlQM6tSrDkVpuZtiLZJlmheHcXnf9Tp4KXtt2OwzDR-Pw3ctwb4o_u8HXbN5QE1MxdIw\",\n    \"refresh_token\" : \"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI4OTcyOTFkNy1hOTJmLTRjMDUtOTA2ZS1iZDEyNGU5OWFhM2MiLCJzdWIiOiJZM0ZySDJURlQzSyIsImlhdCI6MTcwOTg4NTA2NSwibmJmIjoxNzA5ODg1MDY1LCJleHAiOjE3MTI0NzcwNjV9.CzcJ3K9DvBo3FRVDB_tDq0YmNOJL_uJCCHwiFcsRqGbWLPFPm0EVzVUfIIlrwnVgrhvep_e1k0IDO8pm8EuaaA\"\n  }\n}"
                   }
                 }
               }
@@ -607,6 +621,23 @@
           "message" : {
             "type" : "string",
             "description" : "시스템 메시지"
+          }
+        }
+      },
+      "v1-otp-verify-1050633976" : {
+        "type" : "object",
+        "properties" : {
+          "otp" : {
+            "type" : "string",
+            "description" : "OTP"
+          },
+          "otp_type" : {
+            "type" : "string",
+            "description" : "비밀번호"
+          },
+          "username" : {
+            "type" : "string",
+            "description" : "아이디"
           }
         }
       },
@@ -649,29 +680,25 @@
           }
         }
       },
-      "v1-otp-verify-1050633976" : {
-        "type" : "object",
-        "properties" : {
-          "otp" : {
-            "type" : "string",
-            "description" : "OTP"
-          },
-          "otp_type" : {
-            "type" : "string",
-            "description" : "비밀번호"
-          },
-          "username" : {
-            "type" : "string",
-            "description" : "아이디"
-          }
-        }
-      },
       "v1-update-nickname-1740837738" : {
         "type" : "object",
         "properties" : {
           "new_nickname" : {
             "type" : "string",
             "description" : "새로운 닉네임"
+          }
+        }
+      },
+      "v1-logout1664018147" : {
+        "type" : "object",
+        "properties" : {
+          "device_token" : {
+            "type" : "string",
+            "description" : "Device Token"
+          },
+          "fcm_token" : {
+            "type" : "string",
+            "description" : "Fcm Token"
           }
         }
       },
@@ -688,7 +715,7 @@
           }
         }
       },
-      "v1-register-985494254" : {
+      "v1-login-985494254" : {
         "type" : "object",
         "properties" : {
           "code" : {
@@ -734,15 +761,6 @@
           }
         }
       },
-      "v1-find-username-272417006" : {
-        "type" : "object",
-        "properties" : {
-          "email" : {
-            "type" : "string",
-            "description" : "이메일"
-          }
-        }
-      },
       "v1-otp-verify1422706013" : {
         "type" : "object",
         "properties" : {
@@ -766,6 +784,15 @@
           "message" : {
             "type" : "string",
             "description" : "시스템 메시지"
+          }
+        }
+      },
+      "v1-find-username-272417006" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "description" : "이메일"
           }
         }
       },
@@ -805,7 +832,7 @@
           }
         }
       },
-      "v1-find-username-640416564" : {
+      "v1-set-new-password-640416564" : {
         "type" : "object",
         "properties" : {
           "code" : {
