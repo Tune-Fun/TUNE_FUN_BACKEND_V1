@@ -236,6 +236,10 @@ asciidoctor {
     }
 }
 
+jar {
+    enabled = false
+}
+
 bootJar {
     dependsOn 'asciidoctor'
     dependsOn 'openapi3'
