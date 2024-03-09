@@ -10,9 +10,8 @@ import com.tune_fun.v1.account.application.port.input.usecase.RegisterUseCase;
 import com.tune_fun.v1.account.application.port.input.usecase.SendForgotPasswordOtpUseCase;
 import com.tune_fun.v1.account.application.port.input.usecase.jwt.GenerateAccessTokenUseCase;
 import com.tune_fun.v1.account.application.port.input.usecase.jwt.GenerateRefreshTokenUseCase;
-import com.tune_fun.v1.account.domain.behavior.DeleteDevice;
 import com.tune_fun.v1.account.domain.behavior.SaveDevice;
-import com.tune_fun.v1.base.AbstractIntegrationTest;
+import com.tune_fun.v1.base.annotation.IntegrationTest;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpPersistenceAdapter;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
@@ -34,9 +33,10 @@ import java.security.NoSuchAlgorithmException;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+@IntegrationTest
 @Getter
 @Service
-public class DummyService extends AbstractIntegrationTest {
+public class DummyService {
 
     @Autowired
     private RegisterUseCase registerUseCase;

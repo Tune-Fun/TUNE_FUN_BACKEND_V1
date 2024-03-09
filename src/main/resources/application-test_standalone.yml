@@ -1,6 +1,6 @@
 spring:
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -89,8 +89,3 @@ jwt:
 
 otp:
   validity: 3m
-
-jira:
-  uri:
-  username:
-  password:

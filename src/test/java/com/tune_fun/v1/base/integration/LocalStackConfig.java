@@ -1,4 +1,4 @@
-package com.tune_fun.v1.base.aws;
+package com.tune_fun.v1.base.integration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,8 +21,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
 
-import static com.tune_fun.v1.base.mail.MailConfig.SMTP_PASSWORD;
-import static com.tune_fun.v1.base.mail.MailConfig.SMTP_USERNAME;
+import static com.tune_fun.v1.base.integration.MailConfig.SMTP_USERNAME;
 import static java.lang.String.format;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SECRETSMANAGER;
