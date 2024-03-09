@@ -26,6 +26,8 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.io.UnsupportedEncodingException;
 
+import static com.tune_fun.v1.common.api.DocumentLinkGenerator.DocUrl.MESSAGE_CODE;
+import static com.tune_fun.v1.common.api.DocumentLinkGenerator.generateLinkCode;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -117,7 +119,7 @@ public abstract class ControllerBaseTest {
 
     protected static final FieldDescriptor[] baseResponseFields = {
             fieldWithPath("message").description("시스템 메시지"),
-            fieldWithPath("code").description("상태 코드")
+            fieldWithPath("code").description(generateLinkCode(MESSAGE_CODE))
     };
 
 

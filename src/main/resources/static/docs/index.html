@@ -447,6 +447,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
+<li><a href="#API-Response-Format">API 응답 포맷</a>
+<ul class="sectlevel2">
+<li><a href="#_response_fields">Response Fields</a></li>
+</ul>
+</li>
 <li><a href="#Account-API">Account API</a>
 <ul class="sectlevel2">
 <li><a href="#_회원가입_api">회원가입 API</a></li>
@@ -473,6 +478,54 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
+<h2 id="API-Response-Format"><a class="link" href="#API-Response-Format">API 응답 포맷</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_response_fields"><a class="link" href="#_response_fields">Response Fields</a></h3>
+<div class="sect3">
+<h4 id="_response_fields_custom_response-fields"><a class="link" href="#_response_fields_custom_response-fields">Custom response-fields</a></h4>
+<div class="sect2">
+<h3 id="_api_custom_response_data_fields"><a class="link" href="#_api_custom_response_data_fields">API Custom Response Data Fields</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수값</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">데이터</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="Account-API"><a class="link" href="#Account-API">Account API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -485,14 +538,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /v1/register HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 267
+Content-Length: 269
 Host: localhost:8080
 
 {
-  "username" : "JPEDK4ZFV1",
-  "password" : "PvwJlFWGDb4a2SEtg",
-  "email" : "wqTfTxo@GjNGb.com",
-  "nickname" : "LsArg",
+  "username" : "2wfaf612oTdPYz",
+  "password" : "EAnZtEqlVzFiz8P",
+  "email" : "JqZwtUl@cSLBi.com",
+  "nickname" : "dDraY",
   "notification" : {
     "vote_progress_notification" : true,
     "vote_end_notification" : true,
@@ -518,16 +571,16 @@ Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
 Content-Security-Policy: script-src 'self'
-Content-Length: 846
+Content-Length: 860
 
 {
   "message" : "요청이 성공적으로 처리되었습니다.",
   "code" : "0000",
   "data" : {
-    "username" : "JPEDK4ZFV1",
+    "username" : "2wfaf612oTdPYz",
     "roles" : [ "CLIENT_0" ],
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJkYTllMjJjMS1kYWExLTQyOTYtYjEyZC1hNTY2MDc1OWE2NjQiLCJzdWIiOiJKUEVESzRaRlYxIiwiaWF0IjoxNzA5OTk1MDYyLCJuYmYiOjE3MDk5OTUwNjIsImV4cCI6MTcwOTk5NTI0Mn0.A_W9qhYBG3pdEfC4Ighb7OqirX1yIC9yY63Iwb0zq2Al4PzFzdmfw57aCyJPfS3QKswRMuIxhw6CkCVtgsHs_A",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIwMzQ0MjE0Mi0wM2FlLTRhMTItODIzMS05YTMwMTc2MTU2NTgiLCJzdWIiOiJKUEVESzRaRlYxIiwiaWF0IjoxNzA5OTk1MDYyLCJuYmYiOjE3MDk5OTUwNjIsImV4cCI6MTcxMjU4NzA2Mn0.Xv_siGl3egcjcMAFoB6_FUZ9bURsF1teg2HdrwtmHMCwT0tx2nW7OJIwcWBRk4vvOoZupQpYzsFR5uZ6UTDJkw"
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI5YTllZTY4MS01NDY0LTQwNmUtODAwZC1lYTg5MTdjMTQ5NjUiLCJzdWIiOiIyd2ZhZjYxMm9UZFBZeiIsImlhdCI6MTcxMDAwMjY0OSwibmJmIjoxNzEwMDAyNjQ5LCJleHAiOjE3MTAwMDI4Mjl9.l9G-zTHoeekKnWIygbj7FYFsZx4Kx6xT4OHnSfl8Jp8GZM58K2wudRTZ59NcmOENBGcDh9qVtSrkMVTrO16DFQ",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI0MmVmM2Y0Zi04M2NhLTQwMTQtYjE2Yy0yY2FiOGRlMzZlNDMiLCJzdWIiOiIyd2ZhZjYxMm9UZFBZeiIsImlhdCI6MTcxMDAwMjY0OSwibmJmIjoxNzEwMDAyNjQ5LCJleHAiOjE3MTI1OTQ2NDl9.pW4MUQO0XYzh-7GeWMWAEAeG3f28RKgDdo34W7ma_Xm7464XP1qtxuqKIxUZ5igBmmqKdmorSddx423jXGfaPw"
   }
 }</code></pre>
 </div>
@@ -636,7 +689,7 @@ Content-Length: 846
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
@@ -678,15 +731,15 @@ Content-Length: 846
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /v1/login HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 161
+Content-Length: 165
 Host: localhost:8080
 
 {
-  "username" : "l2FoUkV9cd",
-  "password" : "JBbt6nxV1OuwYlS",
+  "username" : "BTR4b5itjxySn",
+  "password" : "kcOmcaTfDJj3CAGN",
   "device" : {
-    "fcm_token" : "DnS6y9srdBW7uor",
-    "device_token" : "GFR8UR2hQzLUu9Z"
+    "fcm_token" : "bh5m3WQS4xmF80j",
+    "device_token" : "4GxK29duiWTasy7"
   }
 }</code></pre>
 </div>
@@ -708,16 +761,16 @@ Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
 Content-Security-Policy: script-src 'self'
-Content-Length: 846
+Content-Length: 857
 
 {
   "message" : "요청이 성공적으로 처리되었습니다.",
   "code" : "0000",
   "data" : {
-    "username" : "l2FoUkV9cd",
+    "username" : "BTR4b5itjxySn",
     "roles" : [ "CLIENT_0" ],
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI2NWJjM2IwZi0yOTJlLTQ2NGQtODJjYS1mMGUwMzRjOTM1MGUiLCJzdWIiOiJsMkZvVWtWOWNkIiwiaWF0IjoxNzA5OTk1MDYxLCJuYmYiOjE3MDk5OTUwNjEsImV4cCI6MTcwOTk5NTI0MX0.p9AJRSoASv23NuZLAESJSfDxYoy-4JP3tmTdgeDl9Sca-a6GFHH-pBESokCY01ezR_p3jwBv-pe-z_Dv5tB9EQ",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIyYzVlNDI1Ni1iYjkyLTRmNTctOTUxOS00NzM1ZjdjNjZhYjYiLCJzdWIiOiJsMkZvVWtWOWNkIiwiaWF0IjoxNzA5OTk1MDYxLCJuYmYiOjE3MDk5OTUwNjEsImV4cCI6MTcxMjU4NzA2MX0.zJst0bBWXDY_9TF6fqILw4lCaRB_Va4XsaZC7h1WVnm6Frn-HGH6-BHn4fW49fBtUP4oj6NpydwxVaQbxAjAsg"
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJlYTMyNTJkMy04MjIxLTRmNDctODYzNC0xZWM5NWVmYjZkMWEiLCJzdWIiOiJCVFI0YjVpdGp4eVNuIiwiaWF0IjoxNzEwMDAyNjQ4LCJuYmYiOjE3MTAwMDI2NDgsImV4cCI6MTcxMDAwMjgyOH0.egfYUEhVsUSMJJDpKCBF5wYGfU1Z-xNA_6WNZHedk7WiZXAWlrWCnA12KV8wv58ss-jjxwbEcnOnLUr_MIcTUw",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJlNWNhYTQwMi1mY2UzLTRiZTMtYTc1Ni05OWQ5MzRkZDExM2UiLCJzdWIiOiJCVFI0YjVpdGp4eVNuIiwiaWF0IjoxNzEwMDAyNjQ4LCJuYmYiOjE3MTAwMDI2NDgsImV4cCI6MTcxMjU5NDY0OH0.uul5eACzWr_c1Bvr1JJxXSI86v89pjbfO4UXgEdNP9HtlgYTNC1GNd6SdFMo-zKrHomKUhOCy8aHlYXeqcYrVg"
   }
 }</code></pre>
 </div>
@@ -805,7 +858,7 @@ Content-Length: 846
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
@@ -858,7 +911,7 @@ Host: localhost:8080</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Set-Cookie: oauth2_auth_request=rO0ABXNyAExvcmcuc3ByaW5nZnJhbWV3b3JrLnNlY3VyaXR5Lm9hdXRoMi5jb3JlLmVuZHBvaW50Lk9BdXRoMkF1dGhvcml6YXRpb25SZXF1ZXN0AAAAAAAAAmwCAApMABRhZGRpdGlvbmFsUGFyYW1ldGVyc3QAD0xqYXZhL3V0aWwvTWFwO0wACmF0dHJpYnV0ZXNxAH4AAUwAFmF1dGhvcml6YXRpb25HcmFudFR5cGV0AEFMb3JnL3NwcmluZ2ZyYW1ld29yay9zZWN1cml0eS9vYXV0aDIvY29yZS9BdXRob3JpemF0aW9uR3JhbnRUeXBlO0wAF2F1dGhvcml6YXRpb25SZXF1ZXN0VXJpdAASTGphdmEvbGFuZy9TdHJpbmc7TAAQYXV0aG9yaXphdGlvblVyaXEAfgADTAAIY2xpZW50SWRxAH4AA0wAC3JlZGlyZWN0VXJpcQB-AANMAAxyZXNwb25zZVR5cGV0AFNMb3JnL3NwcmluZ2ZyYW1ld29yay9zZWN1cml0eS9vYXV0aDIvY29yZS9lbmRwb2ludC9PQXV0aDJBdXRob3JpemF0aW9uUmVzcG9uc2VUeXBlO0wABnNjb3Blc3QAD0xqYXZhL3V0aWwvU2V0O0wABXN0YXRlcQB-AAN4cHNyACVqYXZhLnV0aWwuQ29sbGVjdGlvbnMkVW5tb2RpZmlhYmxlTWFw8aWo_nT1B0ICAAFMAAFtcQB-AAF4cHNyABdqYXZhLnV0aWwuTGlua2VkSGFzaE1hcDTATlwQbMD7AgABWgALYWNjZXNzT3JkZXJ4cgARamF2YS51dGlsLkhhc2hNYXAFB9rBwxZg0QMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAAdwgAAAAQAAAAAHgAc3EAfgAHc3EAfgAJP0AAAAAAAAx3CAAAABAAAAABdAAPcmVnaXN0cmF0aW9uX2lkdAAGZ29vZ2xleABzcgA_b3JnLnNwcmluZ2ZyYW1ld29yay5zZWN1cml0eS5vYXV0aDIuY29yZS5BdXRob3JpemF0aW9uR3JhbnRUeXBlAAAAAAAAAmwCAAFMAAV2YWx1ZXEAfgADeHB0ABJhdXRob3JpemF0aW9uX2NvZGV0AMNodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvdjIvYXV0aD9yZXNwb25zZV90eXBlPWNvZGUmY2xpZW50X2lkPWFhYWEmc2NvcGU9cHJvZmlsZSUyMGVtYWlsJnN0YXRlPTRWWldLSXhLRTRmbVZfUXRiNGRTZlA5WjkzYzlzdjJ5Zlp6UE1TS3FQRWslM0QmcmVkaXJlY3RfdXJpPWNjY2Nsb2dpbi9vYXV0aDIvY29kZS9nb29nbGV0ACxodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvdjIvYXV0aHQABGFhYWF0ABxjY2NjbG9naW4vb2F1dGgyL2NvZGUvZ29vZ2xlc3IAUW9yZy5zcHJpbmdmcmFtZXdvcmsuc2VjdXJpdHkub2F1dGgyLmNvcmUuZW5kcG9pbnQuT0F1dGgyQXV0aG9yaXphdGlvblJlc3BvbnNlVHlwZQAAAAAAAAJsAgABTAAFdmFsdWVxAH4AA3hwdAAEY29kZXNyACVqYXZhLnV0aWwuQ29sbGVjdGlvbnMkVW5tb2RpZmlhYmxlU2V0gB2S0Y-bgFUCAAB4cgAsamF2YS51dGlsLkNvbGxlY3Rpb25zJFVubW9kaWZpYWJsZUNvbGxlY3Rpb24ZQgCAy173HgIAAUwAAWN0ABZMamF2YS91dGlsL0NvbGxlY3Rpb247eHBzcgAXamF2YS51dGlsLkxpbmtlZEhhc2hTZXTYbNdald0qHgIAAHhyABFqYXZhLnV0aWwuSGFzaFNldLpEhZWWuLc0AwAAeHB3DAAAABA_QAAAAAAAAnQAB3Byb2ZpbGV0AAVlbWFpbHh0ACw0VlpXS0l4S0U0Zm1WX1F0YjRkU2ZQOVo5M2M5c3YyeWZaelBNU0txUEVrPQ==; Path=/; Max-Age=180; Expires=Sat, 09 Mar 2024 14:40:41 GMT; HttpOnly
+Set-Cookie: oauth2_auth_request=rO0ABXNyAExvcmcuc3ByaW5nZnJhbWV3b3JrLnNlY3VyaXR5Lm9hdXRoMi5jb3JlLmVuZHBvaW50Lk9BdXRoMkF1dGhvcml6YXRpb25SZXF1ZXN0AAAAAAAAAmwCAApMABRhZGRpdGlvbmFsUGFyYW1ldGVyc3QAD0xqYXZhL3V0aWwvTWFwO0wACmF0dHJpYnV0ZXNxAH4AAUwAFmF1dGhvcml6YXRpb25HcmFudFR5cGV0AEFMb3JnL3NwcmluZ2ZyYW1ld29yay9zZWN1cml0eS9vYXV0aDIvY29yZS9BdXRob3JpemF0aW9uR3JhbnRUeXBlO0wAF2F1dGhvcml6YXRpb25SZXF1ZXN0VXJpdAASTGphdmEvbGFuZy9TdHJpbmc7TAAQYXV0aG9yaXphdGlvblVyaXEAfgADTAAIY2xpZW50SWRxAH4AA0wAC3JlZGlyZWN0VXJpcQB-AANMAAxyZXNwb25zZVR5cGV0AFNMb3JnL3NwcmluZ2ZyYW1ld29yay9zZWN1cml0eS9vYXV0aDIvY29yZS9lbmRwb2ludC9PQXV0aDJBdXRob3JpemF0aW9uUmVzcG9uc2VUeXBlO0wABnNjb3Blc3QAD0xqYXZhL3V0aWwvU2V0O0wABXN0YXRlcQB-AAN4cHNyACVqYXZhLnV0aWwuQ29sbGVjdGlvbnMkVW5tb2RpZmlhYmxlTWFw8aWo_nT1B0ICAAFMAAFtcQB-AAF4cHNyABdqYXZhLnV0aWwuTGlua2VkSGFzaE1hcDTATlwQbMD7AgABWgALYWNjZXNzT3JkZXJ4cgARamF2YS51dGlsLkhhc2hNYXAFB9rBwxZg0QMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAAdwgAAAAQAAAAAHgAc3EAfgAHc3EAfgAJP0AAAAAAAAx3CAAAABAAAAABdAAPcmVnaXN0cmF0aW9uX2lkdAAGZ29vZ2xleABzcgA_b3JnLnNwcmluZ2ZyYW1ld29yay5zZWN1cml0eS5vYXV0aDIuY29yZS5BdXRob3JpemF0aW9uR3JhbnRUeXBlAAAAAAAAAmwCAAFMAAV2YWx1ZXEAfgADeHB0ABJhdXRob3JpemF0aW9uX2NvZGV0AMNodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvdjIvYXV0aD9yZXNwb25zZV90eXBlPWNvZGUmY2xpZW50X2lkPWFhYWEmc2NvcGU9cHJvZmlsZSUyMGVtYWlsJnN0YXRlPTFvNEtXSFZDQzIzNG80NjBiVXlVQUdDRUp5N2RDNTlKVFkzaU9NcGpzZG8lM0QmcmVkaXJlY3RfdXJpPWNjY2Nsb2dpbi9vYXV0aDIvY29kZS9nb29nbGV0ACxodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvdjIvYXV0aHQABGFhYWF0ABxjY2NjbG9naW4vb2F1dGgyL2NvZGUvZ29vZ2xlc3IAUW9yZy5zcHJpbmdmcmFtZXdvcmsuc2VjdXJpdHkub2F1dGgyLmNvcmUuZW5kcG9pbnQuT0F1dGgyQXV0aG9yaXphdGlvblJlc3BvbnNlVHlwZQAAAAAAAAJsAgABTAAFdmFsdWVxAH4AA3hwdAAEY29kZXNyACVqYXZhLnV0aWwuQ29sbGVjdGlvbnMkVW5tb2RpZmlhYmxlU2V0gB2S0Y-bgFUCAAB4cgAsamF2YS51dGlsLkNvbGxlY3Rpb25zJFVubW9kaWZpYWJsZUNvbGxlY3Rpb24ZQgCAy173HgIAAUwAAWN0ABZMamF2YS91dGlsL0NvbGxlY3Rpb247eHBzcgAXamF2YS51dGlsLkxpbmtlZEhhc2hTZXTYbNdald0qHgIAAHhyABFqYXZhLnV0aWwuSGFzaFNldLpEhZWWuLc0AwAAeHB3DAAAABA_QAAAAAAAAnQAB3Byb2ZpbGV0AAVlbWFpbHh0ACwxbzRLV0hWQ0MyMzRvNDYwYlV5VUFHQ0VKeTdkQzU5SlRZM2lPTXBqc2RvPQ==; Path=/; Max-Age=180; Expires=Sat, 09 Mar 2024 16:47:08 GMT; HttpOnly
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -866,7 +919,7 @@ Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
 Content-Security-Policy: script-src 'self'
-Location: https://accounts.google.com/o/oauth2/v2/auth?response_type=code&amp;client_id=aaaa&amp;scope=profile%20email&amp;state=4VZWKIxKE4fmV_Qtb4dSfP9Z93c9sv2yfZzPMSKqPEk%3D&amp;redirect_uri=cccclogin/oauth2/code/google</code></pre>
+Location: https://accounts.google.com/o/oauth2/v2/auth?response_type=code&amp;client_id=aaaa&amp;scope=profile%20email&amp;state=1o4KWHVCC234o460bUyUAGCEJy7dC59JTY3iOMpjsdo%3D&amp;redirect_uri=cccclogin/oauth2/code/google</code></pre>
 </div>
 </div>
 </div>
@@ -882,13 +935,13 @@ Location: https://accounts.google.com/o/oauth2/v2/auth?response_type=code&amp;cl
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /v1/logout HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6Ijk4NDVlOTI0LTRkZTktNDM0Yy1hOGVmLWM0NmNiMzg4NDRjNCIsInN1YiI6IlB1amRWUTh4MTRhIiwiaWF0IjoxNzA5OTk1MDYxLCJuYmYiOjE3MDk5OTUwNjEsImV4cCI6MTcwOTk5NTI0MX0.8AOnvrBZIXqFMevvjPIpncsHpC4iU1jjxMmbRLyt2mn1LkOAipEo8qXgPwK1e9pkuciHjSQyEfLKDG698LNkrw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImJlMmNhMWM3LWMwMTctNDlmYi1iODk4LTc5YmVkMmRjMWMxNCIsInN1YiI6IkdRNFJ1MUNqaHZiIiwiaWF0IjoxNzEwMDAyNjQ4LCJuYmYiOjE3MTAwMDI2NDgsImV4cCI6MTcxMDAwMjgyOH0.1I8qSQgSGFgEF6gSO3eTPxUP5LRyPNsWkV06BqhDuCNDXK1ar4DYZ-rHOUMa5-TH5Gzhs9qu6UUfEZl8zssAZA
 Content-Length: 75
 Host: localhost:8080
 
 {
-  "fcm_token" : "mGK3O63SwlSZnx0",
-  "device_token" : "jXmMD93NIYKNtSd"
+  "fcm_token" : "qPNPsYmSalIQbQo",
+  "device_token" : "ZEFwXzq4L9mUJ3e"
 }</code></pre>
 </div>
 </div>
@@ -979,7 +1032,7 @@ Content-Length: 87
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1000,7 +1053,7 @@ Content-Length: 348
 Host: localhost:8080
 
 {
-  "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImYyNTM1MTFhLWFkNTEtNDlhOC1iMmIxLTZkZWE1M2M5MDNjYiIsInN1YiI6IkdUM1VZOXJMelciLCJpYXQiOjE3MDk5OTUwNjEsIm5iZiI6MTcwOTk5NTA2MSwiZXhwIjoxNzEyNTg3MDYxfQ.ij2A_r0BvMeYrWRU5fLDo_POF6DB4xdhrVNbfgUS6FfBdygyKaQksyi7ji3vX7isKpWGan3eUWC5je3xwzx_PA"
+  "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjBjMTYyNWFhLTc2YmUtNDNjNS05NjE5LWYwMTExYTczYmY3MyIsInN1YiI6Im5HYXBNRHBVUEgiLCJpYXQiOjE3MTAwMDI2NDgsIm5iZiI6MTcxMDAwMjY0OCwiZXhwIjoxNzEyNTk0NjQ4fQ.BMzYmxg7NRSfUzSrGPHkQ3q7F1euc_TPjpZpeoZnvyOZcIjTk7UPMOOcIHhNbhEdi4Hvqmm0TfPmRcq4aDXoxw"
 }</code></pre>
 </div>
 </div>
@@ -1027,7 +1080,7 @@ Content-Length: 451
   "message" : "요청이 성공적으로 처리되었습니다.",
   "code" : "0000",
   "data" : {
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6Ijc3YWU1YjhhLWU3NzEtNDM5My04MDkzLTNjZTFiYzlhY2U3NiIsInN1YiI6IkdUM1VZOXJMelciLCJpYXQiOjE3MDk5OTUwNjIsIm5iZiI6MTcwOTk5NTA2MiwiZXhwIjoxNzA5OTk1MjQyfQ.h3U7tw19HPPvS0zfy2imjI6XFHqb9p4b-eQqm2cjxYtFt2RlBbT3ddTL76tLEynf_-dQfc93g1LcxsSwtjHtbg"
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjNhNjIwZTMzLWZmMTMtNDUwYy1hZTYzLWE2NzQ0NTYwZGRlMCIsInN1YiI6Im5HYXBNRHBVUEgiLCJpYXQiOjE3MTAwMDI2NDgsIm5iZiI6MTcxMDAwMjY0OCwiZXhwIjoxNzEwMDAyODI4fQ.ZOaKQRpcaE7OhnZlRKtV0ze95bxxj1ads7JZGNBQa4e59oz5Jxwt3Dl5SU3XHrHdl7dGoymBj-gaV-A-jxOKRA"
   }
 }</code></pre>
 </div>
@@ -1087,7 +1140,7 @@ Content-Length: 451
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
@@ -1193,7 +1246,7 @@ Content-Length: 74
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1205,7 +1258,7 @@ Content-Length: 74
 <h5 id="_실패_http_request"><a class="link" href="#_실패_http_request">HTTP request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/check-email-duplicate?email=JTfJaoN%40LIIVB.com HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/check-email-duplicate?email=bnRZLDU%40Kbzim.com HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1286,7 +1339,7 @@ Content-Length: 68
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1382,7 +1435,7 @@ Content-Length: 74
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1394,7 +1447,7 @@ Content-Length: 74
 <h5 id="_실패_2_http_request"><a class="link" href="#_실패_2_http_request">HTTP request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/check-username-duplicate?username=aOiIPh8yct7gL HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/check-username-duplicate?username=M0k7b6I6j9AQVb HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1435,7 +1488,7 @@ Content-Length: 68
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/check-email-verified HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjRmNjdiNjZhLWYzY2UtNGIwYS1iM2VjLTRkMmZhYjQ1NzM5NCIsInN1YiI6IlliZzB5VnZiMEJjRSIsImlhdCI6MTcwOTk5NTA2MCwibmJmIjoxNzA5OTk1MDYwLCJleHAiOjE3MDk5OTUyNDB9.QuRJSHYVeBHB6enVtz7s2mxxpApPYC0Nz-jdpgdK7SqQIBIGpKEY1I7x2wCSHUQf1wginfJd19Oyw9dMlPQ6mA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImQyOGE5ODAwLTJiMzQtNDE5OC1hY2Y0LTI5ODhlNDg5YWQ2NCIsInN1YiI6IlhXQzRIMDdWTUhhb3RmIiwiaWF0IjoxNzEwMDAyNjQ3LCJuYmYiOjE3MTAwMDI2NDcsImV4cCI6MTcxMDAwMjgyN30.rUbJm4-gjtwjA6EEJdCiDjQDkIuwpBDfZ8Q3tPP7LROXzOX7Q4eYslgIbIOvUdKjiLeeQsWUyWFOitRYZY0NQQ
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1489,7 +1542,7 @@ Content-Length: 85
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1506,11 +1559,11 @@ Content-Length: 85
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /v1/forgot-password/send-otp HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 31
+Content-Length: 32
 Host: localhost:8080
 
 {
-  "username" : "IkXih7v8fJ"
+  "username" : "TUHIannxZ5y"
 }</code></pre>
 </div>
 </div>
@@ -1594,7 +1647,7 @@ Content-Length: 97
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1611,12 +1664,12 @@ Content-Length: 97
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /v1/set-new-password HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIwOGEwOWJiZi0yOGZiLTQ4YzEtYWFhMi1kM2VkOGViZTA2OWYiLCJzdWIiOiJZZ1VlRU5rTG9vbHlzUiIsImlhdCI6MTcwOTk5NTA2MiwibmJmIjoxNzA5OTk1MDYyLCJleHAiOjE3MDk5OTUyNDJ9.ByAess2TSiQjec_J6QeWP9fZ9l8vKRFjleyHYEWcfyxdUdinuI5SjO2KD2iXKXmhFqw1ysOAZBbfyqJV1d9E3w
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIyNWJlYjU1MS0zMzAwLTRkZjAtOGZmNi03YzJlZDQ2ZWQ3NTIiLCJzdWIiOiIzZkk1MVNsb2hqb3JHNSIsImlhdCI6MTcxMDAwMjY0OSwibmJmIjoxNzEwMDAyNjQ5LCJleHAiOjE3MTAwMDI4Mjl9.4Eixiev07ffeU6ZAAxTFbWr-cuA-gkko2hU67q9SVJq1RrjDOH5-QDl7lRgdrQkLG8FeluBMgW4XoG9j8BGIXQ
 Content-Length: 40
 Host: localhost:8080
 
 {
-  "new_password" : "G5lFAdYPv9g9hlY"
+  "new_password" : "ReOiLWBt6gnedoJ"
 }</code></pre>
 </div>
 </div>
@@ -1700,7 +1753,7 @@ Content-Length: 87
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1717,12 +1770,12 @@ Content-Length: 87
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /v1/update-nickname HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6IjI4ODAyMTI0LTYwMGEtNDQwNi05NGM0LTIyMzFmM2UwMTgxYiIsInN1YiI6IkhNMFZkZmhneGJDengiLCJpYXQiOjE3MDk5OTUwNjIsIm5iZiI6MTcwOTk5NTA2MiwiZXhwIjoxNzA5OTk1MjQyfQ.-n2WIOwV2C9YsFImBXgLqrcI_ww3hEPZNBKHDqMzD3gExgjo7eFMrKaQtIEiqgtXDw0k13M-qpMxAMjBiNlPRw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9DTElFTlRfMCIsInRva2VuVHlwZSI6IkJlYXJlciIsImp0aSI6ImVhYWM1NjE0LTY2N2MtNGY4NS1hYzcxLTYzNDBjZmYxM2ExZCIsInN1YiI6IjdWTVRRcndFMkNjODciLCJpYXQiOjE3MTAwMDI2NDksIm5iZiI6MTcxMDAwMjY0OSwiZXhwIjoxNzEwMDAyODI5fQ.-8z1A6QEWeRD-Meajol2NYv0VsK-wlklFLjOlTOQ9M40GnURUcujUZ138JuJtI497RpG1dsrr0pjou05Jx7SbA
 Content-Length: 31
 Host: localhost:8080
 
 {
-  "new_nickname" : "2pvu41"
+  "new_nickname" : "SHDKfR"
 }</code></pre>
 </div>
 </div>
@@ -1806,7 +1859,7 @@ Content-Length: 81
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1828,13 +1881,13 @@ Content-Length: 81
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /v1/otp/verify HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 87
+Content-Length: 88
 Host: localhost:8080
 
 {
-  "username" : "hPEqQkFaSgUZ",
+  "username" : "wows2TAQbxbCU",
   "otp_type" : "forgot-password",
-  "otp" : "788277"
+  "otp" : "988943"
 }</code></pre>
 </div>
 </div>
@@ -1855,14 +1908,14 @@ Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
 Content-Security-Policy: script-src 'self'
-Content-Length: 781
+Content-Length: 783
 
 {
   "message" : "인증번호가 인증되었습니다.",
   "code" : "3104",
   "data" : {
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiJhM2JjNmQ2Yy1hZTM4LTRkYzctYjZkZS1hZGFmNTFiNjM5NjYiLCJzdWIiOiJoUEVxUWtGYVNnVVoiLCJpYXQiOjE3MDk5OTUwNjMsIm5iZiI6MTcwOTk5NTA2MywiZXhwIjoxNzA5OTk1MjQzfQ.EUCdE9W4EBxTLxUBp_m_I_OID60s4A-9NJP0KX7XOmIkSF_K1fsUsERXgMGPRZ0wmT4oxnNrqxo4nNYeLiYJoQ",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiIwYjVjOWZkMS0xMTkyLTQ3ODQtYTAxZC1lYzM0ZDRmMWIzZjEiLCJzdWIiOiJoUEVxUWtGYVNnVVoiLCJpYXQiOjE3MDk5OTUwNjMsIm5iZiI6MTcwOTk5NTA2MywiZXhwIjoxNzEyNTg3MDYzfQ.TrlIzGnKlDqRgfk6h3DGiDf4zEHlrtwWyUstSXsAj6Xlx8WKOoWprZjPhR90DIT2rBqhdvfOqdRjxtL6oETTpw"
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI5N2M5YzMyOS05OTQwLTQ5YzctYjkxNy0zZDNmNTI5Y2JlMjIiLCJzdWIiOiJ3b3dzMlRBUWJ4YkNVIiwiaWF0IjoxNzEwMDAyNjUwLCJuYmYiOjE3MTAwMDI2NTAsImV4cCI6MTcxMDAwMjgzMH0.gmNUJPu5kzkt0aYvvghbdITzZ4Df003Qz0XVE2kwukZDj8jmPXARaFh8f9MGoWA-LjXKqSYcNxd-f0lLgkn8Jw",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQ0xJRU5UXzAiLCJ0b2tlblR5cGUiOiJCZWFyZXIiLCJqdGkiOiI2ZDY0OWMwNi1jMjVkLTQ3YWMtYTk2NC04Nzc3MGYyYzMxNDkiLCJzdWIiOiJ3b3dzMlRBUWJ4YkNVIiwiaWF0IjoxNzEwMDAyNjUwLCJuYmYiOjE3MTAwMDI2NTAsImV4cCI6MTcxMjU5NDY1MH0.2NSc9Bwp2gjoH6gMRdZ2awJ5yHDVntAu7s4ifWFhok50TuZT1MheRrN5v7fNBU5X3IBTi-06-cQNvSewwIiizA"
   }
 }</code></pre>
 </div>
@@ -1936,7 +1989,7 @@ Content-Length: 781
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token</code></p></td>
@@ -1960,13 +2013,13 @@ Content-Length: 781
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /v1/otp/verify HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 85
+Content-Length: 86
 Host: localhost:8080
 
 {
-  "username" : "7Z4mf9QikWgZ1",
+  "username" : "NiRwn4ehPzGRam",
   "otp_type" : "verify-email",
-  "otp" : "912131"
+  "otp" : "885427"
 }</code></pre>
 </div>
 </div>
@@ -2064,7 +2117,7 @@ Content-Length: 81
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -2085,7 +2138,7 @@ Content-Length: 65
 Host: localhost:8080
 
 {
-  "username" : "Nhn3DwPEp9",
+  "username" : "02TWGO2tGh",
   "otp_type" : "forgot-password"
 }</code></pre>
 </div>
@@ -2177,7 +2230,7 @@ Content-Length: 80
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/message-code.html" class="popup">메시지 코드</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -2190,7 +2243,7 @@ Content-Length: 80
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-02-24 14:54:52 +0900
+Last updated 2024-03-10 01:36:44 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

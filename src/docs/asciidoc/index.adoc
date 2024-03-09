@@ -6,5 +6,9 @@
 :toclevels: 2
 :sectlinks:
 
+:docinfo: shared-head
+
+include::common/response.adoc[]
+include::common/message.adoc[]
 include::account-api.adoc[]
 include::otp-api.adoc[]

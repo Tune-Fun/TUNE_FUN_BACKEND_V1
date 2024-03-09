@@ -1,0 +1,5 @@
+[[API-Response-Format]]
+== API 응답 포맷
+
+=== Response Fields
+operation::get-custom-response-example[snippets='custom-response-fields']

@@ -2,6 +2,10 @@ package com.tune_fun.v1.common.config;
 
 public class Uris {
 
+    public static final String MESSAGE_CODES = "/message-codes";
+    public static final String CUSTOM_RESPONSE_EXAMPLE = "/custom-response-example";
+    public static final String CUSTOM_EXCEPTION_RESPONSE_EXAMPLE = "/custom-exception-response-example";
+
     public static final String API_V1_ROOT = "/v1";
 
     public static final String REST_NAME_ID = "/{id}";
@@ -64,7 +68,10 @@ public class Uris {
             SWAGGER_API_DOCS_JSON,
             API_DOC_HTML,
             FAVICON,
-            HEALTH_CHECK
+            HEALTH_CHECK,
+            MESSAGE_CODES,
+            CUSTOM_RESPONSE_EXAMPLE,
+            CUSTOM_EXCEPTION_RESPONSE_EXAMPLE
     };
     public static final String[] PERMIT_ALL_URIS = {
             CHECK_USERNAME_DUPLICATE,
@@ -90,7 +97,10 @@ public class Uris {
             SWAGGER_API_DOCS_JSON,
             API_DOC_HTML,
             FAVICON,
-            HEALTH_CHECK
+            HEALTH_CHECK,
+            MESSAGE_CODES,
+            CUSTOM_RESPONSE_EXAMPLE,
+            CUSTOM_EXCEPTION_RESPONSE_EXAMPLE
     };
     public static final String[] ADMIN_URIS = {
 
