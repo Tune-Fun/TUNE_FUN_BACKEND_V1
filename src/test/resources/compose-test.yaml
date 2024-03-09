@@ -1,7 +1,0 @@
-services:
-  redis:
-    image: 'redis:latest'
-    container_name: 'tune_fun_redis_test'
-    restart: always
-    ports:
-      - '6378:6379'

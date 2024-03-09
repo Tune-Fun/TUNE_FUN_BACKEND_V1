@@ -1,13 +1,14 @@
-package com.tune_fun.v1.base.docker;
+package com.tune_fun.v1.base.integration;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import javax.sql.DataSource;
@@ -22,33 +23,41 @@ public class TestContainersConfig {
     private static final String ENV_TZ = "TZ";
     private static final String ASIA_SEOUL = "Asia/Seoul";
 
-    private static final DockerImageName MARIADB_IMAGE = parse("mariadb:latest");
+    private static final DockerImageName REDIS_IMAGE = parse("redis:latest");
+
+    static {
+        GenericContainer<?> REDIS_CONTAINER =
+                new GenericContainer<>(REDIS_IMAGE)
+                        .withExposedPorts(6379)
+                        .withReuse(true);
+
+        REDIS_CONTAINER.start();
+
+        System.setProperty("spring.data.redis.host", REDIS_CONTAINER.getHost());
+        System.setProperty("spring.data.redis.port", REDIS_CONTAINER.getMappedPort(6379).toString());
+    }
+
+    private static final DockerImageName POSTGRES_IMAGE = parse("postgres:latest");
     /**
-     * @see <a href="https://www.testcontainers.org/modules/databases/mariadb/">MariaDBContainer</a>
+     * @see <a href="https://java.testcontainers.org/modules/databases/postgres/">PostgresContainer</a>
      */
     @Bean(initMethod = "start", destroyMethod = "stop")
     @ServiceConnection
-    public static MariaDBContainer<?> mariaDBContainer() {
-        return new MariaDBContainer<>(MARIADB_IMAGE)
+    public static PostgreSQLContainer<?> postgresContainer() {
+        return new PostgreSQLContainer<>(POSTGRES_IMAGE)
                 .withEnv(ENV_TZ, ASIA_SEOUL)
-                .withEnv("MARIADB_DATABASE", "test")
-                .withEnv("MARIADB_USER", "test")
-                .withEnv("MARIADB_PASSWORD", "test")
-                .withCommand(
-                        "--character-set-server=utf8mb4",
-                        "--collation-server=utf8mb4_unicode_ci",
-                        "--skip-character-set-client-handshake",
-                        "--default-time-zone=+09:00"
-                );
+                .withEnv("POSTGRES_DB", "test")
+                .withEnv("POSTGRES_USER", "test")
+                .withEnv("POSTGRES_PASSWORD", "test");
     }
 
     @Bean
-    @DependsOn("mariaDBContainer")
-    public static DataSource dataSource(MariaDBContainer<?> mariaDBContainer) {
+    @DependsOn("postgresContainer")
+    public static DataSource dataSource(PostgreSQLContainer<?> postgresSQLContainer) {
         return create()
-                .url(mariaDBContainer.getJdbcUrl())
-                .username(mariaDBContainer.getUsername())
-                .password(mariaDBContainer.getPassword())
+                .url(postgresSQLContainer.getJdbcUrl())
+                .username(postgresSQLContainer.getUsername())
+                .password(postgresSQLContainer.getPassword())
                 .build();
     }
 
@@ -81,14 +90,5 @@ public class TestContainersConfig {
         return new KafkaContainer(KAFKA_IMAGE)
                 .withExposedPorts(9092, 9093);
     }
-
-//
-//    @DynamicPropertySource
-//    @DependsOn("dockerComposeContainer")
-//    public static void properties(DynamicPropertyRegistry registry) {
-//        registry.add("spring.data.redis.host", () -> DOCKER_COMPOSE_CONTAINER.getServiceHost("redis", 6378));
-//        registry.add("spring.data.redis.port", () -> DOCKER_COMPOSE_CONTAINER.getServicePort("redis", 6378));
-//        registry.add("spring.data.redis.database", () -> 0);
-//    }
 
 }

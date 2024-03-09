@@ -1,13 +1,15 @@
-package com.tune_fun.v1.base.mail;
+package com.tune_fun.v1.base.integration;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 import static com.icegreen.greenmail.util.ServerSetup.PROTOCOL_SMTP;
 
 @TestConfiguration
+@Profile("test_standalone")
 public class MailConfig {
 
     public static final String SMTP_USERNAME = "habin";

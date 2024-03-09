@@ -1,17 +1,14 @@
 services:
-  mariadb:
-    image: 'mariadb:latest'
-    container_name: 'tune_fun_mariadb'
+  postgres:
+    image: 'postgres:latest'
+    container_name: 'tune_fun_postgres'
     restart: always
-    environment:
-      TZ: Asia/Seoul
-      MARIADB_DATABASE: mydatabase
-      MARIADB_ROOT_PASSWORD: verysecret
-      MARIADB_USER: myuser
-      MARIADB_PASSWORD: secret
     ports:
-      - '3305:3306'
-
+      - '5431:5432'
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: mydatabase
   redis:
     image: 'redis:latest'
     container_name: 'tune_fun_redis'

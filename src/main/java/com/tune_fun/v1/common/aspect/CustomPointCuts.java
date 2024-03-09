@@ -12,6 +12,10 @@ public final class CustomPointCuts {
     public void springdoc() {
     }
 
+    @Pointcut("execution(* com.tune_fun.v1.common.api.HealthCheckController.*(..))")
+    public void healthCheck() {
+    }
+
     @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
     public void restController() {
     }

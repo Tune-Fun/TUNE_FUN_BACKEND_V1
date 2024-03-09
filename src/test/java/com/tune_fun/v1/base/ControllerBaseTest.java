@@ -1,6 +1,9 @@
 package com.tune_fun.v1.base;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import com.tune_fun.v1.base.annotation.IntegrationTest;
 import com.tune_fun.v1.base.doc.RestDocsConfig;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.util.i18n.MessageSourceUtil;
@@ -36,10 +39,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
+@IntegrationTest
 @AutoConfigureMockMvc
 @Import(RestDocsConfig.class)
 @ExtendWith(RestDocumentationExtension.class)
-public abstract class ControllerBaseTest extends AbstractIntegrationTest {
+public abstract class ControllerBaseTest {
 
     @Autowired
     protected RestDocumentationResultHandler restDocs;
@@ -49,6 +53,13 @@ public abstract class ControllerBaseTest extends AbstractIntegrationTest {
 
     @Autowired
     protected MessageSourceUtil messageSourceUtil;
+
+    @Autowired
+    protected ObjectMapper objectMapper;
+
+    public <T> String toJson(T data) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(data);
+    }
 
     @BeforeEach
     void setUp(final WebApplicationContext context, final RestDocumentationContextProvider provider) {

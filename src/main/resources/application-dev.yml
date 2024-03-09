@@ -3,20 +3,19 @@ spring:
     compose:
       enabled: false
   datasource:
-    url: ${mariadb-url}
-    username: ${mariadb-username}
-    password: ${mariadb-password}
-    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc-secretsmanager:postgresql://tunefun-dev.cjgc0imyy7ak.ap-northeast-2.rds.amazonaws.com:5432/tunefun_dev
+    username: rds!db-b4f88cec-869c-4e2e-a281-bdfc2280c8b3
+    driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerPostgreSQLDriver
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MariaDBDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
         use_sql_comments: false
-        default_batch_fetch_size: 100
+        default_batch_fetch_size: 1000
 
   data:
     redis:
