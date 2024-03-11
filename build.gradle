@@ -1,5 +1,7 @@
 plugins {
+    id 'idea'
     id 'java'
+    id 'jacoco'
     id 'org.springframework.boot' version '3.2.3'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
@@ -29,13 +31,30 @@ repositories {
     maven { url 'https://packages.atlassian.com/maven/repository/public' }
 }
 
+def jacocoExcludePatterns = [
+        "**.domain.**.*",
+        "**.common.**.*",
+        "**.external.**.*",
+        "**.oauth2.*",
+        "**.application.port.**.*",
+        "**.*Application*",
+        "**.*Config*",
+        "**.*Exception*",
+        "**.*Filter*",
+        "**.*Converter*",
+        "**.*Entity*",
+        "**.Q*",
+        "**.*MapperImpl"
+]
+
 ext {
     set('snippetsDir', file("build/generated-snippets"))
     set('generated', file("src/main/generated"))
     set('docsDir', "src/main/resources/static/docs")
+    set('jacocoDir', file("reports/"))
     set('springCloudVersion', "2023.0.0")
     set('testcontainersVersion', "1.19.7")
-    set('jwtVersion', '0.12.3')
+    set('jwtVersion', '0.12.5')
     set('queryDslVersion', "6.1")
     set('mapstructVersion', "1.5.5.Final")
 }
@@ -184,9 +203,58 @@ bootRun {
 
 test {
     systemProperty 'spring.profiles.active', 'test_standalone'
+    finalizedBy jacocoTestReport
     outputs.dir snippetsDir
     useJUnitPlatform()
+
+    jacoco {
+        excludes = jacocoExcludePatterns
+    }
 }
+
+jacocoTestReport {
+    dependsOn test	// 테스트가 수행되어야만 report를 생성할 수 있도록 설정
+    reports {
+        html.required.set(true)
+        csv.required.set(true)
+        html.destination file("jacoco/index.html")
+        csv.destination file("jacoco/index.csv")
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, excludes: jacocoExcludePatterns)
+                })
+        )
+    }
+    finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+
+            element = 'CLASS'
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.80
+            }
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.80
+            }
+
+            excludes = jacocoExcludePatterns
+        }
+    }
+}
+
 
 openapi3 { // Swagger OAS Generate
     servers = [

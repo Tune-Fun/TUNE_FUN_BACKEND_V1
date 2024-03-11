@@ -34,8 +34,4 @@ public abstract class AccountMapper {
         return Role.roleValues(roles);
     }
 
-    @Named("roleValue")
-    public String roleValue(Role role) {
-        return role.name();
-    }
 }
