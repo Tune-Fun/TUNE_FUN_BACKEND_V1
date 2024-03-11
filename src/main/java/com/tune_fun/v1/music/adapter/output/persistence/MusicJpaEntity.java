@@ -51,6 +51,18 @@ public class MusicJpaEntity extends BaseEntity {
     @Comment("장르")
     private String genre;
 
+    @NotNull
+    @Size(max = 255)
+    @Column(name = "album_name", nullable = false)
+    @Comment("앨범 이름")
+    private String albumName;
+
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "album_image_link", nullable = false)
+    @Comment("앨범 이미지 링크")
+    private String albumImageLink;
+
     @Column(name = "released_at", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Comment("공개일")

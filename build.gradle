@@ -77,7 +77,8 @@ dependencies {
     implementation 'software.amazon.awssdk:s3:2.21.29'
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.1.0'
     implementation 'com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:2.0.2'
-    implementation 'com.slack.api:slack-app-backend:1.38.0' // Chat
+    implementation 'com.slack.api:slack-app-backend:1.38.0'
+    implementation 'se.michaelthelin.spotify:spotify-web-api-java:8.3.6'
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 
     // Message Broker

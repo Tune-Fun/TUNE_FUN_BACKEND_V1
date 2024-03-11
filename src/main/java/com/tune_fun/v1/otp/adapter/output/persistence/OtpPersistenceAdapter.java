@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Date;
@@ -28,6 +29,7 @@ import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.fromLabel;
 import static java.lang.String.format;
 
 
+@Component
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOtpPort, DeleteOtpPort {
