@@ -38,10 +38,4 @@ public class ResponseMapper {
                 .body(new ExceptionResponse(messageSourceUtil.getMessage(messageCode.getCode()), messageCode.getCode()));
     }
 
-    public ResponseEntity<ExceptionResponse> error(final MessageCode messageCode, final String message) {
-        return ResponseEntity
-                .status(messageCode.getHttpStatus())
-                .body(new ExceptionResponse(message, messageCode.getCode()));
-    }
-
 }

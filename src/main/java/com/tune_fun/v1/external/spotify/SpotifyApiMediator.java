@@ -21,8 +21,8 @@ public class SpotifyApiMediator {
     @Bean
     public SpotifyApi spotifyApi() {
         return new SpotifyApi.Builder()
-                .setClientId(spotifyProperty.getClientId())
-                .setClientSecret(spotifyProperty.getClientSecret())
+                .setClientId(spotifyProperty.clientId())
+                .setClientSecret(spotifyProperty.clientSecret())
                 .build();
     }
 
