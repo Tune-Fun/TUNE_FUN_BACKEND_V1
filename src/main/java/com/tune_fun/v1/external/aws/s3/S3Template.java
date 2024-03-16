@@ -22,7 +22,7 @@ import java.util.function.BiFunction;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class S3Mediator {
+public class S3Template {
 
     private final S3Client s3Client;
 
