@@ -125,6 +125,10 @@ fcm:
   access-token: ${firebase-oauth2-token}
   project-id: tunefun-6edf5
 
+spotify:
+  client-id: ${spotify-client-id}
+  client-secret: ${spotify-client-secret}
+
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8

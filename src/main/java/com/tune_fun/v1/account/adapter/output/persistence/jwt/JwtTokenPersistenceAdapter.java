@@ -59,7 +59,7 @@ public class JwtTokenPersistenceAdapter implements
 
     @Override
     public void afterPropertiesSet() {
-        this.secretKey = hmacShaKeyFor(jwtProperty.getSecret().getBytes(UTF_8));
+        this.secretKey = hmacShaKeyFor(jwtProperty.secret().getBytes(UTF_8));
     }
 
     @Override // LoadUsernamePort
@@ -139,7 +139,7 @@ public class JwtTokenPersistenceAdapter implements
 
         ValueOperations<String, Object> vopObject = redisTemplateObject.opsForValue();
         vopObject.set(accessToken, true);
-        redisTemplateObject.expire(accessToken, jwtProperty.getAccessTokenValidityDuration());
+        redisTemplateObject.expire(accessToken, jwtProperty.accessTokenValidity());
     }
 
     @Override // DeleteRefreshTokenPort

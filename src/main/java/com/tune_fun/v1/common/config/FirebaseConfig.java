@@ -25,12 +25,12 @@ public class FirebaseConfig {
 
     @PostConstruct
     public void init() throws IOException {
-        AccessToken googleOAuth2AccessToken = new AccessToken(fcmProperty.getAccessToken(), new Date(MAX_VALUE));
+        AccessToken googleOAuth2AccessToken = new AccessToken(fcmProperty.accessToken(), new Date(MAX_VALUE));
         GoogleCredentials googleCredentials = GoogleCredentials.create(googleOAuth2AccessToken);
 
         FirebaseOptions firebaseOptions = FirebaseOptions.builder()
                 .setCredentials(googleCredentials)
-                .setProjectId(fcmProperty.getProjectId())
+                .setProjectId(fcmProperty.projectId())
                 .build();
 
         FirebaseApp.initializeApp(firebaseOptions);
