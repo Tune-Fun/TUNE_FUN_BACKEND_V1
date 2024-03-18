@@ -50,6 +50,16 @@ erDiagram
         updated_at datetime
         deleted_at datetime
     }
+    MUSIC {
+        id BIGINT
+        uuid VARCHAR(255)
+        title VARCHAR(20)
+        artist VARCHAR(100)
+        genre VARCHAR(255)
+        released_at datetime
+        created_at datetime
+        updated_at datetime
+    }
     VOTE_PAPER {
         id string
         uuid string
@@ -71,6 +81,7 @@ erDiagram
     VOTE_CHOICE {
         id BIGINT
         vote_paper string
+        music_id string
         username VARCHAR(255)
         created_at datetime
         updated_at datetime
@@ -125,6 +136,7 @@ erDiagram
     VOTE }o--|| VOTE_PAPER: vote_paper
     VOTE_CHOICE }o--|| ACCOUNT: username
     VOTE_CHOICE }o--|| VOTE_PAPER: vote_paper
+    VOTE_CHOICE }o--|| MUSIC: music
     FAVORITE }o--|| VOTE_PAPER: vote_paper
     FAVORITE }o--|| ACCOUNT: username
     REPORT }o--|| ACCOUNT: reporter
