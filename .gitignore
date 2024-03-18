@@ -6,6 +6,8 @@ build/
 !**/src/test/**/build/
 /src/main/generated
 /src/main/resources/tunefun-firebase-adminsdk.json
+/jacoco
+/src/main/resources/static/docs/
 
 ### STS ###
 .apt_generated

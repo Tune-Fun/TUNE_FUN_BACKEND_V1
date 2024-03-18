@@ -113,9 +113,18 @@ spring:
 
 
 jwt:
-  accessTokenValidity: 3d
-  refreshTokenValidity: 30d
+  access-token-validity: 3d
+  refresh-token-validity: 30d
   secret: x/A?D(G+KbPeShVmYq3t6v9y$B&E)H@McQfTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z$C&F)H@McQfTjWnZr4u7x!A%D*G-KaNdRgUkX
+
+event:
+  sqs:
+    send-vote-article-upload-notification:
+      queue-name: send-vote-article-upload-notification
+      message-group-id: send-vote-article-upload-notification
+  kafka:
+    send-vote-article-upload-notification:
+      topic: send-vote-article-upload-notification
 
 otp:
   validity: 3m

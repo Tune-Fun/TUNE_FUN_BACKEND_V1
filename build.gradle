@@ -1,5 +1,7 @@
 plugins {
+    id 'idea'
     id 'java'
+    id 'jacoco'
     id 'org.springframework.boot' version '3.2.3'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
@@ -29,13 +31,32 @@ repositories {
     maven { url 'https://packages.atlassian.com/maven/repository/public' }
 }
 
+def jacocoExcludePatterns = [
+        "**.domain.**.*",
+        "**.common.**.*",
+        "**.external.**.*",
+        "**.oauth2.*",
+        "**.application.port.**.*",
+        "**.*Application*",
+        "**.*Config*",
+        "**.*Exception*",
+        "**.*Filter*",
+        "**.*Converter*",
+        "**.*Entity*",
+        "**.Q*",
+        "**.*MapperImpl"
+]
+
 ext {
     set('snippetsDir', file("build/generated-snippets"))
     set('generated', file("src/main/generated"))
     set('docsDir', "src/main/resources/static/docs")
+    set('jacocoDir', file("reports/"))
     set('springCloudVersion', "2023.0.0")
     set('testcontainersVersion', "1.19.7")
-    set('jwtVersion', '0.12.3')
+    set('awspringVersion', "3.1.0")
+    set('awssdkVersion', "2.25.11")
+    set('jwtVersion', '0.12.5')
     set('queryDslVersion', "6.1")
     set('mapstructVersion', "1.5.5.Final")
 }
@@ -74,14 +95,14 @@ dependencies {
     // External
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'com.google.firebase:firebase-admin:9.2.0'
-    implementation 'software.amazon.awssdk:s3:2.21.29'
-    implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.1.0'
+    implementation 'software.amazon.awssdk:s3'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager'
     implementation 'com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:2.0.2'
     implementation 'com.slack.api:slack-app-backend:1.38.0'
-    implementation 'se.michaelthelin.spotify:spotify-web-api-java:8.3.6'
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 
     // Message Broker
+    implementation 'io.awspring.cloud:spring-cloud-aws-sqs'
     implementation 'org.apache.kafka:kafka-streams'
     implementation 'org.springframework.kafka:spring-kafka'
 
@@ -100,6 +121,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.13.0'
     implementation 'org.apache.commons:commons-rng-simple:1.5'
     implementation 'commons-io:commons-io:2.15.1'
+    implementation 'io.vavr:vavr:0.10.4'
 
     // API Documentation
     implementation 'com.epages:restdocs-api-spec-mockmvc:0.19.0'
@@ -130,8 +152,10 @@ dependencies {
     testImplementation 'com.icegreen:greenmail-junit5:2.0.1'
     testImplementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.1.0'
 
+    testImplementation 'io.vavr:vavr-test:0.10.4'
+    testImplementation 'org.awaitility:awaitility:4.2.1'
+    testImplementation 'org.awaitility:awaitility-proxy:3.1.6'
     testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0' // JUnit Extension
-    testImplementation 'com.slack.api:slack-app-backend:1.38.0'
     testImplementation 'com.atlassian.jira:jira-rest-java-client-core:5.2.7'
     testCompileOnly 'io.atlassian.fugue:fugue:5.0.0'
 
@@ -144,6 +168,8 @@ dependencies {
     testImplementation 'org.testcontainers:mongodb'
     testImplementation 'org.testcontainers:kafka'
     testImplementation 'org.testcontainers:localstack'
+    testImplementation 'org.elasticmq:elasticmq-server_3:1.5.7'
+
 
     testAnnotationProcessor(
             'org.springframework.boot:spring-boot-configuration-processor',
@@ -185,8 +211,56 @@ bootRun {
 
 test {
     systemProperty 'spring.profiles.active', 'test_standalone'
+    finalizedBy jacocoTestReport
     outputs.dir snippetsDir
     useJUnitPlatform()
+
+    jacoco {
+        excludes = jacocoExcludePatterns
+    }
+}
+
+jacocoTestReport {
+    dependsOn test	// 테스트가 수행되어야만 report를 생성할 수 있도록 설정
+    reports {
+        html.required.set(true)
+        csv.required.set(true)
+        html.destination file("jacoco/index.html")
+        csv.destination file("jacoco/index.csv")
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, excludes: jacocoExcludePatterns)
+                })
+        )
+    }
+    finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+
+            element = 'CLASS'
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.00
+            }
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.00
+            }
+
+            excludes = jacocoExcludePatterns
+        }
+    }
 }
 
 openapi3 { // Swagger OAS Generate
@@ -251,5 +325,7 @@ dependencyManagement {
     imports {
         mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:${awspringVersion}"
+        mavenBom "software.amazon.awssdk:bom:${awssdkVersion}"
     }
 }
