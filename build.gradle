@@ -99,7 +99,6 @@ dependencies {
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager'
     implementation 'com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:2.0.2'
     implementation 'com.slack.api:slack-app-backend:1.38.0'
-    implementation 'se.michaelthelin.spotify:spotify-web-api-java:8.3.6'
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 
     // Message Broker
@@ -166,6 +165,8 @@ dependencies {
     testImplementation 'org.testcontainers:mongodb'
     testImplementation 'org.testcontainers:kafka'
     testImplementation 'org.testcontainers:localstack'
+    testImplementation 'org.elasticmq:elasticmq-server_3:1.5.7'
+
 
     testAnnotationProcessor(
             'org.springframework.boot:spring-boot-configuration-processor',
