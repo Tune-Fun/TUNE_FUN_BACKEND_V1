@@ -1,17 +1,18 @@
 package com.tune_fun.v1.common.config.aws;
 
-import com.tune_fun.v1.common.config.annotation.OnlyDevelopmentConfiguration;
 import io.awspring.cloud.sqs.config.SqsMessageListenerContainerFactory;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 
 import static software.amazon.awssdk.regions.Region.AP_NORTHEAST_2;
 
 @Slf4j
-@OnlyDevelopmentConfiguration
+@Configuration
 public class AwsSqsConfig {
 
     @Bean
@@ -35,18 +36,20 @@ public class AwsSqsConfig {
     }
 
     @Bean
-    public SqsMessageListenerContainerFactory<Object> defaultSqsListenerContainerFactory() {
+    @DependsOn("sqsAsyncClient")
+    public SqsMessageListenerContainerFactory<Object> defaultSqsListenerContainerFactory(SqsAsyncClient sqsAsyncClient) {
         log.info("SqsMessageListenerContainerFactory is created");
         return SqsMessageListenerContainerFactory
                 .builder()
-                .sqsAsyncClient(sqsAsyncClient())
+                .sqsAsyncClient(sqsAsyncClient)
                 .build();
     }
 
     @Bean
-    public SqsTemplate sqsTemplate() {
+    @DependsOn("sqsAsyncClient")
+    public SqsTemplate sqsTemplate(SqsAsyncClient sqsAsyncClient) {
         log.info("SqsTemplate is created");
-        return SqsTemplate.newTemplate(sqsAsyncClient());
+        return SqsTemplate.newTemplate(sqsAsyncClient);
     }
 
 }

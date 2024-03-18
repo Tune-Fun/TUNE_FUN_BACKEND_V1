@@ -38,6 +38,7 @@ public class TestContainersConfig {
     }
 
     private static final DockerImageName POSTGRES_IMAGE = parse("postgres:latest");
+
     /**
      * @see <a href="https://java.testcontainers.org/modules/databases/postgres/">PostgresContainer</a>
      */

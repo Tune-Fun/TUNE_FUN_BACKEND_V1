@@ -20,11 +20,11 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
-import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 
 import static com.tune_fun.v1.base.integration.MailConfig.SMTP_USERNAME;
 import static java.lang.String.format;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.*;
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SECRETSMANAGER;
 import static software.amazon.awssdk.auth.credentials.AwsBasicCredentials.create;
 import static software.amazon.awssdk.regions.Region.of;
 
@@ -41,7 +41,7 @@ public class LocalStackConfig {
     @Bean(initMethod = "start", destroyMethod = "stop")
     public static LocalStackContainer localStackContainer() {
         return new LocalStackContainer(LOCAL_STACK_IMAGE)
-                .withServices(S3, SQS, SECRETSMANAGER);
+                .withServices(S3, SECRETSMANAGER);
     }
 
     @Bean
@@ -55,16 +55,6 @@ public class LocalStackConfig {
 
         s3Client.createBucket(builder -> builder.bucket(LOCAL_STACK_S3_BUCKET_NAME));
         return s3Client;
-    }
-
-    @Bean
-    @DependsOn("localStackContainer")
-    protected SqsAsyncClient sqsAsyncClient(LocalStackContainer localStackContainer) {
-        return SqsAsyncClient.builder()
-                .endpointOverride(localStackContainer.getEndpointOverride(SQS))
-                .credentialsProvider(getCredentialsProvider(localStackContainer))
-                .region(of(localStackContainer.getRegion()))
-                .build();
     }
 
     @Primary
