@@ -2,4 +2,5 @@
 == 메시지 코드
 
 === Message Code
+
 operation::get-message-codes[snippets='messagecode-response-fields']

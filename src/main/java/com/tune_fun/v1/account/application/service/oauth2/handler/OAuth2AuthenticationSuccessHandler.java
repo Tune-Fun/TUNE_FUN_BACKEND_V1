@@ -7,7 +7,6 @@ import com.tune_fun.v1.account.application.port.output.jwt.CreateRefreshTokenPor
 import com.tune_fun.v1.account.application.port.output.oauth2.RemoveAuthorizationRequestCookiePort;
 import com.tune_fun.v1.account.application.port.output.oauth2.SaveOAuth2AccountPort;
 import com.tune_fun.v1.account.application.service.oauth2.OAuth2UserPrincipal;
-import com.tune_fun.v1.account.application.service.oauth2.unlink.OAuth2UserUnlinkFacade;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
@@ -67,7 +66,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Transactional
     public String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) {
+                                     Authentication authentication) {
 
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map(Cookie::getValue);
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());

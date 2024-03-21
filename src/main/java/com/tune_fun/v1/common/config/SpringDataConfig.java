@@ -2,7 +2,6 @@ package com.tune_fun.v1.common.config;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import com.tune_fun.v1.common.config.annotation.OnlyDevelopmentConfiguration;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.mongodb.MongoMetricsCommandListener;
 import io.micrometer.core.instrument.binder.mongodb.MongoMetricsConnectionPoolListener;
@@ -16,7 +15,7 @@ import org.springframework.data.mongodb.core.MongoClientFactoryBean;
 @Configuration
 @Profile("dev_standalone")
 @RequiredArgsConstructor
-public class SpringDataConfig  {
+public class SpringDataConfig {
 
     @Bean
     public MongoClientFactoryBean mongoClientFactoryBean(MongoProperties properties, MeterRegistry meterRegistry) {

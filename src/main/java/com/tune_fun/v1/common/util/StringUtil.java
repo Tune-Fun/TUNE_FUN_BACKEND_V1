@@ -10,7 +10,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static java.util.regex.Pattern.matches;
 import static java.util.stream.Collectors.joining;

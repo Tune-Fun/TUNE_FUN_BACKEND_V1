@@ -7,6 +7,7 @@ import com.tune_fun.v1.base.annotation.IntegrationTest;
 import com.tune_fun.v1.base.doc.RestDocsConfig;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.util.i18n.MessageSourceUtil;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -9,6 +9,8 @@ import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
@@ -18,21 +20,20 @@ import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 
 @IntegrationTest
 class SqsProviderTest {
 
     @Autowired
+    private SqsProvider sut;
+
+    @Autowired
     private EventProperty eventProperty;
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private SqsProvider sqsProvider;
 
     @Autowired
     private SqsAsyncClient sqsAsyncClient;
@@ -42,7 +43,7 @@ class SqsProviderTest {
 
     @Test
     @Order(1)
-    @DisplayName("sendMessageRangedQueue")
+    @DisplayName("AWS SQS 메시지 전송, 성공")
     void sendMessageRangedQueue() {
         // given
         EventProperty.SqsProducer sqsProducer = eventProperty.sqs().values().stream().findFirst()
@@ -51,7 +52,7 @@ class SqsProviderTest {
         TestMessage message = new TestMessage("Hello!");
 
         // when
-        SendResult<?> sendResult = sqsProvider.sendMessageRangedQueue(queueName, message);
+        SendResult<?> sendResult = sut.sendMessageRangedQueue(queueName, message);
         assertSame(sendResult.message().getPayload(), message);
 
         // then
