@@ -6,7 +6,7 @@ import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.application.port.output.SendUsernamePort;
 import com.tune_fun.v1.account.domain.behavior.SendUsername;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,6 +36,6 @@ public class FindUsernameService implements FindUsernameUseCase {
             return;
         }
 
-        throw new CommonApplicationException(ACCOUNT_NOT_FOUND);
+        throw new AppException(ACCOUNT_NOT_FOUND);
     }
 }

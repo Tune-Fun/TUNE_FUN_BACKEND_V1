@@ -6,7 +6,7 @@ import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort
 import com.tune_fun.v1.account.application.port.output.jwt.CreateRefreshTokenPort;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
 import com.tune_fun.v1.otp.application.port.input.usecase.VerifyOtpUseCase;
@@ -64,6 +64,6 @@ public class VerifyOtpService implements VerifyOtpUseCase {
     @Transactional(readOnly = true)
     public CurrentAccount getCurrentAccount(OtpQueries.Verify query) {
         return loadAccountPort.currentAccountInfo(query.username())
-                .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ACCOUNT_NOT_FOUND));
     }
 }

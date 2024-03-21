@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class CommonApplicationException extends RuntimeException {
+public class AppException extends RuntimeException {
 
     private MessageCode messageCode;
 

@@ -4,7 +4,7 @@ import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.UpdateNicknameUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.application.port.output.UpdateNicknamePort;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -25,7 +25,7 @@ public class UpdateNicknameService implements UpdateNicknameUseCase {
     @Transactional
     public void updateNickname(final AccountCommands.UpdateNickname command, final User user) {
         if (loadAccountPort.registeredAccountInfoByNickname(command.newNickname()).isPresent())
-            throw new CommonApplicationException(USER_POLICY_NICKNAME_REGISTERED);
+            throw new AppException(USER_POLICY_NICKNAME_REGISTERED);
 
         updateNicknamePort.updateNickname(user.getUsername(), command.newNickname());
     }

@@ -72,4 +72,12 @@ public class AccountCommands {
     public record UpdateNickname(@NotBlank(message = "{new_nickname.not_blank}") String newNickname) {
     }
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public record OAuth2Link(
+            @NotBlank(message = "{provider.not_blank}")
+            String provider,
+            @NotBlank(message = "{username.not_blank}")
+            String username
+    ) {
+    }
 }

@@ -10,7 +10,7 @@ import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.account.domain.state.RegisterResult;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -70,7 +70,7 @@ public class RegisterService implements RegisterUseCase {
     @Transactional(readOnly = true)
     public void checkRegisterdAccount(AccountCommands.Register command) {
         loadAccountPort.currentAccountInfo(command.username()).ifPresent(accountInfo -> {
-            throw new CommonApplicationException(USER_POLICY_ACCOUNT_REGISTERED);
+            throw new AppException(USER_POLICY_ACCOUNT_REGISTERED);
         });
     }
 }

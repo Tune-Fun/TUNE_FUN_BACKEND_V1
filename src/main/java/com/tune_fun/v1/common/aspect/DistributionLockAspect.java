@@ -1,6 +1,6 @@
 package com.tune_fun.v1.common.aspect;
 
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.lock.DistributedTransactionMediator;
 import com.tune_fun.v1.common.lock.DistributionLock;
 import com.tune_fun.v1.common.lock.DistributionLockKeyGenerator;
@@ -14,6 +14,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
+
+import static com.tune_fun.v1.common.response.MessageCode.LOCK_ACQUISITION_FAILED_ERROR;
+import static com.tune_fun.v1.common.response.MessageCode.LOCK_INTERRUPTED_ERROR;
 
 @Slf4j
 @Aspect
@@ -31,13 +34,13 @@ public class DistributionLockAspect {
 
         try {
             if (!lockInfo.reentrantLock().tryLock(distributionLock.waitTime(), distributionLock.leaseTime(), distributionLock.timeUnit()))
-                throw new CommonApplicationException(MessageCode.LOCK_ACQUISITION_FAILED_ERROR);
+                throw new AppException(LOCK_ACQUISITION_FAILED_ERROR);
 
             log.info("reentrantLock - " + lockInfo.key());
             return distributedTransactionMediator.proceed(joinPoint);
         } catch (InterruptedException e) {
             log.error(e.getMessage());
-            throw new CommonApplicationException(MessageCode.LOCK_INTERRUPTED_ERROR);
+            throw new AppException(LOCK_INTERRUPTED_ERROR);
         } finally {
             log.info("unlock - " + lockInfo.key());
             lockInfo.reentrantLock().unlock();

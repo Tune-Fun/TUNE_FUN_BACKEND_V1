@@ -1,6 +1,6 @@
 package com.tune_fun.v1.otp.adapter.output.persistence;
 
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -20,7 +20,7 @@ public enum OtpType {
 
     public static OtpType fromLabel(String label) {
         for (OtpType type : OtpType.values()) if (type.getLabel().equals(label)) return type;
-        throw new CommonApplicationException(EXCEPTION_OTP_TYPE_NOT_FOUND);
+        throw new AppException(EXCEPTION_OTP_TYPE_NOT_FOUND);
     }
 
 }

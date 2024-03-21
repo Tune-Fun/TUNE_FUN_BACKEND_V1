@@ -2,6 +2,9 @@ package com.tune_fun.v1.common.config;
 
 public class Uris {
 
+    private Uris() {
+    }
+
     public static final String MESSAGE_CODES = "/message-codes";
     public static final String CUSTOM_RESPONSE_EXAMPLE = "/custom-response-example";
     public static final String CUSTOM_EXCEPTION_RESPONSE_EXAMPLE = "/custom-exception-response-example";
@@ -14,11 +17,22 @@ public class Uris {
     public static final String CHECK_USERNAME_DUPLICATE = API_V1_ROOT + "/check-username-duplicate";
     public static final String CHECK_EMAIL_DUPLICATE = API_V1_ROOT + "/check-email-duplicate";
     public static final String FIND_USERNAME = API_V1_ROOT + "/find-username";
+
     public static final String REGISTER = API_V1_ROOT + "/register";
     public static final String LOGIN = API_V1_ROOT + "/login";
+
     public static final String LOGIN_GOOGLE = "/oauth2/authorization/google";
-    public static final String LOGIN_APPLE = API_V1_ROOT + "/login/apple";
-    public static final String LOGIN_INSTAGRAM = API_V1_ROOT + "/login/instagram";
+    public static final String LOGIN_APPLE = API_V1_ROOT + "/oauth2/authorization/apple";
+    public static final String LOGIN_INSTAGRAM = API_V1_ROOT + "/oauth2/authorization/instagram";
+
+    public static final String LINK_GOOGLE = API_V1_ROOT + "/oauth2/link/google";
+    public static final String LINK_APPLE = API_V1_ROOT + "/oauth2/link/apple";
+    public static final String LINK_INSTAGRAM = API_V1_ROOT + "/oauth/link/instagram";
+
+    public static final String UNLINK_GOOGLE = API_V1_ROOT + "/oauth2/unlink/google";
+    public static final String UNLINK_APPLE = API_V1_ROOT + "/oauth2/unlink/apple";
+    public static final String UNLINK_INSTAGRAM = API_V1_ROOT + "/oauth/unlink/instagram";
+
     public static final String LOGOUT = API_V1_ROOT + "/logout";
     public static final String REFRESH = API_V1_ROOT + "/refresh";
     public static final String SET_NEW_PASSWORD = API_V1_ROOT + "/set-new-password";

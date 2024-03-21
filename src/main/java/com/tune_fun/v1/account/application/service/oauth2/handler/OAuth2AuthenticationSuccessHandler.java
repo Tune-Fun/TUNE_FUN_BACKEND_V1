@@ -11,7 +11,7 @@ import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.util.CookieUtil;
@@ -112,7 +112,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void checkRegisteredAccount(final OAuth2UserPrincipal principal) {
         loadAccountPort.registeredAccountInfoByUsername(principal.userInfo().getEmail())
                 .ifPresent(account -> {
-                    throw new CommonApplicationException(MessageCode.USER_POLICY_ACCOUNT_REGISTERED);
+                    throw new AppException(MessageCode.USER_POLICY_ACCOUNT_REGISTERED);
                 });
     }
 

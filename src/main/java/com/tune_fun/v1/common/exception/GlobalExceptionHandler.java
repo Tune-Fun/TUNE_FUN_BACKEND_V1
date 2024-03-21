@@ -34,8 +34,8 @@ public class GlobalExceptionHandler {
         return propertyPath.substring(propertyPath.lastIndexOf('.') + 1);
     }
 
-    @ExceptionHandler(CommonApplicationException.class)
-    protected ResponseEntity<ExceptionResponse> commonApplicationException(CommonApplicationException e) {
+    @ExceptionHandler(AppException.class)
+    protected ResponseEntity<ExceptionResponse> commonApplicationException(AppException e) {
         return e.getMessageCode() == null ?
                 responseMapper.error(ERROR) : responseMapper.error(e.getMessageCode());
     }

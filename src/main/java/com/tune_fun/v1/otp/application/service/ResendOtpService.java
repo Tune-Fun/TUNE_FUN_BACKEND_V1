@@ -2,7 +2,7 @@ package com.tune_fun.v1.otp.application.service;
 
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.otp.application.port.input.command.OtpCommands;
@@ -32,7 +32,7 @@ public class ResendOtpService implements ResendOtpUseCase {
     @Override
     public void resend(final OtpCommands.Resend command) throws Exception {
         Optional<CurrentAccount> currentAccount = loadAccountPort.currentAccountInfo(command.username());
-        if (currentAccount.isEmpty()) throw new CommonApplicationException(MessageCode.ACCOUNT_NOT_FOUND);
+        if (currentAccount.isEmpty()) throw new AppException(MessageCode.ACCOUNT_NOT_FOUND);
 
         CurrentAccount account = currentAccount.get();
 

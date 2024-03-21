@@ -1,6 +1,6 @@
 package com.tune_fun.v1.otp.adapter.output.persistence;
 
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.EncryptUtil;
 import com.tune_fun.v1.common.util.StringUtil;
@@ -75,13 +75,13 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
         ValueOperations<String, OtpRedisEntity> ops = redisTemplate.opsForValue();
         OtpRedisEntity otpRedisEntity = ops.get(otpKey);
 
-        if (otpRedisEntity == null) throw new CommonApplicationException(EXCEPTION_OTP_NOT_FOUND);
+        if (otpRedisEntity == null) throw new AppException(EXCEPTION_OTP_NOT_FOUND);
 
         if (checkRedisExpiration(ops, otpKey))
-            throw new CommonApplicationException(EXCEPTION_OTP_EXPIRED);
+            throw new AppException(EXCEPTION_OTP_EXPIRED);
 
         if (!checkMatchValue(verifyOtp.otp(), otpRedisEntity))
-            throw new CommonApplicationException(EXCEPTION_OTP_NOT_MATCH);
+            throw new AppException(EXCEPTION_OTP_NOT_MATCH);
 
         expire(otpKey);
     }

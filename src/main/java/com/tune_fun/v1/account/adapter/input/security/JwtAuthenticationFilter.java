@@ -3,7 +3,7 @@ package com.tune_fun.v1.account.adapter.input.security;
 import com.tune_fun.v1.account.application.port.input.usecase.jwt.LoadUsernameFromTokenUseCase;
 import com.tune_fun.v1.account.application.port.input.usecase.jwt.ValidateAccessTokenUseCase;
 import com.tune_fun.v1.common.config.Uris;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.response.ExceptionResponse;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.util.ObjectUtil;
@@ -89,7 +89,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String getAccessTokenFromRequest(final HttpServletRequest request) {
         String accessToken = Optional.ofNullable(request.getHeader(AUTHORIZATION))
-                .orElseThrow(() -> new CommonApplicationException(MessageCode.EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND));
+                .orElseThrow(() -> new AppException(MessageCode.EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND));
 
         return removeBearerPrefix(accessToken);
     }

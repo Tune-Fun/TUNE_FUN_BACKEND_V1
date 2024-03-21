@@ -1,8 +1,7 @@
 package com.tune_fun.v1.common.aspect;
 
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.rate.TokenBucketResolver;
-import com.tune_fun.v1.common.response.MessageCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -10,6 +9,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+
+import static com.tune_fun.v1.common.response.MessageCode.TOO_MANY_REQUESTS;
 
 @Slf4j
 @Aspect
@@ -31,7 +32,7 @@ public class RateLimitAspect {
 
         if (tokenBucketResolver.checkBucketCounter(key)) return joinPoint.proceed();
 
-        throw new CommonApplicationException(MessageCode.TOO_MANY_REQUESTS);
+        throw new AppException(TOO_MANY_REQUESTS);
     }
 
 }

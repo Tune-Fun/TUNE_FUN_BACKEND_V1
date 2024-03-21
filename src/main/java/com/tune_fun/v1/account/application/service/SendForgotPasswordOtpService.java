@@ -4,7 +4,7 @@ import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.SendForgotPasswordOtpUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.otp.application.port.output.SaveOtpPort;
 import com.tune_fun.v1.otp.application.port.output.SendOtpPort;
@@ -49,6 +49,6 @@ public class SendForgotPasswordOtpService implements SendForgotPasswordOtpUseCas
     @Transactional(readOnly = true)
     public CurrentAccount getCurrentAccount(final AccountCommands.SendForgotPasswordOtp command) {
         return loadAccountPort.currentAccountInfo(command.username())
-                .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ACCOUNT_NOT_FOUND));
     }
 }

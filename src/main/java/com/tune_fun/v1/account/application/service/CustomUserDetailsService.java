@@ -1,7 +1,7 @@
 package com.tune_fun.v1.account.application.service;
 
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +24,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return loadAccountPort.loadCustomUserByUsername(username)
-                .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ACCOUNT_NOT_FOUND));
     }
 }

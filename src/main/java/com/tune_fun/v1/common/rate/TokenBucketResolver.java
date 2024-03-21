@@ -1,6 +1,6 @@
 package com.tune_fun.v1.common.rate;
 
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.redis.lettuce.cas.LettuceBasedProxyManager;
@@ -23,7 +23,7 @@ public class TokenBucketResolver {
     }
 
     public boolean checkBucketCounter(String key) {
-        if (!bucket(key).tryConsume(1)) throw new CommonApplicationException(TOO_MANY_REQUESTS);
+        if (!bucket(key).tryConsume(1)) throw new AppException(TOO_MANY_REQUESTS);
         return true;
     }
 

@@ -4,7 +4,7 @@ import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.LogoutUseCase;
 import com.tune_fun.v1.account.domain.state.CurrentUser;
 import com.tune_fun.v1.common.config.Uris;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.hexagon.WebAdapter;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
@@ -35,7 +35,7 @@ public class LogoutController {
     public ResponseEntity<Response<?>> logout(final HttpServletRequest request,
                                               @Valid @RequestBody final AccountCommands.Device device, @CurrentUser final User user) {
         String authorizationValue = Optional.ofNullable(request.getHeader(AUTHORIZATION))
-                .orElseThrow(() -> new CommonApplicationException(EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND));
+                .orElseThrow(() -> new AppException(EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND));
         String accessToken = StringUtil.removeBearerPrefix(authorizationValue);
 
         logoutUseCase.logout(accessToken, device, user);

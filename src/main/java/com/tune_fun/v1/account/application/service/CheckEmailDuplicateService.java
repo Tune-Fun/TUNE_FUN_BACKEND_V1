@@ -2,7 +2,7 @@ package com.tune_fun.v1.account.application.service;
 
 import com.tune_fun.v1.account.application.port.input.usecase.CheckEmailDuplicateUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
-import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.exception.AppException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class CheckEmailDuplicateService implements CheckEmailDuplicateUseCase {
     public void checkEmailDuplicate(final String email) {
         loadAccountPort.registeredAccountInfoByEmail(email)
                 .ifPresent(account -> {
-                    throw new CommonApplicationException(USER_POLICY_EMAIL_REGISTERED);
+                    throw new AppException(USER_POLICY_EMAIL_REGISTERED);
                 });
     }
 }
