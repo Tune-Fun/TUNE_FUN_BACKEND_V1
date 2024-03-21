@@ -1,5 +1,6 @@
 package com.tune_fun.v1.base.integration;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +43,7 @@ public class TestContainersConfig {
     /**
      * @see <a href="https://java.testcontainers.org/modules/databases/postgres/">PostgresContainer</a>
      */
+    @ConditionalOnMissingBean
     @Bean(initMethod = "start", destroyMethod = "stop")
     @ServiceConnection
     public static PostgreSQLContainer<?> postgresContainer() {
@@ -52,6 +54,7 @@ public class TestContainersConfig {
                 .withEnv("POSTGRES_PASSWORD", "test");
     }
 
+    @ConditionalOnMissingBean
     @Bean
     @DependsOn("postgresContainer")
     public static DataSource dataSource(PostgreSQLContainer<?> postgresSQLContainer) {
@@ -69,6 +72,7 @@ public class TestContainersConfig {
      * @see <a href="https://devs0n.tistory.com/48">Start Spring Data MongoDB - 5. Integration Test</a>
      */
 
+    @ConditionalOnMissingBean
     @Bean(initMethod = "start", destroyMethod = "stop")
     @ServiceConnection
     public static MongoDBContainer mongoDBContainer() {
@@ -85,6 +89,7 @@ public class TestContainersConfig {
     /**
      * @see <a href="https://www.testcontainers.org/modules/kafka/">KafkaContainer</a>
      */
+    @ConditionalOnMissingBean
     @Bean(initMethod = "start", destroyMethod = "stop")
     @ServiceConnection
     public static KafkaContainer kafkaContainer() {

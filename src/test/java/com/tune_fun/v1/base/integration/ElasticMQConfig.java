@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticmq.rest.sqs.SQSRestServer;
 import org.elasticmq.rest.sqs.SQSRestServerBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -20,16 +21,20 @@ import static software.amazon.awssdk.regions.Region.AP_NORTHEAST_2;
 
 @Slf4j
 @TestConfiguration
+@Profile("test_standalone")
 @RequiredArgsConstructor
 public class ElasticMQConfig {
 
     private final EventProperty eventProperty;
 
+    @Value("${elasticmq.port}")
+    private int elasticMqPort;
+
     private UriComponents elasticMQLocalSqsUri() {
         return UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("0.0.0.0")
-                .port(9324)
+                .port(elasticMqPort)
                 .build()
                 .encode();
     }
@@ -38,7 +43,7 @@ public class ElasticMQConfig {
     public SQSRestServer sqsRestServer() {
         return SQSRestServerBuilder
                 .withInterface("0.0.0.0")
-                .withPort(9324)
+                .withPort(elasticMqPort)
                 .start();
     }
 
