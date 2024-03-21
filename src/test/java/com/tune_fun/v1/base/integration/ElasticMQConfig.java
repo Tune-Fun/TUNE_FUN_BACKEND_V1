@@ -1,5 +1,7 @@
 package com.tune_fun.v1.base.integration;
 
+import com.tune_fun.v1.common.property.EventProperty;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticmq.rest.sqs.SQSRestServer;
 import org.elasticmq.rest.sqs.SQSRestServerBuilder;
@@ -18,7 +20,10 @@ import static software.amazon.awssdk.regions.Region.AP_NORTHEAST_2;
 
 @Slf4j
 @TestConfiguration
+@RequiredArgsConstructor
 public class ElasticMQConfig {
+
+    private final EventProperty eventProperty;
 
     private UriComponents elasticMQLocalSqsUri() {
         return UriComponentsBuilder.newInstance()
@@ -42,11 +47,14 @@ public class ElasticMQConfig {
     @Profile("test_standalone")
     public SqsAsyncClient sqsAsyncClient() {
         log.info("SqsAsyncClient is created for test_standalone");
-        return SqsAsyncClient.builder()
+        SqsAsyncClient sqsAsyncClient = SqsAsyncClient.builder()
                 .region(AP_NORTHEAST_2)
                 .credentialsProvider(getCredentialsProvider())
                 .endpointOverride(elasticMQLocalSqsUri().toUri())
                 .build();
+
+        eventProperty.sqs().values().forEach(sqs -> sqsAsyncClient.createQueue(r -> r.queueName(sqs.queueName())));
+        return sqsAsyncClient;
     }
 
     private static AwsCredentialsProvider getCredentialsProvider() {

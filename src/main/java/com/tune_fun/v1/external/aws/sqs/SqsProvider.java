@@ -6,6 +6,7 @@ import io.awspring.cloud.sqs.operations.SqsTemplate;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.messaging.MessageHeaders.CONTENT_TYPE;
@@ -23,7 +24,7 @@ public class SqsProvider {
                 .queue(queueName)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .payload(message)
-                .messageGroupId(sqsProducer.messageGroupId())
+//                .messageGroupId(sqsProducer.messageGroupId())
         );
     }
 
