@@ -27,17 +27,16 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
 class VerifyOtpControllerTest extends ControllerBaseTest {
 
-    @Autowired
-    private DummyService dummyService;
-
-    @Autowired
-    private ValidateAccessTokenUseCase validateAccessTokenUseCase;
-
     private static final FieldDescriptor[] REQUEST_DESCRIPTORS = new FieldDescriptor[]{
             fieldWithPath("username").description("아이디").attributes(constraint("NOT BLANK")),
             fieldWithPath("otp_type").description("비밀번호").attributes(constraint("NOT BLANK")),
             fieldWithPath("otp").description("OTP").attributes(constraint("NOT BLANK"))
     };
+
+    @Autowired
+    private DummyService dummyService;
+    @Autowired
+    private ValidateAccessTokenUseCase validateAccessTokenUseCase;
 
     @Transactional
     @Test

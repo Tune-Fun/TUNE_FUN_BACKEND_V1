@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.account.adapter.output.persistence.Role.CLIENT_0;
-import static com.tune_fun.v1.base.doc.RestDocsConfig.*;
+import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
 import static com.tune_fun.v1.common.util.StringUtil.randomAlphaNumericSymbol;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;

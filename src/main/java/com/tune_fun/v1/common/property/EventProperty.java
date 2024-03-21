@@ -10,17 +10,6 @@ public record EventProperty(
         Map<String, KafkaProducer> kafka
 ) {
 
-    public record SqsProducer (
-            String queueName,
-            String messageGroupId
-    ) {
-    }
-
-    public record KafkaProducer(
-            String topic
-    ) {
-    }
-
     public SqsProducer getSqsProducer(final String queueName) {
         return sqs.values().stream()
                 .filter(sqsProducer -> sqsProducer.queueName().equals(queueName))
@@ -43,6 +32,17 @@ public record EventProperty(
     public void validateKafkaTopic(final String topic) {
         if (kafka.values().stream().noneMatch(kafkaProducer -> kafkaProducer.topic().equals(topic)))
             throw new IllegalArgumentException("Invalid topic: " + topic);
+    }
+
+    public record SqsProducer(
+            String queueName,
+            String messageGroupId
+    ) {
+    }
+
+    public record KafkaProducer(
+            String topic
+    ) {
     }
 
 

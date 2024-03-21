@@ -9,7 +9,6 @@ import com.tune_fun.v1.common.property.FcmProperty;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.util.Date;

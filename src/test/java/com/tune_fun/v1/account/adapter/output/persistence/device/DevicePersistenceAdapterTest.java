@@ -28,9 +28,9 @@ class DevicePersistenceAdapterTest {
     void testSaveDevice() {
         // Arrange
         DeviceRepository deviceRepository = mock(DeviceRepository.class);
-        when(deviceRepository.save(Mockito.<DeviceJpaEntity>any())).thenReturn(new DeviceJpaEntity());
+        when(deviceRepository.save(Mockito.any())).thenReturn(new DeviceJpaEntity());
         Optional<DeviceJpaEntity> ofResult = Optional.of(new DeviceJpaEntity());
-        when(deviceRepository.findByDeviceToken(Mockito.<String>any())).thenReturn(ofResult);
+        when(deviceRepository.findByDeviceToken(Mockito.any())).thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
         AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
@@ -44,7 +44,7 @@ class DevicePersistenceAdapterTest {
 
         // Assert
         verify(deviceRepository).findByDeviceToken(eq("ABC123"));
-        verify(deviceRepository).save(Mockito.<DeviceJpaEntity>any());
+        verify(deviceRepository).save(Mockito.any());
     }
 
     /**
@@ -55,16 +55,16 @@ class DevicePersistenceAdapterTest {
         // Arrange
         AccountRepository accountRepository = mock(AccountRepository.class);
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
+        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
         AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
                 oauth2AccountRepository, new AccountMapperImpl());
 
         DeviceRepository deviceRepository = mock(DeviceRepository.class);
-        when(deviceRepository.save(Mockito.<DeviceJpaEntity>any())).thenReturn(new DeviceJpaEntity());
+        when(deviceRepository.save(Mockito.any())).thenReturn(new DeviceJpaEntity());
         Optional<DeviceJpaEntity> emptyResult = Optional.empty();
-        when(deviceRepository.findByDeviceToken(Mockito.<String>any())).thenReturn(emptyResult);
+        when(deviceRepository.findByDeviceToken(Mockito.any())).thenReturn(emptyResult);
         DevicePersistenceAdapter devicePersistenceAdapter = new DevicePersistenceAdapter(accountPersistenceAdapter,
                 deviceRepository, new DeviceMapperImpl());
 
@@ -74,7 +74,7 @@ class DevicePersistenceAdapterTest {
         // Assert
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
         verify(deviceRepository).findByDeviceToken(eq("ABC123"));
-        verify(deviceRepository).save(Mockito.<DeviceJpaEntity>any());
+        verify(deviceRepository).save(Mockito.any());
     }
 
     /**
@@ -85,7 +85,7 @@ class DevicePersistenceAdapterTest {
         // Arrange
         AccountRepository accountRepository = mock(AccountRepository.class);
         Optional<AccountJpaEntity> emptyResult = Optional.empty();
-        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
+        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(emptyResult);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
         AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
@@ -93,7 +93,7 @@ class DevicePersistenceAdapterTest {
 
         DeviceRepository deviceRepository = mock(DeviceRepository.class);
         Optional<DeviceJpaEntity> emptyResult2 = Optional.empty();
-        when(deviceRepository.findByDeviceToken(Mockito.<String>any())).thenReturn(emptyResult2);
+        when(deviceRepository.findByDeviceToken(Mockito.any())).thenReturn(emptyResult2);
         DevicePersistenceAdapter devicePersistenceAdapter = new DevicePersistenceAdapter(accountPersistenceAdapter,
                 deviceRepository, new DeviceMapperImpl());
 
@@ -112,10 +112,10 @@ class DevicePersistenceAdapterTest {
     void testDelete() {
         // Arrange
         DeviceRepository deviceRepository = mock(DeviceRepository.class);
-        doNothing().when(deviceRepository).delete(Mockito.<DeviceJpaEntity>any());
+        doNothing().when(deviceRepository).delete(Mockito.any());
         Optional<DeviceJpaEntity> ofResult = Optional.of(new DeviceJpaEntity());
-        when(deviceRepository.findByFcmTokenOrDeviceToken(Mockito.<String>any(), Mockito.<String>any(),
-                Mockito.<String>any())).thenReturn(ofResult);
+        when(deviceRepository.findByFcmTokenOrDeviceToken(Mockito.any(), Mockito.any(),
+                Mockito.any())).thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
         AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
@@ -129,7 +129,7 @@ class DevicePersistenceAdapterTest {
 
         // Assert
         verify(deviceRepository).findByFcmTokenOrDeviceToken(eq("janedoe"), eq("ABC123"), eq("ABC123"));
-        verify(deviceRepository).delete(Mockito.<DeviceJpaEntity>any());
+        verify(deviceRepository).delete(Mockito.any());
     }
 
     /**
@@ -141,8 +141,8 @@ class DevicePersistenceAdapterTest {
         // Arrange
         DeviceRepository deviceRepository = mock(DeviceRepository.class);
         Optional<DeviceJpaEntity> ofResult = Optional.of(new DeviceJpaEntity());
-        when(deviceRepository.findByFcmTokenOrDeviceToken(Mockito.<String>any(), Mockito.<String>any(),
-                Mockito.<String>any())).thenReturn(ofResult);
+        when(deviceRepository.findByFcmTokenOrDeviceToken(Mockito.any(), Mockito.any(),
+                Mockito.any())).thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
         AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,

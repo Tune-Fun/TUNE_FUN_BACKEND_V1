@@ -11,7 +11,6 @@ operation::verify-otp-success[snippets='http-request,http-response,request-field
 
 operation::verify-otp-fail-case1[snippets='http-request,http-response,request-fields,response-fields']
 
-
 === OTP 재전송
 
 ==== 성공

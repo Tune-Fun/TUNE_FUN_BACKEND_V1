@@ -46,6 +46,22 @@ public class LocalStackConfig {
                 .withServices(S3, SECRETSMANAGER);
     }
 
+    @DynamicPropertySource
+    public static void properties(DynamicPropertyRegistry registry,
+                                  SecretsManagerClient secretsManagerClient) throws JsonProcessingException {
+        SecretInfo secretInfo = new ObjectMapper().readValue(getSecretValue(secretsManagerClient).secretString(), SecretInfo.class);
+        registry.add("spring.mail.username", secretInfo::gmailUsername);
+        registry.add("spring.mail.password", secretInfo::gmailPassword);
+    }
+
+    private static GetSecretValueResponse getSecretValue(SecretsManagerClient secretsManagerClient) {
+        return secretsManagerClient.getSecretValue(b -> b.secretId(LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME));
+    }
+
+    private static String getMailSecret(String username, String password) {
+        return format("{\"gmail-username\": \"%s\", \"gmail-password\": \"%s\"}", username, password);
+    }
+
     @ConditionalOnMissingBean
     @Bean
     @DependsOn("localStackContainer")
@@ -88,22 +104,6 @@ public class LocalStackConfig {
     @NotNull
     private StaticCredentialsProvider getCredentialsProvider(LocalStackContainer localStackContainer) {
         return StaticCredentialsProvider.create(create(localStackContainer.getAccessKey(), localStackContainer.getSecretKey()));
-    }
-
-    @DynamicPropertySource
-    public static void properties(DynamicPropertyRegistry registry,
-                                  SecretsManagerClient secretsManagerClient) throws JsonProcessingException {
-        SecretInfo secretInfo = new ObjectMapper().readValue(getSecretValue(secretsManagerClient).secretString(), SecretInfo.class);
-        registry.add("spring.mail.username", secretInfo::gmailUsername);
-        registry.add("spring.mail.password", secretInfo::gmailPassword);
-    }
-
-    private static GetSecretValueResponse getSecretValue(SecretsManagerClient secretsManagerClient) {
-        return secretsManagerClient.getSecretValue(b -> b.secretId(LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME));
-    }
-
-    private static String getMailSecret(String username, String password) {
-        return format("{\"gmail-username\": \"%s\", \"gmail-password\": \"%s\"}", username, password);
     }
 
     private record SecretInfo(

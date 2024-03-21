@@ -60,6 +60,7 @@ operation::check-email-verified-success[snippets='http-request,http-response,res
 === 비밀번호 찾기 OTP 전송 API
 
 ==== 성공
+
 operation::send-forgot-password-otp-success[snippets='http-request,http-response,request-fields,response-fields']
 
 === 비밀번호 재설정 API

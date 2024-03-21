@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,8 +54,8 @@ class LogoutControllerTest extends ControllerBaseTest {
         AccountCommands.Device deviceCommand = new AccountCommands.Device(device.getFcmToken(), device.getDeviceToken());
 
         FieldDescriptor[] requestDescriptors = {
-            fieldWithPath("fcm_token").description("Fcm Token").attributes(constraint("NOT BLANK")),
-            fieldWithPath("device_token").description("Device Token").attributes(constraint("NOT BLANK"))
+                fieldWithPath("fcm_token").description("Fcm Token").attributes(constraint("NOT BLANK")),
+                fieldWithPath("device_token").description("Device Token").attributes(constraint("NOT BLANK"))
         };
 
         ResultActions resultActions = mockMvc.perform(

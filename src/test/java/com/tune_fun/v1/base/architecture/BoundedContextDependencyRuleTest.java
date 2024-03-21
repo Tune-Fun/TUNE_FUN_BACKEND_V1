@@ -7,22 +7,12 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public abstract class BoundedContextDependencyRuleTest {
 
-    public abstract String getBoundedContextPackage();
-
     private static final String ROOT_PACKAGE = "com.tune_fun.v1";
     private static final String DOMAIN_PACKAGE = "domain";
     private static final String APPLICATION_PACKAGE = "application";
     private static final String PORT_PACKAGE = "application.port";
     private static final String SERVICE_PACKAGE = "application.service";
     private static final String ADAPTER_PACKAGE = "adapter";
-
-
-    public void checkDependencyRule() {
-        String rootPackage = fullyBoundedContextPackage(getBoundedContextPackage());
-        String importPackages = rootPackage + "..";
-        JavaClasses classesToCheck = new ClassFileImporter().importPackages(importPackages);
-        assertDependency(rootPackage, classesToCheck);
-    }
 
     private static void assertDependency(String rootPackage, JavaClasses classesToCheck) {
         checkNoDependencyFromTo(rootPackage, DOMAIN_PACKAGE, APPLICATION_PACKAGE, classesToCheck);
@@ -53,6 +43,15 @@ public abstract class BoundedContextDependencyRuleTest {
 
     private static String fullyQualified(String rootPackage, String packageName) {
         return rootPackage + '.' + packageName + "..";
+    }
+
+    public abstract String getBoundedContextPackage();
+
+    public void checkDependencyRule() {
+        String rootPackage = fullyBoundedContextPackage(getBoundedContextPackage());
+        String importPackages = rootPackage + "..";
+        JavaClasses classesToCheck = new ClassFileImporter().importPackages(importPackages);
+        assertDependency(rootPackage, classesToCheck);
     }
 
 }

@@ -7,7 +7,6 @@ import com.tune_fun.v1.account.application.port.output.jwt.DeleteAccessTokenPort
 import com.tune_fun.v1.account.application.port.output.jwt.DeleteRefreshTokenPort;
 import com.tune_fun.v1.account.domain.behavior.DeleteDevice;
 import com.tune_fun.v1.common.hexagon.UseCase;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
