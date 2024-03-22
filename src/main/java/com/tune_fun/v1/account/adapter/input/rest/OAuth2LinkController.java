@@ -25,6 +25,12 @@ public class OAuth2LinkController {
     private final OAuth2LinkUseCase oAuth2LinkUseCase;
     private final ResponseMapper responseMapper;
 
+    /**
+     * Link Google OAuth2
+     * @param command 연결될 Google OAuth2 계정의 이메일
+     * @param user 연결할 사용자
+     * @return responseMapper.ok(MessageCode.SUCCESS_LINK_GOOGLE_OAUTH2)
+     */
     @PatchMapping(value = Uris.LINK_GOOGLE)
     public ResponseEntity<Response<BasePayload>> linkGoogle(@RequestBody @Valid final AccountCommands.OAuth2Link command, @CurrentUser final User user) {
         oAuth2LinkUseCase.linkGoogle(command, user);

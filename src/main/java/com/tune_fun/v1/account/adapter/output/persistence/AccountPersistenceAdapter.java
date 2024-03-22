@@ -3,11 +3,13 @@ package com.tune_fun.v1.account.adapter.output.persistence;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountRepository;
 import com.tune_fun.v1.account.application.port.output.*;
+import com.tune_fun.v1.account.application.port.output.oauth2.LoadOAuth2AccountPort;
 import com.tune_fun.v1.account.application.port.output.oauth2.SaveOAuth2AccountPort;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
+import com.tune_fun.v1.account.domain.state.RegisteredOAuth2Account;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,8 @@ import java.util.Optional;
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class AccountPersistenceAdapter implements
-        LoadAccountPort, SaveAccountPort, SaveOAuth2AccountPort,
+        LoadAccountPort, SaveAccountPort,
+        LoadOAuth2AccountPort, SaveOAuth2AccountPort,
         RecordLastLoginAtPort, RecordEmailVerifiedAtPort,
         UpdatePasswordPort, UpdateNicknamePort {
 
@@ -110,6 +113,12 @@ public class AccountPersistenceAdapter implements
 
                     oauth2AccountRepository.save(updatedAccount);
                 });
+    }
+
+    @Override
+    public Optional<RegisteredOAuth2Account> findByOAuth2ProviderAndEmail(final String oauth2Provider, final String email) {
+        return oauth2AccountRepository.findByOauth2ProviderAndEmailAndIsEnabledTrue(oauth2Provider, email)
+                .map(accountMapper::registeredOAuth2Account);
     }
 
     @Override

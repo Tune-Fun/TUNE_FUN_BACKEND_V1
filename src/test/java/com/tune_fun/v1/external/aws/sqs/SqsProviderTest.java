@@ -9,8 +9,6 @@ import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
@@ -20,7 +18,8 @@ import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 @IntegrationTest

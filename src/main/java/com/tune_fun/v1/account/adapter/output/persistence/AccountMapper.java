@@ -1,8 +1,10 @@
 package com.tune_fun.v1.account.adapter.output.persistence;
 
+import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountJpaEntity;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
+import com.tune_fun.v1.account.domain.state.RegisteredOAuth2Account;
 import com.tune_fun.v1.common.config.BaseMapperConfig;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -29,9 +31,10 @@ public abstract class AccountMapper {
     @Mapping(target = "roles", source = "roles", qualifiedByName = "roleValues")
     public abstract RegisteredAccount registeredAccountInfo(AccountJpaEntity accountJpaEntity);
 
+    public abstract RegisteredOAuth2Account registeredOAuth2Account(final OAuth2AccountJpaEntity oAuth2AccountJpaEntity);
+
     @Named("roleValues")
     public List<String> roleValues(List<Role> roles) {
         return Role.roleValues(roles);
     }
-
 }

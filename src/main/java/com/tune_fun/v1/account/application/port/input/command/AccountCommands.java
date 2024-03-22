@@ -74,10 +74,9 @@ public class AccountCommands {
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public record OAuth2Link(
-            @NotBlank(message = "{provider.not_blank}")
-            String provider,
             @NotBlank(message = "{username.not_blank}")
-            String username
+            @Email(message = "{email.format}")
+            String email
     ) {
     }
 }

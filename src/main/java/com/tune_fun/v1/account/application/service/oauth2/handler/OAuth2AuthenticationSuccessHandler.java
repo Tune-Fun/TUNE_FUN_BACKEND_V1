@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.HttpCookieOAuth2AuthorizationRequestPersistenceAdapter.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.tune_fun.v1.common.response.MessageCode.USER_POLICY_ACCOUNT_REGISTERED;
 
 @Slf4j
 @Component
