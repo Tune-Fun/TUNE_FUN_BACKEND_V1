@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     hikari:
-      max-lifetime: 60
+      max-lifetime: 17700
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -11,7 +11,7 @@ spring:
       hibernate:
         format_sql: false
         use_sql_comments: false
-        default_batch_fetch_size: 100
+        default_batch_fetch_size: 1000
   thymeleaf:
     enabled: false
   flyway:

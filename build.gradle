@@ -2,7 +2,7 @@ plugins {
     id 'idea'
     id 'java'
     id 'jacoco'
-    id 'org.springframework.boot' version '3.2.3'
+    id 'org.springframework.boot' version '3.2.4'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
     id 'com.epages.restdocs-api-spec' version '0.18.2'
@@ -169,20 +169,10 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:postgresql'
     testImplementation 'org.testcontainers:mongodb'
-    testImplementation 'org.testcontainers:kafka'
     testImplementation 'org.testcontainers:localstack'
     testImplementation 'org.elasticmq:elasticmq-server_3:1.5.7'
 
-
-    testAnnotationProcessor(
-            'org.springframework.boot:spring-boot-configuration-processor',
-            "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}",
-            "io.github.openfeign.querydsl:querydsl-mongodb:${queryDslVersion}",
-            'org.springframework.boot:spring-boot-starter-data-mongodb',
-            'org.projectlombok:lombok',
-            "org.mapstruct:mapstruct-processor:${mapstructVersion}",
-            'org.projectlombok:lombok-mapstruct-binding:0.2.0'
-    )
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 sourceSets {

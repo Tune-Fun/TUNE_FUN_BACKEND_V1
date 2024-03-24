@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -18,8 +19,13 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@SpringBootTest(classes = TuneFunV1Application.class, webEnvironment = RANDOM_PORT)
+@SpringBootTest(
+        classes = TuneFunV1Application.class,
+        properties = {"spring.main.allow-bean-definition-overriding=true"},
+        webEnvironment = RANDOM_PORT
+)
 @ContextConfiguration(initializers = RandomPortInitializer.class)
+@Testcontainers
 @Import({TestContainersConfig.class, LocalStackConfig.class, ElasticMQConfig.class, MailConfig.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test_standalone")

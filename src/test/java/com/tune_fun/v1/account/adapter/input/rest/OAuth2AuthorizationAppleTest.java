@@ -24,7 +24,7 @@ public class OAuth2AuthorizationAppleTest extends ControllerBaseTest {
     @Issue("T1-177")
     @Order(1)
     @DisplayName("애플 소셜 로그인 페이지 진입, 성공")
-    void oauth2AuthorizationGoogleSuccess() throws Exception {
+    void oauth2AuthorizationAppleSuccess() throws Exception {
 
         HeaderDescriptor[] responseHeaderDescriptor = {
                 headerWithName("Location").description("Redirect URL"),
