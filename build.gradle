@@ -169,10 +169,20 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:postgresql'
     testImplementation 'org.testcontainers:mongodb'
+    testImplementation 'org.testcontainers:kafka'
     testImplementation 'org.testcontainers:localstack'
     testImplementation 'org.elasticmq:elasticmq-server_3:1.5.7'
 
-    testAnnotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor(
+            'org.springframework.boot:spring-boot-configuration-processor',
+            "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}",
+            "io.github.openfeign.querydsl:querydsl-mongodb:${queryDslVersion}",
+            'org.springframework.boot:spring-boot-starter-data-mongodb',
+            'org.projectlombok:lombok',
+            "org.mapstruct:mapstruct-processor:${mapstructVersion}",
+            'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    )
+
 }
 
 sourceSets {
