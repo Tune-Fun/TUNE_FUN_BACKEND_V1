@@ -30,6 +30,8 @@ import static java.time.ZoneId.systemDefault;
 @RequiredArgsConstructor
 public class OAuth2RequestConverter implements Converter<OAuth2AuthorizationCodeGrantRequest, RequestEntity<?>> {
 
+    private static final String APPLE = "apple";
+
     private final OAuth2AuthorizationCodeGrantRequestEntityConverter defaultConverter = new OAuth2AuthorizationCodeGrantRequestEntityConverter();
     private final AppleProperty appleProperty;
     private final OAuth2ClientProperties oAuth2ClientProperties;
@@ -44,7 +46,7 @@ public class OAuth2RequestConverter implements Converter<OAuth2AuthorizationCode
         assert entity != null;
         MultiValueMap<String, String> params = (MultiValueMap<String, String>) entity.getBody();
 
-        if (registrationId.contains("apple"))
+        if (registrationId.contains(APPLE))
             params.set("client_secret", createAppleClientSecret());
 
         return new RequestEntity<>(params, entity.getHeaders(), entity.getMethod(), entity.getUrl());
@@ -54,12 +56,14 @@ public class OAuth2RequestConverter implements Converter<OAuth2AuthorizationCode
         Date expirationDate = Date.from(now().plusDays(30).atZone(systemDefault()).toInstant());
 
         return Jwts.builder()
-                .header().add("kid", appleProperty.keyId()).and()
+                .header().add("kid", appleProperty.keyId())
+                .and()
                 .issuer(appleProperty.teamId())
                 .issuedAt(new Date(currentTimeMillis()))
                 .expiration(expirationDate)
-                .audience().add("https://appleid.apple.com").and()
-                .subject(oAuth2ClientProperties.getRegistration().get("apple").getClientId())
+                .audience().add("https://appleid.apple.com")
+                .and()
+                .subject(oAuth2ClientProperties.getRegistration().get(APPLE).getClientId())
                 .signWith(getPrivateKey(), Jwts.SIG.ES256)
                 .compact();
     }

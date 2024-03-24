@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import static java.util.Collections.emptyList;
+
 public record OAuth2UserPrincipal(OAuth2UserInfo userInfo) implements OAuth2User, UserDetails {
 
     @Override
@@ -48,7 +50,7 @@ public record OAuth2UserPrincipal(OAuth2UserInfo userInfo) implements OAuth2User
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return emptyList();
     }
 
     @Override
