@@ -60,7 +60,7 @@ spring:
           ssl:
             enable: true
   config:
-    import: optional:aws-secretsmanager:tunefun_dev_secrets
+    import: aws-secretsmanager:tunefun_dev_secrets
   cloud:
     aws:
       secretsmanager:
@@ -101,6 +101,7 @@ spring:
           apple:
             authorization-uri: https://appleid.apple.com/auth/authorize?scope=name%20email&response_mode=form_post
             token-uri: https://appleid.apple.com/auth/token
+            jwk-set-uri: https://appleid.apple.com/auth/keys
           instagram:
             authorization-uri: https://api.instagram.com/oauth/authorize
             token-uri: https://api.instagram.com/oauth/access_token
@@ -126,9 +127,13 @@ otp:
   validity: 3m
 
 fcm:
-  sdk-file: tunefun-firebase-adminsdk.json
+  sdk-file: ${firebase-admin-credential}
   access-token: ${firebase-oauth2-token}
   project-id: tunefun-6edf5
+
+apple:
+  key-id: ${apple-key-id}
+  team-id: ${apple-team-id}
 
 spotify:
   client-id: ${spotify-client-id}

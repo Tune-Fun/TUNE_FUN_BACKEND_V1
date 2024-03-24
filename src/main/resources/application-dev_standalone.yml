@@ -59,7 +59,7 @@ spring:
           ssl:
             enable: true
   config:
-    import: optional:aws-secretsmanager:tunefun_dev_secrets
+    import: aws-secretsmanager:tunefun_dev_secrets
   cloud:
     aws:
       secretsmanager:
@@ -130,9 +130,13 @@ otp:
   validity: 3m
 
 fcm:
-  sdk-file: tunefun-firebase-adminsdk.json
+  sdk-file: ${firebase-admin-credential}
   access-token: ${firebase-oauth2-token}
   project-id: tunefun-6edf5
+
+apple:
+  key-id: ${apple-key-id}
+  team-id: ${apple-team-id}
 
 spotify:
   client-id: ${spotify-client-id}

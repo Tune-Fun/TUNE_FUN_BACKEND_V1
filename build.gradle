@@ -55,7 +55,7 @@ ext {
     set('springCloudVersion', "2023.0.0")
     set('testcontainersVersion', "1.19.7")
     set('awspringVersion', "3.1.0")
-    set('awssdkVersion', "2.25.11")
+    set('awssdkVersion', "2.25.16")
     set('jwtVersion', '0.12.5')
     set('queryDslVersion', "6.1")
     set('mapstructVersion', "1.5.5.Final")
@@ -109,6 +109,7 @@ dependencies {
     // Authentication, Authorization
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation "io.jsonwebtoken:jjwt-api:${jwtVersion}"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:${jwtVersion}"
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jwtVersion}"
