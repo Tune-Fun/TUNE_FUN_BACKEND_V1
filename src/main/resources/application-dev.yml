@@ -134,6 +134,7 @@ fcm:
 apple:
   key-id: ${apple-key-id}
   team-id: ${apple-team-id}
+  oauth2-key: ${apple-oauth2-key}
 
 spotify:
   client-id: ${spotify-client-id}

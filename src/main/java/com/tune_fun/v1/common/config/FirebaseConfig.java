@@ -1,6 +1,5 @@
 package com.tune_fun.v1.common.config;
 
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.tune_fun.v1.common.config.annotation.OnlyDevelopmentConfiguration;
@@ -11,8 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
+import static com.google.auth.oauth2.GoogleCredentials.fromStream;
+import static com.google.firebase.FirebaseApp.initializeApp;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
@@ -27,10 +27,10 @@ public class FirebaseConfig {
         if (FirebaseApp.getApps().isEmpty()) {
             FirebaseOptions options =
                     FirebaseOptions.builder()
-                            .setCredentials(GoogleCredentials.fromStream(credentialFileStream(fcmProperty.sdkFile())))
+                            .setCredentials(fromStream(credentialFileStream(fcmProperty.sdkFile())))
                             .setProjectId(fcmProperty.projectId())
                             .build();
-            FirebaseApp.initializeApp(options);
+            initializeApp(options);
             log.info("FirebaseApp initialized.");
         }
 
