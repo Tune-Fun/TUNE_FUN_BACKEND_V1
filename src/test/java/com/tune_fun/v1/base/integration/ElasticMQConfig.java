@@ -39,7 +39,7 @@ public class ElasticMQConfig {
                 .encode();
     }
 
-    @Bean(destroyMethod = "stopAndWait")
+    @Bean(initMethod = "startFuture", destroyMethod = "stopAndGetFuture")
     public SQSRestServer sqsRestServer() {
         return SQSRestServerBuilder
                 .withInterface("0.0.0.0")
@@ -47,7 +47,6 @@ public class ElasticMQConfig {
                 .start();
     }
 
-    @Primary
     @Bean
     @Profile("test_standalone")
     public SqsAsyncClient sqsAsyncClient() {

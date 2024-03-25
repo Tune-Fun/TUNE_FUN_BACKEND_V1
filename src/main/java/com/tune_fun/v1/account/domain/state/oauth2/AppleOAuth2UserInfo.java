@@ -22,11 +22,16 @@ public class AppleOAuth2UserInfo implements OAuth2UserInfo {
         this.attributes = attributes;
         this.id = (String) attributes.get("sub");
         this.email = (String) attributes.get("email");
-        this.name = (String) attributes.get("name");
-        this.firstName = (String) attributes.get("given_name");
-        this.lastName = (String) attributes.get("family_name");
-        this.nickname = null;
-        this.profileImageUrl = (String) attributes.get("picture");
+        this.name = parseName("firstName") + " " + parseName("lastName");
+        this.firstName = parseName("firstName");
+        this.lastName = parseName("lastName");
+        this.nickname = parseName("firstName") + " " + parseName("lastName");
+        this.profileImageUrl = null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private String parseName(final String attr) {
+        return ((Map<String, String>) attributes.get("name")).get(attr);
     }
 
     @Override

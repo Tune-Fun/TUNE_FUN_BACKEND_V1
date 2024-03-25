@@ -1,15 +1,18 @@
 package com.tune_fun.v1.base.integration;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.devtools.restart.RestartScope;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 
 import javax.sql.DataSource;
@@ -17,7 +20,7 @@ import javax.sql.DataSource;
 import static org.springframework.boot.jdbc.DataSourceBuilder.create;
 import static org.testcontainers.utility.DockerImageName.parse;
 
-@TestConfiguration(proxyBeanMethods = false)
+@TestConfiguration
 @Profile("test_standalone")
 public class TestContainersConfig {
 
@@ -29,69 +32,70 @@ public class TestContainersConfig {
     private static final DockerImageName MONGODB_IMAGE = parse("mongo:latest");
     private static final DockerImageName KAFKA_IMAGE = parse("confluentinc/cp-kafka:latest");
 
-    static {
-        GenericContainer<?> REDIS_CONTAINER =
-                new GenericContainer<>(REDIS_IMAGE)
-                        .withExposedPorts(6379)
-                        .withReuse(true);
+    @Container
+    static GenericContainer<?> REDIS_CONTAINER =
+            new GenericContainer<>(REDIS_IMAGE)
+                    .withExposedPorts(6379)
+                    .withReuse(true);
 
+    @Container
+    static PostgreSQLContainer<?> POSTGRES_CONTAINER =
+            new PostgreSQLContainer<>(POSTGRES_IMAGE)
+                    .withEnv(ENV_TZ, ASIA_SEOUL)
+                    .withEnv("POSTGRES_DB", "test")
+                    .withEnv("POSTGRES_USER", "test")
+                    .withEnv("POSTGRES_PASSWORD", "test")
+                    .withReuse(true);
+
+    @Container
+    static MongoDBContainer MONGODB_CONTAINER =
+            new MongoDBContainer(MONGODB_IMAGE)
+                    .withEnv(ENV_TZ, ASIA_SEOUL)
+                    .withEnv("MONGO_INITDB_ROOT_USERNAME", "test")
+                    .withEnv("MONGO_INITDB_ROOT_PASSWORD", "test")
+                    .withEnv("MAX_CONNECTION_IDLE_TIME_MS", "10000")
+                    .withSharding()
+                    .withExposedPorts(27017)
+                    .withReuse(true);
+
+    @Container
+    static KafkaContainer KAFKA_CONTAINER =
+            new KafkaContainer(KAFKA_IMAGE)
+                    .withExposedPorts(9092, 9093)
+                    .withReuse(true);
+
+    static {
+        POSTGRES_CONTAINER.start();
         REDIS_CONTAINER.start();
+        MONGODB_CONTAINER.start();
 
         System.setProperty("spring.data.redis.host", REDIS_CONTAINER.getHost());
         System.setProperty("spring.data.redis.port", REDIS_CONTAINER.getMappedPort(6379).toString());
     }
 
-    /**
-     * @see <a href="https://java.testcontainers.org/modules/databases/postgres/">PostgresContainer</a>
-     */
-    @ConditionalOnMissingBean
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    @ServiceConnection
-    public static PostgreSQLContainer<?> postgresContainer() {
-        return new PostgreSQLContainer<>(POSTGRES_IMAGE)
-                .withEnv(ENV_TZ, ASIA_SEOUL)
-                .withEnv("POSTGRES_DB", "test")
-                .withEnv("POSTGRES_USER", "test")
-                .withEnv("POSTGRES_PASSWORD", "test");
+    @DynamicPropertySource
+    static void setProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", () -> POSTGRES_CONTAINER.getJdbcUrl());
+        registry.add("spring.datasource.username", () -> POSTGRES_CONTAINER.getUsername());
+        registry.add("spring.datasource.password", () -> POSTGRES_CONTAINER.getPassword());
+
+        registry.add("spring.data.mongodb.host", () -> MONGODB_CONTAINER.getHost());
+        registry.add("spring.data.mongodb.port", () -> MONGODB_CONTAINER.getFirstMappedPort());
+        registry.add("spring.data.mongodb.username", () -> "test");
+        registry.add("spring.data.mongodb.password", () -> "test");
+
+        registry.add("spring.kafka.bootstrap-servers", () -> KAFKA_CONTAINER.getBootstrapServers());
+        registry.add("spring.kafka.consumer.auto-offset-reset", () -> "earliest");
     }
 
-    @ConditionalOnMissingBean
     @Bean
-    @DependsOn("postgresContainer")
-    public static DataSource dataSource(PostgreSQLContainer<?> postgresSQLContainer) {
+    @RestartScope
+    public DataSource dataSource() {
         return create()
-                .url(postgresSQLContainer.getJdbcUrl())
-                .username(postgresSQLContainer.getUsername())
-                .password(postgresSQLContainer.getPassword())
+                .url(POSTGRES_CONTAINER.getJdbcUrl())
+                .username(POSTGRES_CONTAINER.getUsername())
+                .password(POSTGRES_CONTAINER.getPassword())
                 .build();
-    }
-
-    /**
-     * @see <a href="https://www.testcontainers.org/modules/databases/mongodb/">MongoDBContainer</a>
-     * @see <a href="https://devs0n.tistory.com/48">Start Spring Data MongoDB - 5. Integration Test</a>
-     */
-
-    @ConditionalOnMissingBean
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    @ServiceConnection
-    public static MongoDBContainer mongoDBContainer() {
-        return new MongoDBContainer(MONGODB_IMAGE)
-                .withEnv(ENV_TZ, ASIA_SEOUL)
-                .withEnv("MONGO_INITDB_ROOT_USERNAME", "test")
-                .withEnv("MONGO_INITDB_ROOT_PASSWORD", "test")
-                .withSharding()
-                .withExposedPorts(27017);
-    }
-
-    /**
-     * @see <a href="https://www.testcontainers.org/modules/kafka/">KafkaContainer</a>
-     */
-    @ConditionalOnMissingBean
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    @ServiceConnection
-    public static KafkaContainer kafkaContainer() {
-        return new KafkaContainer(KAFKA_IMAGE)
-                .withExposedPorts(9092, 9093);
     }
 
 }

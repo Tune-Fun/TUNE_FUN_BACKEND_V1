@@ -7,7 +7,6 @@ import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
@@ -39,7 +38,6 @@ public class LocalStackConfig {
     private static final String LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME = "test_secret";
 
 
-    @ConditionalOnMissingBean
     @Bean(initMethod = "start", destroyMethod = "stop")
     public static LocalStackContainer localStackContainer() {
         return new LocalStackContainer(LOCAL_STACK_IMAGE)
@@ -62,7 +60,7 @@ public class LocalStackConfig {
         return format("{\"gmail-username\": \"%s\", \"gmail-password\": \"%s\"}", username, password);
     }
 
-    @ConditionalOnMissingBean
+
     @Bean
     @DependsOn("localStackContainer")
     protected S3Client s3Client(LocalStackContainer localStackContainer) {
@@ -76,8 +74,6 @@ public class LocalStackConfig {
         return s3Client;
     }
 
-    @Primary
-    @ConditionalOnMissingBean
     @Bean
     @DependsOn({"localStackContainer", "greenMail"})
     protected SecretsManagerClient secretsManagerClient(

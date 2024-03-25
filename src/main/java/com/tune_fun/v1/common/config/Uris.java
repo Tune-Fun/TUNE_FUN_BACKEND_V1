@@ -17,8 +17,8 @@ public class Uris {
     public static final String REGISTER = API_V1_ROOT + "/register";
     public static final String LOGIN = API_V1_ROOT + "/login";
     public static final String LOGIN_GOOGLE = "/oauth2/authorization/google";
-    public static final String LOGIN_APPLE = API_V1_ROOT + "/login/apple";
-    public static final String LOGIN_INSTAGRAM = API_V1_ROOT + "/login/instagram";
+    public static final String LOGIN_APPLE = "/oauth2/authorization/apple";
+    public static final String LOGIN_INSTAGRAM = "/oauth2/authorization/instagram";
     public static final String LOGOUT = API_V1_ROOT + "/logout";
     public static final String REFRESH = API_V1_ROOT + "/refresh";
     public static final String SET_NEW_PASSWORD = API_V1_ROOT + "/set-new-password";
@@ -79,6 +79,9 @@ public class Uris {
             FIND_USERNAME,
             REGISTER,
             LOGIN,
+            LOGIN_GOOGLE,
+            LOGIN_APPLE,
+            LOGIN_INSTAGRAM,
             REFRESH,
             FORGOT_PASSWORD_SEND_OTP,
             RESEND_OTP,

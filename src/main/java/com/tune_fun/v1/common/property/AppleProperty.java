@@ -2,5 +2,6 @@ package com.tune_fun.v1.common.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("spotify")
-public record SpotifyProperty(String clientId, String clientSecret) {}
+@ConfigurationProperties("apple")
+public record AppleProperty(String keyId, String teamId, String oauth2Key) {
+}
