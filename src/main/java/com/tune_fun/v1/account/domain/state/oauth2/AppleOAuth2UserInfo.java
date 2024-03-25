@@ -1,8 +1,11 @@
 package com.tune_fun.v1.account.domain.state.oauth2;
 
+import com.tune_fun.v1.common.util.StringUtil;
 import lombok.Getter;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
+
 
 @Getter
 public class AppleOAuth2UserInfo implements OAuth2UserInfo {
@@ -17,21 +20,16 @@ public class AppleOAuth2UserInfo implements OAuth2UserInfo {
     private final String nickname;
     private final String profileImageUrl;
 
-    public AppleOAuth2UserInfo(String accessToken, Map<String, Object> attributes) {
+    public AppleOAuth2UserInfo(String accessToken, Map<String, Object> attributes) throws NoSuchAlgorithmException {
         this.accessToken = accessToken;
         this.attributes = attributes;
         this.id = (String) attributes.get("sub");
         this.email = (String) attributes.get("email");
-        this.name = parseName("firstName") + " " + parseName("lastName");
-        this.firstName = parseName("firstName");
-        this.lastName = parseName("lastName");
-        this.nickname = parseName("firstName") + " " + parseName("lastName");
+        this.name = (String) attributes.get("email");
+        this.firstName = null;
+        this.lastName = null;
+        this.nickname = StringUtil.generateRandomNickname() + StringUtil.randomNumeric(3);
         this.profileImageUrl = null;
-    }
-
-    @SuppressWarnings("unchecked")
-    private String parseName(final String attr) {
-        return ((Map<String, String>) attributes.get("name")).get(attr);
     }
 
     @Override

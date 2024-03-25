@@ -41,7 +41,6 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
     @Comment("고유번호")
     private String uuid;
 
-    @Convert(converter = EncryptConverter.class)
     @Size(max = 255)
     @Column(name = "username", nullable = false)
     @Comment("아이디")
@@ -53,13 +52,11 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
     @Comment("비밀번호")
     private String password;
 
-    @Convert(converter = EncryptConverter.class)
     @NotNull
     @Column(name = "email")
     @Comment("이메일")
     private String email;
 
-    @Convert(converter = EncryptConverter.class)
     @NotNull
     @Column(name = "nickname", nullable = false)
     @Comment("닉네임")

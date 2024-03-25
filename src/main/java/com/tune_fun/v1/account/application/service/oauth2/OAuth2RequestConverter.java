@@ -4,9 +4,10 @@ import com.tune_fun.v1.common.property.AppleProperty;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
-import org.bouncycastle.util.io.pem.PemReader;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.RequestEntity;
@@ -15,17 +16,16 @@ import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCo
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.security.PrivateKey;
 import java.util.Date;
 
 import static java.lang.System.currentTimeMillis;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.LocalDateTime.now;
 import static java.time.ZoneId.systemDefault;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OAuth2RequestConverter implements Converter<OAuth2AuthorizationCodeGrantRequest, RequestEntity<?>> {
@@ -36,6 +36,7 @@ public class OAuth2RequestConverter implements Converter<OAuth2AuthorizationCode
     private final AppleProperty appleProperty;
     private final OAuth2ClientProperties oAuth2ClientProperties;
 
+    // TODO : APPLE 로그인시, OAuth2AuthorizationCodeGrantRequest.authorizationExchange.authorizationResponse 에서 username을 가지고 오지 못함
     @SneakyThrows
     @SuppressWarnings("unchecked")
     @Override
@@ -69,12 +70,11 @@ public class OAuth2RequestConverter implements Converter<OAuth2AuthorizationCode
     }
 
     public PrivateKey getPrivateKey() throws IOException {
-        byte[] oauth2KeyByte = appleProperty.oauth2Key().getBytes(UTF_8);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(oauth2KeyByte);
-        PemReader reader = new PemReader(new InputStreamReader(byteArrayInputStream));
-
-        PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(reader.readPemObject());
+        PEMParser pemParser = new PEMParser(new StringReader(appleProperty.oauth2Key()));
         JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
+        PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(pemParser.readObject());
+
+        pemParser.close();
         return converter.getPrivateKey(privateKeyInfo);
     }
 

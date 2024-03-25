@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoClientFactoryBean;
 
 @Configuration
-@Profile("dev_standalone")
+@Profile("dev_standalone | dev")
 @RequiredArgsConstructor
 public class SpringDataConfig {
 
