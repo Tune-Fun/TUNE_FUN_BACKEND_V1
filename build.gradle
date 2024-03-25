@@ -145,6 +145,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'com.c4-soft.springaddons:spring-addons-oauth2-test:7.6.3'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.apache.commons:commons-lang3:3.13.0'

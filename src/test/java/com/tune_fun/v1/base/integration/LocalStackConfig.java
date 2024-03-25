@@ -74,8 +74,6 @@ public class LocalStackConfig {
         return s3Client;
     }
 
-    @Primary
-
     @Bean
     @DependsOn({"localStackContainer", "greenMail"})
     protected SecretsManagerClient secretsManagerClient(
