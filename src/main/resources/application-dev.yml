@@ -99,7 +99,7 @@ spring:
               - user_media
         provider:
           apple:
-            authorization-uri: https://appleid.apple.com/auth/authorize?scope=name%20email&response_mode=form_post
+            authorization-uri: https://appleid.apple.com/auth/authorize?response_mode=form_post
             token-uri: https://appleid.apple.com/auth/token
             jwk-set-uri: https://appleid.apple.com/auth/keys
           instagram:
