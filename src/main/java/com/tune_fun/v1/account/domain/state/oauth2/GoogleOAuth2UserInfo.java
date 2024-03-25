@@ -1,7 +1,9 @@
 package com.tune_fun.v1.account.domain.state.oauth2;
 
+import com.tune_fun.v1.common.util.StringUtil;
 import lombok.Getter;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 @Getter
@@ -17,7 +19,7 @@ public class GoogleOAuth2UserInfo implements OAuth2UserInfo {
     private final String nickname;
     private final String profileImageUrl;
 
-    public GoogleOAuth2UserInfo(String accessToken, Map<String, Object> attributes) {
+    public GoogleOAuth2UserInfo(String accessToken, Map<String, Object> attributes) throws NoSuchAlgorithmException {
         this.accessToken = accessToken;
         this.attributes = attributes;
         this.id = (String) attributes.get("sub");
@@ -25,7 +27,7 @@ public class GoogleOAuth2UserInfo implements OAuth2UserInfo {
         this.name = (String) attributes.get("name");
         this.firstName = (String) attributes.get("given_name");
         this.lastName = (String) attributes.get("family_name");
-        this.nickname = null;
+        this.nickname = StringUtil.generateRandomNickname() + StringUtil.randomNumeric(3);
         this.profileImageUrl = (String) attributes.get("picture");
     }
 

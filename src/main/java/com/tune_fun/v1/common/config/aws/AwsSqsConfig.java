@@ -15,7 +15,7 @@ import static software.amazon.awssdk.regions.Region.AP_NORTHEAST_2;
 @Configuration
 public class AwsSqsConfig {
 
-    @Bean
+    @Bean("sqsAsyncClient")
     @Profile("dev_standalone")
     public SqsAsyncClient sqsAsyncClient() {
         log.info("SqsAsyncClient is created for dev_standalone");
@@ -25,9 +25,9 @@ public class AwsSqsConfig {
                 .build();
     }
 
-    @Bean
+    @Bean("sqsAsyncClient")
     @Profile("dev | staging | prod")
-    public SqsAsyncClient amazonS3ClientStaging() {
+    public SqsAsyncClient amazonAsyncClientStaging() {
         log.info("SqsAsyncClient is created for dev, staging, prod");
         return SqsAsyncClient.builder()
                 .region(AP_NORTHEAST_2)

@@ -119,7 +119,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Transactional
     public CurrentAccount saveBaseAccount(final OAuth2UserPrincipal principal) {
         SaveAccount saveAccountBehavior = new SaveAccount(StringUtil.uuid(), principal.userInfo().getEmail(),
-                "social", principal.userInfo().getEmail(), principal.userInfo().getName(),
+                "social", principal.userInfo().getEmail(), principal.userInfo().getNickname(),
                 true, true, true);
         return saveAccountPort.saveAccount(saveAccountBehavior);
     }
@@ -128,7 +128,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void saveOAuth2Account(final OAuth2UserPrincipal principal, final CurrentAccount currentAccount) {
         SaveOAuth2Account saveOAuth2AccountBehavior = new SaveOAuth2Account(
                 principal.userInfo().getEmail(),
-                principal.userInfo().getName(),
+                principal.userInfo().getNickname(),
                 principal.userInfo().getProvider().name(),
                 currentAccount.username()
         );
