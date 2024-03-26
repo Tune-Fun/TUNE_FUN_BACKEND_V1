@@ -33,13 +33,13 @@ public class ElasticMQConfig {
     private UriComponents elasticMQLocalSqsUri() {
         return UriComponentsBuilder.newInstance()
                 .scheme("http")
-                .host("0.0.0.0")
+                .host("localhost")
                 .port(elasticMqPort)
                 .build()
                 .encode();
     }
 
-    @Bean(initMethod = "startFuture", destroyMethod = "stopAndGetFuture")
+    @Bean(destroyMethod = "stopAndWait")
     public SQSRestServer sqsRestServer() {
         return SQSRestServerBuilder
                 .withInterface("0.0.0.0")
