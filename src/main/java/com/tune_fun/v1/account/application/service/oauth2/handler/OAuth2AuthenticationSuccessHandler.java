@@ -25,12 +25,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.HttpCookieOAuth2AuthorizationRequestPersistenceAdapter.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
 @Slf4j
 @Component
@@ -50,13 +50,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-
-        String targetUrl;
-
-        targetUrl = determineTargetUrl(request, response, authentication);
+        String targetUrl = determineTargetUrl(request, response, authentication);
 
         if (response.isCommitted()) {
-            logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
+            log.error("Response has already been committed. Unable to redirect to {}", targetUrl);
             return;
         }
 
@@ -71,13 +68,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map(Cookie::getValue);
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        OAuth2UserPrincipal principal = getOAuth2UserPrincipal(authentication);
+        Optional<OAuth2UserPrincipal> principalOptional = getOAuth2UserPrincipal(authentication);
 
-        if (principal == null) {
-            return UriComponentsBuilder.fromUriString(targetUrl)
-                    .queryParam("error", "Login failed")
-                    .build().toUriString();
-        }
+        if (principalOptional.isEmpty()) return fromUriString(targetUrl)
+                .queryParam("error", "Login failed")
+                .build().toUriString();
+
+        OAuth2UserPrincipal principal = principalOptional.get();
 
         checkRegisteredAccount(principal);
         CurrentAccount currentAccount = saveBaseAccount(principal);
@@ -89,18 +86,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String accessToken = createAccessTokenPort.createAccessToken(saveJwtTokenBehavior);
         String refreshToken = createRefreshTokenPort.createRefreshToken(saveJwtTokenBehavior);
 
-        return UriComponentsBuilder.fromUriString(targetUrl)
+        return fromUriString(targetUrl)
                 .queryParam("access_token", accessToken)
                 .queryParam("refresh_token", refreshToken)
                 .build().toUriString();
 
     }
 
-    private OAuth2UserPrincipal getOAuth2UserPrincipal(Authentication authentication) {
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof OAuth2UserPrincipal) return (OAuth2UserPrincipal) principal;
-        return null;
+    private Optional<OAuth2UserPrincipal> getOAuth2UserPrincipal(Authentication authentication) {
+        return Optional.ofNullable(authentication.getPrincipal())
+                .filter(principal -> principal instanceof OAuth2UserPrincipal)
+                .map(OAuth2UserPrincipal.class::cast);
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {

@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 @Component
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class HttpCookieOAuth2AuthorizationRequestPersistenceAdapter
+public class OAuth2AuthorizationRequestPersistenceAdapter
         implements AuthorizationRequestRepository<OAuth2AuthorizationRequest>, RemoveAuthorizationRequestCookiePort {
 
     public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
