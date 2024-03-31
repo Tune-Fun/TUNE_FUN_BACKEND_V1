@@ -2,6 +2,9 @@ package com.tune_fun.v1.common.config;
 
 public class Uris {
 
+    private Uris() {
+    }
+
     public static final String MESSAGE_CODES = "/message-codes";
     public static final String CUSTOM_RESPONSE_EXAMPLE = "/custom-response-example";
     public static final String CUSTOM_EXCEPTION_RESPONSE_EXAMPLE = "/custom-exception-response-example";
@@ -16,9 +19,19 @@ public class Uris {
     public static final String FIND_USERNAME = API_V1_ROOT + "/find-username";
     public static final String REGISTER = API_V1_ROOT + "/register";
     public static final String LOGIN = API_V1_ROOT + "/login";
-    public static final String LOGIN_GOOGLE = "/oauth2/authorization/google";
-    public static final String LOGIN_APPLE = "/oauth2/authorization/apple";
-    public static final String LOGIN_INSTAGRAM = "/oauth2/authorization/instagram";
+    public static final String OAUTH2_AUTHORIZATION_ROOT = "/oauth2/authorization";
+    public static final String OAUTH2_GOOGLE_ROOT = OAUTH2_AUTHORIZATION_ROOT + "/google";
+    public static final String OAUTH2_APPLE_ROOT = OAUTH2_AUTHORIZATION_ROOT + "/apple";
+    public static final String OAUTH2_INSTAGRAM_ROOT = OAUTH2_AUTHORIZATION_ROOT + "/instagram";
+    public static final String OAUTH2_REGISTER_GOOGLE = OAUTH2_GOOGLE_ROOT + "?mode=register";
+    public static final String OAUTH2_LOGIN_GOOGLE = OAUTH2_GOOGLE_ROOT + "?mode=login";
+    public static final String OAUTH2_UNLINK_GOOGLE = OAUTH2_GOOGLE_ROOT + "?mode=unlink";
+    public static final String OAUTH2_REGISTER_APPLE = OAUTH2_APPLE_ROOT + "?mode=register";
+    public static final String OAUTH2_LOGIN_APPLE = OAUTH2_APPLE_ROOT + "?mode=login";
+    public static final String OAUTH2_UNLINK_APPLE = OAUTH2_APPLE_ROOT + "?mode=unlink";
+    public static final String OAUTH2_REGISTER_INSTAGRAM = OAUTH2_INSTAGRAM_ROOT + "?mode=register";
+    public static final String OAUTH2_LOGIN_INSTAGRAM = OAUTH2_INSTAGRAM_ROOT + "?mode=login";
+    public static final String OAUTH2_UNLINK_INSTAGRAM = OAUTH2_INSTAGRAM_ROOT + "?mode=unlink";
     public static final String LOGOUT = API_V1_ROOT + "/logout";
     public static final String REFRESH = API_V1_ROOT + "/refresh";
     public static final String SET_NEW_PASSWORD = API_V1_ROOT + "/set-new-password";
@@ -79,9 +92,9 @@ public class Uris {
             FIND_USERNAME,
             REGISTER,
             LOGIN,
-            LOGIN_GOOGLE,
-            LOGIN_APPLE,
-            LOGIN_INSTAGRAM,
+            OAUTH2_GOOGLE_ROOT,
+            OAUTH2_APPLE_ROOT,
+            OAUTH2_INSTAGRAM_ROOT,
             REFRESH,
             FORGOT_PASSWORD_SEND_OTP,
             RESEND_OTP,

@@ -5,17 +5,17 @@ import com.tune_fun.v1.account.application.port.output.SaveAccountPort;
 import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort;
 import com.tune_fun.v1.account.application.port.output.jwt.CreateRefreshTokenPort;
 import com.tune_fun.v1.account.application.port.output.oauth2.*;
-import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserPrincipal;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
+import com.tune_fun.v1.account.domain.state.oauth2.OAuth2AuthorizationRequestMode;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider;
+import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserInfo;
+import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserPrincipal;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.exception.OAuth2AuthenticationProcessingException;
 import com.tune_fun.v1.common.hexagon.UseCase;
-import com.tune_fun.v1.common.response.MessageCode;
-import com.tune_fun.v1.common.util.CookieUtil;
 import com.tune_fun.v1.common.util.StringUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,8 +32,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.MODE_PARAM_COOKIE_NAME;
 import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2AuthorizationRequestMode.fromQueryParameter;
 import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider.APPLE;
+import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
+import static com.tune_fun.v1.common.response.MessageCode.USER_POLICY_ACCOUNT_REGISTERED;
+import static com.tune_fun.v1.common.util.CookieUtil.getCookie;
+import static com.tune_fun.v1.common.util.StringUtil.getFlattenAuthorities;
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
 @Slf4j
@@ -41,6 +47,9 @@ import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 @UseCase
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+
+    private static final String ACCESS_TOKEN_QUERY_PARAMETER = "access_token";
+    private static final String REFRESH_TOKEN_QUERY_PARAMETER = "refresh_token";
 
     private final RemoveAuthorizationRequestCookiePort removeAuthorizationRequestCookiePort;
 
@@ -75,33 +84,68 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Transactional
     public String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
                                      Authentication authentication) {
-
-        Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map(Cookie::getValue);
+        Optional<String> redirectUri = getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map(Cookie::getValue);
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         Optional<OAuth2UserPrincipal> principalOptional = getOAuth2UserPrincipal(authentication);
+        Optional<String> modeOptional = getCookie(request, MODE_PARAM_COOKIE_NAME).map(Cookie::getValue);
 
-        if (principalOptional.isEmpty()) return fromUriString(targetUrl)
-                .queryParam("error", "Login failed")
-                .build().toUriString();
+        if (principalOptional.isEmpty() || modeOptional.isEmpty())
+            return fromUriString(targetUrl)
+                    .queryParam("error", "Login failed")
+                    .build().toUriString();
 
         OAuth2UserPrincipal principal = principalOptional.get();
+        OAuth2AuthorizationRequestMode mode = fromQueryParameter(modeOptional.get());
 
+        return switch (mode) {
+            case LOGIN -> login(principal, targetUrl);
+            case REGISTER -> register(principal, targetUrl);
+            case UNLINK -> unlink(principal, targetUrl);
+        };
+    }
+
+    @Transactional
+    public String register(final OAuth2UserPrincipal principal, final String targetUrl) {
         checkRegisteredAccount(principal);
         CurrentAccount currentAccount = saveBaseAccount(principal);
         saveOAuth2Account(principal, currentAccount);
 
-        String authorities = StringUtil.getFlattenAuthorities(principal.getAuthorities());
+        return createJwtTokenAndRedirectUri(principal, targetUrl);
+    }
+
+    @Transactional
+    public String login(final OAuth2UserPrincipal principal, final String targetUrl) {
+        checkUnregisteredAccount(principal);
+
+        return createJwtTokenAndRedirectUri(principal, targetUrl);
+    }
+
+    @NotNull
+    private String createJwtTokenAndRedirectUri(final OAuth2UserPrincipal principal, final String targetUrl) {
+        String authorities = getFlattenAuthorities(principal.getAuthorities());
 
         SaveJwtToken saveJwtTokenBehavior = new SaveJwtToken(principal.getUsername(), authorities);
         String accessToken = createAccessTokenPort.createAccessToken(saveJwtTokenBehavior);
         String refreshToken = createRefreshTokenPort.createRefreshToken(saveJwtTokenBehavior);
 
         return fromUriString(targetUrl)
-                .queryParam("access_token", accessToken)
-                .queryParam("refresh_token", refreshToken)
+                .queryParam(ACCESS_TOKEN_QUERY_PARAMETER, accessToken)
+                .queryParam(REFRESH_TOKEN_QUERY_PARAMETER, refreshToken)
                 .build().toUriString();
+    }
 
+    @Transactional
+    public String unlink(OAuth2UserPrincipal principal, String targetUrl) {
+        OAuth2UserInfo oAuth2UserInfo = principal.userInfo();
+
+        String accessToken = oAuth2UserInfo.getAccessToken();
+        OAuth2Provider provider = oAuth2UserInfo.getProvider();
+
+        unlinkRequest(provider, accessToken);
+        // TODO : 탈퇴 영속성 로직 구현 필요
+
+        return fromUriString(targetUrl).build().toUriString();
     }
 
     private Optional<OAuth2UserPrincipal> getOAuth2UserPrincipal(Authentication authentication) {
@@ -119,8 +163,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void checkRegisteredAccount(final OAuth2UserPrincipal principal) {
         loadAccountPort.registeredAccountInfoByUsername(principal.userInfo().getEmail())
                 .ifPresent(account -> {
-                    throw new CommonApplicationException(MessageCode.USER_POLICY_ACCOUNT_REGISTERED);
+                    throw new CommonApplicationException(USER_POLICY_ACCOUNT_REGISTERED);
                 });
+    }
+
+    @Transactional
+    public void checkUnregisteredAccount(final OAuth2UserPrincipal principal) {
+        loadAccountPort.registeredAccountInfoByUsername(principal.userInfo().getEmail())
+                .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
     }
 
     @Transactional
@@ -142,7 +192,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         saveOAuth2AccountPort.saveOAuth2Account(saveOAuth2AccountBehavior);
     }
 
-    public void unlink(final OAuth2Provider provider, final String accessToken) {
+    public void unlinkRequest(final OAuth2Provider provider, final String accessToken) {
         if (accessToken == null || accessToken.trim().isEmpty())
             throw new OAuth2AuthenticationProcessingException("Access token must not be null or empty");
 

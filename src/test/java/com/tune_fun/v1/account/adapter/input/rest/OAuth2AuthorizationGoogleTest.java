@@ -32,7 +32,7 @@ public class OAuth2AuthorizationGoogleTest extends ControllerBaseTest {
         };
 
         mockMvc.perform(
-                        get(Uris.LOGIN_GOOGLE)
+                        get(Uris.OAUTH2_LOGIN_GOOGLE)
                 )
                 .andExpect(status().isFound())
                 .andExpectAll(

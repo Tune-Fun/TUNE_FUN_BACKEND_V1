@@ -32,7 +32,7 @@ public class OAuth2AuthorizationAppleTest extends ControllerBaseTest {
         };
 
         mockMvc.perform(
-                        get(Uris.LOGIN_APPLE)
+                        get(Uris.OAUTH2_LOGIN_APPLE)
                 )
                 .andExpect(status().isFound())
                 .andExpectAll(
