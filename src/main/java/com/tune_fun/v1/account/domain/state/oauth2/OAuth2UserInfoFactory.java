@@ -1,6 +1,6 @@
 package com.tune_fun.v1.account.domain.state.oauth2;
 
-import com.tune_fun.v1.account.application.service.oauth2.OAuth2AuthenticationProcessingException;
+import com.tune_fun.v1.common.exception.OAuth2AuthenticationProcessingException;
 import lombok.experimental.UtilityClass;
 
 import java.security.NoSuchAlgorithmException;

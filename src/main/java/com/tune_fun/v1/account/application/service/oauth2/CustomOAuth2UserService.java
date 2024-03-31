@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserInfo;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserInfoFactory;
+import com.tune_fun.v1.common.exception.OAuth2AuthenticationProcessingException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

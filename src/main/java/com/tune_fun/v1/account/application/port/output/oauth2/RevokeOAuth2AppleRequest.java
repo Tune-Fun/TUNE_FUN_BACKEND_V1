@@ -1,4 +1,4 @@
-package com.tune_fun.v1.account.application.service.oauth2.unlink;
+package com.tune_fun.v1.account.application.port.output.oauth2;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
