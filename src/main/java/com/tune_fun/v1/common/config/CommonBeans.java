@@ -1,6 +1,10 @@
 package com.tune_fun.v1.common.config;
 
+import com.tune_fun.v1.account.application.port.output.oauth2.RevokeAppleOAuth2Port;
+import com.tune_fun.v1.account.application.port.output.oauth2.RevokeGoogleOAuth2Port;
+import com.tune_fun.v1.external.http.RetrofitClient;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -19,6 +23,7 @@ import org.zalando.logbook.core.Conditions;
 import org.zalando.logbook.json.PrettyPrintingJsonBodyFilter;
 
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 import static com.tune_fun.v1.common.config.Uris.NOT_LOGGING_URIS;
@@ -115,6 +120,16 @@ public class CommonBeans {
                 .bodyFilter(new PrettyPrintingJsonBodyFilter())
                 .condition(excludePredicate)
                 .build();
+    }
+
+    @Bean
+    public RevokeGoogleOAuth2Port revokeGoogleOAuth2Port() {
+        return RetrofitClient.getGoogleInstance().create(RevokeGoogleOAuth2Port.class);
+    }
+
+    @Bean
+    public RevokeAppleOAuth2Port revokeAppleOAuth2Port() {
+        return RetrofitClient.getAppleInstance().create(RevokeAppleOAuth2Port.class);
     }
 
 }

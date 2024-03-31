@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import java.util.concurrent.TimeUnit;
+
 public class RetrofitClient {
 
     private RetrofitClient() {
@@ -26,11 +28,18 @@ public class RetrofitClient {
     }
 
     private static Retrofit getRetrofit(@NotNull final String baseUrl) {
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(JacksonConverterFactory.create())
-                .client(okHttpClient)
+                .client(getOkHttpClient())
+                .build();
+    }
+
+    private static OkHttpClient getOkHttpClient() {
+        return new OkHttpClient.Builder()
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
                 .build();
     }
 
