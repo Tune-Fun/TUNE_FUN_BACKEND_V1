@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
+
+import static com.tune_fun.v1.common.util.CookieUtil.*;
+import static org.springframework.util.StringUtils.hasText;
 
 
 @Component
@@ -20,6 +22,7 @@ public class OAuth2AuthorizationRequestPersistenceAdapter
 
     public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
     public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
+    public static final String MODE_PARAM_COOKIE_NAME = "mode";
     public static final int COOKIE_EXPIRE_SECONDS = 180;
 
     @Override
@@ -33,24 +36,14 @@ public class OAuth2AuthorizationRequestPersistenceAdapter
     public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request,
                                          HttpServletResponse response) {
         if (authorizationRequest == null) {
-            CookieUtil.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
-            CookieUtil.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
+            remove(request, response);
             return;
         }
 
-        CookieUtil.addCookie(response,
-                OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME,
-                CookieUtil.serialize(authorizationRequest),
-                COOKIE_EXPIRE_SECONDS);
+        addCookie(response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, serialize(authorizationRequest), COOKIE_EXPIRE_SECONDS);
 
-        String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME);
-        if (StringUtils.hasText(redirectUriAfterLogin)) {
-            CookieUtil.addCookie(response,
-                    REDIRECT_URI_PARAM_COOKIE_NAME,
-                    redirectUriAfterLogin,
-                    COOKIE_EXPIRE_SECONDS);
-        }
-
+        checkRequestParameterAndAddCookie(REDIRECT_URI_PARAM_COOKIE_NAME, request, response);
+        checkRequestParameterAndAddCookie(MODE_PARAM_COOKIE_NAME, request, response);
     }
 
     @Override
@@ -59,13 +52,20 @@ public class OAuth2AuthorizationRequestPersistenceAdapter
         return this.loadAuthorizationRequest(request);
     }
 
-    private void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
-        CookieUtil.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
-        CookieUtil.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
-    }
-
     @Override
     public void remove(HttpServletRequest request, HttpServletResponse response) {
         removeAuthorizationRequestCookies(request, response);
+    }
+
+    private static void checkRequestParameterAndAddCookie(final String parameterName, HttpServletRequest request, HttpServletResponse response) {
+        String parameterValue = request.getParameter(parameterName);
+        if (hasText(parameterValue))
+            addCookie(response, parameterName, parameterValue, COOKIE_EXPIRE_SECONDS);
+    }
+
+    private static void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
+        deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
+        deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
+        deleteCookie(request, response, MODE_PARAM_COOKIE_NAME);
     }
 }

@@ -1,4 +1,4 @@
-package com.tune_fun.v1.account.application.service.oauth2.handler;
+package com.tune_fun.v1.account.application.service.oauth2;
 
 import com.tune_fun.v1.account.application.port.output.oauth2.RemoveAuthorizationRequestCookiePort;
 import com.tune_fun.v1.common.util.CookieUtil;

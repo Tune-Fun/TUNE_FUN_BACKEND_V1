@@ -1,12 +1,10 @@
-package com.tune_fun.v1.account.application.service.oauth2;
+package com.tune_fun.v1.account.domain.state.oauth2;
 
-import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 import static java.util.Collections.emptyList;
