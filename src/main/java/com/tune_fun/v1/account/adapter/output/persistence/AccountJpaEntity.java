@@ -1,14 +1,12 @@
 package com.tune_fun.v1.account.adapter.output.persistence;
 
+import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountJpaEntity;
 import com.tune_fun.v1.common.converter.EncryptConverter;
 import com.tune_fun.v1.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,9 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 
 @SuperBuilder(toBuilder = true)
@@ -66,10 +62,10 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
     @Embedded
     private NotificationConfig notificationConfig = new NotificationConfig();
 
-    @Builder.Default
+    @Singular
     @Convert(converter = RoleConverter.class)
     @Column(name = "roles", nullable = false)
-    private List<Role> roles = new ArrayList<>();
+    private Set<Role> roles;
 
     @Column(name = "last_login_at")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -95,6 +91,10 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Comment("삭제일")
     protected LocalDateTime deletedAt;
+
+    @Singular
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    private List<OAuth2AccountJpaEntity> oauth2Accounts;
 
     @Builder.Default
     @Column(name = "account_non_expired")

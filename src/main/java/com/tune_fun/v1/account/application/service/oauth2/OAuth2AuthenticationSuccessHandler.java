@@ -9,6 +9,7 @@ import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
+import com.tune_fun.v1.account.domain.state.RegisteredAccount;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2AuthorizationRequestMode;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserInfo;
@@ -16,6 +17,7 @@ import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserPrincipal;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.exception.OAuth2AuthenticationProcessingException;
 import com.tune_fun.v1.common.hexagon.UseCase;
+import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.util.StringUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,8 +38,7 @@ import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2Au
 import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.REDIRECT_URI_PARAM_COOKIE_NAME;
 import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2AuthorizationRequestMode.fromQueryParameter;
 import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider.APPLE;
-import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
-import static com.tune_fun.v1.common.response.MessageCode.USER_POLICY_ACCOUNT_REGISTERED;
+import static com.tune_fun.v1.common.response.MessageCode.*;
 import static com.tune_fun.v1.common.util.CookieUtil.getCookie;
 import static com.tune_fun.v1.common.util.StringUtil.getFlattenAuthorities;
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
@@ -117,6 +118,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Transactional
     public String login(final OAuth2UserPrincipal principal, final String targetUrl) {
         checkUnregisteredAccount(principal);
+        saveOAuth2Account(principal, loadRegisteredAccount(principal));
 
         return createJwtTokenAndRedirectUri(principal, targetUrl);
     }
@@ -142,6 +144,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String accessToken = oAuth2UserInfo.getAccessToken();
         OAuth2Provider provider = oAuth2UserInfo.getProvider();
 
+        RegisteredAccount registeredAccount = loadRegisteredAccount(principal);
+        if (registeredAccount.oauth2Accounts().size() == 1)
+            throw new CommonApplicationException(USER_POLICY_CANNOT_UNLINK_FIRST_PROVIDER);
+
         unlinkRequest(provider, accessToken);
         // TODO : 탈퇴 영속성 로직 구현 필요
 
@@ -165,6 +171,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .ifPresent(account -> {
                     throw new CommonApplicationException(USER_POLICY_ACCOUNT_REGISTERED);
                 });
+    }
+
+    @Transactional
+    public RegisteredAccount loadRegisteredAccount(final OAuth2UserPrincipal principal) {
+        return loadAccountPort.registeredAccountInfoByUsername(principal.userInfo().getEmail())
+                .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
     }
 
     @Transactional

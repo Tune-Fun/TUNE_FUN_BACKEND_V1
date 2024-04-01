@@ -72,7 +72,7 @@ class RegisterControllerTest extends ControllerBaseTest {
                         () -> assertEquals(username, accountInfo.username()),
                         () -> assertTrue(passwordEncoder.matches(password, accountInfo.password())),
                         () -> assertEquals(1, accountInfo.roles().size()),
-                        () -> assertEquals(CLIENT_0.name(), accountInfo.roles().getFirst())
+                        () -> assertEquals(CLIENT_0.name(), accountInfo.roles().stream().toList().getFirst())
                 ),
                 () -> fail("회원가입 실패")
         );

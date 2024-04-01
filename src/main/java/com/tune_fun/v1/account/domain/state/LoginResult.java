@@ -2,11 +2,11 @@ package com.tune_fun.v1.account.domain.state;
 
 import com.tune_fun.v1.common.response.BasePayload;
 
-import java.util.List;
+import java.util.Set;
 
 public record LoginResult(
         String username,
-        List<String> roles,
+        Set<String> roles,
         String accessToken,
         String refreshToken
 ) implements BasePayload {

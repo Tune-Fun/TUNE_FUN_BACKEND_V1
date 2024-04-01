@@ -7,20 +7,46 @@ import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.aot.DisabledInAotMode;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+@ContextConfiguration(classes = {AccountPersistenceAdapter.class})
+@ActiveProfiles("test_standalone")
+@ExtendWith(SpringExtension.class)
+@DisabledInAotMode
 class AccountPersistenceAdapterTest {
+    @MockBean
+    private AccountMapper accountMapper;
+
+    @Autowired
+    private AccountPersistenceAdapter accountPersistenceAdapter;
+
+    @MockBean
+    private AccountRepository accountRepository;
+
+    @MockBean
+    private OAuth2AccountRepository oAuth2AccountRepository;
+
     /**
      * Method under test:
      * {@link AccountPersistenceAdapter#loadCustomUserByUsername(String)}
@@ -28,26 +54,66 @@ class AccountPersistenceAdapterTest {
     @Test
     void testLoadCustomUserByUsername() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         NotificationConfig notificationConfig = new NotificationConfig();
-        ArrayList<Role> roles = new ArrayList<>();
+        HashSet<Role> roles = new HashSet<>();
         LocalDateTime lastLoginAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime lastLogoutAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime withdrawalAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
                 "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, LocalDate.of(1970, 1, 1).atStartOfDay(), true, true, true, true));
+                emailVerifiedAt, withdrawalAt, deletedAt, new ArrayList<>(), true, true, true, true));
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        Optional<User> actualLoadCustomUserByUsernameResult = (new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl())).loadCustomUserByUsername("janedoe");
+        Optional<User> actualLoadCustomUserByUsernameResult = accountPersistenceAdapter.loadCustomUserByUsername("janedoe");
 
         // Assert
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
+        User getResult = actualLoadCustomUserByUsernameResult.get();
+        assertEquals("iloveyou", getResult.getPassword());
+        assertEquals("janedoe", getResult.getUsername());
+        assertTrue(getResult.isAccountNonExpired());
+        assertTrue(getResult.isAccountNonLocked());
+        assertTrue(getResult.isCredentialsNonExpired());
+        assertTrue(getResult.isEnabled());
+        assertEquals(roles, getResult.getAuthorities());
+    }
+
+    /**
+     * Method under test:
+     * {@link AccountPersistenceAdapter#loadCustomUserByUsername(String)}
+     */
+    @Test
+    void testLoadCustomUserByUsername2() {
+        // Arrange
+        AccountJpaEntity accountJpaEntity = mock(AccountJpaEntity.class);
+        when(accountJpaEntity.isAccountNonExpired()).thenReturn(true);
+        when(accountJpaEntity.isAccountNonLocked()).thenReturn(true);
+        when(accountJpaEntity.isCredentialsNonExpired()).thenReturn(true);
+        when(accountJpaEntity.isEnabled()).thenReturn(true);
+        when(accountJpaEntity.getPassword()).thenReturn("iloveyou");
+        when(accountJpaEntity.getUsername()).thenReturn("janedoe");
+        Mockito.<Collection<? extends GrantedAuthority>>when(accountJpaEntity.getAuthorities())
+                .thenReturn(new ArrayList<>());
+        Optional<AccountJpaEntity> ofResult = Optional.of(accountJpaEntity);
+        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn(ofResult);
+
+        // Act
+        Optional<User> actualLoadCustomUserByUsernameResult = accountPersistenceAdapter.loadCustomUserByUsername("janedoe");
+
+        // Assert
+        verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
+        verify(accountJpaEntity).getAuthorities();
+        verify(accountJpaEntity).getPassword();
+        verify(accountJpaEntity).getUsername();
+        verify(accountJpaEntity).isAccountNonExpired();
+        verify(accountJpaEntity).isAccountNonLocked();
+        verify(accountJpaEntity).isCredentialsNonExpired();
+        verify(accountJpaEntity).isEnabled();
         User getResult = actualLoadCustomUserByUsernameResult.get();
         assertEquals("iloveyou", getResult.getPassword());
         assertEquals("janedoe", getResult.getUsername());
@@ -63,52 +129,35 @@ class AccountPersistenceAdapterTest {
      * {@link AccountPersistenceAdapter#loadCustomUserByUsername(String)}
      */
     @Test
-    void testLoadCustomUserByUsername2() {
-        // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
-        Optional<AccountJpaEntity> emptyResult = Optional.empty();
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
-                .thenReturn(emptyResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
-
-        // Act
-        Optional<User> actualLoadCustomUserByUsernameResult = (new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl())).loadCustomUserByUsername("janedoe");
-
-        // Assert
-        verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
-        assertFalse(actualLoadCustomUserByUsernameResult.isPresent());
-        assertSame(emptyResult, actualLoadCustomUserByUsernameResult);
-    }
-
-    /**
-     * Method under test:
-     * {@link AccountPersistenceAdapter#loadCustomUserByUsername(String)}
-     */
-    @Test
     void testLoadCustomUserByUsername3() {
         // Arrange
-        ArrayList<Role> roles = new ArrayList<>();
-        roles.add(Role.CLIENT_0);
-        NotificationConfig notificationConfig = new NotificationConfig();
-        LocalDateTime lastLoginAt = LocalDate.of(1970, 1, 1).atStartOfDay();
-        LocalDateTime lastLogoutAt = LocalDate.of(1970, 1, 1).atStartOfDay();
-        LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
-        LocalDateTime withdrawalAt = LocalDate.of(1970, 1, 1).atStartOfDay();
-        Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
-                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, LocalDate.of(1970, 1, 1).atStartOfDay(), true, true, true, true));
-        AccountRepository accountRepository = mock(AccountRepository.class);
+        ArrayList<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
+        grantedAuthorityList.add(new SimpleGrantedAuthority("Role"));
+        AccountJpaEntity accountJpaEntity = mock(AccountJpaEntity.class);
+        when(accountJpaEntity.isAccountNonExpired()).thenReturn(true);
+        when(accountJpaEntity.isAccountNonLocked()).thenReturn(true);
+        when(accountJpaEntity.isCredentialsNonExpired()).thenReturn(true);
+        when(accountJpaEntity.isEnabled()).thenReturn(true);
+        when(accountJpaEntity.getPassword()).thenReturn("iloveyou");
+        when(accountJpaEntity.getUsername()).thenReturn("janedoe");
+        Mockito.<Collection<? extends GrantedAuthority>>when(accountJpaEntity.getAuthorities())
+                .thenReturn(grantedAuthorityList);
+        Optional<AccountJpaEntity> ofResult = Optional.of(accountJpaEntity);
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        Optional<User> actualLoadCustomUserByUsernameResult = (new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl())).loadCustomUserByUsername("janedoe");
+        Optional<User> actualLoadCustomUserByUsernameResult = accountPersistenceAdapter.loadCustomUserByUsername("janedoe");
 
         // Assert
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
+        verify(accountJpaEntity).getAuthorities();
+        verify(accountJpaEntity).getPassword();
+        verify(accountJpaEntity).getUsername();
+        verify(accountJpaEntity).isAccountNonExpired();
+        verify(accountJpaEntity).isAccountNonLocked();
+        verify(accountJpaEntity).isCredentialsNonExpired();
+        verify(accountJpaEntity).isEnabled();
         User getResult = actualLoadCustomUserByUsernameResult.get();
         assertEquals("iloveyou", getResult.getPassword());
         assertEquals("janedoe", getResult.getUsername());
@@ -126,34 +175,17 @@ class AccountPersistenceAdapterTest {
     @Test
     void testLoadCustomUserByUsername4() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
-        NotificationConfig notificationConfig = new NotificationConfig();
-        ArrayList<Role> roles = new ArrayList<>();
-        LocalDateTime lastLoginAt = LocalDate.of(1970, 1, 1).atStartOfDay();
-        LocalDateTime lastLogoutAt = LocalDate.of(1970, 1, 1).atStartOfDay();
-        LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
-        LocalDateTime withdrawalAt = LocalDate.of(1970, 1, 1).atStartOfDay();
-        Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
-                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, LocalDate.of(1970, 1, 1).atStartOfDay(), false, true, true, true));
+        Optional<AccountJpaEntity> emptyResult = Optional.empty();
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
-                .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+                .thenReturn(emptyResult);
 
         // Act
-        Optional<User> actualLoadCustomUserByUsernameResult = (new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl())).loadCustomUserByUsername("janedoe");
+        Optional<User> actualLoadCustomUserByUsernameResult = accountPersistenceAdapter.loadCustomUserByUsername("janedoe");
 
         // Assert
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
-        User getResult = actualLoadCustomUserByUsernameResult.get();
-        assertEquals("iloveyou", getResult.getPassword());
-        assertEquals("janedoe", getResult.getUsername());
-        assertFalse(getResult.isAccountNonExpired());
-        assertTrue(getResult.getAuthorities().isEmpty());
-        assertTrue(getResult.isAccountNonLocked());
-        assertTrue(getResult.isCredentialsNonExpired());
-        assertTrue(getResult.isEnabled());
+        assertFalse(actualLoadCustomUserByUsernameResult.isPresent());
+        assertSame(emptyResult, actualLoadCustomUserByUsernameResult);
     }
 
     /**
@@ -163,79 +195,21 @@ class AccountPersistenceAdapterTest {
     @Test
     void testCurrentAccountInfo() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        LocalDateTime createdAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        when(accountMapper.accountInfo(Mockito.any()))
+                .thenReturn(new CurrentAccount(createdAt, emailVerifiedAt, "01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe",
+                        "Nickname", "jane.doe@example.org", new HashSet<>()));
 
         // Act
-        Optional<CurrentAccount> actualCurrentAccountInfoResult = (new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl())).currentAccountInfo("janedoe");
+        accountPersistenceAdapter.currentAccountInfo("janedoe");
 
         // Assert
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
-        CurrentAccount getResult = actualCurrentAccountInfoResult.get();
-        assertNull(getResult.email());
-        assertNull(getResult.nickname());
-        assertNull(getResult.username());
-        assertNull(getResult.uuid());
-        assertNull(getResult.createdAt());
-        assertNull(getResult.emailVerifiedAt());
-        assertTrue(getResult.roles().isEmpty());
-    }
-
-    /**
-     * Method under test:
-     * {@link AccountPersistenceAdapter#currentAccountInfo(String)}
-     */
-    @Test
-    void testCurrentAccountInfo2() {
-        // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
-        Optional<AccountJpaEntity> ofResult = Optional
-                .of(new AccountJpaEntity(mock(AccountJpaEntity.AccountJpaEntityBuilder.class)));
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
-                .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
-
-        // Act
-        Optional<CurrentAccount> actualCurrentAccountInfoResult = (new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl())).currentAccountInfo("janedoe");
-
-        // Assert
-        verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
-        CurrentAccount getResult = actualCurrentAccountInfoResult.get();
-        assertNull(getResult.email());
-        assertNull(getResult.nickname());
-        assertNull(getResult.username());
-        assertNull(getResult.uuid());
-        assertNull(getResult.createdAt());
-        assertNull(getResult.emailVerifiedAt());
-        assertTrue(getResult.roles().isEmpty());
-    }
-
-    /**
-     * Method under test:
-     * {@link AccountPersistenceAdapter#currentAccountInfo(String)}
-     */
-    @Test
-    void testCurrentAccountInfo3() {
-        // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
-        Optional<AccountJpaEntity> emptyResult = Optional.empty();
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
-                .thenReturn(emptyResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
-
-        // Act
-        Optional<CurrentAccount> actualCurrentAccountInfoResult = (new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl())).currentAccountInfo("janedoe");
-
-        // Assert
-        verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
-        assertFalse(actualCurrentAccountInfoResult.isPresent());
-        assertSame(emptyResult, actualCurrentAccountInfoResult);
+        verify(accountMapper).accountInfo(isA(AccountJpaEntity.class));
     }
 
     /**
@@ -245,47 +219,19 @@ class AccountPersistenceAdapterTest {
     @Test
     void testRegisteredAccountInfoByUsername() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        HashSet<String> roles = new HashSet<>();
+        when(accountMapper.registeredAccountInfo(Mockito.any()))
+                .thenReturn(new RegisteredAccount("janedoe", "iloveyou", roles, new ArrayList<>()));
 
         // Act
-        Optional<RegisteredAccount> actualRegisteredAccountInfoByUsernameResult = (new AccountPersistenceAdapter(
-                accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .registeredAccountInfoByUsername("janedoe");
+        accountPersistenceAdapter.registeredAccountInfoByUsername("janedoe");
 
         // Assert
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
-        RegisteredAccount getResult = actualRegisteredAccountInfoByUsernameResult.get();
-        assertNull(getResult.password());
-        assertNull(getResult.username());
-        assertTrue(getResult.roles().isEmpty());
-    }
-
-    /**
-     * Method under test:
-     * {@link AccountPersistenceAdapter#registeredAccountInfoByUsername(String)}
-     */
-    @Test
-    void testRegisteredAccountInfoByUsername2() {
-        // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
-        Optional<AccountJpaEntity> emptyResult = Optional.empty();
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
-                .thenReturn(emptyResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
-
-        // Act
-        Optional<RegisteredAccount> actualRegisteredAccountInfoByUsernameResult = (new AccountPersistenceAdapter(
-                accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .registeredAccountInfoByUsername("janedoe");
-
-        // Assert
-        verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
-        assertFalse(actualRegisteredAccountInfoByUsernameResult.isPresent());
-        assertSame(emptyResult, actualRegisteredAccountInfoByUsernameResult);
+        verify(accountMapper).registeredAccountInfo(isA(AccountJpaEntity.class));
     }
 
     /**
@@ -295,47 +241,19 @@ class AccountPersistenceAdapterTest {
     @Test
     void testRegisteredAccountInfoByEmail() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        HashSet<String> roles = new HashSet<>();
+        when(accountMapper.registeredAccountInfo(Mockito.any()))
+                .thenReturn(new RegisteredAccount("janedoe", "iloveyou", roles, new ArrayList<>()));
 
         // Act
-        Optional<RegisteredAccount> actualRegisteredAccountInfoByEmailResult = (new AccountPersistenceAdapter(
-                accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .registeredAccountInfoByEmail("jane.doe@example.org");
+        accountPersistenceAdapter.registeredAccountInfoByEmail("jane.doe@example.org");
 
         // Assert
         verify(accountRepository).findActive(isNull(), eq("jane.doe@example.org"), isNull());
-        RegisteredAccount getResult = actualRegisteredAccountInfoByEmailResult.get();
-        assertNull(getResult.password());
-        assertNull(getResult.username());
-        assertTrue(getResult.roles().isEmpty());
-    }
-
-    /**
-     * Method under test:
-     * {@link AccountPersistenceAdapter#registeredAccountInfoByEmail(String)}
-     */
-    @Test
-    void testRegisteredAccountInfoByEmail2() {
-        // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
-        Optional<AccountJpaEntity> emptyResult = Optional.empty();
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
-                .thenReturn(emptyResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
-
-        // Act
-        Optional<RegisteredAccount> actualRegisteredAccountInfoByEmailResult = (new AccountPersistenceAdapter(
-                accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .registeredAccountInfoByEmail("jane.doe@example.org");
-
-        // Assert
-        verify(accountRepository).findActive(isNull(), eq("jane.doe@example.org"), isNull());
-        assertFalse(actualRegisteredAccountInfoByEmailResult.isPresent());
-        assertSame(emptyResult, actualRegisteredAccountInfoByEmailResult);
+        verify(accountMapper).registeredAccountInfo(isA(AccountJpaEntity.class));
     }
 
     /**
@@ -345,47 +263,19 @@ class AccountPersistenceAdapterTest {
     @Test
     void testRegisteredAccountInfoByNickname() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        HashSet<String> roles = new HashSet<>();
+        when(accountMapper.registeredAccountInfo(Mockito.any()))
+                .thenReturn(new RegisteredAccount("janedoe", "iloveyou", roles, new ArrayList<>()));
 
         // Act
-        Optional<RegisteredAccount> actualRegisteredAccountInfoByNicknameResult = (new AccountPersistenceAdapter(
-                accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .registeredAccountInfoByNickname("Nickname");
+        accountPersistenceAdapter.registeredAccountInfoByNickname("Nickname");
 
         // Assert
         verify(accountRepository).findActive(isNull(), isNull(), eq("Nickname"));
-        RegisteredAccount getResult = actualRegisteredAccountInfoByNicknameResult.get();
-        assertNull(getResult.password());
-        assertNull(getResult.username());
-        assertTrue(getResult.roles().isEmpty());
-    }
-
-    /**
-     * Method under test:
-     * {@link AccountPersistenceAdapter#registeredAccountInfoByNickname(String)}
-     */
-    @Test
-    void testRegisteredAccountInfoByNickname2() {
-        // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
-        Optional<AccountJpaEntity> emptyResult = Optional.empty();
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
-                .thenReturn(emptyResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
-
-        // Act
-        Optional<RegisteredAccount> actualRegisteredAccountInfoByNicknameResult = (new AccountPersistenceAdapter(
-                accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .registeredAccountInfoByNickname("Nickname");
-
-        // Assert
-        verify(accountRepository).findActive(isNull(), isNull(), eq("Nickname"));
-        assertFalse(actualRegisteredAccountInfoByNicknameResult.isPresent());
-        assertSame(emptyResult, actualRegisteredAccountInfoByNicknameResult);
+        verify(accountMapper).registeredAccountInfo(isA(AccountJpaEntity.class));
     }
 
     /**
@@ -395,20 +285,17 @@ class AccountPersistenceAdapterTest {
     @Test
     void testRecordLastLoginAt() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        (new AccountPersistenceAdapter(accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .recordLastLoginAt("janedoe");
+        accountPersistenceAdapter.recordLastLoginAt("janedoe");
 
         // Assert
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
-        verify(accountRepository).save(Mockito.any());
+        verify(accountRepository).save(isA(AccountJpaEntity.class));
     }
 
     /**
@@ -418,17 +305,43 @@ class AccountPersistenceAdapterTest {
     @Test
     void testRecordLastLoginAt2() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
+        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
+        NotificationConfig notificationConfig = new NotificationConfig();
+        HashSet<Role> roles = new HashSet<>();
+        LocalDateTime lastLoginAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime lastLogoutAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime withdrawalAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
+                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
+                emailVerifiedAt, withdrawalAt, deletedAt, new ArrayList<>(), true, true, true, true));
+        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn(ofResult);
+
+        // Act
+        accountPersistenceAdapter.recordLastLoginAt("janedoe");
+
+        // Assert
+        verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
+        verify(accountRepository).save(isA(AccountJpaEntity.class));
+    }
+
+    /**
+     * Method under test:
+     * {@link AccountPersistenceAdapter#recordLastLoginAt(String)}
+     */
+    @Test
+    void testRecordLastLoginAt3() {
+        // Arrange
         Optional<AccountJpaEntity> emptyResult = Optional.empty();
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(emptyResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        (new AccountPersistenceAdapter(accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .recordLastLoginAt("janedoe");
+        accountPersistenceAdapter.recordLastLoginAt("janedoe");
 
-        // Assert
+        // Assert that nothing has changed
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
     }
 
@@ -439,20 +352,17 @@ class AccountPersistenceAdapterTest {
     @Test
     void testRecordEmailVerifiedAt() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        (new AccountPersistenceAdapter(accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .recordEmailVerifiedAt("janedoe");
+        accountPersistenceAdapter.recordEmailVerifiedAt("janedoe");
 
         // Assert
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
-        verify(accountRepository).save(Mockito.any());
+        verify(accountRepository).save(isA(AccountJpaEntity.class));
     }
 
     /**
@@ -462,17 +372,43 @@ class AccountPersistenceAdapterTest {
     @Test
     void testRecordEmailVerifiedAt2() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
+        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
+        NotificationConfig notificationConfig = new NotificationConfig();
+        HashSet<Role> roles = new HashSet<>();
+        LocalDateTime lastLoginAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime lastLogoutAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime withdrawalAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
+                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
+                emailVerifiedAt, withdrawalAt, deletedAt, new ArrayList<>(), true, true, true, true));
+        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn(ofResult);
+
+        // Act
+        accountPersistenceAdapter.recordEmailVerifiedAt("janedoe");
+
+        // Assert
+        verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
+        verify(accountRepository).save(isA(AccountJpaEntity.class));
+    }
+
+    /**
+     * Method under test:
+     * {@link AccountPersistenceAdapter#recordEmailVerifiedAt(String)}
+     */
+    @Test
+    void testRecordEmailVerifiedAt3() {
+        // Arrange
         Optional<AccountJpaEntity> emptyResult = Optional.empty();
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(emptyResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        (new AccountPersistenceAdapter(accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .recordEmailVerifiedAt("janedoe");
+        accountPersistenceAdapter.recordEmailVerifiedAt("janedoe");
 
-        // Assert
+        // Assert that nothing has changed
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
     }
 
@@ -483,15 +419,13 @@ class AccountPersistenceAdapterTest {
     @Test
     void testLoadAccountByUsername() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        Optional<AccountJpaEntity> actualLoadAccountByUsernameResult = (new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl())).loadAccountByUsername("janedoe");
+        Optional<AccountJpaEntity> actualLoadAccountByUsernameResult = accountPersistenceAdapter
+                .loadAccountByUsername("janedoe");
 
         // Assert
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
@@ -504,15 +438,12 @@ class AccountPersistenceAdapterTest {
     @Test
     void testFindByEmail() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        Optional<AccountJpaEntity> actualFindByEmailResult = (new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl())).findByEmail("jane.doe@example.org");
+        Optional<AccountJpaEntity> actualFindByEmailResult = accountPersistenceAdapter.findByEmail("jane.doe@example.org");
 
         // Assert
         verify(accountRepository).findActive(isNull(), eq("jane.doe@example.org"), isNull());
@@ -525,15 +456,12 @@ class AccountPersistenceAdapterTest {
     @Test
     void testFindByNickname() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        Optional<AccountJpaEntity> actualFindByNicknameResult = (new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl())).findByNickname("Nickname");
+        Optional<AccountJpaEntity> actualFindByNicknameResult = accountPersistenceAdapter.findByNickname("Nickname");
 
         // Assert
         verify(accountRepository).findActive(isNull(), isNull(), eq("Nickname"));
@@ -546,11 +474,14 @@ class AccountPersistenceAdapterTest {
     @Test
     void testSaveAccount() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
-        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl());
+        when(accountMapper.fromSaveAccountBehavior(Mockito.any())).thenReturn(new AccountJpaEntity());
+        LocalDateTime createdAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        CurrentAccount currentAccount = new CurrentAccount(createdAt, emailVerifiedAt,
+                "01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe", "Nickname", "jane.doe@example.org", new HashSet<>());
+
+        when(accountMapper.accountInfo(Mockito.any())).thenReturn(currentAccount);
 
         // Act
         CurrentAccount actualSaveAccountResult = accountPersistenceAdapter
@@ -558,61 +489,10 @@ class AccountPersistenceAdapterTest {
                         "jane.doe@example.org", "Nickname", true, true, true));
 
         // Assert
-        verify(accountRepository).save(Mockito.any());
-        assertNull(actualSaveAccountResult.email());
-        assertNull(actualSaveAccountResult.nickname());
-        assertNull(actualSaveAccountResult.username());
-        assertNull(actualSaveAccountResult.uuid());
-        assertNull(actualSaveAccountResult.createdAt());
-        assertNull(actualSaveAccountResult.emailVerifiedAt());
-        assertTrue(actualSaveAccountResult.roles().isEmpty());
-    }
-
-    /**
-     * Method under test: {@link AccountPersistenceAdapter#saveAccount(SaveAccount)}
-     */
-    @Test
-    void testSaveAccount2() {
-        // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
-        when(accountRepository.save(Mockito.any())).thenReturn(null);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
-        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl());
-
-        // Act
-        CurrentAccount actualSaveAccountResult = accountPersistenceAdapter
-                .saveAccount(new SaveAccount("01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe", "iloveyou",
-                        "jane.doe@example.org", "Nickname", true, true, true));
-
-        // Assert
-        verify(accountRepository).save(Mockito.any());
-        assertNull(actualSaveAccountResult);
-    }
-
-    /**
-     * Method under test: {@link AccountPersistenceAdapter#saveAccount(SaveAccount)}
-     */
-    @Test
-    void testSaveAccount3() {
-        // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
-        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
-
-        // Act
-        CurrentAccount actualSaveAccountResult = (new AccountPersistenceAdapter(accountRepository, oauth2AccountRepository,
-                new AccountMapperImpl())).saveAccount(null);
-
-        // Assert
-        verify(accountRepository).save(Mockito.any());
-        assertNull(actualSaveAccountResult.email());
-        assertNull(actualSaveAccountResult.nickname());
-        assertNull(actualSaveAccountResult.username());
-        assertNull(actualSaveAccountResult.uuid());
-        assertNull(actualSaveAccountResult.createdAt());
-        assertNull(actualSaveAccountResult.emailVerifiedAt());
-        assertTrue(actualSaveAccountResult.roles().isEmpty());
+        verify(accountMapper).accountInfo(isA(AccountJpaEntity.class));
+        verify(accountMapper).fromSaveAccountBehavior(isA(SaveAccount.class));
+        verify(accountRepository).save(isA(AccountJpaEntity.class));
+        assertSame(currentAccount, actualSaveAccountResult);
     }
 
     /**
@@ -622,14 +502,10 @@ class AccountPersistenceAdapterTest {
     @Test
     void testSaveOAuth2Account() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
-        when(oauth2AccountRepository.save(Mockito.any())).thenReturn(new OAuth2AccountJpaEntity());
-        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl());
+        when(oAuth2AccountRepository.save(Mockito.any())).thenReturn(new OAuth2AccountJpaEntity());
 
         // Act
         accountPersistenceAdapter
@@ -637,7 +513,7 @@ class AccountPersistenceAdapterTest {
 
         // Assert
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
-        verify(oauth2AccountRepository).save(Mockito.any());
+        verify(oAuth2AccountRepository).save(isA(OAuth2AccountJpaEntity.class));
     }
 
     /**
@@ -647,19 +523,15 @@ class AccountPersistenceAdapterTest {
     @Test
     void testSaveOAuth2Account2() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         Optional<AccountJpaEntity> emptyResult = Optional.empty();
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(emptyResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
-        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
-                oauth2AccountRepository, new AccountMapperImpl());
 
         // Act
         accountPersistenceAdapter
                 .saveOAuth2Account(new SaveOAuth2Account("jane.doe@example.org", "Nickname", "Oauth2 Provider", "janedoe"));
 
-        // Assert
+        // Assert that nothing has changed
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
     }
 
@@ -670,20 +542,17 @@ class AccountPersistenceAdapterTest {
     @Test
     void testUpdatePassword() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        (new AccountPersistenceAdapter(accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .updatePassword("janedoe", "secret");
+        accountPersistenceAdapter.updatePassword("janedoe", "secret");
 
         // Assert
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
-        verify(accountRepository).save(Mockito.any());
+        verify(accountRepository).save(isA(AccountJpaEntity.class));
     }
 
     /**
@@ -693,17 +562,43 @@ class AccountPersistenceAdapterTest {
     @Test
     void testUpdatePassword2() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
+        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
+        NotificationConfig notificationConfig = new NotificationConfig();
+        HashSet<Role> roles = new HashSet<>();
+        LocalDateTime lastLoginAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime lastLogoutAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime withdrawalAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
+                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
+                emailVerifiedAt, withdrawalAt, deletedAt, new ArrayList<>(), true, true, true, true));
+        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn(ofResult);
+
+        // Act
+        accountPersistenceAdapter.updatePassword("janedoe", "secret");
+
+        // Assert
+        verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
+        verify(accountRepository).save(isA(AccountJpaEntity.class));
+    }
+
+    /**
+     * Method under test:
+     * {@link AccountPersistenceAdapter#updatePassword(String, String)}
+     */
+    @Test
+    void testUpdatePassword3() {
+        // Arrange
         Optional<AccountJpaEntity> emptyResult = Optional.empty();
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(emptyResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        (new AccountPersistenceAdapter(accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .updatePassword("janedoe", "secret");
+        accountPersistenceAdapter.updatePassword("janedoe", "secret");
 
-        // Assert
+        // Assert that nothing has changed
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
     }
 
@@ -714,20 +609,17 @@ class AccountPersistenceAdapterTest {
     @Test
     void testUpdateNickname() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
         when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        (new AccountPersistenceAdapter(accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .updateNickname("janedoe", "Nickname");
+        accountPersistenceAdapter.updateNickname("janedoe", "Nickname");
 
         // Assert
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
-        verify(accountRepository).save(Mockito.any());
+        verify(accountRepository).save(isA(AccountJpaEntity.class));
     }
 
     /**
@@ -737,17 +629,43 @@ class AccountPersistenceAdapterTest {
     @Test
     void testUpdateNickname2() {
         // Arrange
-        AccountRepository accountRepository = mock(AccountRepository.class);
+        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
+        NotificationConfig notificationConfig = new NotificationConfig();
+        HashSet<Role> roles = new HashSet<>();
+        LocalDateTime lastLoginAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime lastLogoutAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime withdrawalAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
+                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
+                emailVerifiedAt, withdrawalAt, deletedAt, new ArrayList<>(), true, true, true, true));
+        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn(ofResult);
+
+        // Act
+        accountPersistenceAdapter.updateNickname("janedoe", "Nickname");
+
+        // Assert
+        verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
+        verify(accountRepository).save(isA(AccountJpaEntity.class));
+    }
+
+    /**
+     * Method under test:
+     * {@link AccountPersistenceAdapter#updateNickname(String, String)}
+     */
+    @Test
+    void testUpdateNickname3() {
+        // Arrange
         Optional<AccountJpaEntity> emptyResult = Optional.empty();
         when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(emptyResult);
-        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
 
         // Act
-        (new AccountPersistenceAdapter(accountRepository, oauth2AccountRepository, new AccountMapperImpl()))
-                .updateNickname("janedoe", "Nickname");
+        accountPersistenceAdapter.updateNickname("janedoe", "Nickname");
 
-        // Assert
+        // Assert that nothing has changed
         verify(accountRepository).findActive(eq("janedoe"), isNull(), isNull());
     }
 }

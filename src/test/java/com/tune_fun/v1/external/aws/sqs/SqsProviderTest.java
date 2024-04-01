@@ -6,7 +6,6 @@ import com.tune_fun.v1.base.annotation.IntegrationTest;
 import com.tune_fun.v1.common.property.EventProperty;
 import io.awspring.cloud.sqs.operations.SendResult;
 import org.awaitility.core.ThrowingRunnable;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

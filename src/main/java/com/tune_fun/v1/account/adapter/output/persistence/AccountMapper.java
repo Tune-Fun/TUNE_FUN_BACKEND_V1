@@ -10,6 +10,7 @@ import org.mapstruct.Named;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Mapper(
         config = BaseMapperConfig.class,
@@ -30,7 +31,7 @@ public abstract class AccountMapper {
     public abstract RegisteredAccount registeredAccountInfo(AccountJpaEntity accountJpaEntity);
 
     @Named("roleValues")
-    public List<String> roleValues(List<Role> roles) {
+    public Set<String> roleValues(Set<Role> roles) {
         return Role.roleValues(roles);
     }
 
