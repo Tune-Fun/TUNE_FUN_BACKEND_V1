@@ -3,6 +3,7 @@ package com.tune_fun.v1.account.adapter.output.persistence;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountRepository;
 import com.tune_fun.v1.account.application.port.output.*;
+import com.tune_fun.v1.account.application.port.output.oauth2.DisableOAuth2AccountPort;
 import com.tune_fun.v1.account.application.port.output.oauth2.SaveOAuth2AccountPort;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
@@ -23,7 +24,8 @@ import java.util.Optional;
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class AccountPersistenceAdapter implements
-        LoadAccountPort, SaveAccountPort, SaveOAuth2AccountPort,
+        LoadAccountPort, SaveAccountPort,
+        SaveOAuth2AccountPort, DisableOAuth2AccountPort,
         RecordLastLoginAtPort, RecordEmailVerifiedAtPort,
         UpdatePasswordPort, UpdateNicknamePort {
 
@@ -116,6 +118,15 @@ public class AccountPersistenceAdapter implements
                             .build();
 
                     oauth2AccountRepository.save(updatedAccount);
+                });
+    }
+
+    @Override
+    public void disableOAuth2Account(String email) {
+        oauth2AccountRepository.findByEmailAndEnabledTrue(email)
+                .ifPresent(account -> {
+                    account.disable();
+                    oauth2AccountRepository.save(account);
                 });
     }
 

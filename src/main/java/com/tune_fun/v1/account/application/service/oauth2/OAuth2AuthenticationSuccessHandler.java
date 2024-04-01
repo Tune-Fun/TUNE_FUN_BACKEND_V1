@@ -87,7 +87,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Optional<String> redirectUri = getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map(Cookie::getValue);
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        Optional<OAuth2UserPrincipal> principalOptional = getOAuth2UserPrincipal(authentication);
+        Optional<OAuth2UserPrincipal> principalOptional = evaluateAuthentication(authentication);
         Optional<String> modeOptional = getCookie(request, MODE_PARAM_COOKIE_NAME).map(Cookie::getValue);
 
         if (principalOptional.isEmpty() || modeOptional.isEmpty())
@@ -102,7 +102,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             case LOGIN -> login(principal, targetUrl);
             case LINK -> link(principal, targetUrl);
             case UNLINK -> unlink(principal, targetUrl);
-            case WITHDRAWAL -> withdrawal(principal, targetUrl);
         };
     }
 
@@ -153,19 +152,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             throw new CommonApplicationException(USER_POLICY_CANNOT_UNLINK_UNIQUE_PROVIDER);
 
         unlinkHttpRequest(provider, accessToken);
-        // TODO : 연결해제 영속성 로직 구현 필요
-        disableOAuth2AccountPort.disable(principal.userInfo().getEmail());
+        disableOAuth2AccountPort.disableOAuth2Account(principal.userInfo().getEmail());
 
         return fromUriString(targetUrl).build().toUriString();
     }
 
-    @Transactional
-    public String withdrawal(final OAuth2UserPrincipal principal, final String targetUrl) {
-
-        return fromUriString(targetUrl).build().toUriString();
-    }
-
-    private Optional<OAuth2UserPrincipal> getOAuth2UserPrincipal(Authentication authentication) {
+    private Optional<OAuth2UserPrincipal> evaluateAuthentication(Authentication authentication) {
         return Optional.ofNullable(authentication.getPrincipal())
                 .filter(principal -> principal instanceof OAuth2UserPrincipal)
                 .map(OAuth2UserPrincipal.class::cast);
@@ -206,7 +198,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         saveOAuth2AccountPort.saveOAuth2Account(saveOAuth2AccountBehavior);
     }
 
-    public void unlinkHttpRequest(final OAuth2Provider provider, final String accessToken) {
+    private void unlinkHttpRequest(final OAuth2Provider provider, final String accessToken) {
         if (accessToken == null || accessToken.trim().isEmpty())
             throw new OAuth2AuthenticationProcessingException("Access token must not be null or empty");
 

@@ -55,5 +55,8 @@ public class OAuth2AccountJpaEntity extends BaseEntity {
     @Column(name = "enabled")
     private boolean enabled = true;
 
+    public void disable() {
+        this.enabled = false;
+    }
 
 }
