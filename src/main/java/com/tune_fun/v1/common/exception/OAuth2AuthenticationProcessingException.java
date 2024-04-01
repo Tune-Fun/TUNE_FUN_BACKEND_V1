@@ -1,4 +1,4 @@
-package com.tune_fun.v1.account.application.service.oauth2;
+package com.tune_fun.v1.common.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

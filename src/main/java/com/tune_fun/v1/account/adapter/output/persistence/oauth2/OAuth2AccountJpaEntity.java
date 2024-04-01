@@ -52,8 +52,11 @@ public class OAuth2AccountJpaEntity extends BaseEntity {
     private AccountJpaEntity account;
 
     @Builder.Default
-    @Column(name = "is_enabled")
-    private Boolean isEnabled = true;
+    @Column(name = "enabled")
+    private boolean enabled = true;
 
+    public void disable() {
+        this.enabled = false;
+    }
 
 }

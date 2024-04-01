@@ -10,23 +10,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.util.List;
+import java.util.Set;
 
 @Converter
 @RequiredArgsConstructor
-public class RoleConverter implements AttributeConverter<List<Role>, String> {
+public class RoleConverter implements AttributeConverter<Set<Role>, String> {
 
     private final ObjectUtil objectUtil;
     private final ObjectMapper objectMapper;
 
     @SneakyThrows
     @Override
-    public String convertToDatabaseColumn(List<Role> attribute) {
+    public String convertToDatabaseColumn(Set<Role> attribute) {
         return objectUtil.objectToJson(attribute);
     }
 
     @SneakyThrows
     @Override
-    public List<Role> convertToEntityAttribute(String dbData) {
+    public Set<Role> convertToEntityAttribute(String dbData) {
 
         if (StringUtil.hasText(dbData))
             return objectMapper.readValue(dbData, new TypeReference<>() {

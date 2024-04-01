@@ -2,9 +2,15 @@ package com.tune_fun.v1.base.architecture;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import org.junit.jupiter.api.Test;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
+/**
+ * Abstract class to define and enforce architectural rules for bounded contexts
+ * within the application. Subclasses should specify the bounded context package
+ * and can extend rules as needed.
+ */
 public abstract class BoundedContextDependencyRuleTest {
 
     private static final String ROOT_PACKAGE = "com.tune_fun.v1";
@@ -13,6 +19,12 @@ public abstract class BoundedContextDependencyRuleTest {
     private static final String PORT_PACKAGE = "application.port";
     private static final String SERVICE_PACKAGE = "application.service";
     private static final String ADAPTER_PACKAGE = "adapter";
+
+    public void checkDependencyRule() {
+        String rootPackage = fullyBoundedContextPackage(getBoundedContextPackage());
+        JavaClasses classesToCheck = new ClassFileImporter().importPackages(rootPackage + "..");
+        assertDependency(rootPackage, classesToCheck);
+    }
 
     private static void assertDependency(String rootPackage, JavaClasses classesToCheck) {
         checkNoDependencyFromTo(rootPackage, DOMAIN_PACKAGE, APPLICATION_PACKAGE, classesToCheck);
@@ -46,12 +58,5 @@ public abstract class BoundedContextDependencyRuleTest {
     }
 
     public abstract String getBoundedContextPackage();
-
-    public void checkDependencyRule() {
-        String rootPackage = fullyBoundedContextPackage(getBoundedContextPackage());
-        String importPackages = rootPackage + "..";
-        JavaClasses classesToCheck = new ClassFileImporter().importPackages(importPackages);
-        assertDependency(rootPackage, classesToCheck);
-    }
 
 }

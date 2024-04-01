@@ -5,6 +5,9 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 @Getter
 @AllArgsConstructor
@@ -16,8 +19,8 @@ public enum Role implements GrantedAuthority {
 
     private final String authority;
 
-    public static List<String> roleValues(List<Role> roles) {
-        return roles.stream().map(Role::name).toList();
+    public static Set<String> roleValues(Set<Role> roles) {
+        return roles.stream().map(Role::name).collect(toSet());
     }
 
 }

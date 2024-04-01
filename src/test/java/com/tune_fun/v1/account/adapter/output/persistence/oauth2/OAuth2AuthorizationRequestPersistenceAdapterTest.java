@@ -21,50 +21,50 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 
 @Execution(CONCURRENT)
-class HttpCookieOAuth2AuthorizationRequestPersistenceAdapterTest {
+class OAuth2AuthorizationRequestPersistenceAdapterTest {
     /**
      * Method under test:
-     * {@link HttpCookieOAuth2AuthorizationRequestPersistenceAdapter#loadAuthorizationRequest(HttpServletRequest)}
+     * {@link OAuth2AuthorizationRequestPersistenceAdapter#loadAuthorizationRequest(HttpServletRequest)}
      */
     @Test
     void testLoadAuthorizationRequest() {
         // Arrange
-        HttpCookieOAuth2AuthorizationRequestPersistenceAdapter httpCookieOAuth2AuthorizationRequestPersistenceAdapter = new HttpCookieOAuth2AuthorizationRequestPersistenceAdapter();
+        OAuth2AuthorizationRequestPersistenceAdapter OAuth2AuthorizationRequestPersistenceAdapter = new OAuth2AuthorizationRequestPersistenceAdapter();
 
         // Act and Assert
         assertNull(
-                httpCookieOAuth2AuthorizationRequestPersistenceAdapter.loadAuthorizationRequest(new MockHttpServletRequest()));
+                OAuth2AuthorizationRequestPersistenceAdapter.loadAuthorizationRequest(new MockHttpServletRequest()));
     }
 
     /**
      * Method under test:
-     * {@link HttpCookieOAuth2AuthorizationRequestPersistenceAdapter#loadAuthorizationRequest(HttpServletRequest)}
+     * {@link OAuth2AuthorizationRequestPersistenceAdapter#loadAuthorizationRequest(HttpServletRequest)}
      */
     @Test
     void testLoadAuthorizationRequest2() {
         // Arrange
-        HttpCookieOAuth2AuthorizationRequestPersistenceAdapter httpCookieOAuth2AuthorizationRequestPersistenceAdapter = new HttpCookieOAuth2AuthorizationRequestPersistenceAdapter();
+        OAuth2AuthorizationRequestPersistenceAdapter OAuth2AuthorizationRequestPersistenceAdapter = new OAuth2AuthorizationRequestPersistenceAdapter();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setCookies(new Cookie("Name", "https://example.org/example"));
 
         // Act and Assert
-        assertNull(httpCookieOAuth2AuthorizationRequestPersistenceAdapter.loadAuthorizationRequest(request));
+        assertNull(OAuth2AuthorizationRequestPersistenceAdapter.loadAuthorizationRequest(request));
     }
 
     /**
      * Method under test:
-     * {@link HttpCookieOAuth2AuthorizationRequestPersistenceAdapter#saveAuthorizationRequest(OAuth2AuthorizationRequest, HttpServletRequest, HttpServletResponse)}
+     * {@link OAuth2AuthorizationRequestPersistenceAdapter#saveAuthorizationRequest(OAuth2AuthorizationRequest, HttpServletRequest, HttpServletResponse)}
      */
     @Test
     void testSaveAuthorizationRequest() throws IOException {
         // Arrange
-        HttpCookieOAuth2AuthorizationRequestPersistenceAdapter httpCookieOAuth2AuthorizationRequestPersistenceAdapter = new HttpCookieOAuth2AuthorizationRequestPersistenceAdapter();
+        OAuth2AuthorizationRequestPersistenceAdapter OAuth2AuthorizationRequestPersistenceAdapter = new OAuth2AuthorizationRequestPersistenceAdapter();
         MockHttpServletRequest request = new MockHttpServletRequest();
         Response response = new Response();
 
         // Act
-        httpCookieOAuth2AuthorizationRequestPersistenceAdapter.saveAuthorizationRequest(null, request, response);
+        OAuth2AuthorizationRequestPersistenceAdapter.saveAuthorizationRequest(null, request, response);
 
         // Assert that nothing has changed
         HttpServletResponse response2 = response.getResponse();
@@ -97,12 +97,12 @@ class HttpCookieOAuth2AuthorizationRequestPersistenceAdapterTest {
 
     /**
      * Method under test:
-     * {@link HttpCookieOAuth2AuthorizationRequestPersistenceAdapter#saveAuthorizationRequest(OAuth2AuthorizationRequest, HttpServletRequest, HttpServletResponse)}
+     * {@link OAuth2AuthorizationRequestPersistenceAdapter#saveAuthorizationRequest(OAuth2AuthorizationRequest, HttpServletRequest, HttpServletResponse)}
      */
     @Test
     void testSaveAuthorizationRequest2() throws IOException {
         // Arrange
-        HttpCookieOAuth2AuthorizationRequestPersistenceAdapter httpCookieOAuth2AuthorizationRequestPersistenceAdapter = new HttpCookieOAuth2AuthorizationRequestPersistenceAdapter();
+        OAuth2AuthorizationRequestPersistenceAdapter OAuth2AuthorizationRequestPersistenceAdapter = new OAuth2AuthorizationRequestPersistenceAdapter();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         Cookie cookie = new Cookie("Name", "https://example.org/example");
@@ -111,7 +111,7 @@ class HttpCookieOAuth2AuthorizationRequestPersistenceAdapterTest {
         Response response = new Response();
 
         // Act
-        httpCookieOAuth2AuthorizationRequestPersistenceAdapter.saveAuthorizationRequest(null, request, response);
+        OAuth2AuthorizationRequestPersistenceAdapter.saveAuthorizationRequest(null, request, response);
 
         // Assert that nothing has changed
         HttpServletResponse response2 = response.getResponse();
@@ -145,49 +145,49 @@ class HttpCookieOAuth2AuthorizationRequestPersistenceAdapterTest {
 
     /**
      * Method under test:
-     * {@link HttpCookieOAuth2AuthorizationRequestPersistenceAdapter#removeAuthorizationRequest(HttpServletRequest, HttpServletResponse)}
+     * {@link OAuth2AuthorizationRequestPersistenceAdapter#removeAuthorizationRequest(HttpServletRequest, HttpServletResponse)}
      */
     @Test
     void testRemoveAuthorizationRequest() {
         // Arrange
-        HttpCookieOAuth2AuthorizationRequestPersistenceAdapter httpCookieOAuth2AuthorizationRequestPersistenceAdapter = new HttpCookieOAuth2AuthorizationRequestPersistenceAdapter();
+        OAuth2AuthorizationRequestPersistenceAdapter OAuth2AuthorizationRequestPersistenceAdapter = new OAuth2AuthorizationRequestPersistenceAdapter();
         MockHttpServletRequest request = new MockHttpServletRequest();
 
         // Act and Assert
         assertNull(
-                httpCookieOAuth2AuthorizationRequestPersistenceAdapter.removeAuthorizationRequest(request, new Response()));
+                OAuth2AuthorizationRequestPersistenceAdapter.removeAuthorizationRequest(request, new Response()));
     }
 
     /**
      * Method under test:
-     * {@link HttpCookieOAuth2AuthorizationRequestPersistenceAdapter#removeAuthorizationRequest(HttpServletRequest, HttpServletResponse)}
+     * {@link OAuth2AuthorizationRequestPersistenceAdapter#removeAuthorizationRequest(HttpServletRequest, HttpServletResponse)}
      */
     @Test
     void testRemoveAuthorizationRequest2() {
         // Arrange
-        HttpCookieOAuth2AuthorizationRequestPersistenceAdapter httpCookieOAuth2AuthorizationRequestPersistenceAdapter = new HttpCookieOAuth2AuthorizationRequestPersistenceAdapter();
+        OAuth2AuthorizationRequestPersistenceAdapter OAuth2AuthorizationRequestPersistenceAdapter = new OAuth2AuthorizationRequestPersistenceAdapter();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setCookies(new Cookie("Name", "https://example.org/example"));
 
         // Act and Assert
         assertNull(
-                httpCookieOAuth2AuthorizationRequestPersistenceAdapter.removeAuthorizationRequest(request, new Response()));
+                OAuth2AuthorizationRequestPersistenceAdapter.removeAuthorizationRequest(request, new Response()));
     }
 
     /**
      * Method under test:
-     * {@link HttpCookieOAuth2AuthorizationRequestPersistenceAdapter#remove(HttpServletRequest, HttpServletResponse)}
+     * {@link OAuth2AuthorizationRequestPersistenceAdapter#remove(HttpServletRequest, HttpServletResponse)}
      */
     @Test
     void testRemove() throws IOException {
         // Arrange
-        HttpCookieOAuth2AuthorizationRequestPersistenceAdapter httpCookieOAuth2AuthorizationRequestPersistenceAdapter = new HttpCookieOAuth2AuthorizationRequestPersistenceAdapter();
+        OAuth2AuthorizationRequestPersistenceAdapter OAuth2AuthorizationRequestPersistenceAdapter = new OAuth2AuthorizationRequestPersistenceAdapter();
         MockHttpServletRequest request = new MockHttpServletRequest();
         Response response = new Response();
 
         // Act
-        httpCookieOAuth2AuthorizationRequestPersistenceAdapter.remove(request, response);
+        OAuth2AuthorizationRequestPersistenceAdapter.remove(request, response);
 
         // Assert that nothing has changed
         HttpServletResponse response2 = response.getResponse();
@@ -220,12 +220,12 @@ class HttpCookieOAuth2AuthorizationRequestPersistenceAdapterTest {
 
     /**
      * Method under test:
-     * {@link HttpCookieOAuth2AuthorizationRequestPersistenceAdapter#remove(HttpServletRequest, HttpServletResponse)}
+     * {@link OAuth2AuthorizationRequestPersistenceAdapter#remove(HttpServletRequest, HttpServletResponse)}
      */
     @Test
     void testRemove2() throws IOException {
         // Arrange
-        HttpCookieOAuth2AuthorizationRequestPersistenceAdapter httpCookieOAuth2AuthorizationRequestPersistenceAdapter = new HttpCookieOAuth2AuthorizationRequestPersistenceAdapter();
+        OAuth2AuthorizationRequestPersistenceAdapter OAuth2AuthorizationRequestPersistenceAdapter = new OAuth2AuthorizationRequestPersistenceAdapter();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         Cookie cookie = new Cookie("Name", "https://example.org/example");
@@ -234,7 +234,7 @@ class HttpCookieOAuth2AuthorizationRequestPersistenceAdapterTest {
         Response response = new Response();
 
         // Act
-        httpCookieOAuth2AuthorizationRequestPersistenceAdapter.remove(request, response);
+        OAuth2AuthorizationRequestPersistenceAdapter.remove(request, response);
 
         // Assert that nothing has changed
         HttpServletResponse response2 = response.getResponse();

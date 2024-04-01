@@ -18,8 +18,6 @@ public class AccountBoundedContextDependencyRuleTest extends BoundedContextDepen
     }
 
 
-    // TODO : OAuth2 도메인 의존성 수정 필요
-    @Disabled
     @Execution(CONCURRENT)
     @Test
     @DisplayName("Account Bounded Context satisfied Hexagonal Architecture.")

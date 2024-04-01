@@ -10,8 +10,9 @@ import org.springframework.restdocs.headers.HeaderDescriptor;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
-import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.HttpCookieOAuth2AuthorizationRequestPersistenceAdapter.COOKIE_EXPIRE_SECONDS;
-import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.HttpCookieOAuth2AuthorizationRequestPersistenceAdapter.OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME;
+import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.*;
+import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.MODE_PARAM_COOKIE_NAME;
+import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2AuthorizationRequestMode.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -24,26 +25,68 @@ public class OAuth2AuthorizationGoogleTest extends ControllerBaseTest {
     @Issue("T1-177")
     @Order(1)
     @DisplayName("구글 소셜 로그인 페이지 진입, 성공")
-    void oauth2AuthorizationGoogleSuccess() throws Exception {
-
+    void oauth2AuthorizationLoginGoogleSuccess() throws Exception {
         HeaderDescriptor[] responseHeaderDescriptor = {
                 headerWithName("Location").description("Redirect URL"),
                 headerWithName("Set-Cookie").description("Set-Cookie")
         };
 
-        mockMvc.perform(
-                        get(Uris.LOGIN_GOOGLE)
-                )
+        mockMvc.perform(get(Uris.OAUTH2_LOGIN_GOOGLE))
                 .andExpect(status().isFound())
-                .andExpectAll(
-                        cookie().exists(OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME),
-                        cookie().maxAge(OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, COOKIE_EXPIRE_SECONDS)
-                )
+                .andExpectAll(oauth2AuthorizationAssertion(LOGIN))
                 .andDo(restDocs.document(
                         responseHeaders(responseHeaderDescriptor),
                         resource(
                                 builder()
                                         .description("구글 소셜 로그인 페이지 진입")
+                                        .responseHeaders(responseHeaderDescriptor)
+                                        .build()
+                        )
+                ));
+
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("구글 소셜 계정 연결 페이지 진입, 성공")
+    void oauth2AuthorizationLinkGoogleSuccess() throws Exception {
+        HeaderDescriptor[] responseHeaderDescriptor = {
+                headerWithName("Location").description("Redirect URL"),
+                headerWithName("Set-Cookie").description("Set-Cookie")
+        };
+
+        mockMvc.perform(get(Uris.OAUTH2_LINK_GOOGLE))
+                .andExpect(status().isFound())
+                .andExpectAll(oauth2AuthorizationAssertion(LINK))
+                .andDo(restDocs.document(
+                        responseHeaders(responseHeaderDescriptor),
+                        resource(
+                                builder()
+                                        .description("구글 소셜 계정 연결 페이지 진입")
+                                        .responseHeaders(responseHeaderDescriptor)
+                                        .build()
+                        )
+                ));
+
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("구글 소셜 계정 연결 해제 페이지 진입, 성공")
+    void oauth2AuthorizationUnlinkGoogleSuccess() throws Exception {
+        HeaderDescriptor[] responseHeaderDescriptor = {
+                headerWithName("Location").description("Redirect URL"),
+                headerWithName("Set-Cookie").description("Set-Cookie")
+        };
+
+        mockMvc.perform(get(Uris.OAUTH2_UNLINK_APPLE))
+                .andExpect(status().isFound())
+                .andExpectAll(oauth2AuthorizationAssertion(UNLINK))
+                .andDo(restDocs.document(
+                        responseHeaders(responseHeaderDescriptor),
+                        resource(
+                                builder()
+                                        .description("구글 소셜 계정 연결 해제 페이지 진입")
                                         .responseHeaders(responseHeaderDescriptor)
                                         .build()
                         )

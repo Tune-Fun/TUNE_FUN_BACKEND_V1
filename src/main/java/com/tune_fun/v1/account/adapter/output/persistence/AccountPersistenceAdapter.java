@@ -3,11 +3,13 @@ package com.tune_fun.v1.account.adapter.output.persistence;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountRepository;
 import com.tune_fun.v1.account.application.port.output.*;
+import com.tune_fun.v1.account.application.port.output.oauth2.DisableOAuth2AccountPort;
 import com.tune_fun.v1.account.application.port.output.oauth2.SaveOAuth2AccountPort;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
+import com.tune_fun.v1.account.domain.state.oauth2.RegisteredOAuth2Account;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,8 @@ import java.util.Optional;
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class AccountPersistenceAdapter implements
-        LoadAccountPort, SaveAccountPort, SaveOAuth2AccountPort,
+        LoadAccountPort, SaveAccountPort,
+        SaveOAuth2AccountPort, DisableOAuth2AccountPort,
         RecordLastLoginAtPort, RecordEmailVerifiedAtPort,
         UpdatePasswordPort, UpdateNicknamePort {
 
@@ -56,6 +59,12 @@ public class AccountPersistenceAdapter implements
     @Override
     public Optional<RegisteredAccount> registeredAccountInfoByNickname(final String nickname) {
         return findByNickname(nickname).map(accountMapper::registeredAccountInfo);
+    }
+
+    @Override
+    public Optional<RegisteredOAuth2Account> registeredOAuth2AccountInfoByEmail(final String email) {
+        return oauth2AccountRepository.findByEmailAndEnabledTrue(email)
+                .map(accountMapper::registeredOAuth2AccountInfo);
     }
 
     @Override
@@ -109,6 +118,15 @@ public class AccountPersistenceAdapter implements
                             .build();
 
                     oauth2AccountRepository.save(updatedAccount);
+                });
+    }
+
+    @Override
+    public void disableOAuth2Account(String email) {
+        oauth2AccountRepository.findByEmailAndEnabledTrue(email)
+                .ifPresent(account -> {
+                    account.disable();
+                    oauth2AccountRepository.save(account);
                 });
     }
 

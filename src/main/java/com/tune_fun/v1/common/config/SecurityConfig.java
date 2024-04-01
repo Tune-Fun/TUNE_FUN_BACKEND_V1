@@ -1,16 +1,15 @@
 package com.tune_fun.v1.common.config;
 
 import com.tune_fun.v1.account.adapter.input.security.JwtAuthenticationFilter;
-import com.tune_fun.v1.account.adapter.output.persistence.oauth2.HttpCookieOAuth2AuthorizationRequestPersistenceAdapter;
+import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter;
 import com.tune_fun.v1.account.application.service.oauth2.CustomOAuth2UserService;
 import com.tune_fun.v1.account.application.service.oauth2.OAuth2RequestConverter;
-import com.tune_fun.v1.account.application.service.oauth2.handler.OAuth2AuthenticationFailureHandler;
-import com.tune_fun.v1.account.application.service.oauth2.handler.OAuth2AuthenticationSuccessHandler;
+import com.tune_fun.v1.account.application.service.oauth2.OAuth2AuthenticationFailureHandler;
+import com.tune_fun.v1.account.application.service.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +34,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.tune_fun.v1.common.config.Uris.NO_AUTH;
 import static java.util.Arrays.asList;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpMethod.*;
@@ -50,7 +50,7 @@ public class SecurityConfig {
     private final OAuth2RequestConverter oAuth2RequestConverter;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-    private final HttpCookieOAuth2AuthorizationRequestPersistenceAdapter httpCookieOAuth2AuthorizationRequestPersistenceAdapter;
+    private final OAuth2AuthorizationRequestPersistenceAdapter OAuth2AuthorizationRequestPersistenceAdapter;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
@@ -98,10 +98,11 @@ public class SecurityConfig {
                 .oauth2Login(configure ->
                         configure
                                 .tokenEndpoint(config -> config.accessTokenResponseClient(this.accessTokenResponseClient()))
-                                .authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestPersistenceAdapter))
+                                .authorizationEndpoint(config -> config.authorizationRequestRepository(OAuth2AuthorizationRequestPersistenceAdapter))
                                 .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
                                 .failureHandler(oAuth2AuthenticationFailureHandler)
+                                .loginPage(NO_AUTH)
                 )
                 .userDetailsService(userDetailsService)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

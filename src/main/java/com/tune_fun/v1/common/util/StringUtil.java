@@ -72,6 +72,22 @@ public class StringUtil {
         return RandomStringUtils.random(count, 0, 0, true, true, chars, secureRandom());
     }
 
+    public static String uuid() {
+        return UUID.randomUUID().toString();
+    }
+
+    public boolean hasText(String text) {
+        return org.springframework.util.StringUtils.hasText(text);
+    }
+
+    public static String removeBearerPrefix(String accessTokenFromRequest) {
+        return matches("^Bearer .*", accessTokenFromRequest) ? accessTokenFromRequest.substring(7) : null;
+    }
+
+    public static String getFlattenAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        return authorities.stream().map(GrantedAuthority::getAuthority).collect(joining(","));
+    }
+
     public static String generateRandomNickname() throws NoSuchAlgorithmException {
         int animalIndex = secureRandom().nextInt(ANIMAL_NAMES.length);
         int prefixIndex = secureRandom().nextInt(PREFIX_NAMES.length);
@@ -80,22 +96,6 @@ public class StringUtil {
         String prefix = PREFIX_NAMES[prefixIndex];
 
         return prefix + animalName;
-    }
-
-    public String uuid() {
-        return UUID.randomUUID().toString();
-    }
-
-    public boolean hasText(String text) {
-        return org.springframework.util.StringUtils.hasText(text);
-    }
-
-    public String removeBearerPrefix(String accessTokenFromRequest) {
-        return matches("^Bearer .*", accessTokenFromRequest) ? accessTokenFromRequest.substring(7) : null;
-    }
-
-    public static String getFlattenAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        return authorities.stream().map(GrantedAuthority::getAuthority).collect(joining(","));
     }
 
     private static final String[] PREFIX_NAMES = {
