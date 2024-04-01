@@ -14,6 +14,7 @@ public class Uris {
     public static final String REST_NAME_ID = "/{id}";
     public static final String REST_NAME_UUID = "/{uuid}";
 
+    public static final String NO_AUTH = "/no-auth";
     public static final String CHECK_USERNAME_DUPLICATE = API_V1_ROOT + "/check-username-duplicate";
     public static final String CHECK_EMAIL_DUPLICATE = API_V1_ROOT + "/check-email-duplicate";
     public static final String FIND_USERNAME = API_V1_ROOT + "/find-username";
@@ -68,6 +69,7 @@ public class Uris {
     public static final String HEALTH_CHECK = "/health-check";
 
     public static final String[] NOT_LOGGING_URIS = {
+            NO_AUTH,
             SWAGGER_UI,
             SWAGGER_INDEX_HTML,
             SWAGGER_INDEX_CSS,
@@ -87,6 +89,7 @@ public class Uris {
             CUSTOM_EXCEPTION_RESPONSE_EXAMPLE
     };
     public static final String[] PERMIT_ALL_URIS = {
+            NO_AUTH,
             CHECK_USERNAME_DUPLICATE,
             CHECK_EMAIL_DUPLICATE,
             FIND_USERNAME,

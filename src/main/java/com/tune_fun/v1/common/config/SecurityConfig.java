@@ -34,6 +34,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.tune_fun.v1.common.config.Uris.NO_AUTH;
 import static java.util.Arrays.asList;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpMethod.*;
@@ -101,6 +102,7 @@ public class SecurityConfig {
                                 .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
                                 .failureHandler(oAuth2AuthenticationFailureHandler)
+                                .loginPage(NO_AUTH)
                 )
                 .userDetailsService(userDetailsService)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

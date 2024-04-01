@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum OAuth2AuthorizationRequestMode {
-    REGISTER("register"), LOGIN("login"), UNLINK("unlink");
+    LOGIN("login"), LINK("link"), UNLINK("unlink"), WITHDRAWAL("withdrawal");
 
     private final String queryParameter;
 

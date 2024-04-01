@@ -8,16 +8,13 @@ import com.tune_fun.v1.account.application.port.output.oauth2.*;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
+import com.tune_fun.v1.account.domain.state.Account;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
-import com.tune_fun.v1.account.domain.state.oauth2.OAuth2AuthorizationRequestMode;
-import com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider;
-import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserInfo;
-import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserPrincipal;
+import com.tune_fun.v1.account.domain.state.oauth2.*;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.exception.OAuth2AuthenticationProcessingException;
 import com.tune_fun.v1.common.hexagon.UseCase;
-import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.util.StringUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,6 +58,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final SaveAccountPort saveAccountPort;
     private final SaveOAuth2AccountPort saveOAuth2AccountPort;
 
+    private final DisableOAuth2AccountPort disableOAuth2AccountPort;
+
     private final CreateAccessTokenPort createAccessTokenPort;
     private final CreateRefreshTokenPort createRefreshTokenPort;
 
@@ -93,7 +92,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         if (principalOptional.isEmpty() || modeOptional.isEmpty())
             return fromUriString(targetUrl)
-                    .queryParam("error", "Login failed")
+                    .queryParam("error", "Authorization failed")
                     .build().toUriString();
 
         OAuth2UserPrincipal principal = principalOptional.get();
@@ -101,24 +100,29 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         return switch (mode) {
             case LOGIN -> login(principal, targetUrl);
-            case REGISTER -> register(principal, targetUrl);
+            case LINK -> link(principal, targetUrl);
             case UNLINK -> unlink(principal, targetUrl);
+            case WITHDRAWAL -> withdrawal(principal, targetUrl);
         };
     }
 
     @Transactional
-    public String register(final OAuth2UserPrincipal principal, final String targetUrl) {
-        checkRegisteredAccount(principal);
-        CurrentAccount currentAccount = saveBaseAccount(principal);
-        saveOAuth2Account(principal, currentAccount);
+    public String login(final OAuth2UserPrincipal principal, final String targetUrl) {
+        if (loadRegisteredOAuth2Account(principal).isEmpty()) {
+            CurrentAccount currentAccount = saveBaseAccount(principal);
+            saveOAuth2Account(principal, currentAccount);
+        }
 
         return createJwtTokenAndRedirectUri(principal, targetUrl);
     }
 
     @Transactional
-    public String login(final OAuth2UserPrincipal principal, final String targetUrl) {
-        checkUnregisteredAccount(principal);
-        saveOAuth2Account(principal, loadRegisteredAccount(principal));
+    public String link(final OAuth2UserPrincipal principal, final String targetUrl) {
+        if (loadRegisteredOAuth2Account(principal).isPresent())
+            throw new CommonApplicationException(USER_POLICY_ALREADY_LINKED_PROVIDER);
+
+        RegisteredAccount registeredAccount = loadRegisteredAccount(principal);
+        saveOAuth2Account(principal, registeredAccount);
 
         return createJwtTokenAndRedirectUri(principal, targetUrl);
     }
@@ -138,18 +142,25 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     @Transactional
-    public String unlink(OAuth2UserPrincipal principal, String targetUrl) {
+    public String unlink(final OAuth2UserPrincipal principal, final String targetUrl) {
         OAuth2UserInfo oAuth2UserInfo = principal.userInfo();
 
         String accessToken = oAuth2UserInfo.getAccessToken();
         OAuth2Provider provider = oAuth2UserInfo.getProvider();
 
         RegisteredAccount registeredAccount = loadRegisteredAccount(principal);
-        if (registeredAccount.oauth2Accounts().size() == 1)
-            throw new CommonApplicationException(USER_POLICY_CANNOT_UNLINK_FIRST_PROVIDER);
+        if (registeredAccount.isUniqueOAuth2Account())
+            throw new CommonApplicationException(USER_POLICY_CANNOT_UNLINK_UNIQUE_PROVIDER);
 
-        unlinkRequest(provider, accessToken);
-        // TODO : 탈퇴 영속성 로직 구현 필요
+        unlinkHttpRequest(provider, accessToken);
+        // TODO : 연결해제 영속성 로직 구현 필요
+        disableOAuth2AccountPort.disable(principal.userInfo().getEmail());
+
+        return fromUriString(targetUrl).build().toUriString();
+    }
+
+    @Transactional
+    public String withdrawal(final OAuth2UserPrincipal principal, final String targetUrl) {
 
         return fromUriString(targetUrl).build().toUriString();
     }
@@ -166,23 +177,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     @Transactional
-    public void checkRegisteredAccount(final OAuth2UserPrincipal principal) {
-        loadAccountPort.registeredAccountInfoByUsername(principal.userInfo().getEmail())
-                .ifPresent(account -> {
-                    throw new CommonApplicationException(USER_POLICY_ACCOUNT_REGISTERED);
-                });
-    }
-
-    @Transactional
     public RegisteredAccount loadRegisteredAccount(final OAuth2UserPrincipal principal) {
         return loadAccountPort.registeredAccountInfoByUsername(principal.userInfo().getEmail())
                 .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
     }
 
     @Transactional
-    public void checkUnregisteredAccount(final OAuth2UserPrincipal principal) {
-        loadAccountPort.registeredAccountInfoByUsername(principal.userInfo().getEmail())
-                .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
+    public Optional<RegisteredOAuth2Account> loadRegisteredOAuth2Account(OAuth2UserPrincipal principal) {
+        return loadAccountPort.registeredOAuth2AccountInfoByEmail(principal.userInfo().getEmail());
     }
 
     @Transactional
@@ -194,17 +196,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     @Transactional
-    public void saveOAuth2Account(final OAuth2UserPrincipal principal, final CurrentAccount currentAccount) {
+    public void saveOAuth2Account(final OAuth2UserPrincipal principal, final Account account) {
         SaveOAuth2Account saveOAuth2AccountBehavior = new SaveOAuth2Account(
                 principal.userInfo().getEmail(),
                 principal.userInfo().getNickname(),
                 principal.userInfo().getProvider().name(),
-                currentAccount.username()
+                account.username()
         );
         saveOAuth2AccountPort.saveOAuth2Account(saveOAuth2AccountBehavior);
     }
 
-    public void unlinkRequest(final OAuth2Provider provider, final String accessToken) {
+    public void unlinkHttpRequest(final OAuth2Provider provider, final String accessToken) {
         if (accessToken == null || accessToken.trim().isEmpty())
             throw new OAuth2AuthenticationProcessingException("Access token must not be null or empty");
 

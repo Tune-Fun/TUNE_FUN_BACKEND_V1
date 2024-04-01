@@ -8,6 +8,7 @@ import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
+import com.tune_fun.v1.account.domain.state.oauth2.RegisteredOAuth2Account;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,12 @@ public class AccountPersistenceAdapter implements
     @Override
     public Optional<RegisteredAccount> registeredAccountInfoByNickname(final String nickname) {
         return findByNickname(nickname).map(accountMapper::registeredAccountInfo);
+    }
+
+    @Override
+    public Optional<RegisteredOAuth2Account> registeredOAuth2AccountInfoByEmail(final String email) {
+        return oauth2AccountRepository.findByEmailAndEnabledTrue(email)
+                .map(accountMapper::registeredOAuth2AccountInfo);
     }
 
     @Override

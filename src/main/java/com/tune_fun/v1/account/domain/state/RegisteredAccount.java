@@ -10,5 +10,12 @@ public record RegisteredAccount(
         String password,
         Set<String> roles,
         List<RegisteredOAuth2Account> oauth2Accounts
-) {
+) implements Account {
+
+    public boolean isUniqueOAuth2Account() {
+        return oauth2Accounts.stream()
+                .filter(RegisteredOAuth2Account::enabled)
+                .count() == 1;
+    }
+
 }
