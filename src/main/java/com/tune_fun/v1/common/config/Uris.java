@@ -24,14 +24,14 @@ public class Uris {
     public static final String OAUTH2_GOOGLE_ROOT = OAUTH2_AUTHORIZATION_ROOT + "/google";
     public static final String OAUTH2_APPLE_ROOT = OAUTH2_AUTHORIZATION_ROOT + "/apple";
     public static final String OAUTH2_INSTAGRAM_ROOT = OAUTH2_AUTHORIZATION_ROOT + "/instagram";
-    public static final String OAUTH2_REGISTER_GOOGLE = OAUTH2_GOOGLE_ROOT + "?mode=register";
     public static final String OAUTH2_LOGIN_GOOGLE = OAUTH2_GOOGLE_ROOT + "?mode=login";
+    public static final String OAUTH2_LINK_GOOGLE = OAUTH2_GOOGLE_ROOT + "?mode=link";
     public static final String OAUTH2_UNLINK_GOOGLE = OAUTH2_GOOGLE_ROOT + "?mode=unlink";
-    public static final String OAUTH2_REGISTER_APPLE = OAUTH2_APPLE_ROOT + "?mode=register";
     public static final String OAUTH2_LOGIN_APPLE = OAUTH2_APPLE_ROOT + "?mode=login";
+    public static final String OAUTH2_LINK_APPLE = OAUTH2_APPLE_ROOT + "?mode=link";
     public static final String OAUTH2_UNLINK_APPLE = OAUTH2_APPLE_ROOT + "?mode=unlink";
-    public static final String OAUTH2_REGISTER_INSTAGRAM = OAUTH2_INSTAGRAM_ROOT + "?mode=register";
     public static final String OAUTH2_LOGIN_INSTAGRAM = OAUTH2_INSTAGRAM_ROOT + "?mode=login";
+    public static final String OAUTH2_LINK_INSTAGRAM = OAUTH2_INSTAGRAM_ROOT + "?mode=link";
     public static final String OAUTH2_UNLINK_INSTAGRAM = OAUTH2_INSTAGRAM_ROOT + "?mode=unlink";
     public static final String LOGOUT = API_V1_ROOT + "/logout";
     public static final String REFRESH = API_V1_ROOT + "/refresh";

@@ -13,18 +13,6 @@ operation::register-success[snippets='http-request,http-response,request-fields,
 
 operation::login-success[snippets='http-request,http-response,request-fields,response-fields']
 
-=== 구글 소셜 로그인 페이지 진입 API
-
-==== 성공
-
-operation::oauth2-authorization-google-success[snippets='http-request,http-response']
-
-=== 애플 소셜 로그인 페이지 진입 API
-
-==== 성공
-
-operation::oauth2-authorization-apple-success[snippets='http-request,http-response']
-
 === 로그아웃 API
 
 ==== 성공

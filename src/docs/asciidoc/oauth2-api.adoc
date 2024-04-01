@@ -1,0 +1,38 @@
+[[OAuth2-API]]
+== OAuth2 API
+
+=== 구글 소셜 로그인 페이지 진입 API
+
+==== 성공
+
+operation::oauth2-authorization-login-google-success[snippets='http-request,http-response']
+
+=== 구글 소셜 계정 연결 페이지 진입 API
+
+==== 성공
+
+operation::oauth2-authorization-link-google-success[snippets='http-request,http-response']
+
+=== 구글 소셜 계정 연결 해제 페이지 진입 API
+
+==== 성공
+
+operation::oauth2-authorization-unlink-google-success[snippets='http-request,http-response']
+
+=== 애플 소셜 로그인 페이지 진입 API
+
+==== 성공
+
+operation::oauth2-authorization-login-apple-success[snippets='http-request,http-response']
+
+=== 애플 소셜 계정 연결 페이지 진입 API
+
+==== 성공
+
+operation::oauth2-authorization-link-apple-success[snippets='http-request,http-response']
+
+=== 애플 소셜 계정 연결 해제 페이지 진입 API
+
+==== 성공
+
+operation::oauth2-authorization-unlink-apple-success[snippets='http-request,http-response']

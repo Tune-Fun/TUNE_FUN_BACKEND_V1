@@ -11,4 +11,5 @@
 include::common/response.adoc[]
 include::common/message.adoc[]
 include::account-api.adoc[]
+include::oauth2-api.adoc[]
 include::otp-api.adoc[]

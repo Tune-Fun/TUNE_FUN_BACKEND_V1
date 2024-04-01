@@ -3,11 +3,11 @@ package com.tune_fun.v1.base;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import com.tune_fun.v1.account.domain.state.oauth2.OAuth2AuthorizationRequestMode;
 import com.tune_fun.v1.base.annotation.IntegrationTest;
 import com.tune_fun.v1.base.doc.RestDocsConfig;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.util.i18n.MessageSourceUtil;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.io.UnsupportedEncodingException;
 
+import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.*;
 import static com.tune_fun.v1.common.api.DocumentLinkGenerator.DocUrl.MESSAGE_CODE;
 import static com.tune_fun.v1.common.api.DocumentLinkGenerator.generateLinkCode;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -38,8 +39,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @IntegrationTest
@@ -123,6 +123,15 @@ public abstract class ControllerBaseTest {
             fieldWithPath("code").description(generateLinkCode(MESSAGE_CODE))
     };
 
+    protected ResultMatcher[] oauth2AuthorizationAssertion(final OAuth2AuthorizationRequestMode mode) {
+        return new ResultMatcher[]{
+                cookie().exists(OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME),
+                cookie().maxAge(OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, COOKIE_EXPIRE_SECONDS),
+                cookie().exists(MODE_PARAM_COOKIE_NAME),
+                cookie().value(MODE_PARAM_COOKIE_NAME, mode.getQueryParameter()),
+                cookie().maxAge(MODE_PARAM_COOKIE_NAME, COOKIE_EXPIRE_SECONDS)
+        };
+    }
 
     protected static final HeaderDescriptor authorizationHeader = headerWithName(AUTHORIZATION).description("AccessToken \"Bearer \" prefix");
 
