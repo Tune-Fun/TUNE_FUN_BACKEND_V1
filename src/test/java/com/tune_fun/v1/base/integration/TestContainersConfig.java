@@ -2,9 +2,7 @@ package com.tune_fun.v1.base.integration;
 
 import org.springframework.boot.devtools.restart.RestartScope;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -12,6 +10,7 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 
@@ -36,6 +35,7 @@ public class TestContainersConfig {
     static GenericContainer<?> REDIS_CONTAINER =
             new GenericContainer<>(REDIS_IMAGE)
                     .withExposedPorts(6379)
+                    .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*\\n", 1))
                     .withReuse(true);
 
     @Container
