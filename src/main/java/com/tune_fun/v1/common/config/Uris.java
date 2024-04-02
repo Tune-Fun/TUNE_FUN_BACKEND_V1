@@ -14,7 +14,7 @@ public class Uris {
     public static final String REST_NAME_ID = "/{id}";
     public static final String REST_NAME_UUID = "/{uuid}";
 
-    public static final String NO_AUTH = "/no-auth";
+    public static final String DEFAULT_LOGIN_PAGE = "/login";
     public static final String CHECK_USERNAME_DUPLICATE = API_V1_ROOT + "/check-username-duplicate";
     public static final String CHECK_EMAIL_DUPLICATE = API_V1_ROOT + "/check-email-duplicate";
     public static final String FIND_USERNAME = API_V1_ROOT + "/find-username";
@@ -55,8 +55,11 @@ public class Uris {
     public static final String SWAGGER_INDEX_HTML = SWAGGER_UI_ROOT + "/index.html";
     public static final String SWAGGER_INDEX_CSS = SWAGGER_UI_ROOT + "/index.css";
     public static final String SWAGGER_BUNDLE_JS = SWAGGER_UI_ROOT + "/swagger-ui-bundle.js";
+    public static final String SWAGGER_BUNDLE_JS_MAP = SWAGGER_UI_ROOT + "/swagger-ui-bundle.js.map";
     public static final String SWAGGER_CSS = SWAGGER_UI_ROOT + "/swagger-ui.css";
+    public static final String SWAGGER_CSS_MAP = SWAGGER_UI_ROOT + "/swagger-ui.css.map";
     public static final String SWAGGER_STANDALONE_PRESET_JS = SWAGGER_UI_ROOT + "/swagger-ui-standalone-preset.js";
+    public static final String SWAGGER_STANDALONE_PRESET_JS_MAP = SWAGGER_UI_ROOT + "/swagger-ui-standalone-preset.js.map";
     public static final String SWAGGER_INITIALIZER_JS = SWAGGER_UI_ROOT + "/swagger-initializer.js";
     public static final String SWAGGER_FAVICON = SWAGGER_UI_ROOT + "/favicon-32x32.png";
 
@@ -69,13 +72,16 @@ public class Uris {
     public static final String HEALTH_CHECK = "/health-check";
 
     public static final String[] NOT_LOGGING_URIS = {
-            NO_AUTH,
+            DEFAULT_LOGIN_PAGE,
             SWAGGER_UI,
             SWAGGER_INDEX_HTML,
             SWAGGER_INDEX_CSS,
             SWAGGER_BUNDLE_JS,
+            SWAGGER_BUNDLE_JS_MAP,
             SWAGGER_CSS,
+            SWAGGER_CSS_MAP,
             SWAGGER_STANDALONE_PRESET_JS,
+            SWAGGER_STANDALONE_PRESET_JS_MAP,
             SWAGGER_INITIALIZER_JS,
             SWAGGER_API_DOCS,
             SWAGGER_API_DOCS_SWAGGER_CONFIG,
@@ -89,7 +95,6 @@ public class Uris {
             CUSTOM_EXCEPTION_RESPONSE_EXAMPLE
     };
     public static final String[] PERMIT_ALL_URIS = {
-            NO_AUTH,
             CHECK_USERNAME_DUPLICATE,
             CHECK_EMAIL_DUPLICATE,
             FIND_USERNAME,
@@ -107,8 +112,11 @@ public class Uris {
             SWAGGER_DOCS,
             SWAGGER_INDEX_CSS,
             SWAGGER_BUNDLE_JS,
+            SWAGGER_BUNDLE_JS_MAP,
             SWAGGER_CSS,
+            SWAGGER_CSS_MAP,
             SWAGGER_STANDALONE_PRESET_JS,
+            SWAGGER_STANDALONE_PRESET_JS_MAP,
             SWAGGER_INITIALIZER_JS,
             SWAGGER_API_DOCS,
             SWAGGER_API_DOCS_SWAGGER_CONFIG,
@@ -122,7 +130,7 @@ public class Uris {
             CUSTOM_EXCEPTION_RESPONSE_EXAMPLE
     };
     public static final String[] ADMIN_URIS = {
-
+            DEFAULT_LOGIN_PAGE
     };
 
 
