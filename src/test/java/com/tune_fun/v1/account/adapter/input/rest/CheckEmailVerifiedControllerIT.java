@@ -19,7 +19,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 
-class CheckEmailVerifiedControllerTest extends ControllerBaseTest {
+class CheckEmailVerifiedControllerIT extends ControllerBaseTest {
 
     @Autowired
     private DummyService dummyService;
