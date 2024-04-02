@@ -27,10 +27,10 @@ public class TestContainersConfig {
     private static final String ENV_TZ = "TZ";
     private static final String ASIA_SEOUL = "Asia/Seoul";
 
-    private static final DockerImageName REDIS_IMAGE = parse("redis:latest");
-    private static final DockerImageName POSTGRES_IMAGE = parse("postgres:latest");
-    private static final DockerImageName MONGODB_IMAGE = parse("mongo:latest");
-    private static final DockerImageName KAFKA_IMAGE = parse("confluentinc/cp-kafka:latest");
+    private static final DockerImageName REDIS_IMAGE = parse("redis:7.2.4");
+    private static final DockerImageName POSTGRES_IMAGE = parse("postgres:16.2");
+    private static final DockerImageName MONGODB_IMAGE = parse("mongo:7.0.4");
+    private static final DockerImageName KAFKA_IMAGE = parse("confluentinc/cp-kafka:7.6.0");
 
     @Container
     static GenericContainer<?> REDIS_CONTAINER =

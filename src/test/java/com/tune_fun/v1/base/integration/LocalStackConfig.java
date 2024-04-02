@@ -7,6 +7,7 @@ import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
@@ -33,7 +34,7 @@ import static software.amazon.awssdk.regions.Region.of;
 @Profile("test_standalone")
 public class LocalStackConfig {
 
-    private static final DockerImageName LOCAL_STACK_IMAGE = DockerImageName.parse("localstack/localstack:latest");
+    private static final DockerImageName LOCAL_STACK_IMAGE = DockerImageName.parse("localstack/localstack:3.3");
     private static final String LOCAL_STACK_S3_BUCKET_NAME = "test";
     private static final String LOCAL_STACK_SECRETS_MANAGER_SECRET_NAME = "test_secret";
 

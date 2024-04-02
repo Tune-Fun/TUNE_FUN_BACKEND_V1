@@ -1,6 +1,5 @@
 package com.tune_fun.v1.account.adapter.input.rest;
 
-import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.base.ControllerBaseTest;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.response.MessageCode;
@@ -8,7 +7,6 @@ import com.tune_fun.v1.dummy.DummyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.Issue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,34 +19,32 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 
-class CheckEmailDuplicateControllerTest extends ControllerBaseTest {
+class CheckUsernameDuplicateControllerIT extends ControllerBaseTest {
 
     @Autowired
     private DummyService dummyService;
-
-    private static final ParameterDescriptor REQUEST_DESCRIPTOR = parameterWithName("email").description("이메일")
+    private static final ParameterDescriptor REQUEST_DESCRIPTOR = parameterWithName("username").description("아이디")
             .attributes(constraint("NOT BLANK"));
 
     @Transactional
     @Test
-    @Issue("T1-163")
     @Order(1)
-    @DisplayName("이메일 중복확인, 성공")
-    void checkEmailDuplicateSuccess() throws Exception {
+    @DisplayName("아이디 중복확인, 성공")
+    void checkUsernameDuplicateSuccess() throws Exception {
         dummyService.initAccount();
 
         mockMvc.perform(
-                        get(Uris.CHECK_EMAIL_DUPLICATE)
-                                .param("email", "test")
+                        get(Uris.CHECK_USERNAME_DUPLICATE)
+                                .param("username", "test")
                 )
-                .andExpectAll(baseAssertion(MessageCode.SUCCESS_EMAIL_UNIQUE))
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS_USERNAME_UNIQUE))
                 .andDo(
                         restDocs.document(
                                 queryParameters(REQUEST_DESCRIPTOR),
                                 responseFields(baseResponseFields),
                                 resource(
                                         builder().
-                                                description("이메일 중복확인").
+                                                description("아이디 중복확인").
                                                 queryParameters(REQUEST_DESCRIPTOR).
                                                 responseFields(baseResponseFields)
                                                 .build()
@@ -59,25 +55,23 @@ class CheckEmailDuplicateControllerTest extends ControllerBaseTest {
 
     @Transactional
     @Test
-    @Issue("T1-163")
     @Order(2)
-    @DisplayName("이메일 중복확인, 실패 - 중복된 이메일")
-    void checkEmailDuplicateFailed() throws Exception {
+    @DisplayName("아이디 중복확인, 실패 - 중복된 아이디")
+    void checkUsernameDuplicateSuccessFailed() throws Exception {
         dummyService.initAccount();
-        AccountJpaEntity account = dummyService.getDefaultAccount();
 
         mockMvc.perform(
-                        get(Uris.CHECK_EMAIL_DUPLICATE)
-                                .param("email", account.getEmail())
+                        get(Uris.CHECK_USERNAME_DUPLICATE)
+                                .param("username", dummyService.getDefaultUsername())
                 )
-                .andExpectAll(baseAssertion(MessageCode.USER_POLICY_EMAIL_REGISTERED))
+                .andExpectAll(baseAssertion(MessageCode.USER_POLICY_USERNAME_REGISTERED))
                 .andDo(
                         restDocs.document(
                                 queryParameters(REQUEST_DESCRIPTOR),
                                 responseFields(baseResponseFields),
                                 resource(
                                         builder().
-                                                description("이메일 중복확인").
+                                                description("아이디 중복확인").
                                                 queryParameters(REQUEST_DESCRIPTOR).
                                                 responseFields(baseResponseFields)
                                                 .build()

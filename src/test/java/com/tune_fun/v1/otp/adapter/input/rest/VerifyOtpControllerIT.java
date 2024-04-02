@@ -25,7 +25,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
-class VerifyOtpControllerTest extends ControllerBaseTest {
+class VerifyOtpControllerIT extends ControllerBaseTest {
 
     private static final FieldDescriptor[] REQUEST_DESCRIPTORS = new FieldDescriptor[]{
             fieldWithPath("username").description("아이디").attributes(constraint("NOT BLANK")),

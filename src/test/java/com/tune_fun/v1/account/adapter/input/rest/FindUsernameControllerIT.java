@@ -23,7 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
-class FindUsernameControllerTest extends ControllerBaseTest {
+class FindUsernameControllerIT extends ControllerBaseTest {
 
     @Autowired
     private DummyService dummyService;

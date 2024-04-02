@@ -25,7 +25,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-class RefreshControllerTest extends ControllerBaseTest {
+class RefreshControllerIT extends ControllerBaseTest {
 
     @Autowired
     private DummyService dummyService;

@@ -28,7 +28,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
-class LogoutControllerTest extends ControllerBaseTest {
+class LogoutControllerIT extends ControllerBaseTest {
 
     @Autowired
     private DummyService dummyService;

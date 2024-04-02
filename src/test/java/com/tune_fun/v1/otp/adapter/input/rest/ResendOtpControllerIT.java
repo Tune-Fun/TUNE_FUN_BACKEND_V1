@@ -33,7 +33,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
-class ResendOtpControllerTest extends ControllerBaseTest {
+class ResendOtpControllerIT extends ControllerBaseTest {
 
     @Autowired
     private DummyService dummyService;

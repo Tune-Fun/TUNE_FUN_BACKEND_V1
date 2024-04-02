@@ -33,7 +33,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
 
-class ForgotPasswordOtpControllerTest extends ControllerBaseTest {
+class ForgotPasswordOtpControllerIT extends ControllerBaseTest {
 
     @Autowired
     private DummyService dummyService;
