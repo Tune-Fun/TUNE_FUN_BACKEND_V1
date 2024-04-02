@@ -3,9 +3,9 @@ package com.tune_fun.v1.common.config;
 import com.tune_fun.v1.account.adapter.input.security.JwtAuthenticationFilter;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter;
 import com.tune_fun.v1.account.application.service.oauth2.CustomOAuth2UserService;
-import com.tune_fun.v1.account.application.service.oauth2.OAuth2RequestConverter;
 import com.tune_fun.v1.account.application.service.oauth2.OAuth2AuthenticationFailureHandler;
 import com.tune_fun.v1.account.application.service.oauth2.OAuth2AuthenticationSuccessHandler;
+import com.tune_fun.v1.account.application.service.oauth2.OAuth2RequestConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +34,6 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.tune_fun.v1.common.config.Uris.NO_AUTH;
 import static java.util.Arrays.asList;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpMethod.*;
@@ -102,7 +101,6 @@ public class SecurityConfig {
                                 .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
                                 .failureHandler(oAuth2AuthenticationFailureHandler)
-                                .loginPage(NO_AUTH)
                 )
                 .userDetailsService(userDetailsService)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

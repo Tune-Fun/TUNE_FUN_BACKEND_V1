@@ -76,7 +76,7 @@ public class OAuth2AuthorizationGoogleIT extends ControllerBaseTest {
                 headerWithName("Set-Cookie").description("Set-Cookie")
         };
 
-        mockMvc.perform(get(Uris.OAUTH2_UNLINK_APPLE))
+        mockMvc.perform(get(Uris.OAUTH2_UNLINK_GOOGLE))
                 .andExpect(status().isFound())
                 .andExpectAll(oauth2AuthorizationAssertion(UNLINK))
                 .andDo(restDocs.document(
