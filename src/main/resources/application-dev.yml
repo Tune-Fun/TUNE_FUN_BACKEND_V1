@@ -138,6 +138,10 @@ apple:
   team-id: ${apple-team-id}
   oauth2-key: ${apple-oauth2-key}
 
+kms:
+  jwt-signature-arn: ${kms-jwt-signature-arn}
+  encrypt-key-arn: ${kms-encrypt-key-arn}
+
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8

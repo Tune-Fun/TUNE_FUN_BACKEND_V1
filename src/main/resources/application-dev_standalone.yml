@@ -142,8 +142,9 @@ apple:
   oauth2-key: ${apple-oauth2-key}
 
 kms:
-  jwt-signature-id: ${kms-jwt-signature-id}
-  encrypt-key-id: ${kms-encrypt-key-id}
+  jwt-signature-arn: ${kms-jwt-signature-arn}
+  encrypt-key-arn: ${kms-encrypt-key-arn}
+  data-key-cache-size: 1000
 
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8

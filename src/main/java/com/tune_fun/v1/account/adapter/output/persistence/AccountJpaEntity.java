@@ -38,8 +38,8 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
     private String uuid;
 
     @Convert(converter = EncryptConverter.class)
-    @Size(max = 255)
-    @Column(name = "username", nullable = false)
+    @Size(max = 2000)
+    @Column(name = "username", length = 2000, nullable = false)
     @Comment("아이디")
     private String username;
 
@@ -51,13 +51,14 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
 
     @Convert(converter = EncryptConverter.class)
     @NotNull
-    @Column(name = "email")
+    @Column(name = "email", length = 2000)
     @Comment("이메일")
     private String email;
 
     @Convert(converter = EncryptConverter.class)
+    @Size(max = 2000)
     @NotNull
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "nickname", length = 2000, nullable = false)
     @Comment("닉네임")
     private String nickname;
 
