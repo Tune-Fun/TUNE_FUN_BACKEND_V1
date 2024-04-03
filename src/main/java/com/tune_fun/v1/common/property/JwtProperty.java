@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.time.Duration;
 
 @ConfigurationProperties("jwt")
-public record JwtProperty(String secret, Duration accessTokenValidity, Duration refreshTokenValidity) {
+public record JwtProperty(Duration accessTokenValidity, Duration refreshTokenValidity) {
 
     public Long getAccessTokenValidity() {
         return accessTokenValidity.toMillis();
