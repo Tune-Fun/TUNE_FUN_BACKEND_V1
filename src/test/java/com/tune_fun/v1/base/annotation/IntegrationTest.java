@@ -27,10 +27,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
         webEnvironment = RANDOM_PORT
 )
 @ContextConfiguration(initializers = RandomPortInitializer.class)
-//@EmbeddedSQL
-//@EmbeddedRedis
-//@EmbeddedMongo
-//@EmbeddedKafka
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test_standalone")
 public @interface IntegrationTest {
