@@ -1,5 +1,0 @@
-org.springframework.test.context.ContextCustomizerFactory=\
-    com.tune_fun.v1.base.integration.SqlTestContainersSpringContextCustomizerFactory,\
-    com.tune_fun.v1.base.integration.RedisTestContainersSpringContextCustomizerFactory,\
-    com.tune_fun.v1.base.integration.KafkaTestContainersSpringContextCustomizerFactory,\
-    com.tune_fun.v1.base.integration.MongoTestContainersSpringContextCustomizerFactory
