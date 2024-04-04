@@ -330,6 +330,9 @@ bootJar {
     dependsOn 'asciidoctor'
     dependsOn 'openapi3'
     dependsOn 'postman'
+    from("${docsDir}") {
+        into "static/docs"
+    }
 }
 
 dependencyManagement {
