@@ -7,27 +7,27 @@ import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.services.kms.KmsClient;
+import software.amazon.awssdk.services.kms.model.*;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
 
 import static com.tune_fun.v1.base.integration.MailConfig.SMTP_USERNAME;
 import static java.lang.String.format;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SECRETSMANAGER;
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.*;
 import static software.amazon.awssdk.auth.credentials.AwsBasicCredentials.create;
 import static software.amazon.awssdk.regions.Region.of;
+import static software.amazon.awssdk.services.kms.model.OriginType.AWS_KMS;
 
 @Slf4j
 @TestConfiguration
@@ -42,15 +42,20 @@ public class LocalStackConfig {
     @Bean(initMethod = "start", destroyMethod = "stop")
     public static LocalStackContainer localStackContainer() {
         return new LocalStackContainer(LOCAL_STACK_IMAGE)
-                .withServices(S3, SECRETSMANAGER);
+                .withServices(S3, KMS, SECRETSMANAGER);
     }
 
     @DynamicPropertySource
     public static void properties(DynamicPropertyRegistry registry,
-                                  SecretsManagerClient secretsManagerClient) throws JsonProcessingException {
+                                  SecretsManagerClient secretsManagerClient,
+                                  KmsClient kmsClient) throws JsonProcessingException {
         SecretInfo secretInfo = new ObjectMapper().readValue(getSecretValue(secretsManagerClient).secretString(), SecretInfo.class);
         registry.add("spring.mail.username", secretInfo::gmailUsername);
         registry.add("spring.mail.password", secretInfo::gmailPassword);
+        
+        KmsKeyArnInfo secretKey = getKeyArn(kmsClient);
+        registry.add("kms.jwt-signature", secretKey::jwtSignatureArn);
+        registry.add("kms.encrypt-key-arn", secretKey::encryptKeyArn);
     }
 
     private static GetSecretValueResponse getSecretValue(SecretsManagerClient secretsManagerClient) {
@@ -61,6 +66,23 @@ public class LocalStackConfig {
         return format("{\"gmail-username\": \"%s\", \"gmail-password\": \"%s\"}", username, password);
     }
 
+
+    private static KmsKeyArnInfo getKeyArn(KmsClient kmsClient) {
+        CreateKeyResponse testEncryptKeyResponse = kmsClient.createKey(b -> b
+                .description("Test Encrypt key")
+                .keyUsage(KeyUsageType.ENCRYPT_DECRYPT)
+                .origin(AWS_KMS)
+        );
+
+        CreateKeyResponse testJwtSignatureResponse = kmsClient.createKey(b -> b
+                .description("Test Jwt Signature")
+                .keyUsage(KeyUsageType.GENERATE_VERIFY_MAC)
+                .keySpec(KeySpec.HMAC_512)
+                .origin(AWS_KMS)
+        );
+
+        return new KmsKeyArnInfo(testJwtSignatureResponse.keyMetadata().arn(), testEncryptKeyResponse.keyMetadata().arn());
+    }
 
     @Bean
     @DependsOn("localStackContainer")
@@ -98,6 +120,16 @@ public class LocalStackConfig {
         return secretsManagerClient;
     }
 
+    @Bean
+    @DependsOn({"localStackContainer"})
+    protected KmsClient kmsClient(LocalStackContainer localStackContainer) {
+        return KmsClient.builder()
+                .endpointOverride(localStackContainer.getEndpointOverride(KMS))
+                .credentialsProvider(getCredentialsProvider(localStackContainer))
+                .region(of(localStackContainer.getRegion()))
+                .build();
+    }
+
     @NotNull
     private StaticCredentialsProvider getCredentialsProvider(LocalStackContainer localStackContainer) {
         return StaticCredentialsProvider.create(create(localStackContainer.getAccessKey(), localStackContainer.getSecretKey()));
@@ -109,6 +141,13 @@ public class LocalStackConfig {
 
             @JsonProperty("gmail-password")
             String gmailPassword) {
+
+    }
+
+    private record KmsKeyArnInfo(
+            String jwtSignatureArn,
+            String encryptKeyArn
+    ) {
 
     }
 

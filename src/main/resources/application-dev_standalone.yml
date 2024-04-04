@@ -144,7 +144,6 @@ apple:
 kms:
   jwt-signature-arn: ${kms-jwt-signature-arn}
   encrypt-key-arn: ${kms-encrypt-key-arn}
-  data-key-cache-size: 1000
 
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
