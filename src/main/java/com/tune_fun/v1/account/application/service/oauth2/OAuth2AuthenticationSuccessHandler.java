@@ -49,7 +49,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private static final String ACCESS_TOKEN_QUERY_PARAMETER = "access_token";
     private static final String REFRESH_TOKEN_QUERY_PARAMETER = "refresh_token";
 
-    private final RemoveAuthorizationRequestCookiePort removeAuthorizationRequestCookiePort;
+
+    private final DeleteAuthorizationRequestPort deleteAuthorizationRequestPort;
 
     private final OAuth2ClientProperties oAuth2ClientProperties;
 
@@ -175,7 +176,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
-        removeAuthorizationRequestCookiePort.remove(request, response);
+        deleteAuthorizationRequestPort.delete(request, response);
     }
 
     @Transactional

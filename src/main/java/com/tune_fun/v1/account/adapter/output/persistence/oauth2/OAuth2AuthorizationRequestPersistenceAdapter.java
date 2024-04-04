@@ -1,6 +1,6 @@
 package com.tune_fun.v1.account.adapter.output.persistence.oauth2;
 
-import com.tune_fun.v1.account.application.port.output.oauth2.RemoveAuthorizationRequestCookiePort;
+import com.tune_fun.v1.account.application.port.output.oauth2.DeleteAuthorizationRequestPort;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +18,7 @@ import static org.springframework.util.StringUtils.hasText;
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class OAuth2AuthorizationRequestPersistenceAdapter
-        implements AuthorizationRequestRepository<OAuth2AuthorizationRequest>, RemoveAuthorizationRequestCookiePort {
+        implements AuthorizationRequestRepository<OAuth2AuthorizationRequest>, DeleteAuthorizationRequestPort {
 
     public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
     public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
@@ -37,7 +37,7 @@ public class OAuth2AuthorizationRequestPersistenceAdapter
     public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request,
                                          HttpServletResponse response) {
         if (authorizationRequest == null) {
-            remove(request, response);
+            delete(request, response);
             return;
         }
 
@@ -55,7 +55,7 @@ public class OAuth2AuthorizationRequestPersistenceAdapter
     }
 
     @Override
-    public void remove(HttpServletRequest request, HttpServletResponse response) {
+    public void delete(HttpServletRequest request, HttpServletResponse response) {
         removeAuthorizationRequestCookies(request, response);
     }
 

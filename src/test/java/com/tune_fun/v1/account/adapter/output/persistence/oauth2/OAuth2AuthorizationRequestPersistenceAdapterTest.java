@@ -177,7 +177,7 @@ class OAuth2AuthorizationRequestPersistenceAdapterTest {
 
     /**
      * Method under test:
-     * {@link OAuth2AuthorizationRequestPersistenceAdapter#remove(HttpServletRequest, HttpServletResponse)}
+     * {@link OAuth2AuthorizationRequestPersistenceAdapter#delete(HttpServletRequest, HttpServletResponse)}
      */
     @Test
     void testRemove() throws IOException {
@@ -187,7 +187,7 @@ class OAuth2AuthorizationRequestPersistenceAdapterTest {
         Response response = new Response();
 
         // Act
-        OAuth2AuthorizationRequestPersistenceAdapter.remove(request, response);
+        OAuth2AuthorizationRequestPersistenceAdapter.delete(request, response);
 
         // Assert that nothing has changed
         HttpServletResponse response2 = response.getResponse();
@@ -220,7 +220,7 @@ class OAuth2AuthorizationRequestPersistenceAdapterTest {
 
     /**
      * Method under test:
-     * {@link OAuth2AuthorizationRequestPersistenceAdapter#remove(HttpServletRequest, HttpServletResponse)}
+     * {@link OAuth2AuthorizationRequestPersistenceAdapter#delete(HttpServletRequest, HttpServletResponse)}
      */
     @Test
     void testRemove2() throws IOException {
@@ -234,7 +234,7 @@ class OAuth2AuthorizationRequestPersistenceAdapterTest {
         Response response = new Response();
 
         // Act
-        OAuth2AuthorizationRequestPersistenceAdapter.remove(request, response);
+        OAuth2AuthorizationRequestPersistenceAdapter.delete(request, response);
 
         // Assert that nothing has changed
         HttpServletResponse response2 = response.getResponse();
