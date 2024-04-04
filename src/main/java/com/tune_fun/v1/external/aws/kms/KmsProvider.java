@@ -14,9 +14,6 @@ import software.amazon.cryptography.materialproviders.MaterialProviders;
 import software.amazon.cryptography.materialproviders.model.CreateAwsKmsMultiKeyringInput;
 import software.amazon.cryptography.materialproviders.model.MaterialProvidersConfig;
 
-import java.util.Collections;
-import java.util.Map;
-
 import static com.amazonaws.encryptionsdk.internal.Utils.decodeBase64String;
 import static com.amazonaws.encryptionsdk.internal.Utils.encodeBase64String;
 import static java.nio.charset.StandardCharsets.UTF_8;
