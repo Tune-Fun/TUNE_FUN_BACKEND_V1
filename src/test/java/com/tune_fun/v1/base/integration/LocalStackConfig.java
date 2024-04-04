@@ -17,13 +17,16 @@ import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.services.kms.KmsClient;
-import software.amazon.awssdk.services.kms.model.*;
+import software.amazon.awssdk.services.kms.model.CreateKeyResponse;
+import software.amazon.awssdk.services.kms.model.KeySpec;
+import software.amazon.awssdk.services.kms.model.KeyUsageType;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
 
 import static com.tune_fun.v1.base.integration.MailConfig.SMTP_USERNAME;
 import static java.lang.String.format;
+import static java.lang.System.setProperty;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.*;
 import static software.amazon.awssdk.auth.credentials.AwsBasicCredentials.create;
 import static software.amazon.awssdk.regions.Region.of;
@@ -52,10 +55,7 @@ public class LocalStackConfig {
         SecretInfo secretInfo = new ObjectMapper().readValue(getSecretValue(secretsManagerClient).secretString(), SecretInfo.class);
         registry.add("spring.mail.username", secretInfo::gmailUsername);
         registry.add("spring.mail.password", secretInfo::gmailPassword);
-        
-        KmsKeyArnInfo secretKey = getKeyArn(kmsClient);
-        registry.add("kms.jwt-signature", secretKey::jwtSignatureArn);
-        registry.add("kms.encrypt-key-arn", secretKey::encryptKeyArn);
+
     }
 
     private static GetSecretValueResponse getSecretValue(SecretsManagerClient secretsManagerClient) {
@@ -67,12 +67,17 @@ public class LocalStackConfig {
     }
 
 
-    private static KmsKeyArnInfo getKeyArn(KmsClient kmsClient) {
+    private void createKeyArn(KmsClient kmsClient) {
+        log.info("Creating Test KMS keys");
+
         CreateKeyResponse testEncryptKeyResponse = kmsClient.createKey(b -> b
                 .description("Test Encrypt key")
                 .keyUsage(KeyUsageType.ENCRYPT_DECRYPT)
                 .origin(AWS_KMS)
         );
+
+        log.info("Test Encrypt key created");
+        log.info("Test Encrypt Key Arn: {}", testEncryptKeyResponse.keyMetadata().arn());
 
         CreateKeyResponse testJwtSignatureResponse = kmsClient.createKey(b -> b
                 .description("Test Jwt Signature")
@@ -81,7 +86,11 @@ public class LocalStackConfig {
                 .origin(AWS_KMS)
         );
 
-        return new KmsKeyArnInfo(testJwtSignatureResponse.keyMetadata().arn(), testEncryptKeyResponse.keyMetadata().arn());
+        log.info("Test Jwt Signature key created");
+        log.info("Test Encrypt Key Arn: {}", testJwtSignatureResponse.keyMetadata().arn());
+
+        setProperty("kms.encrypt-key-arn", testEncryptKeyResponse.keyMetadata().arn());
+        setProperty("kms.jwt-signature-arn", testJwtSignatureResponse.keyMetadata().arn());
     }
 
     @Bean
@@ -123,11 +132,14 @@ public class LocalStackConfig {
     @Bean
     @DependsOn({"localStackContainer"})
     protected KmsClient kmsClient(LocalStackContainer localStackContainer) {
-        return KmsClient.builder()
+        KmsClient kmsClient = KmsClient.builder()
                 .endpointOverride(localStackContainer.getEndpointOverride(KMS))
                 .credentialsProvider(getCredentialsProvider(localStackContainer))
                 .region(of(localStackContainer.getRegion()))
                 .build();
+
+        createKeyArn(kmsClient);
+        return kmsClient;
     }
 
     @NotNull
@@ -141,13 +153,6 @@ public class LocalStackConfig {
 
             @JsonProperty("gmail-password")
             String gmailPassword) {
-
-    }
-
-    private record KmsKeyArnInfo(
-            String jwtSignatureArn,
-            String encryptKeyArn
-    ) {
 
     }
 
