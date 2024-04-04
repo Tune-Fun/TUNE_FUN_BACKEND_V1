@@ -66,7 +66,7 @@ public class JwtTokenPersistenceAdapter implements
 
     @Override
     public void afterPropertiesSet() {
-        this.secretKey = hmacShaKeyFor(kmsProvider.getJwtSignature());
+        this.secretKey = hmacShaKeyFor(kmsProvider.requestJwtSignature());
     }
 
     @Override // LoadUsernamePort
