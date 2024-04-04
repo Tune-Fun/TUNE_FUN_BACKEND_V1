@@ -33,6 +33,9 @@ import java.security.NoSuchAlgorithmException;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+
+// REVIEW : DummyService 클래스는 테스트 경계를 흐릿하게 한다.
+// 병렬로 돌릴때 문제가 될수도
 @IntegrationTest
 @Getter
 @Service

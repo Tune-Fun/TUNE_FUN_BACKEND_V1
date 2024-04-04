@@ -59,6 +59,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.error("ExpiredJwtException: {}", e.getMessage());
             response.setStatus(401);
             response.setHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE);
+
+
+            // REVIEW Access-Control-Allow-Credentials : true 는 Access-Control-Allow-Origin : * 와 같이 사용할 수 없다.
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
             response.setHeader("Access-Control-Allow-Headers", "*");
@@ -94,6 +97,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return removeBearerPrefix(accessToken);
     }
 
+    // REVIEW : Pattern은 상수로 뽑아내는게 좋음
     private String removeBearerPrefix(String accessTokenFromRequest) {
         return Pattern.matches("^Bearer .*", accessTokenFromRequest) ? accessTokenFromRequest.substring(7) : null;
     }
