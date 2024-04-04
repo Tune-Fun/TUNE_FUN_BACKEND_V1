@@ -14,7 +14,7 @@ env:
 jobs:
   build:
     name: CI/CD
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       # 작업에서 액세스할 수 있도록 $GITHUB_WORKSPACE에서 저장소를 체크아웃한다

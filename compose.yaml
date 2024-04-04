@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: 'postgres:latest'
+    image: 'postgres:16.2'
     container_name: 'tune_fun_postgres'
     restart: always
     ports:
@@ -10,14 +10,14 @@ services:
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: mydatabase
   redis:
-    image: 'redis:latest'
+    image: 'redis:7.2.4'
     container_name: 'tune_fun_redis'
     restart: always
     ports:
       - '6378:6379'
 
   mongodb:
-    image: 'mongo:latest'
+    image: 'mongo:7.0.4'
     container_name: 'tune_fun_mongodb'
     restart: always
     environment:

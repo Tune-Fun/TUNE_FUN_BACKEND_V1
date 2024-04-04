@@ -6,6 +6,7 @@ import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.property.JwtProperty;
 import com.tune_fun.v1.common.response.MessageCode;
+import com.tune_fun.v1.external.aws.kms.KmsProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
@@ -13,6 +14,7 @@ import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
@@ -22,7 +24,6 @@ import java.util.Date;
 import java.util.UUID;
 
 import static io.jsonwebtoken.security.Keys.hmacShaKeyFor;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Account - Output Adapter - Persistence - JwtToken
@@ -30,6 +31,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
 @Component
+@DependsOn("kmsProvider")
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class JwtTokenPersistenceAdapter implements
@@ -43,10 +45,15 @@ public class JwtTokenPersistenceAdapter implements
 
     private static final String ACCESS_TOKEN_KEY_PREFIX = "access_";
     private static final String REFRESH_TOKEN_KEY_PREFIX = "refresh_";
+
     private final JwtProperty jwtProperty;
+
     private final RedisTemplate<String, AccessTokenRedisEntity> redisTemplateAccess;
     private final RedisTemplate<String, RefreshTokenRedisEntity> redisTemplateRefresh;
     private final RedisTemplate<String, Object> redisTemplateObject;
+
+    private final KmsProvider kmsProvider;
+
     private SecretKey secretKey;
 
     private static String getAccessTokenKey(final String username) {
@@ -59,7 +66,7 @@ public class JwtTokenPersistenceAdapter implements
 
     @Override
     public void afterPropertiesSet() {
-        this.secretKey = hmacShaKeyFor(jwtProperty.secret().getBytes(UTF_8));
+        this.secretKey = hmacShaKeyFor(kmsProvider.requestJwtSignature());
     }
 
     @Override // LoadUsernamePort

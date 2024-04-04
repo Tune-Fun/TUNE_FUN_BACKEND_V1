@@ -1,9 +1,6 @@
 package com.tune_fun.v1.common.config;
 
-import com.tune_fun.v1.common.property.AppleProperty;
-import com.tune_fun.v1.common.property.EventProperty;
-import com.tune_fun.v1.common.property.FcmProperty;
-import com.tune_fun.v1.common.property.JwtProperty;
+import com.tune_fun.v1.common.property.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
         AppleProperty.class,
         EventProperty.class,
         FcmProperty.class,
-        JwtProperty.class
+        JwtProperty.class,
+        KmsProperty.class
 })
 @Configuration
 public class PropertiesConfig {}

@@ -99,5 +99,9 @@ event:
       queue-name: test
       message-group-id: test
 
+kms:
+  jwt-signature-arn:
+  encrypt-key-arn:
+
 otp:
   validity: 3m

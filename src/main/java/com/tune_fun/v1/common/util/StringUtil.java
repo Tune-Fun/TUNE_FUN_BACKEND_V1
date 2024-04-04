@@ -4,14 +4,16 @@ import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.rng.UniformRandomProvider;
 import org.apache.commons.rng.simple.RandomSource;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.util.StringUtils;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.UUID;
 
-import static java.util.concurrent.ThreadLocalRandom.current;
+import static java.lang.String.join;
 import static java.util.regex.Pattern.matches;
 import static java.util.stream.Collectors.joining;
 
@@ -77,7 +79,11 @@ public class StringUtil {
     }
 
     public boolean hasText(String text) {
-        return org.springframework.util.StringUtils.hasText(text);
+        return StringUtils.hasText(text);
+    }
+
+    public static String concatWithColon(String... strings) {
+        return join(":", strings);
     }
 
     public static String removeBearerPrefix(String accessTokenFromRequest) {

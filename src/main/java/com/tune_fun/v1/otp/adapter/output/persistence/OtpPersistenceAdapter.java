@@ -4,6 +4,8 @@ import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.EncryptUtil;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.external.aws.kms.DataKey;
+import com.tune_fun.v1.external.aws.kms.KmsProvider;
 import com.tune_fun.v1.otp.application.port.output.DeleteOtpPort;
 import com.tune_fun.v1.otp.application.port.output.LoadOtpPort;
 import com.tune_fun.v1.otp.application.port.output.SaveOtpPort;
@@ -20,13 +22,22 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.Date;
 import java.util.Objects;
 
 import static com.tune_fun.v1.common.response.MessageCode.*;
+import static com.tune_fun.v1.common.util.StringUtil.concatWithColon;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.fromLabel;
 import static java.lang.String.format;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.tomcat.util.codec.binary.Base64.decodeBase64;
+import static org.apache.tomcat.util.codec.binary.Base64.encodeBase64String;
 
 
 @Component
@@ -35,7 +46,7 @@ import static java.lang.String.format;
 public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOtpPort, DeleteOtpPort {
 
     private final RedisTemplate<String, OtpRedisEntity> redisTemplate;
-    private final EncryptUtil encryptUtil;
+    private final KmsProvider kmsProvider;
 
     @Value("${otp.validity}")
     private Duration otpValidity;
@@ -43,18 +54,15 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
     @Override
     public CurrentOtp saveOtp(final SaveOtp saveOtp) throws Exception {
         OtpType otpTypeConstant = getConstant(saveOtp.otpType());
-        String token = StringUtil.randomNumeric(6);
         String otpKey = setOtpKey(otpTypeConstant, saveOtp.username());
-        String encryptedToken = encryptUtil.encrypt(token);
+        String encryptedToken = generateEncryptedToken();
 
         OtpRedisEntity otpRedisEntity = new OtpRedisEntity(saveOtp.username(), encryptedToken);
 
         ValueOperations<String, OtpRedisEntity> ops = redisTemplate.opsForValue();
         ops.set(otpKey, otpRedisEntity);
 
-        Date now = new Date();
-        Date expireDate = new Date(now.getTime() + otpValidity.toMillis());
-        redisTemplate.expireAt(otpKey, expireDate);
+        setExpiredAt(otpKey);
 
         return new CurrentOtp(saveOtp.username(), otpTypeConstant.getLabel(), encryptedToken);
     }
@@ -64,7 +72,8 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
         OtpType otpTypeConstant = getConstant(loadOtp.otpType());
         ValueOperations<String, OtpRedisEntity> ops = redisTemplate.opsForValue();
         OtpRedisEntity otpRedisEntity = ops.get(setOtpKey(otpTypeConstant, loadOtp.username()));
-        String decrypted = encryptUtil.decrypt(otpRedisEntity.getToken());
+
+        String decrypted = getDecryptedToken(otpRedisEntity);
         return new CurrentDecryptedOtp(loadOtp.username(), otpTypeConstant.getLabel(), decrypted);
     }
 
@@ -97,12 +106,38 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
         redisTemplate.expire(otpKey, Duration.ZERO);
     }
 
+    private String generateEncryptedToken() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        String token = StringUtil.randomNumeric(6);
+        DataKey dataKey = kmsProvider.makeDataKey();
+        String encryptedToken = EncryptUtil.encrypt(dataKey.plainTextKey(), token.getBytes(UTF_8));
+
+        return concatWithColon(encodeBase64String(dataKey.encryptedKey()), encryptedToken);
+    }
+
+    private String getDecryptedToken(@NotNull OtpRedisEntity otpRedisEntity) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        String token = otpRedisEntity.getToken();
+
+        int keyEnd = token.indexOf(':');
+        byte[] encryptedKey = decodeBase64(token.substring(0, keyEnd));
+        byte[] encryptedToken = decodeBase64(token.substring(keyEnd + 1));
+        byte[] plainText = kmsProvider.requestPlaintextKey(encryptedKey).plaintext().asByteArray();
+
+        return EncryptUtil.decrypt(plainText, encryptedToken);
+    }
+
+    private void setExpiredAt(String otpKey) {
+        Date now = new Date();
+        Date expireDate = new Date(now.getTime() + otpValidity.toMillis());
+        redisTemplate.expireAt(otpKey, expireDate);
+    }
+
     private Boolean checkRedisExpiration(final ValueOperations<String, OtpRedisEntity> ops, final String key) {
         return ops.get(key) == null || redisTemplate.getExpire(key) == null || redisTemplate.getExpire(key) < 0;
     }
 
     private Boolean checkMatchValue(@NotNull String value, @NotNull OtpRedisEntity otpRedisEntity) throws Exception {
-        return Objects.equals(value, encryptUtil.decrypt(otpRedisEntity.getToken()));
+        String decrypted = getDecryptedToken(otpRedisEntity);
+        return Objects.equals(value, decrypted);
     }
 
     private OtpType getConstant(final String otpType) {
