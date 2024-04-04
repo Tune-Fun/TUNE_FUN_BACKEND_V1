@@ -1,5 +1,7 @@
 package com.tune_fun.v1.external.aws.kms;
 
+import com.amazonaws.encryptionsdk.AwsCrypto;
+import com.amazonaws.encryptionsdk.CommitmentPolicy;
 import com.tune_fun.v1.common.property.KmsProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +9,17 @@ import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.kms.KmsClient;
 import software.amazon.awssdk.services.kms.model.*;
+import software.amazon.cryptography.materialproviders.IKeyring;
+import software.amazon.cryptography.materialproviders.MaterialProviders;
+import software.amazon.cryptography.materialproviders.model.CreateAwsKmsMultiKeyringInput;
+import software.amazon.cryptography.materialproviders.model.MaterialProvidersConfig;
 
+import java.util.Collections;
+import java.util.Map;
+
+import static com.amazonaws.encryptionsdk.internal.Utils.decodeBase64String;
+import static com.amazonaws.encryptionsdk.internal.Utils.encodeBase64String;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static software.amazon.awssdk.core.SdkBytes.fromByteArray;
 import static software.amazon.awssdk.services.kms.model.DataKeySpec.AES_256;
 import static software.amazon.awssdk.services.kms.model.MacAlgorithmSpec.HMAC_SHA_512;
@@ -21,6 +33,11 @@ import static software.amazon.awssdk.services.kms.model.MacAlgorithmSpec.HMAC_SH
 @Component
 @RequiredArgsConstructor
 public class KmsProvider {
+
+    private static final AwsCrypto AWS_ENCRYPTION_SDK =
+            AwsCrypto.builder()
+                    .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
+                    .build();
 
     private final KmsClient kmsClient;
     private final KmsProperty kmsProperty;
@@ -36,6 +53,27 @@ public class KmsProvider {
             return generateMacResponse.mac().asByteArray();
 
         throw new RuntimeException("Failed to get JWT signature");
+    }
+
+    public String encryptWithKeyRing(final String plainText) {
+        IKeyring keyring = getAwsKmsKeyring(kmsProperty.encryptKeyArn());
+        return encodeBase64String(AWS_ENCRYPTION_SDK.encryptData(keyring, plainText.getBytes(UTF_8)).getResult());
+    }
+
+    public String decryptWithKeyRing(final String encryptedText) {
+        IKeyring keyring = getAwsKmsKeyring(kmsProperty.encryptKeyArn());
+        return new String(AWS_ENCRYPTION_SDK.decryptData(keyring, decodeBase64String(encryptedText)).getResult());
+    }
+
+    private IKeyring getAwsKmsKeyring(String keyId) {
+        final MaterialProviders materialProviders =
+                MaterialProviders.builder()
+                        .MaterialProvidersConfig(MaterialProvidersConfig.builder().build())
+                        .build();
+
+        final CreateAwsKmsMultiKeyringInput keyringInput =
+                CreateAwsKmsMultiKeyringInput.builder().generator(keyId).build();
+        return materialProviders.CreateAwsKmsMultiKeyring(keyringInput);
     }
 
     public DataKey makeDataKey() {
