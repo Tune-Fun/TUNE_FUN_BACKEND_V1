@@ -23,12 +23,13 @@ public class OAuth2AuthorizationRequestPersistenceAdapter
     public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
     public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
     public static final String MODE_PARAM_COOKIE_NAME = "mode";
+    public static final String USERNAME_PARAM_COOKIE_NAME = "username";
     public static final int COOKIE_EXPIRE_SECONDS = 180;
 
     @Override
     public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
         return CookieUtil.getCookie(request, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME)
-                .map(cookie -> CookieUtil.deserialize(cookie, OAuth2AuthorizationRequest.class))
+                .map(cookie -> deserialize(cookie, OAuth2AuthorizationRequest.class))
                 .orElse(null);
     }
 
@@ -44,6 +45,7 @@ public class OAuth2AuthorizationRequestPersistenceAdapter
 
         checkRequestParameterAndAddCookie(REDIRECT_URI_PARAM_COOKIE_NAME, request, response);
         checkRequestParameterAndAddCookie(MODE_PARAM_COOKIE_NAME, request, response);
+        checkRequestParameterAndAddCookie(USERNAME_PARAM_COOKIE_NAME, request, response);
     }
 
     @Override
@@ -67,5 +69,6 @@ public class OAuth2AuthorizationRequestPersistenceAdapter
         deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
         deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
         deleteCookie(request, response, MODE_PARAM_COOKIE_NAME);
+        deleteCookie(request, response, USERNAME_PARAM_COOKIE_NAME);
     }
 }
