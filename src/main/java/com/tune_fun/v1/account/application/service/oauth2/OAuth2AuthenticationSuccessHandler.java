@@ -30,9 +30,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.Function;
 
-import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.MODE_PARAM_COOKIE_NAME;
-import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.*;
 import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2AuthorizationRequestMode.fromQueryParameter;
 import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider.APPLE;
 import static com.tune_fun.v1.common.response.MessageCode.*;
@@ -49,7 +49,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private static final String ACCESS_TOKEN_QUERY_PARAMETER = "access_token";
     private static final String REFRESH_TOKEN_QUERY_PARAMETER = "refresh_token";
 
-    private final RemoveAuthorizationRequestCookiePort removeAuthorizationRequestCookiePort;
+
+    private final DeleteAuthorizationRequestPort deleteAuthorizationRequestPort;
 
     private final OAuth2ClientProperties oAuth2ClientProperties;
 
@@ -65,6 +66,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final RevokeGoogleOAuth2Port revokeGoogleOAuth2Port;
     private final RevokeAppleOAuth2Port revokeAppleOAuth2Port;
+
+    private static final Function<String, String> AUTH_FAILED_URL_FUNCTION = targetUrl ->
+            fromUriString(targetUrl)
+                    .queryParam("error", "Authorization failed")
+                    .build().toUriString();
 
     @Override
     @Transactional
@@ -90,18 +96,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Optional<OAuth2UserPrincipal> principalOptional = evaluateAuthentication(authentication);
         Optional<String> modeOptional = getCookie(request, MODE_PARAM_COOKIE_NAME).map(Cookie::getValue);
 
-        if (principalOptional.isEmpty() || modeOptional.isEmpty())
-            return fromUriString(targetUrl)
-                    .queryParam("error", "Authorization failed")
-                    .build().toUriString();
+        if (principalOptional.isEmpty() || modeOptional.isEmpty()) return AUTH_FAILED_URL_FUNCTION.apply(targetUrl);
 
         OAuth2UserPrincipal principal = principalOptional.get();
         OAuth2AuthorizationRequestMode mode = fromQueryParameter(modeOptional.get());
 
         return switch (mode) {
             case LOGIN -> login(principal, targetUrl);
-            case LINK -> link(principal, targetUrl);
-            case UNLINK -> unlink(principal, targetUrl);
+            case LINK -> link(principal, targetUrl, request);
+            case UNLINK -> unlink(principal, targetUrl, request);
         };
     }
 
@@ -116,11 +119,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     @Transactional
-    public String link(final OAuth2UserPrincipal principal, final String targetUrl) {
+    public String link(final OAuth2UserPrincipal principal, final String targetUrl, HttpServletRequest request) {
+        Optional<String> usernameOptional = getCookie(request, USERNAME_PARAM_COOKIE_NAME).map(Cookie::getValue);
+        if (usernameOptional.isEmpty()) return AUTH_FAILED_URL_FUNCTION.apply(targetUrl);
+
         if (loadRegisteredOAuth2Account(principal).isPresent())
             throw new CommonApplicationException(USER_POLICY_ALREADY_LINKED_PROVIDER);
 
-        RegisteredAccount registeredAccount = loadRegisteredAccount(principal);
+        String username = usernameOptional.get();
+        RegisteredAccount registeredAccount = loadRegisteredAccount(username);
         saveOAuth2Account(principal, registeredAccount);
 
         return createJwtTokenAndRedirectUri(principal, targetUrl);
@@ -141,13 +148,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     @Transactional
-    public String unlink(final OAuth2UserPrincipal principal, final String targetUrl) {
+    public String unlink(final OAuth2UserPrincipal principal, final String targetUrl, HttpServletRequest request) {
+        Optional<String> usernameOptional = getCookie(request, USERNAME_PARAM_COOKIE_NAME).map(Cookie::getValue);
+        if (usernameOptional.isEmpty()) return AUTH_FAILED_URL_FUNCTION.apply(targetUrl);
+
         OAuth2UserInfo oAuth2UserInfo = principal.userInfo();
 
         String accessToken = oAuth2UserInfo.getAccessToken();
         OAuth2Provider provider = oAuth2UserInfo.getProvider();
 
-        RegisteredAccount registeredAccount = loadRegisteredAccount(principal);
+        String username = usernameOptional.get();
+        RegisteredAccount registeredAccount = loadRegisteredAccount(username);
         if (registeredAccount.isUniqueOAuth2Account())
             throw new CommonApplicationException(USER_POLICY_CANNOT_UNLINK_UNIQUE_PROVIDER);
 
@@ -165,12 +176,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
-        removeAuthorizationRequestCookiePort.remove(request, response);
+        deleteAuthorizationRequestPort.delete(request, response);
     }
 
     @Transactional
-    public RegisteredAccount loadRegisteredAccount(final OAuth2UserPrincipal principal) {
-        return loadAccountPort.registeredAccountInfoByUsername(principal.userInfo().getEmail())
+    public RegisteredAccount loadRegisteredAccount(final String username) {
+        return loadAccountPort.registeredAccountInfoByUsername(username)
                 .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
     }
 

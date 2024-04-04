@@ -1,6 +1,6 @@
 package com.tune_fun.v1.account.application.service.oauth2;
 
-import com.tune_fun.v1.account.application.port.output.oauth2.RemoveAuthorizationRequestCookiePort;
+import com.tune_fun.v1.account.application.port.output.oauth2.DeleteAuthorizationRequestPort;
 import com.tune_fun.v1.common.util.CookieUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2Au
 @Component
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    private final RemoveAuthorizationRequestCookiePort removeAuthorizationRequestCookiePort;
+    private final DeleteAuthorizationRequestPort deleteAuthorizationRequestPort;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
@@ -32,7 +32,7 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
                 .queryParam("error", exception.getLocalizedMessage())
                 .build().toUriString();
 
-        removeAuthorizationRequestCookiePort.remove(request, response);
+        deleteAuthorizationRequestPort.delete(request, response);
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
