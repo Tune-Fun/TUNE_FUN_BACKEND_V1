@@ -1,4 +1,4 @@
-package com.tune_fun.v1.account.application.service.oauth2;
+package com.tune_fun.v1.account.application.service.oauth2.handler;
 
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.application.port.output.SaveAccountPort;
@@ -64,12 +64,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final CreateAccessTokenPort createAccessTokenPort;
     private final CreateRefreshTokenPort createRefreshTokenPort;
 
-    private final RevokeGoogleOAuth2Port revokeGoogleOAuth2Port;
-    private final RevokeAppleOAuth2Port revokeAppleOAuth2Port;
+    private final RevokeOAuth2GooglePort revokeOAuth2GooglePort;
+    private final RevokeOAuth2ApplePort revokeOAuth2ApplePort;
 
     private static final Function<String, String> AUTH_FAILED_URL_FUNCTION = targetUrl ->
-            fromUriString(targetUrl)
-                    .queryParam("error", "Authorization failed")
+            fromUriString(targetUrl).queryParam("error", "Authorization failed")
                     .build().toUriString();
 
     @Override
@@ -214,10 +213,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             throw new OAuth2AuthenticationProcessingException("Access token must not be null or empty");
 
         switch (provider) {
-            case GOOGLE -> revokeGoogleOAuth2Port.revokeOAuth2Google(accessToken);
+            case GOOGLE -> revokeOAuth2GooglePort.revokeOAuth2Google(accessToken);
             case APPLE -> {
                 RevokeOAuth2AppleRequest request = getRevokeOAuth2AppleRequest(accessToken);
-                revokeAppleOAuth2Port.revokeOAuth2Apple(request);
+                revokeOAuth2ApplePort.revokeOAuth2Apple(request);
             }
             default -> throw new OAuth2AuthenticationProcessingException(
                     "Unlink with " + provider.getRegistrationId() + " is not supported");

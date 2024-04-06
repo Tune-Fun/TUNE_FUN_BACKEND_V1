@@ -8,7 +8,7 @@ import java.util.Map;
 
 
 @Getter
-public class AppleOAuth2UserInfo implements OAuth2UserInfo {
+public final class AppleOAuth2UserInfo implements OAuth2UserInfo {
 
     private final Map<String, Object> attributes;
     private final String accessToken;

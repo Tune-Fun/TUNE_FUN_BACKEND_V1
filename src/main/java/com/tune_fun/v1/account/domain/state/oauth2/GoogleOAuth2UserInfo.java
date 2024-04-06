@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 @Getter
-public class GoogleOAuth2UserInfo implements OAuth2UserInfo {
+public final class GoogleOAuth2UserInfo implements OAuth2UserInfo {
 
     private final Map<String, Object> attributes;
     private final String accessToken;

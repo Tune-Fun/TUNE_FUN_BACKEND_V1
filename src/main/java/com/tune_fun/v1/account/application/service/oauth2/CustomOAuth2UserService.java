@@ -23,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Map;
 
+import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider.APPLE;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Base64.getUrlDecoder;
 
@@ -53,7 +54,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         final String accessToken = request.getAccessToken().getTokenValue();
         Map<String, Object> attributes;
 
-        if (registrationId.equals("apple")) {
+        if (registrationId.contains(APPLE.getRegistrationId())) {
             String idToken = request.getAdditionalParameters().get("id_token").toString();
             attributes = decodeJwtTokenPayload(idToken);
             attributes.put("id_token", idToken);
