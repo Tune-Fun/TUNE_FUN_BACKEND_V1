@@ -15,6 +15,9 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
 
+import static com.tune_fun.v1.common.response.MessageCode.LOCK_ACQUISITION_FAILED_ERROR;
+import static com.tune_fun.v1.common.response.MessageCode.LOCK_INTERRUPTED_ERROR;
+
 @Slf4j
 @Aspect
 @Component
@@ -31,15 +34,15 @@ public class DistributionLockAspect {
 
         try {
             if (!lockInfo.reentrantLock().tryLock(distributionLock.waitTime(), distributionLock.leaseTime(), distributionLock.timeUnit()))
-                throw new CommonApplicationException(MessageCode.LOCK_ACQUISITION_FAILED_ERROR);
+                throw new CommonApplicationException(LOCK_ACQUISITION_FAILED_ERROR);
 
-            log.info("reentrantLock - " + lockInfo.key());
+            log.info("reentrantLock - {}", lockInfo.key());
             return distributedTransactionMediator.proceed(joinPoint);
         } catch (InterruptedException e) {
             log.error(e.getMessage());
-            throw new CommonApplicationException(MessageCode.LOCK_INTERRUPTED_ERROR);
+            throw new CommonApplicationException(LOCK_INTERRUPTED_ERROR);
         } finally {
-            log.info("unlock - " + lockInfo.key());
+            log.info("unlock - {}", lockInfo.key());
             lockInfo.reentrantLock().unlock();
         }
     }

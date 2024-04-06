@@ -3,6 +3,7 @@ package com.tune_fun.v1.otp.adapter.output.persistence;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.helper.KmsEncryptionHelper;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
+import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.otp.application.port.output.DeleteOtpPort;
 import com.tune_fun.v1.otp.application.port.output.LoadOtpPort;
 import com.tune_fun.v1.otp.application.port.output.SaveOtpPort;
@@ -24,7 +25,6 @@ import java.util.Date;
 import java.util.Objects;
 
 import static com.tune_fun.v1.common.response.MessageCode.*;
-import static com.tune_fun.v1.common.util.StringUtil.randomNumeric;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.fromLabel;
 import static java.lang.String.format;
 
@@ -44,7 +44,7 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
     public CurrentOtp saveOtp(final SaveOtp saveOtp) throws Exception {
         OtpType otpTypeConstant = getConstant(saveOtp.otpType());
         String otpKey = setOtpKey(otpTypeConstant, saveOtp.username());
-        String encryptedToken = kmsEncryptionHelper.encrypt(randomNumeric(6));
+        String encryptedToken = kmsEncryptionHelper.encrypt(StringUtil.randomNumeric(6));
 
         OtpRedisEntity otpRedisEntity = new OtpRedisEntity(saveOtp.username(), encryptedToken);
 
