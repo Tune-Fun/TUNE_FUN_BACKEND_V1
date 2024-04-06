@@ -57,7 +57,7 @@ public class OAuth2AuthorizationInstagramIT extends ControllerBaseTest {
                 headerWithName("Set-Cookie").description("Set-Cookie")
         };
 
-        mockMvc.perform(get(Uris.OAUTH2_LINK_INSTAGRAM))
+        mockMvc.perform(get(Uris.OAUTH2_LINK_INSTAGRAM).queryParam("username", dummyService.getDefaultUsername()))
                 .andExpect(status().isFound())
                 .andExpectAll(oauth2AuthorizationAssertion(LINK))
                 .andDo(restDocs.document(
@@ -82,7 +82,7 @@ public class OAuth2AuthorizationInstagramIT extends ControllerBaseTest {
                 headerWithName("Set-Cookie").description("Set-Cookie")
         };
 
-        mockMvc.perform(get(Uris.OAUTH2_UNLINK_INSTAGRAM))
+        mockMvc.perform(get(Uris.OAUTH2_UNLINK_INSTAGRAM).queryParam("username", dummyService.getDefaultUsername()))
                 .andExpect(status().isFound())
                 .andExpectAll(oauth2AuthorizationAssertion(UNLINK))
                 .andDo(restDocs.document(

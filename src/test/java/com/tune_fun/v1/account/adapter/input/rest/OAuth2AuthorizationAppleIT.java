@@ -84,6 +84,8 @@ public class OAuth2AuthorizationAppleIT extends ControllerBaseTest {
     @Order(3)
     @DisplayName("애플 소셜 계정 연결 해제 페이지 진입, 성공")
     void oauth2AuthorizationUnlinkAppleSuccess() throws Exception {
+        dummyService.initAccount();
+
         HeaderDescriptor[] responseHeaderDescriptor = {
                 headerWithName("Location").description("Redirect URL"),
                 headerWithName("Set-Cookie").description("Set-Cookie")
