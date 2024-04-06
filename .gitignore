@@ -8,6 +8,8 @@ build/
 /src/main/resources/tunefun-firebase-adminsdk.json
 /jacoco
 /src/main/resources/static/docs/
+spy.log
+.jqwik-database
 
 ### STS ###
 .apt_generated
@@ -23,6 +25,7 @@ bin/
 
 ### IntelliJ IDEA ###
 .idea
+.jpb
 *.iws
 *.iml
 *.ipr

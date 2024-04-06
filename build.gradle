@@ -102,8 +102,7 @@ dependencies {
     implementation 'software.amazon.awssdk:kms'
     implementation 'com.amazonaws:aws-encryption-sdk-java:3.0.0'
     implementation 'software.amazon.cryptography:aws-cryptographic-material-providers:1.2.0'
-    implementation 'com.squareup.retrofit2:retrofit'
-    implementation 'com.squareup.retrofit2:converter-jackson'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.1'
     implementation 'com.slack.api:slack-app-backend:1.38.0'
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 

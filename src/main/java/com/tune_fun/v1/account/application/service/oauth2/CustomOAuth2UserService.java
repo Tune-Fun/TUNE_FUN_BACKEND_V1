@@ -3,6 +3,8 @@ package com.tune_fun.v1.account.application.service.oauth2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tune_fun.v1.account.application.port.output.oauth2.LoadOAuth2InstagramUserInfoPort;
+import com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserInfo;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserInfoFactory;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserPrincipal;
@@ -33,6 +35,7 @@ import static java.util.Base64.getUrlDecoder;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final ObjectMapper objectMapper;
+    private final LoadOAuth2InstagramUserInfoPort loadOAuth2InstagramUserInfoPort;
 
     @SneakyThrows
     @Override
@@ -51,16 +54,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private OAuth2UserRegistration loadRegistration(final OAuth2UserRequest request) throws JsonProcessingException {
         final String registrationId = request.getClientRegistration().getRegistrationId();
         final String accessToken = request.getAccessToken().getTokenValue();
-        Map<String, Object> attributes;
 
-        if (registrationId.equals("apple")) {
-            String idToken = request.getAdditionalParameters().get("id_token").toString();
-            attributes = decodeJwtTokenPayload(idToken);
-            attributes.put("id_token", idToken);
-        } else {
-            OAuth2User oAuth2User = super.loadUser(request);
-            attributes = oAuth2User.getAttributes();
-        }
+        final Map<String, Object> attributes =
+                switch (OAuth2Provider.valueOf(registrationId)) {
+                    case APPLE:
+                        String idToken = request.getAdditionalParameters().get("id_token").toString();
+                        Map<String, Object> payload = decodeJwtTokenPayload(idToken);
+                        payload.put("id_token", idToken);
+                        yield payload;
+                    case INSTAGRAM:
+                        yield loadOAuth2InstagramUserInfoPort.loadUserInfo("id,username", accessToken);
+                    default:
+                        OAuth2User oAuth2User = super.loadUser(request);
+                        yield oAuth2User.getAttributes();
+                };
 
         return new OAuth2UserRegistration(registrationId, accessToken, attributes);
     }

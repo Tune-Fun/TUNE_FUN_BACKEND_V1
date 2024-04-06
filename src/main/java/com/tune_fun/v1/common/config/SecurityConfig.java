@@ -3,9 +3,9 @@ package com.tune_fun.v1.common.config;
 import com.tune_fun.v1.account.adapter.input.security.JwtAuthenticationFilter;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter;
 import com.tune_fun.v1.account.application.service.oauth2.CustomOAuth2UserService;
-import com.tune_fun.v1.account.application.service.oauth2.OAuth2AuthenticationFailureHandler;
-import com.tune_fun.v1.account.application.service.oauth2.OAuth2AuthenticationSuccessHandler;
-import com.tune_fun.v1.account.application.service.oauth2.OAuth2RequestConverter;
+import com.tune_fun.v1.account.application.service.oauth2.decorator.OAuth2AccessTokenResponseClientDecorator;
+import com.tune_fun.v1.account.application.service.oauth2.handler.OAuth2AuthenticationFailureHandler;
+import com.tune_fun.v1.account.application.service.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -14,13 +14,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
@@ -31,10 +27,10 @@ import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -46,18 +42,13 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2RequestConverter oAuth2RequestConverter;
+    private final OAuth2AccessTokenResponseClientDecorator OAuth2AccessTokenResponseClientDecorator;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final OAuth2AuthorizationRequestPersistenceAdapter OAuth2AuthorizationRequestPersistenceAdapter;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
-
-    @Bean
-    public WebSecurityCustomizer configure() {
-        return (web) -> web.ignoring().requestMatchers("/static/**", "/favicon.ico");
-    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -90,13 +81,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(mvc(introspector, Uris.PERMIT_ALL_URIS)).permitAll()
+                        .requestMatchers(mvc(introspector, "/static/**", "/favicon.ico")).permitAll()
                         .requestMatchers(mvc(introspector, Uris.ADMIN_URIS)).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(configure ->
                         configure
-                                .tokenEndpoint(config -> config.accessTokenResponseClient(this.accessTokenResponseClient()))
+                                .tokenEndpoint(config -> config.accessTokenResponseClient(OAuth2AccessTokenResponseClientDecorator))
                                 .authorizationEndpoint(config -> config.authorizationRequestRepository(OAuth2AuthorizationRequestPersistenceAdapter))
                                 .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
@@ -108,18 +100,8 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
-        DefaultAuthorizationCodeTokenResponseClient tokenResponseClient = new DefaultAuthorizationCodeTokenResponseClient();
-        tokenResponseClient.setRequestEntityConverter(oAuth2RequestConverter);
-
-        return tokenResponseClient;
-    }
-
     private AntPathRequestMatcher[] ant(String... patterns) {
-        return Arrays.stream(patterns)
-                .map(this::ant)
-                .toArray(AntPathRequestMatcher[]::new);
+        return stream(patterns).map(this::ant).toArray(AntPathRequestMatcher[]::new);
     }
 
     private AntPathRequestMatcher ant(String pattern) {
@@ -127,9 +109,7 @@ public class SecurityConfig {
     }
 
     private MvcRequestMatcher[] mvc(HandlerMappingIntrospector introspector, String... patterns) {
-        return Arrays.stream(patterns)
-                .map(pattern -> mvc(introspector, pattern))
-                .toArray(MvcRequestMatcher[]::new);
+        return stream(patterns).map(pattern -> mvc(introspector, pattern)).toArray(MvcRequestMatcher[]::new);
     }
 
     private MvcRequestMatcher mvc(HandlerMappingIntrospector introspector, String pattern) {
