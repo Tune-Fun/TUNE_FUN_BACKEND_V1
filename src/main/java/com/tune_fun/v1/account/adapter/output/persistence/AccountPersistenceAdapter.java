@@ -26,6 +26,7 @@ import java.util.Optional;
 public class AccountPersistenceAdapter implements
         LoadAccountPort, SaveAccountPort,
         SaveOAuth2AccountPort, DisableOAuth2AccountPort,
+        DeleteAccountPort,
         RecordLastLoginAtPort, RecordEmailVerifiedAtPort,
         UpdatePasswordPort, UpdateNicknamePort {
 
@@ -65,6 +66,11 @@ public class AccountPersistenceAdapter implements
     public Optional<RegisteredOAuth2Account> registeredOAuth2AccountInfoByEmail(final String email) {
         return oauth2AccountRepository.findByEmailAndEnabledTrue(email)
                 .map(accountMapper::registeredOAuth2AccountInfo);
+    }
+
+    @Override
+    public void deleteAll() {
+        accountRepository.deleteAll();
     }
 
     @Override
