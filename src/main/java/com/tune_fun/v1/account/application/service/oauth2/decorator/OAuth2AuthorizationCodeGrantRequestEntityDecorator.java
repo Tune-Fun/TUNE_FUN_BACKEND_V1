@@ -1,5 +1,6 @@
 package com.tune_fun.v1.account.application.service.oauth2.decorator;
 
+import com.tune_fun.v1.common.helper.AppleOAuth2ClientSecretHelper;
 import com.tune_fun.v1.common.property.AppleProperty;
 import com.tune_fun.v1.common.util.EncryptUtil;
 import io.jsonwebtoken.Jwts;
@@ -27,8 +28,7 @@ import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterN
 @RequiredArgsConstructor
 public class OAuth2AuthorizationCodeGrantRequestEntityDecorator extends OAuth2AuthorizationCodeGrantRequestEntityConverter {
 
-    private final AppleProperty appleProperty;
-    private final OAuth2ClientProperties oAuth2ClientProperties;
+    private final AppleOAuth2ClientSecretHelper appleOAuth2ClientSecretHelper;
 
 
     @Override
@@ -51,7 +51,7 @@ public class OAuth2AuthorizationCodeGrantRequestEntityDecorator extends OAuth2Au
 
         String clientSecret;
         try {
-            clientSecret = createAppleClientSecret();
+            clientSecret = appleOAuth2ClientSecretHelper.createAppleClientSecret();
         } catch (IOException e) {
             throw new IllegalStateException("Error while creating Apple client secret.");
         }
@@ -59,25 +59,6 @@ public class OAuth2AuthorizationCodeGrantRequestEntityDecorator extends OAuth2Au
         params.set(CLIENT_SECRET, clientSecret);
 
         return new RequestEntity<>(params, entity.getHeaders(), entity.getMethod(), entity.getUrl());
-    }
-
-    private String createAppleClientSecret() throws IOException {
-        Instant expirationInstant = Instant.now().plusSeconds(30 * 24 * 60 * 60); // 30 days in seconds
-        final StringReader appleOAuth2KeyReader = new StringReader(appleProperty.oauth2Key());
-        final PrivateKey appleOAuth2PrivateKey = EncryptUtil.parsePemAndGetPrivateKey(appleOAuth2KeyReader);
-
-
-        return Jwts.builder()
-                .header().add("kid", appleProperty.keyId())
-                .and()
-                .issuer(appleProperty.teamId())
-                .issuedAt(Date.from(Instant.now()))
-                .expiration(Date.from(expirationInstant))
-                .audience().add("https://appleid.apple.com")
-                .and()
-                .subject(oAuth2ClientProperties.getRegistration().get(APPLE.getRegistrationId()).getClientId())
-                .signWith(appleOAuth2PrivateKey, Jwts.SIG.ES256)
-                .compact();
     }
 
 }
