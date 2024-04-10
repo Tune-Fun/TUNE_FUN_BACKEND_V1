@@ -225,6 +225,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             }
             default -> throw new OAuth2AuthenticationProcessingException(
                     "Unlink with " + provider.getRegistrationId() + " is not supported");
+
         }
     }
 
