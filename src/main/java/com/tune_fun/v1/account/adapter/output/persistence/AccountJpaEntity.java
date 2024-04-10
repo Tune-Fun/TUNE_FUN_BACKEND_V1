@@ -1,5 +1,6 @@
 package com.tune_fun.v1.account.adapter.output.persistence;
 
+import com.tune_fun.v1.account.adapter.output.persistence.device.DeviceJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountJpaEntity;
 import com.tune_fun.v1.common.converter.EncryptConverter;
 import com.tune_fun.v1.common.entity.BaseEntity;
@@ -37,7 +38,6 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
     @Comment("고유번호")
     private String uuid;
 
-//    @Convert(converter = EncryptConverter.class)
     @Size(max = 2000)
     @Column(name = "username", length = 2000, nullable = false)
     @Comment("아이디")
@@ -49,13 +49,11 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
     @Comment("비밀번호")
     private String password;
 
-//    @Convert(converter = EncryptConverter.class)
     @NotNull
     @Column(name = "email", length = 2000)
     @Comment("이메일")
     private String email;
 
-//    @Convert(converter = EncryptConverter.class)
     @Size(max = 2000)
     @NotNull
     @Column(name = "nickname", length = 2000, nullable = false)
@@ -97,7 +95,11 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
     protected LocalDateTime deletedAt;
 
     @Singular
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
+    private List<DeviceJpaEntity> devices;
+
+    @Singular
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OAuth2AccountJpaEntity> oauth2Accounts;
 
     @Builder.Default

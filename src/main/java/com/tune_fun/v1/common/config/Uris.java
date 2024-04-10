@@ -9,6 +9,10 @@ public class Uris {
     public static final String CUSTOM_RESPONSE_EXAMPLE = "/custom-response-example";
     public static final String CUSTOM_EXCEPTION_RESPONSE_EXAMPLE = "/custom-exception-response-example";
 
+    public static final String TEMP_ROOT = "/temp";
+
+    public static final String TEMP_ACCOUNT_RESET = TEMP_ROOT + "/account";
+
     public static final String API_V1_ROOT = "/v1";
 
     public static final String REST_NAME_ID = "/{id}";
@@ -95,6 +99,8 @@ public class Uris {
             CUSTOM_EXCEPTION_RESPONSE_EXAMPLE
     };
     public static final String[] PERMIT_ALL_URIS = {
+            TEMP_ACCOUNT_RESET,
+
             CHECK_USERNAME_DUPLICATE,
             CHECK_EMAIL_DUPLICATE,
             FIND_USERNAME,
