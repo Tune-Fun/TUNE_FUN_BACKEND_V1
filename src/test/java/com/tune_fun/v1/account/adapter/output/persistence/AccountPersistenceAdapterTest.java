@@ -1,22 +1,21 @@
 package com.tune_fun.v1.account.adapter.output.persistence;
 
+import com.tune_fun.v1.account.adapter.output.persistence.device.DeviceJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountRepository;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
 import com.tune_fun.v1.account.domain.state.CurrentAccount;
 import com.tune_fun.v1.account.domain.state.RegisteredAccount;
+import com.tune_fun.v1.account.domain.state.oauth2.RegisteredOAuth2Account;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -29,13 +28,10 @@ import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-@Execution(CONCURRENT)
 @ContextConfiguration(classes = {AccountPersistenceAdapter.class})
-@ActiveProfiles("test_standalone")
 @ExtendWith(SpringExtension.class)
 @DisabledInAotMode
 class AccountPersistenceAdapterTest {
@@ -65,10 +61,11 @@ class AccountPersistenceAdapterTest {
         LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime withdrawalAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        ArrayList<DeviceJpaEntity> devices = new ArrayList<>();
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
                 "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, deletedAt, new ArrayList<>(), true, true, true, true));
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+                emailVerifiedAt, withdrawalAt, deletedAt, devices, new ArrayList<>(), true, true, true, true));
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -103,7 +100,7 @@ class AccountPersistenceAdapterTest {
         Mockito.<Collection<? extends GrantedAuthority>>when(accountJpaEntity.getAuthorities())
                 .thenReturn(new ArrayList<>());
         Optional<AccountJpaEntity> ofResult = Optional.of(accountJpaEntity);
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -147,7 +144,7 @@ class AccountPersistenceAdapterTest {
         Mockito.<Collection<? extends GrantedAuthority>>when(accountJpaEntity.getAuthorities())
                 .thenReturn(grantedAuthorityList);
         Optional<AccountJpaEntity> ofResult = Optional.of(accountJpaEntity);
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -180,7 +177,7 @@ class AccountPersistenceAdapterTest {
     void testLoadCustomUserByUsername4() {
         // Arrange
         Optional<AccountJpaEntity> emptyResult = Optional.empty();
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(emptyResult);
 
         // Act
@@ -200,11 +197,11 @@ class AccountPersistenceAdapterTest {
     void testCurrentAccountInfo() {
         // Arrange
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
         LocalDateTime createdAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
-        when(accountMapper.accountInfo(Mockito.any()))
+        when(accountMapper.accountInfo(Mockito.<AccountJpaEntity>any()))
                 .thenReturn(new CurrentAccount(createdAt, emailVerifiedAt, "01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe",
                         "Nickname", "jane.doe@example.org", new HashSet<>()));
 
@@ -224,10 +221,10 @@ class AccountPersistenceAdapterTest {
     void testRegisteredAccountInfoByUsername() {
         // Arrange
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
         HashSet<String> roles = new HashSet<>();
-        when(accountMapper.registeredAccountInfo(Mockito.any()))
+        when(accountMapper.registeredAccountInfo(Mockito.<AccountJpaEntity>any()))
                 .thenReturn(new RegisteredAccount("janedoe", "iloveyou", roles, new ArrayList<>()));
 
         // Act
@@ -246,10 +243,10 @@ class AccountPersistenceAdapterTest {
     void testRegisteredAccountInfoByEmail() {
         // Arrange
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
         HashSet<String> roles = new HashSet<>();
-        when(accountMapper.registeredAccountInfo(Mockito.any()))
+        when(accountMapper.registeredAccountInfo(Mockito.<AccountJpaEntity>any()))
                 .thenReturn(new RegisteredAccount("janedoe", "iloveyou", roles, new ArrayList<>()));
 
         // Act
@@ -268,10 +265,10 @@ class AccountPersistenceAdapterTest {
     void testRegisteredAccountInfoByNickname() {
         // Arrange
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
         HashSet<String> roles = new HashSet<>();
-        when(accountMapper.registeredAccountInfo(Mockito.any()))
+        when(accountMapper.registeredAccountInfo(Mockito.<AccountJpaEntity>any()))
                 .thenReturn(new RegisteredAccount("janedoe", "iloveyou", roles, new ArrayList<>()));
 
         // Act
@@ -284,14 +281,49 @@ class AccountPersistenceAdapterTest {
 
     /**
      * Method under test:
+     * {@link AccountPersistenceAdapter#registeredOAuth2AccountInfoByEmail(String)}
+     */
+    @Test
+    void testRegisteredOAuth2AccountInfoByEmail() {
+        // Arrange
+        Optional<OAuth2AccountJpaEntity> ofResult = Optional.of(new OAuth2AccountJpaEntity());
+        when(oAuth2AccountRepository.findByEmailAndEnabledTrue(Mockito.<String>any())).thenReturn(ofResult);
+        when(accountMapper.registeredOAuth2AccountInfo(Mockito.<OAuth2AccountJpaEntity>any()))
+                .thenReturn(new RegisteredOAuth2Account("jane.doe@example.org", "Nickname", "Oauth2 Provider", true));
+
+        // Act
+        accountPersistenceAdapter.registeredOAuth2AccountInfoByEmail("jane.doe@example.org");
+
+        // Assert
+        verify(accountMapper).registeredOAuth2AccountInfo(isA(OAuth2AccountJpaEntity.class));
+        verify(oAuth2AccountRepository).findByEmailAndEnabledTrue(eq("jane.doe@example.org"));
+    }
+
+    /**
+     * Method under test: {@link AccountPersistenceAdapter#deleteAll()}
+     */
+    @Test
+    void testDeleteAll() {
+        // Arrange
+        doNothing().when(accountRepository).deleteAll();
+
+        // Act
+        accountPersistenceAdapter.deleteAll();
+
+        // Assert that nothing has changed
+        verify(accountRepository).deleteAll();
+    }
+
+    /**
+     * Method under test:
      * {@link AccountPersistenceAdapter#recordLastLoginAt(String)}
      */
     @Test
     void testRecordLastLoginAt() {
         // Arrange
-        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
+        when(accountRepository.save(Mockito.<AccountJpaEntity>any())).thenReturn(new AccountJpaEntity());
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -309,7 +341,7 @@ class AccountPersistenceAdapterTest {
     @Test
     void testRecordLastLoginAt2() {
         // Arrange
-        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
+        when(accountRepository.save(Mockito.<AccountJpaEntity>any())).thenReturn(new AccountJpaEntity());
         NotificationConfig notificationConfig = new NotificationConfig();
         HashSet<Role> roles = new HashSet<>();
         LocalDateTime lastLoginAt = LocalDate.of(1970, 1, 1).atStartOfDay();
@@ -317,10 +349,11 @@ class AccountPersistenceAdapterTest {
         LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime withdrawalAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        ArrayList<DeviceJpaEntity> devices = new ArrayList<>();
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
                 "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, deletedAt, new ArrayList<>(), true, true, true, true));
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+                emailVerifiedAt, withdrawalAt, deletedAt, devices, new ArrayList<>(), true, true, true, true));
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -339,7 +372,7 @@ class AccountPersistenceAdapterTest {
     void testRecordLastLoginAt3() {
         // Arrange
         Optional<AccountJpaEntity> emptyResult = Optional.empty();
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(emptyResult);
 
         // Act
@@ -356,9 +389,9 @@ class AccountPersistenceAdapterTest {
     @Test
     void testRecordEmailVerifiedAt() {
         // Arrange
-        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
+        when(accountRepository.save(Mockito.<AccountJpaEntity>any())).thenReturn(new AccountJpaEntity());
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -376,7 +409,7 @@ class AccountPersistenceAdapterTest {
     @Test
     void testRecordEmailVerifiedAt2() {
         // Arrange
-        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
+        when(accountRepository.save(Mockito.<AccountJpaEntity>any())).thenReturn(new AccountJpaEntity());
         NotificationConfig notificationConfig = new NotificationConfig();
         HashSet<Role> roles = new HashSet<>();
         LocalDateTime lastLoginAt = LocalDate.of(1970, 1, 1).atStartOfDay();
@@ -384,10 +417,11 @@ class AccountPersistenceAdapterTest {
         LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime withdrawalAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        ArrayList<DeviceJpaEntity> devices = new ArrayList<>();
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
                 "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, deletedAt, new ArrayList<>(), true, true, true, true));
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+                emailVerifiedAt, withdrawalAt, deletedAt, devices, new ArrayList<>(), true, true, true, true));
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -406,7 +440,7 @@ class AccountPersistenceAdapterTest {
     void testRecordEmailVerifiedAt3() {
         // Arrange
         Optional<AccountJpaEntity> emptyResult = Optional.empty();
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(emptyResult);
 
         // Act
@@ -424,7 +458,7 @@ class AccountPersistenceAdapterTest {
     void testLoadAccountByUsername() {
         // Arrange
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -443,7 +477,7 @@ class AccountPersistenceAdapterTest {
     void testFindByEmail() {
         // Arrange
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -461,7 +495,7 @@ class AccountPersistenceAdapterTest {
     void testFindByNickname() {
         // Arrange
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -478,14 +512,14 @@ class AccountPersistenceAdapterTest {
     @Test
     void testSaveAccount() {
         // Arrange
-        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
-        when(accountMapper.fromSaveAccountBehavior(Mockito.any())).thenReturn(new AccountJpaEntity());
+        when(accountRepository.save(Mockito.<AccountJpaEntity>any())).thenReturn(new AccountJpaEntity());
+        when(accountMapper.fromSaveAccountBehavior(Mockito.<SaveAccount>any())).thenReturn(new AccountJpaEntity());
         LocalDateTime createdAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         CurrentAccount currentAccount = new CurrentAccount(createdAt, emailVerifiedAt,
                 "01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe", "Nickname", "jane.doe@example.org", new HashSet<>());
 
-        when(accountMapper.accountInfo(Mockito.any())).thenReturn(currentAccount);
+        when(accountMapper.accountInfo(Mockito.<AccountJpaEntity>any())).thenReturn(currentAccount);
 
         // Act
         CurrentAccount actualSaveAccountResult = accountPersistenceAdapter
@@ -507,9 +541,9 @@ class AccountPersistenceAdapterTest {
     void testSaveOAuth2Account() {
         // Arrange
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
-        when(oAuth2AccountRepository.save(Mockito.any())).thenReturn(new OAuth2AccountJpaEntity());
+        when(oAuth2AccountRepository.save(Mockito.<OAuth2AccountJpaEntity>any())).thenReturn(new OAuth2AccountJpaEntity());
 
         // Act
         accountPersistenceAdapter
@@ -528,7 +562,7 @@ class AccountPersistenceAdapterTest {
     void testSaveOAuth2Account2() {
         // Arrange
         Optional<AccountJpaEntity> emptyResult = Optional.empty();
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(emptyResult);
 
         // Act
@@ -541,14 +575,72 @@ class AccountPersistenceAdapterTest {
 
     /**
      * Method under test:
+     * {@link AccountPersistenceAdapter#disableOAuth2Account(String)}
+     */
+    @Test
+    void testDisableOAuth2Account() {
+        // Arrange
+        when(oAuth2AccountRepository.save(Mockito.<OAuth2AccountJpaEntity>any())).thenReturn(new OAuth2AccountJpaEntity());
+        Optional<OAuth2AccountJpaEntity> ofResult = Optional.of(new OAuth2AccountJpaEntity());
+        when(oAuth2AccountRepository.findByEmailAndEnabledTrue(Mockito.<String>any())).thenReturn(ofResult);
+
+        // Act
+        accountPersistenceAdapter.disableOAuth2Account("jane.doe@example.org");
+
+        // Assert
+        verify(oAuth2AccountRepository).findByEmailAndEnabledTrue(eq("jane.doe@example.org"));
+        verify(oAuth2AccountRepository).save(isA(OAuth2AccountJpaEntity.class));
+    }
+
+    /**
+     * Method under test:
+     * {@link AccountPersistenceAdapter#disableOAuth2Account(String)}
+     */
+    @Test
+    void testDisableOAuth2Account2() {
+        // Arrange
+        OAuth2AccountJpaEntity oAuth2AccountJpaEntity = mock(OAuth2AccountJpaEntity.class);
+        doNothing().when(oAuth2AccountJpaEntity).disable();
+        Optional<OAuth2AccountJpaEntity> ofResult = Optional.of(oAuth2AccountJpaEntity);
+        when(oAuth2AccountRepository.save(Mockito.<OAuth2AccountJpaEntity>any())).thenReturn(new OAuth2AccountJpaEntity());
+        when(oAuth2AccountRepository.findByEmailAndEnabledTrue(Mockito.<String>any())).thenReturn(ofResult);
+
+        // Act
+        accountPersistenceAdapter.disableOAuth2Account("jane.doe@example.org");
+
+        // Assert that nothing has changed
+        verify(oAuth2AccountJpaEntity).disable();
+        verify(oAuth2AccountRepository).findByEmailAndEnabledTrue(eq("jane.doe@example.org"));
+        verify(oAuth2AccountRepository).save(isA(OAuth2AccountJpaEntity.class));
+    }
+
+    /**
+     * Method under test:
+     * {@link AccountPersistenceAdapter#disableOAuth2Account(String)}
+     */
+    @Test
+    void testDisableOAuth2Account3() {
+        // Arrange
+        Optional<OAuth2AccountJpaEntity> emptyResult = Optional.empty();
+        when(oAuth2AccountRepository.findByEmailAndEnabledTrue(Mockito.<String>any())).thenReturn(emptyResult);
+
+        // Act
+        accountPersistenceAdapter.disableOAuth2Account("jane.doe@example.org");
+
+        // Assert that nothing has changed
+        verify(oAuth2AccountRepository).findByEmailAndEnabledTrue(eq("jane.doe@example.org"));
+    }
+
+    /**
+     * Method under test:
      * {@link AccountPersistenceAdapter#updatePassword(String, String)}
      */
     @Test
     void testUpdatePassword() {
         // Arrange
-        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
+        when(accountRepository.save(Mockito.<AccountJpaEntity>any())).thenReturn(new AccountJpaEntity());
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -566,7 +658,7 @@ class AccountPersistenceAdapterTest {
     @Test
     void testUpdatePassword2() {
         // Arrange
-        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
+        when(accountRepository.save(Mockito.<AccountJpaEntity>any())).thenReturn(new AccountJpaEntity());
         NotificationConfig notificationConfig = new NotificationConfig();
         HashSet<Role> roles = new HashSet<>();
         LocalDateTime lastLoginAt = LocalDate.of(1970, 1, 1).atStartOfDay();
@@ -574,10 +666,11 @@ class AccountPersistenceAdapterTest {
         LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime withdrawalAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        ArrayList<DeviceJpaEntity> devices = new ArrayList<>();
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
                 "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, deletedAt, new ArrayList<>(), true, true, true, true));
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+                emailVerifiedAt, withdrawalAt, deletedAt, devices, new ArrayList<>(), true, true, true, true));
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -596,7 +689,7 @@ class AccountPersistenceAdapterTest {
     void testUpdatePassword3() {
         // Arrange
         Optional<AccountJpaEntity> emptyResult = Optional.empty();
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(emptyResult);
 
         // Act
@@ -613,9 +706,9 @@ class AccountPersistenceAdapterTest {
     @Test
     void testUpdateNickname() {
         // Arrange
-        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
+        when(accountRepository.save(Mockito.<AccountJpaEntity>any())).thenReturn(new AccountJpaEntity());
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -633,7 +726,7 @@ class AccountPersistenceAdapterTest {
     @Test
     void testUpdateNickname2() {
         // Arrange
-        when(accountRepository.save(Mockito.any())).thenReturn(new AccountJpaEntity());
+        when(accountRepository.save(Mockito.<AccountJpaEntity>any())).thenReturn(new AccountJpaEntity());
         NotificationConfig notificationConfig = new NotificationConfig();
         HashSet<Role> roles = new HashSet<>();
         LocalDateTime lastLoginAt = LocalDate.of(1970, 1, 1).atStartOfDay();
@@ -641,10 +734,11 @@ class AccountPersistenceAdapterTest {
         LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime withdrawalAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        ArrayList<DeviceJpaEntity> devices = new ArrayList<>();
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
                 "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, deletedAt, new ArrayList<>(), true, true, true, true));
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+                emailVerifiedAt, withdrawalAt, deletedAt, devices, new ArrayList<>(), true, true, true, true));
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
         // Act
@@ -663,7 +757,7 @@ class AccountPersistenceAdapterTest {
     void testUpdateNickname3() {
         // Arrange
         Optional<AccountJpaEntity> emptyResult = Optional.empty();
-        when(accountRepository.findActive(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(emptyResult);
 
         // Act
