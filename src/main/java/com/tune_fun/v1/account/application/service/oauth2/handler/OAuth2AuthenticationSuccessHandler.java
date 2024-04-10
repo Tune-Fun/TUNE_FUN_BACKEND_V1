@@ -14,12 +14,14 @@ import com.tune_fun.v1.account.domain.state.RegisteredAccount;
 import com.tune_fun.v1.account.domain.state.oauth2.*;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.exception.OAuth2AuthenticationProcessingException;
+import com.tune_fun.v1.common.helper.AppleOAuth2ClientSecretHelper;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.StringUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
@@ -67,6 +69,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final RevokeOAuth2GooglePort revokeOAuth2GooglePort;
     private final RevokeOAuth2ApplePort revokeOAuth2ApplePort;
 
+    private final AppleOAuth2ClientSecretHelper appleOAuth2ClientSecretHelper;
+
     private static final Function<String, String> AUTH_FAILED_URL_FUNCTION = targetUrl ->
             fromUriString(targetUrl).queryParam("error", "Authorization failed")
                     .build().toUriString();
@@ -86,6 +90,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
+    @SneakyThrows
     @Transactional
     public String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
                                      Authentication authentication) {
@@ -147,7 +152,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     @Transactional
-    public String unlink(final OAuth2UserPrincipal principal, final String targetUrl, HttpServletRequest request) {
+    public String unlink(final OAuth2UserPrincipal principal, final String targetUrl, HttpServletRequest request) throws IOException {
         Optional<String> usernameOptional = getCookie(request, USERNAME_PARAM_COOKIE_NAME).map(Cookie::getValue);
         if (usernameOptional.isEmpty()) return AUTH_FAILED_URL_FUNCTION.apply(targetUrl);
 
@@ -208,7 +213,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         saveOAuth2AccountPort.saveOAuth2Account(saveOAuth2AccountBehavior);
     }
 
-    private void unlinkHttpRequest(final OAuth2Provider provider, final String accessToken) {
+    private void unlinkHttpRequest(final OAuth2Provider provider, final String accessToken) throws IOException {
         if (accessToken == null || accessToken.trim().isEmpty())
             throw new OAuth2AuthenticationProcessingException("Access token must not be null or empty");
 
@@ -224,14 +229,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     @NotNull
-    private RevokeOAuth2AppleRequest getRevokeOAuth2AppleRequest(final String accessToken) {
+    private RevokeOAuth2AppleRequest getRevokeOAuth2AppleRequest(final String accessToken) throws IOException {
         OAuth2ClientProperties.Registration registration = oAuth2ClientProperties
                 .getRegistration()
                 .get(APPLE.getRegistrationId());
 
         if (registration == null) throw new OAuth2AuthenticationProcessingException("Apple registration not found");
 
-        return new RevokeOAuth2AppleRequest(registration.getClientId(), registration.getClientSecret(), accessToken);
+        return new RevokeOAuth2AppleRequest(registration.getClientId(), appleOAuth2ClientSecretHelper.createAppleClientSecret(), accessToken);
     }
 
 }
