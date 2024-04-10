@@ -8,6 +8,7 @@ import com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserInfo;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserInfoFactory;
 import com.tune_fun.v1.account.domain.state.oauth2.OAuth2UserPrincipal;
+import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.exception.OAuth2AuthenticationProcessingException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +57,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         final String accessToken = request.getAccessToken().getTokenValue();
 
         final Map<String, Object> attributes =
-                switch (OAuth2Provider.valueOf(registrationId)) {
+                switch (OAuth2Provider.fromRegistrationId(registrationId)) {
                     case APPLE:
                         String idToken = request.getAdditionalParameters().get("id_token").toString();
                         Map<String, Object> payload = decodeJwtTokenPayload(idToken);
@@ -64,6 +65,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                         yield payload;
                     case INSTAGRAM:
                         yield loadOAuth2InstagramUserInfoPort.loadUserInfo("id,username", accessToken);
+                    case null:
+                        throw new OAuth2AuthenticationProcessingException("Invalid OAuth2 provider");
                     default:
                         OAuth2User oAuth2User = super.loadUser(request);
                         yield oAuth2User.getAttributes();
