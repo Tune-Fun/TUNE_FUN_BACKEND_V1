@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
-@FeignClient(contextId = "revokeAppleOAuth2Port", name = "revokeAppleOAuth2Port", url = "https://oauth2.googleapis.com/revoke")
+@FeignClient(contextId = "revokeAppleOAuth2Port", name = "revokeAppleOAuth2Port", url = "https://appleid.apple.com/auth/revoke")
 public interface RevokeOAuth2ApplePort {
 
     /**
