@@ -55,7 +55,7 @@ ext {
     set('springCloudVersion', "2023.0.0")
     set('testcontainersVersion', "1.19.7")
     set('awspringVersion', "3.1.0")
-    set('awssdkVersion', "2.25.16")
+    set('awssdkVersion', "2.25.28")
     set('retrofitVersion', "2.11.0")
     set('jwtVersion', '0.12.5')
     set('queryDslVersion', "6.1")
@@ -92,6 +92,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
 
     // External
     implementation 'org.springframework.boot:spring-boot-starter-mail'
@@ -102,6 +103,7 @@ dependencies {
     implementation 'software.amazon.awssdk:kms'
     implementation 'com.amazonaws:aws-encryption-sdk-java:3.0.0'
     implementation 'software.amazon.cryptography:aws-cryptographic-material-providers:1.2.0'
+    implementation 'software.amazon.awssdk:cloudwatchlogs'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.1'
     implementation 'com.slack.api:slack-app-backend:1.38.0'
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'

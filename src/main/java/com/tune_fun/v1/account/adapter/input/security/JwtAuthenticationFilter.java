@@ -56,7 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
         } catch (ExpiredJwtException e) {
-            log.error("ExpiredJwtException: {}", e.getMessage());
             response.setStatus(401);
             response.setHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE);
             response.setHeader("Access-Control-Allow-Origin", "*");
@@ -70,9 +69,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             MessageCode.EXCEPTION_EXPIRED_TOKEN.getCode()));
             response.getWriter().write(message);
             return;
-        } catch (Exception e) { // 이부분은 망가진 토큰일때
-            log.error("cannot set user, exception \n", e);
-            log.error("cannot set user, exception message \n{}", e.getMessage());
         }
 
         filterChain.doFilter(request, response);
