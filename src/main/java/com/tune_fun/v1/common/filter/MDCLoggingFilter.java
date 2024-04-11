@@ -16,10 +16,10 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
  */
 @Component
 @Order(HIGHEST_PRECEDENCE)
-public class MDCLoggingFilter implements Filter {
+class MDCLoggingFilter implements Filter {
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain filterChain) throws IOException, ServletException {
         MDC.put("CORRELATION_ID", StringUtil.uuid());
         filterChain.doFilter(servletRequest, servletResponse);
         MDC.clear();
