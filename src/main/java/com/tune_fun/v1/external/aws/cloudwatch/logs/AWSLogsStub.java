@@ -83,9 +83,6 @@ class AWSLogsStub {
             }
         } catch (ResourceAlreadyExistsException ignored) {
         } catch (Throwable t) {
-            if (verbose) {
-                t.printStackTrace();
-            }
         }
         try {
             awsLogs.createLogStream(CreateLogStreamRequest.builder()

@@ -14,7 +14,6 @@ spring:
         format_sql: false
         use_sql_comments: false
         default_batch_fetch_size: 1000
-
   data:
     redis:
       host: localhost
@@ -151,3 +150,4 @@ springdoc:
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:
     url: /docs/com.tune_fun-open-api-3.0.1.json
+  show-actuator: true

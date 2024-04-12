@@ -2,7 +2,6 @@ package com.tune_fun.v1.account.adapter.output.persistence;
 
 import com.tune_fun.v1.account.adapter.output.persistence.device.DeviceJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountJpaEntity;
-import com.tune_fun.v1.common.converter.EncryptConverter;
 import com.tune_fun.v1.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +14,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 
 @SuperBuilder(toBuilder = true)
