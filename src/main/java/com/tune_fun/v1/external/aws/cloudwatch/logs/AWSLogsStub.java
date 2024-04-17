@@ -81,17 +81,14 @@ class AWSLogsStub {
                         .retentionInDays(retentionTimeInDays)
                         .build());
             }
-        } catch (ResourceAlreadyExistsException ignored) {
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
         try {
             awsLogs.createLogStream(CreateLogStreamRequest.builder()
                     .logGroupName(logGroupName)
                     .logStreamName(logStreamName)
                     .build());
-        } catch (ResourceAlreadyExistsException ignored) {
-        } catch (Throwable t) {
-            if (verbose) t.printStackTrace();
+        } catch (Throwable ignored) {
         }
     }
 
@@ -145,9 +142,6 @@ class AWSLogsStub {
             sequenceToken = e.expectedSequenceToken();
             logPreparedEvents(events);
         } catch (Throwable t) {
-            if (verbose) {
-                t.printStackTrace();
-            }
             AwsLogsMetricsHolder.get().incrementPutLogFailed(t);
             throw t;
         }
