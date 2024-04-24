@@ -24,6 +24,9 @@ public class VoteChoiceMongoEntity {
     @DocumentReference(collection = "votePaper", lazy = true)
     private VotePaperMongoEntity votePaper;
 
+    @Field("offer")
+    private Offer offer;
+
     @CreatedDate
     @Field("created_at")
     private LocalDateTime createdAt;

@@ -1,13 +1,12 @@
 package com.tune_fun.v1.vote.adapter.output.persistence;
 
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
@@ -24,17 +23,26 @@ public class VotePaperMongoEntity {
     @Field("uuid")
     private String uuid;
 
-    @DocumentReference(collection = "vote", lazy = true)
-    private VoteMongoEntity vote;
+    @Field("title")
+    private String title;
+
+    @Field("content")
+    private String content;
+
+    @Field("author")
+    private String author;
 
     @Field("option")
     private VotePaperOption option;
 
-    @Field("delivery_at")
-    private LocalDateTime deliveryAt;
+    @Field("vote_start_at")
+    private LocalDateTime voteStartAt;
 
     @Field("vote_end_at")
     private LocalDateTime voteEndAt;
+
+    @Field("delivery_at")
+    private LocalDateTime deliveryAt;
 
     @CreatedDate
     @Field("created_at")

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @WebAdapter
 @RequiredArgsConstructor
-public class RegisterVoteController {
+public class VoteController {
 
     private final RegisterVoteUseCase registerVoteUseCase;
     private final ResponseMapper responseMapper;
