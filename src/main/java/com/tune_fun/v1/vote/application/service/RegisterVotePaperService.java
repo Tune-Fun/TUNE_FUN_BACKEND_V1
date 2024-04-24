@@ -6,9 +6,11 @@ import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVotePaperUseCase;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
 import com.tune_fun.v1.vote.application.port.output.SaveVotePaperPort;
+import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.tune_fun.v1.common.response.MessageCode.VOTE_POLICY_ONE_VOTE_PAPER_PER_USER;
 
@@ -20,10 +22,18 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
     private final LoadVotePaperPort loadVotePaperPort;
     private final SaveVotePaperPort saveVotePaperPort;
 
+    private final VoteBehaviorMapper voteBehaviorMapper;
+
+
+    @Transactional
     @Override
     public void register(final VotePaperCommands.Register command, final User user) {
         validateRegistrableVotePaperCount(user);
 
+        SaveVotePaper saveVotePaper = voteBehaviorMapper.saveVotePaper(command);
+        saveVotePaperPort.saveVotePaper(saveVotePaper);
+
+        
     }
 
     public void validateRegistrableVotePaperCount(final User user) {

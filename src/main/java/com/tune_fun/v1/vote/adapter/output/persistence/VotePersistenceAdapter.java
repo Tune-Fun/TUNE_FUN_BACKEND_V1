@@ -6,6 +6,7 @@ import com.tune_fun.v1.vote.application.port.output.LoadVotePort;
 import com.tune_fun.v1.vote.application.port.output.SaveVotePaperPort;
 import com.tune_fun.v1.vote.application.port.output.SaveVotePort;
 import com.tune_fun.v1.vote.domain.RegisteredVotePaper;
+import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -32,4 +33,9 @@ public class VotePersistenceAdapter implements
                 .map(votePaperMapper::registeredVotePaper);
     }
 
+    @Override
+    public void saveVotePaper(final SaveVotePaper saveVotePaper) {
+        VotePaperMongoEntity votePaper = votePaperMapper.fromSaveVotePaperBehavior(saveVotePaper);
+        votePaperRepository.save(votePaper);
+    }
 }
