@@ -9,4 +9,6 @@ public interface VotePaperRepository extends MongoRepository<VotePaperMongoEntit
 
     Optional<VotePaperMongoEntity> findByVoteEndAtBeforeAndAuthor(LocalDateTime voteEndAt, String author);
 
+    Optional<VotePaperMongoEntity> findByVoteEndAtBeforeAndId(LocalDateTime voteEndAt, String id);
+
 }

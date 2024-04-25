@@ -8,8 +8,8 @@ import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort
 import com.tune_fun.v1.account.application.port.output.jwt.CreateRefreshTokenPort;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
-import com.tune_fun.v1.account.domain.state.CurrentAccount;
-import com.tune_fun.v1.account.domain.state.RegisterResult;
+import com.tune_fun.v1.account.domain.value.CurrentAccount;
+import com.tune_fun.v1.account.domain.value.RegisterResult;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.StringUtil;

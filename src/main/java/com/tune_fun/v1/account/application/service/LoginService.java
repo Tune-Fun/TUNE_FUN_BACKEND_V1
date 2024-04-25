@@ -9,8 +9,8 @@ import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort
 import com.tune_fun.v1.account.application.port.output.jwt.CreateRefreshTokenPort;
 import com.tune_fun.v1.account.domain.behavior.SaveDevice;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
-import com.tune_fun.v1.account.domain.state.LoginResult;
-import com.tune_fun.v1.account.domain.state.RegisteredAccount;
+import com.tune_fun.v1.account.domain.value.LoginResult;
+import com.tune_fun.v1.account.domain.value.RegisteredAccount;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import lombok.RequiredArgsConstructor;

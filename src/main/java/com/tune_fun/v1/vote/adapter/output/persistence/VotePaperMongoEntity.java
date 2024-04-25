@@ -20,9 +20,6 @@ public class VotePaperMongoEntity {
     @Id
     private String id;
 
-    @Field("uuid")
-    private String uuid;
-
     @Field("title")
     private String title;
 

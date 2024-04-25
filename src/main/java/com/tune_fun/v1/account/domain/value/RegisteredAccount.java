@@ -1,6 +1,6 @@
-package com.tune_fun.v1.account.domain.state;
+package com.tune_fun.v1.account.domain.value;
 
-import com.tune_fun.v1.account.domain.state.oauth2.RegisteredOAuth2Account;
+import com.tune_fun.v1.account.domain.value.oauth2.RegisteredOAuth2Account;
 
 import java.util.List;
 import java.util.Set;

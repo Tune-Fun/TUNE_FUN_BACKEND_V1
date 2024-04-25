@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.LocalDateTime;
 
 @Document("vote_choice")
-@Builder
+@Builder(toBuilder = true)
 @Getter
 @AllArgsConstructor
 public class VoteChoiceMongoEntity {

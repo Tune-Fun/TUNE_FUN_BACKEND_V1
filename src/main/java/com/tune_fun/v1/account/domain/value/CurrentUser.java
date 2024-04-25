@@ -1,4 +1,4 @@
-package com.tune_fun.v1.account.domain.state;
+package com.tune_fun.v1.account.domain.value;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 

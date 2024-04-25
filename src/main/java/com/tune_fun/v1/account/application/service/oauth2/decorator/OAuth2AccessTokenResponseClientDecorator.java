@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider.INSTAGRAM;
+import static com.tune_fun.v1.account.domain.value.oauth2.OAuth2Provider.INSTAGRAM;
 import static org.springframework.security.oauth2.core.OAuth2AccessToken.TokenType.BEARER;
 
 /**

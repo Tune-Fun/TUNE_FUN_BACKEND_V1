@@ -1,4 +1,4 @@
-package com.tune_fun.v1.account.domain.state.oauth2;
+package com.tune_fun.v1.account.domain.value.oauth2;
 
 import com.tune_fun.v1.common.util.StringUtil;
 import lombok.Getter;

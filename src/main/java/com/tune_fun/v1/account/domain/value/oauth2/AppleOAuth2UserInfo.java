@@ -1,4 +1,4 @@
-package com.tune_fun.v1.account.domain.state.oauth2;
+package com.tune_fun.v1.account.domain.value.oauth2;
 
 import com.tune_fun.v1.common.util.StringUtil;
 import lombok.Getter;
@@ -6,8 +6,9 @@ import lombok.Getter;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
+
 @Getter
-public final class GoogleOAuth2UserInfo implements OAuth2UserInfo {
+public final class AppleOAuth2UserInfo implements OAuth2UserInfo {
 
     private final Map<String, Object> attributes;
     private final String accessToken;
@@ -19,21 +20,21 @@ public final class GoogleOAuth2UserInfo implements OAuth2UserInfo {
     private final String nickname;
     private final String profileImageUrl;
 
-    public GoogleOAuth2UserInfo(String accessToken, Map<String, Object> attributes) throws NoSuchAlgorithmException {
+    public AppleOAuth2UserInfo(String accessToken, Map<String, Object> attributes) throws NoSuchAlgorithmException {
         this.accessToken = accessToken;
         this.attributes = attributes;
         this.id = (String) attributes.get("sub");
         this.email = (String) attributes.get("email");
-        this.name = (String) attributes.get("name");
-        this.firstName = (String) attributes.get("given_name");
-        this.lastName = (String) attributes.get("family_name");
+        this.name = (String) attributes.get("email");
+        this.firstName = null;
+        this.lastName = null;
         this.nickname = StringUtil.generateRandomNickname() + StringUtil.randomNumeric(3);
-        this.profileImageUrl = (String) attributes.get("picture");
+        this.profileImageUrl = null;
     }
 
     @Override
     public OAuth2Provider getProvider() {
-        return OAuth2Provider.GOOGLE;
+        return OAuth2Provider.APPLE;
     }
 
 }

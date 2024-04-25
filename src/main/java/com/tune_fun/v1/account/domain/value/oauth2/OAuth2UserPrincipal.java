@@ -1,4 +1,4 @@
-package com.tune_fun.v1.account.domain.state.oauth2;
+package com.tune_fun.v1.account.domain.value.oauth2;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

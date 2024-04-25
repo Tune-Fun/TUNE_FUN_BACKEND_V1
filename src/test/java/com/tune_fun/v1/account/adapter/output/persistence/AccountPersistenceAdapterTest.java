@@ -5,9 +5,9 @@ import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountJp
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountRepository;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
-import com.tune_fun.v1.account.domain.state.CurrentAccount;
-import com.tune_fun.v1.account.domain.state.RegisteredAccount;
-import com.tune_fun.v1.account.domain.state.oauth2.RegisteredOAuth2Account;
+import com.tune_fun.v1.account.domain.value.CurrentAccount;
+import com.tune_fun.v1.account.domain.value.RegisteredAccount;
+import com.tune_fun.v1.account.domain.value.oauth2.RegisteredOAuth2Account;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;

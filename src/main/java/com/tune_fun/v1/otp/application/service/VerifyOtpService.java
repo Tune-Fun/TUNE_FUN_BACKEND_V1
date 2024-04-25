@@ -5,14 +5,14 @@ import com.tune_fun.v1.account.application.port.output.RecordEmailVerifiedAtPort
 import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort;
 import com.tune_fun.v1.account.application.port.output.jwt.CreateRefreshTokenPort;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
-import com.tune_fun.v1.account.domain.state.CurrentAccount;
+import com.tune_fun.v1.account.domain.value.CurrentAccount;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
 import com.tune_fun.v1.otp.application.port.input.usecase.VerifyOtpUseCase;
 import com.tune_fun.v1.otp.application.port.output.VerifyOtpPort;
 import com.tune_fun.v1.otp.domain.behavior.VerifyOtp;
-import com.tune_fun.v1.otp.domain.state.VerifyResult;
+import com.tune_fun.v1.otp.domain.value.VerifyResult;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;

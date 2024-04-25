@@ -1,4 +1,4 @@
-package com.tune_fun.v1.account.domain.state.oauth2;
+package com.tune_fun.v1.account.domain.value.oauth2;
 
 public record RegisteredOAuth2Account(
         String email,

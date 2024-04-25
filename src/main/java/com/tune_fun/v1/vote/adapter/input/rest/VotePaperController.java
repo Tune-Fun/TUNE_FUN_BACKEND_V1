@@ -1,11 +1,10 @@
 package com.tune_fun.v1.vote.adapter.input.rest;
 
-import com.tune_fun.v1.account.domain.state.CurrentUser;
+import com.tune_fun.v1.account.domain.value.CurrentUser;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.hexagon.WebAdapter;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
-import com.tune_fun.v1.vote.application.port.input.command.VoteCommands;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVotePaperUseCase;
 import jakarta.validation.Valid;
