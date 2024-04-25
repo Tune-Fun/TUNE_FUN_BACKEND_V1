@@ -9,4 +9,5 @@ public record SaveVoteChoice(
         Integer offerDurationMs,
         String offerReleaseDate
 ) {
+
 }

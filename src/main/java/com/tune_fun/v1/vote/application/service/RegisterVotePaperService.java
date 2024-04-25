@@ -5,6 +5,7 @@ import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVotePaperUseCase;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
+import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUploadEventPort;
 import com.tune_fun.v1.vote.application.port.output.SaveVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.SaveVotePaperPort;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
@@ -29,6 +30,8 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
 
     private final SaveVoteChoicePort saveVoteChoicePort;
 
+    private final ProduceVotePaperUploadEventPort produceVotePaperUploadEventPort;
+
     private final VoteBehaviorMapper voteBehaviorMapper;
 
 
@@ -42,6 +45,8 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
 
         Set<SaveVoteChoice> saveVoteChoicesBehavior = voteBehaviorMapper.saveVoteChoice(command.offers());
         saveVoteChoicePort.saveVoteChoice(registeredVotePaper.id(), saveVoteChoicesBehavior);
+
+
     }
 
     public void validateRegistrableVotePaperCount(final User user) {
