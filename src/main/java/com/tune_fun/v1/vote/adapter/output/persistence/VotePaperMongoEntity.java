@@ -38,6 +38,10 @@ public class VotePaperMongoEntity {
     @Field("vote_end_at")
     private LocalDateTime voteEndAt;
 
+    @Builder.Default
+    @Field("fcm_sent")
+    private boolean fcmSent = false;
+
     @Field("delivery_at")
     private LocalDateTime deliveryAt;
 
@@ -48,5 +52,6 @@ public class VotePaperMongoEntity {
     @LastModifiedDate
     @Field("updated_at")
     private LocalDateTime updatedAt;
+
 
 }

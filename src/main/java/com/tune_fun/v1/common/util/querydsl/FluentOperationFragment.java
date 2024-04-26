@@ -107,6 +107,14 @@ public abstract class FluentOperationFragment {
         return operate();
     }
 
+    public PredicateBuilder eqBoolean(BooleanExpression column, Boolean value) {
+        if (value != null) {
+            return operate(column.eq(value));
+        }
+
+        return operate();
+    }
+
     public <E extends Enum<E>> PredicateBuilder eqEnum(EnumExpression<E> column, E value) {
         if (value != null) {
             return operate(column.eq(value));

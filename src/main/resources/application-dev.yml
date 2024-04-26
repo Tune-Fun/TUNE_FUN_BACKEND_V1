@@ -121,12 +121,11 @@ jwt:
 
 event:
   sqs:
-    send-vote-article-upload-notification:
-      queue-name: send-vote-article-upload-notification
-      message-group-id: send-vote-article-upload-notification
+    send-vote-paper-upload-notification:
+      queue-name: send-vote-paper-upload-notification-dev
   kafka:
-    send-vote-article-upload-notification:
-      topic: send-vote-article-upload-notification
+    send-vote-paper-upload-notification:
+      topic: send-vote-paper-upload-notification-dev
 
 otp:
   validity: 3m
