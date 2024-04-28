@@ -26,8 +26,8 @@ public class VotePaperController {
 
     @PreAuthorize("hasRole('ARTIST')")
     @PostMapping(value = Uris.REGISTER_VOTE_PAPER)
-    public ResponseEntity<Response<?>> registerVoteArticle(@Valid @RequestBody final VotePaperCommands.Register command,
-                                                           @CurrentUser final User user) {
+    public ResponseEntity<Response<?>> registerVotePaper(@Valid @RequestBody final VotePaperCommands.Register command,
+                                                         @CurrentUser final User user) {
         registerVotePaperUseCase.register(command, user);
         return responseMapper.ok();
     }

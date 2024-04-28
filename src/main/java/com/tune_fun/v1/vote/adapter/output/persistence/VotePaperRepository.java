@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface VotePaperRepository extends MongoRepository<VotePaperMongoEntity, String> {
 
-    Optional<VotePaperMongoEntity> findByVoteEndAtBeforeAndAuthor(LocalDateTime voteEndAt, String author);
+    Optional<VotePaperMongoEntity> findByVoteEndAtAfterAndAuthor(LocalDateTime voteEndAt, String author);
 
-    Optional<VotePaperMongoEntity> findByVoteEndAtBeforeAndId(LocalDateTime voteEndAt, String id);
+    Optional<VotePaperMongoEntity> findByVoteEndAtAfterAndId(LocalDateTime voteEndAt, String id);
 
 }

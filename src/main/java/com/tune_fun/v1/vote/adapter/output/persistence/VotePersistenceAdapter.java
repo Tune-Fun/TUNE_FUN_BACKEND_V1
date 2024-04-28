@@ -54,11 +54,11 @@ public class VotePersistenceAdapter implements
     }
 
     public Optional<VotePaperMongoEntity> findAvailableVotePaperById(final String id) {
-        return votePaperRepository.findByVoteEndAtBeforeAndId(now(), id);
+        return votePaperRepository.findByVoteEndAtAfterAndId(now(), id);
     }
 
     public Optional<VotePaperMongoEntity> findAvailableVotePaperByAuthor(final String username) {
-        return votePaperRepository.findByVoteEndAtBeforeAndAuthor(now(), username);
+        return votePaperRepository.findByVoteEndAtAfterAndAuthor(now(), username);
     }
 
 }

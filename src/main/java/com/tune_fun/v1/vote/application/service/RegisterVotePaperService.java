@@ -45,8 +45,8 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
         saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
 
         // TODO : Scheduling 정책 수립
-        ProduceVotePaperUploadEvent produceVotePaperUploadEventBehavior = getProduceVotePaperUploadEventBehavior(registeredVotePaper);
-        produceVotePaperUploadEventPort.produceVotePaperUploadEvent(produceVotePaperUploadEventBehavior);
+//        ProduceVotePaperUploadEvent produceVotePaperUploadEventBehavior = getProduceVotePaperUploadEventBehavior(registeredVotePaper);
+//        produceVotePaperUploadEventPort.produceVotePaperUploadEvent(produceVotePaperUploadEventBehavior);
     }
 
     public void validateRegistrableVotePaperCount(final User user) {
@@ -54,11 +54,13 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
             throw new CommonApplicationException(VOTE_POLICY_ONE_VOTE_PAPER_PER_USER);
     }
 
+    @Transactional
     public RegisteredVotePaper saveVotePaper(VotePaperCommands.Register command) {
         SaveVotePaper saveVotePaperBehavior = voteBehaviorMapper.saveVotePaper(command);
         return saveVotePaperPort.saveVotePaper(saveVotePaperBehavior);
     }
 
+    @Transactional
     public void saveVoteChoiceByRegisteredVotePaper(VotePaperCommands.Register command, RegisteredVotePaper registeredVotePaper) {
         Set<SaveVoteChoice> saveVoteChoicesBehavior = voteBehaviorMapper.saveVoteChoice(command.offers());
         saveVoteChoicePort.saveVoteChoice(registeredVotePaper.id(), saveVoteChoicesBehavior);

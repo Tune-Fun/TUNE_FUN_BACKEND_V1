@@ -108,3 +108,12 @@ kms:
 
 otp:
   validity: 3m
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG

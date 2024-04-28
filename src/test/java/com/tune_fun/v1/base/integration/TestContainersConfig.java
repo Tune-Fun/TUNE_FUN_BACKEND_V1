@@ -1,9 +1,15 @@
 package com.tune_fun.v1.base.integration;
 
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.binder.mongodb.MongoMetricsCommandListener;
+import io.micrometer.core.instrument.binder.mongodb.MongoMetricsConnectionPoolListener;
 import org.springframework.boot.devtools.restart.RestartScope;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.mongodb.core.MongoClientFactoryBean;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
@@ -79,8 +85,9 @@ public class TestContainersConfig {
         registry.add("spring.datasource.username", () -> POSTGRES_CONTAINER.getUsername());
         registry.add("spring.datasource.password", () -> POSTGRES_CONTAINER.getPassword());
 
-        registry.add("spring.data.mongodb.host", () -> MONGODB_CONTAINER.getHost());
-        registry.add("spring.data.mongodb.port", () -> MONGODB_CONTAINER.getFirstMappedPort());
+//        registry.add("spring.data.mongodb.host", () -> MONGODB_CONTAINER.getHost());
+//        registry.add("spring.data.mongodb.port", () -> MONGODB_CONTAINER.getFirstMappedPort());
+        registry.add("spring.data.mongodb.uri", () -> MONGODB_CONTAINER.getReplicaSetUrl());
         registry.add("spring.data.mongodb.username", () -> "test");
         registry.add("spring.data.mongodb.password", () -> "test");
 
@@ -96,6 +103,22 @@ public class TestContainersConfig {
                 .username(POSTGRES_CONTAINER.getUsername())
                 .password(POSTGRES_CONTAINER.getPassword())
                 .build();
+    }
+
+    @Bean
+    public MongoClientFactoryBean mongoClientFactoryBean(MeterRegistry meterRegistry) {
+        MongoClientFactoryBean mongoClientFactoryBean = new MongoClientFactoryBean();
+
+        mongoClientFactoryBean.setConnectionString(new ConnectionString(MONGODB_CONTAINER.getReplicaSetUrl()));
+
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .addCommandListener(new MongoMetricsCommandListener(meterRegistry))
+                .applyToConnectionPoolSettings(builder ->
+                        builder.addConnectionPoolListener(new MongoMetricsConnectionPoolListener(meterRegistry)))
+                .build();
+        mongoClientFactoryBean.setMongoClientSettings(settings);
+
+        return mongoClientFactoryBean;
     }
 
 }

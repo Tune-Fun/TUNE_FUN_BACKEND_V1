@@ -1,5 +1,6 @@
 package com.tune_fun.v1.account.application.service;
 
+import com.tune_fun.v1.account.adapter.input.rest.RegisterType;
 import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.RegisterUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
@@ -13,7 +14,6 @@ import com.tune_fun.v1.account.domain.value.RegisterResult;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.StringUtil;
-import com.tune_fun.v1.vote.adapter.input.rest.RegisterType;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;

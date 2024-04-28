@@ -7,7 +7,6 @@ import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.hexagon.WebAdapter;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
-import com.tune_fun.v1.vote.adapter.input.rest.RegisterType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
