@@ -20,6 +20,7 @@ import com.tune_fun.v1.otp.application.port.input.usecase.VerifyOtpUseCase;
 import com.tune_fun.v1.otp.domain.behavior.LoadOtp;
 import com.tune_fun.v1.otp.domain.value.CurrentDecryptedOtp;
 import com.tune_fun.v1.otp.domain.value.VerifyResult;
+import com.tune_fun.v1.vote.adapter.input.rest.RegisterType;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -90,7 +91,7 @@ public class DummyService {
         AccountCommands.Notification notification = new AccountCommands.Notification(true, true, true);
         AccountCommands.Register command = new AccountCommands.Register(defaultUsername, defaultPassword, defaultEmail, nickname, notification);
 
-        registerUseCase.register(command);
+        registerUseCase.register(RegisterType.NORMAL, command);
 
         defaultAccount = accountPersistenceAdapter.loadAccountByUsername(defaultUsername)
                 .orElseThrow(() -> new RuntimeException("initUser 실패"));

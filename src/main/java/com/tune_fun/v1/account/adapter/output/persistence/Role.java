@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.List;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
@@ -13,7 +12,7 @@ import static java.util.stream.Collectors.toSet;
 @AllArgsConstructor
 public enum Role implements GrantedAuthority {
 
-    CLIENT_0("ROLE_CLIENT_0"),
+    NORMAL("ROLE_NORMAL"),
     ARTIST("ROLE_ARTIST"),
     ADMIN("ROLE_ADMIN");
 

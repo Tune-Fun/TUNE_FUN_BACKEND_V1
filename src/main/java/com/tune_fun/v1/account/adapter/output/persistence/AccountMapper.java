@@ -13,6 +13,8 @@ import org.mapstruct.Named;
 import java.util.Collections;
 import java.util.Set;
 
+import static java.util.Collections.singleton;
+
 @Mapper(
         config = BaseMapperConfig.class,
         imports = {Collections.class, Role.class}
@@ -22,7 +24,7 @@ public abstract class AccountMapper {
     @Mapping(target = "roles", source = "roles", qualifiedByName = "roleValues")
     public abstract CurrentAccount accountInfo(final AccountJpaEntity accountJpaEntity);
 
-    @Mapping(target = "roles", expression = "java(Collections.singletonList(Role.CLIENT_0))")
+    @Mapping(target = "roles", source = "role", qualifiedByName = "roles")
     @Mapping(target = "notificationConfig.voteProgressNotification", source = "voteProgressNotification")
     @Mapping(target = "notificationConfig.voteEndNotification", source = "voteEndNotification")
     @Mapping(target = "notificationConfig.voteDeliveryNotification", source = "voteDeliveryNotification")
@@ -30,6 +32,11 @@ public abstract class AccountMapper {
 
     @Mapping(target = "roles", source = "roles", qualifiedByName = "roleValues")
     public abstract RegisteredAccount registeredAccountInfo(final AccountJpaEntity accountJpaEntity);
+
+    @Named("roles")
+    public Set<Role> roles(String role) {
+        return singleton(Role.valueOf(role));
+    }
 
     @Named("roleValues")
     public Set<String> roleValues(Set<Role> roles) {

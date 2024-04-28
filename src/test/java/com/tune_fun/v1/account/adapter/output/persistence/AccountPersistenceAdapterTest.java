@@ -523,7 +523,7 @@ class AccountPersistenceAdapterTest {
 
         // Act
         CurrentAccount actualSaveAccountResult = accountPersistenceAdapter
-                .saveAccount(new SaveAccount("01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe", "iloveyou",
+                .saveAccount(new SaveAccount("NORMAL", "01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe", "iloveyou",
                         "jane.doe@example.org", "Nickname", true, true, true));
 
         // Assert

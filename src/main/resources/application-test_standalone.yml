@@ -101,7 +101,6 @@ event:
   sqs:
     test:
       queue-name: test
-      message-group-id: test
 
 kms:
   jwt-signature-arn:

@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public interface VotePaperRepository extends MongoRepository<VotePaperMongoEntity, String>, VotePaperCustomRepository {
+public interface VotePaperRepository extends MongoRepository<VotePaperMongoEntity, String> {
 
     Optional<VotePaperMongoEntity> findByVoteEndAtBeforeAndAuthor(LocalDateTime voteEndAt, String author);
 

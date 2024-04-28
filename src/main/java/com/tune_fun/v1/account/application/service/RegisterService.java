@@ -13,6 +13,7 @@ import com.tune_fun.v1.account.domain.value.RegisterResult;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.vote.adapter.input.rest.RegisterType;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,8 +36,8 @@ public class RegisterService implements RegisterUseCase {
     private final PasswordEncoder passwordEncoder;
 
     @NotNull
-    private static SaveAccount getSaveAccount(AccountCommands.Register command, String encodedPassword) {
-        return new SaveAccount(
+    private static SaveAccount getSaveAccount(final RegisterType type, final AccountCommands.Register command, final String encodedPassword) {
+        return new SaveAccount(type.name(),
                 StringUtil.uuid(), command.username(), encodedPassword,
                 command.email(), command.nickname(), command.notification().voteDeliveryNotification(),
                 command.notification().voteEndNotification(), command.notification().voteDeliveryNotification()
@@ -50,11 +51,11 @@ public class RegisterService implements RegisterUseCase {
 
     @Override
     @Transactional
-    public RegisterResult register(final AccountCommands.Register command) {
+    public RegisterResult register(final RegisterType type, final AccountCommands.Register command) {
         checkRegisterdAccount(command);
 
         String encodedPassword = passwordEncoder.encode(command.password());
-        SaveAccount saveAccount = getSaveAccount(command, encodedPassword);
+        SaveAccount saveAccount = getSaveAccount(type, command, encodedPassword);
         CurrentAccount savedAccount = saveAccountPort.saveAccount(saveAccount);
 
         String authorities = String.join(",", savedAccount.roles());
