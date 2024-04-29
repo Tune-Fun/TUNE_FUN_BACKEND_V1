@@ -29,7 +29,7 @@ public class RegisterController {
      */
     @PostMapping(value = Uris.REGISTER)
     public ResponseEntity<Response<RegisterResult>> register(@RequestParam(name = "type") RegisterType type, @Valid @RequestBody final AccountCommands.Register command) {
-        RegisterResult registerResult = registerUseCase.register(type, command);
+        RegisterResult registerResult = registerUseCase.register(type.name(), command);
         return responseMapper.ok(registerResult);
     }
 

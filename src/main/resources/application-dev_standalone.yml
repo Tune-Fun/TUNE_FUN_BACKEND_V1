@@ -21,14 +21,6 @@ spring:
       port: 6378
       repositories:
         enabled: false
-    mongodb:
-      uri: mongodb://localhost:27016/mydatabase
-      host: localhost
-      port: 27016
-      database: mydatabase
-      username: root
-      password: secret
-      authentication-database: admin
     jpa:
       repositories:
         bootstrap-mode: deferred

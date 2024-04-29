@@ -67,7 +67,7 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
     }
 
     private static @NotNull ProduceVotePaperUploadEvent getProduceVotePaperUploadEventBehavior(RegisteredVotePaper registeredVotePaper) {
-        return new ProduceVotePaperUploadEvent(registeredVotePaper.id(), registeredVotePaper.title(), registeredVotePaper.content(),
+        return new ProduceVotePaperUploadEvent(registeredVotePaper.uuid(), registeredVotePaper.title(), registeredVotePaper.content(),
                 registeredVotePaper.voteStartAt(), registeredVotePaper.voteEndAt());
     }
 }

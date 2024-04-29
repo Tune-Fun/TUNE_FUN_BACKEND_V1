@@ -1,6 +1,5 @@
 package com.tune_fun.v1.account.application.service;
 
-import com.tune_fun.v1.account.adapter.input.rest.RegisterType;
 import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.RegisterUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
@@ -36,8 +35,8 @@ public class RegisterService implements RegisterUseCase {
     private final PasswordEncoder passwordEncoder;
 
     @NotNull
-    private static SaveAccount getSaveAccount(final RegisterType type, final AccountCommands.Register command, final String encodedPassword) {
-        return new SaveAccount(type.name(),
+    private static SaveAccount getSaveAccount(final String registerType, final AccountCommands.Register command, final String encodedPassword) {
+        return new SaveAccount(registerType,
                 StringUtil.uuid(), command.username(), encodedPassword,
                 command.email(), command.nickname(), command.notification().voteDeliveryNotification(),
                 command.notification().voteEndNotification(), command.notification().voteDeliveryNotification()
@@ -51,11 +50,11 @@ public class RegisterService implements RegisterUseCase {
 
     @Override
     @Transactional
-    public RegisterResult register(final RegisterType type, final AccountCommands.Register command) {
+    public RegisterResult register(final String registerType, final AccountCommands.Register command) {
         checkRegisterdAccount(command);
 
         String encodedPassword = passwordEncoder.encode(command.password());
-        SaveAccount saveAccount = getSaveAccount(type, command, encodedPassword);
+        SaveAccount saveAccount = getSaveAccount(registerType, command, encodedPassword);
         CurrentAccount savedAccount = saveAccountPort.saveAccount(saveAccount);
 
         String authorities = String.join(",", savedAccount.roles());

@@ -18,15 +18,13 @@ public class SqsProvider {
     private final SqsTemplate sqsTemplate;
     private final EventProperty eventProperty;
 
-    public SendResult<?> sendMessageRangedQueue(@NotBlank final String queueName, @NotBlank final String messageGroupId,
-                                                @NotNull final Object message) {
+    public SendResult<?> sendMessageRangedQueue(@NotBlank final String queueName, @NotNull final Object message) {
         EventProperty.SqsProducer sqsProducer = eventProperty.getSqsProducer(queueName);
 
         return sqsTemplate.send(to -> to
                 .queue(sqsProducer.queueName())
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .payload(message)
-                .messageGroupId(messageGroupId)
         );
     }
 

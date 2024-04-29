@@ -1,6 +1,6 @@
 package com.tune_fun.v1.vote.adapter.output.persistence;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface VoteRepository extends MongoRepository<VoteMongoEntity, String> {
+public interface VoteRepository extends JpaRepository<VoteJpaEntity, String> {
 }

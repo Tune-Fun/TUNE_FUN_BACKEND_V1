@@ -24,13 +24,6 @@ spring:
       username: ${redis-username}
       password: ${redis-password}
       database: ${redis-database}
-    mongodb:
-      uri: mongodb://${mongodb-username}:${mongodb-password}@${mongodb-host}:${mongodb-port}/tunefun
-      host: ${mongodb-host}
-      port: ${mongodb-port}
-      database: tunefun
-      username: ${mongodb-username}
-      password: ${mongodb-password}
     jpa:
       repositories:
         bootstrap-mode: deferred

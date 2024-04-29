@@ -16,7 +16,6 @@ public class VoteMessageBrokerAdapter implements ProduceVotePaperUploadEventPort
 
     @Override
     public void produceVotePaperUploadEvent(final ProduceVotePaperUploadEvent produceVotePaperUploadEvent) {
-        sqsProvider.sendMessageRangedQueue(VOTE_PAPER_UPLOAD_QUEUE, produceVotePaperUploadEvent.id() + "_fcm",
-                produceVotePaperUploadEvent);
+        sqsProvider.sendMessageRangedQueue(VOTE_PAPER_UPLOAD_QUEUE, produceVotePaperUploadEvent);
     }
 }

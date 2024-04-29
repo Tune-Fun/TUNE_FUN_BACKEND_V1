@@ -1,7 +1,6 @@
 package com.tune_fun.v1.dummy;
 
 
-import com.tune_fun.v1.account.adapter.input.rest.RegisterType;
 import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.AccountPersistenceAdapter;
 import com.tune_fun.v1.account.adapter.output.persistence.device.DeviceJpaEntity;
@@ -91,7 +90,7 @@ public class DummyService {
         AccountCommands.Notification notification = new AccountCommands.Notification(true, true, true);
         AccountCommands.Register command = new AccountCommands.Register(defaultUsername, defaultPassword, defaultEmail, nickname, notification);
 
-        registerUseCase.register(RegisterType.NORMAL, command);
+        registerUseCase.register("NORMAL", command);
 
         defaultAccount = accountPersistenceAdapter.loadAccountByUsername(defaultUsername)
                 .orElseThrow(() -> new RuntimeException("initUser 실패"));
@@ -107,7 +106,7 @@ public class DummyService {
         AccountCommands.Notification notification = new AccountCommands.Notification(true, true, true);
         AccountCommands.Register command = new AccountCommands.Register(defaultUsername, defaultPassword, defaultEmail, nickname, notification);
 
-        registerUseCase.register(RegisterType.ARTIST, command);
+        registerUseCase.register("ARTIST", command);
 
         defaultAccount = accountPersistenceAdapter.loadAccountByUsername(defaultUsername)
                 .orElseThrow(() -> new RuntimeException("initUser 실패"));

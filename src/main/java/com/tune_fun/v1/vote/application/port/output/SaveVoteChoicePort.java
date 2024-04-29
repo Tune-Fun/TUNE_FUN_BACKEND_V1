@@ -6,5 +6,5 @@ import java.util.Set;
 
 @FunctionalInterface
 public interface SaveVoteChoicePort {
-    void saveVoteChoice(final String votePaperId, final Set<SaveVoteChoice> behavior);
+    void saveVoteChoice(final Long votePaperId, final Set<SaveVoteChoice> behavior);
 }

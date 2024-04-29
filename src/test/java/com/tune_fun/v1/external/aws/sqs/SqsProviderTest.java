@@ -52,7 +52,7 @@ class SqsProviderTest {
         TestMessage message = new TestMessage("Hello!");
 
         // when
-        SendResult<?> sendResult = sut.sendMessageRangedQueue(queueName, "test", message);
+        SendResult<?> sendResult = sut.sendMessageRangedQueue(queueName, message);
         assertSame(sendResult.message().getPayload(), message);
 
         // then

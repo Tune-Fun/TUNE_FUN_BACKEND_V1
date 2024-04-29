@@ -1,20 +1,13 @@
 package com.tune_fun.v1.base.integration;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.binder.mongodb.MongoMetricsCommandListener;
-import io.micrometer.core.instrument.binder.mongodb.MongoMetricsConnectionPoolListener;
 import org.springframework.boot.devtools.restart.RestartScope;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.mongodb.core.MongoClientFactoryBean;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
@@ -54,17 +47,6 @@ public class TestContainersConfig {
                     .withReuse(true);
 
     @Container
-    static MongoDBContainer MONGODB_CONTAINER =
-            new MongoDBContainer(MONGODB_IMAGE)
-                    .withEnv(ENV_TZ, ASIA_SEOUL)
-                    .withEnv("MONGO_INITDB_ROOT_USERNAME", "test")
-                    .withEnv("MONGO_INITDB_ROOT_PASSWORD", "test")
-                    .withEnv("MAX_CONNECTION_IDLE_TIME_MS", "10000")
-                    .withSharding()
-                    .withExposedPorts(27017)
-                    .withReuse(true);
-
-    @Container
     static KafkaContainer KAFKA_CONTAINER =
             new KafkaContainer(KAFKA_IMAGE)
                     .withExposedPorts(9092, 9093)
@@ -73,7 +55,6 @@ public class TestContainersConfig {
     static {
         POSTGRES_CONTAINER.start();
         REDIS_CONTAINER.start();
-        MONGODB_CONTAINER.start();
 
         System.setProperty("spring.data.redis.host", REDIS_CONTAINER.getHost());
         System.setProperty("spring.data.redis.port", REDIS_CONTAINER.getMappedPort(6379).toString());
@@ -84,12 +65,6 @@ public class TestContainersConfig {
         registry.add("spring.datasource.url", () -> POSTGRES_CONTAINER.getJdbcUrl());
         registry.add("spring.datasource.username", () -> POSTGRES_CONTAINER.getUsername());
         registry.add("spring.datasource.password", () -> POSTGRES_CONTAINER.getPassword());
-
-//        registry.add("spring.data.mongodb.host", () -> MONGODB_CONTAINER.getHost());
-//        registry.add("spring.data.mongodb.port", () -> MONGODB_CONTAINER.getFirstMappedPort());
-        registry.add("spring.data.mongodb.uri", () -> MONGODB_CONTAINER.getReplicaSetUrl());
-        registry.add("spring.data.mongodb.username", () -> "test");
-        registry.add("spring.data.mongodb.password", () -> "test");
 
         registry.add("spring.kafka.bootstrap-servers", () -> KAFKA_CONTAINER.getBootstrapServers());
         registry.add("spring.kafka.consumer.auto-offset-reset", () -> "earliest");
@@ -103,22 +78,6 @@ public class TestContainersConfig {
                 .username(POSTGRES_CONTAINER.getUsername())
                 .password(POSTGRES_CONTAINER.getPassword())
                 .build();
-    }
-
-    @Bean
-    public MongoClientFactoryBean mongoClientFactoryBean(MeterRegistry meterRegistry) {
-        MongoClientFactoryBean mongoClientFactoryBean = new MongoClientFactoryBean();
-
-        mongoClientFactoryBean.setConnectionString(new ConnectionString(MONGODB_CONTAINER.getReplicaSetUrl()));
-
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .addCommandListener(new MongoMetricsCommandListener(meterRegistry))
-                .applyToConnectionPoolSettings(builder ->
-                        builder.addConnectionPoolListener(new MongoMetricsConnectionPoolListener(meterRegistry)))
-                .build();
-        mongoClientFactoryBean.setMongoClientSettings(settings);
-
-        return mongoClientFactoryBean;
     }
 
 }

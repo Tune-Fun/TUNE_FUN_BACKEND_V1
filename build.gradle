@@ -75,12 +75,9 @@ dependencies {
 
     // Persistence Layer
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.7.4'
     implementation "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}"
-    implementation("io.github.openfeign.querydsl:querydsl-mongodb:${queryDslVersion}") {
-        exclude group: 'org.mongodb', module: 'mongo-java-driver'
-    }
     implementation "io.github.openfeign.querydsl:querydsl-collections:${queryDslVersion}"
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
     implementation 'org.flywaydb:flyway-core'
@@ -137,8 +134,6 @@ dependencies {
     annotationProcessor(
             'org.springframework.boot:spring-boot-configuration-processor',
             "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}",
-            "io.github.openfeign.querydsl:querydsl-mongodb:${queryDslVersion}",
-            'org.springframework.boot:spring-boot-starter-data-mongodb',
             'org.projectlombok:lombok',
             "org.mapstruct:mapstruct-processor:${mapstructVersion}",
             'org.projectlombok:lombok-mapstruct-binding:0.2.0'
@@ -171,7 +166,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:postgresql'
-    testImplementation 'org.testcontainers:mongodb'
     testImplementation 'org.testcontainers:kafka'
     testImplementation 'org.testcontainers:localstack'
     testImplementation 'org.elasticmq:elasticmq-server_3:1.6.1'
@@ -179,8 +173,6 @@ dependencies {
     testAnnotationProcessor(
             'org.springframework.boot:spring-boot-configuration-processor',
             "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}",
-            "io.github.openfeign.querydsl:querydsl-mongodb:${queryDslVersion}",
-            'org.springframework.boot:spring-boot-starter-data-mongodb',
             'org.projectlombok:lombok',
             "org.mapstruct:mapstruct-processor:${mapstructVersion}",
             'org.projectlombok:lombok-mapstruct-binding:0.2.0'
@@ -193,13 +185,6 @@ sourceSets {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs += [
-            "-processor", 'lombok.launch.AnnotationProcessorHider$AnnotationProcessor,' +
-            'org.springframework.data.mongodb.repository.support.MongoAnnotationProcessor,' +
-            'com.querydsl.apt.jpa.JPAAnnotationProcessor,' +
-            'org.mapstruct.ap.MappingProcessor,' +
-            'org.springframework.boot.configurationprocessor.ConfigurationMetadataAnnotationProcessor'
-    ]
     options.annotationProcessorGeneratedSourcesDirectory(file(generated))
 }
 
