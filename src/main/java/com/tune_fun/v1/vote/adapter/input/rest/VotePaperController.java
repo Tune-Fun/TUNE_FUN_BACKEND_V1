@@ -3,6 +3,8 @@ package com.tune_fun.v1.vote.adapter.input.rest;
 import com.tune_fun.v1.account.domain.value.CurrentUser;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.hexagon.WebAdapter;
+import com.tune_fun.v1.common.response.BasePayload;
+import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
@@ -26,10 +28,10 @@ public class VotePaperController {
 
     @PreAuthorize("hasRole('ARTIST')")
     @PostMapping(value = Uris.REGISTER_VOTE_PAPER)
-    public ResponseEntity<Response<?>> registerVotePaper(@Valid @RequestBody final VotePaperCommands.Register command,
-                                                         @CurrentUser final User user) {
+    public ResponseEntity<Response<BasePayload>> registerVotePaper(@Valid @RequestBody final VotePaperCommands.Register command,
+                                                                   @CurrentUser final User user) {
         registerVotePaperUseCase.register(command, user);
-        return responseMapper.ok();
+        return responseMapper.ok(MessageCode.CREATED);
     }
 
 }

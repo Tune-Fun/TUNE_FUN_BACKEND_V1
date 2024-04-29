@@ -39,7 +39,7 @@ public class VotePaperCommands {
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public record Offer(
             @NotBlank(message = "{vote.paper.offer.music.not_blank}")
-            String name,
+            String music,
 
             @NotBlank(message = "{vote.paper.offer.artist_name.not_blank}")
             String artistName,

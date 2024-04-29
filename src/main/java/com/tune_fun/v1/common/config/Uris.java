@@ -136,6 +136,11 @@ public class Uris {
             CUSTOM_RESPONSE_EXAMPLE,
             CUSTOM_EXCEPTION_RESPONSE_EXAMPLE
     };
+
+    public static final String[] ARTIST_URIS = {
+            REGISTER_VOTE_PAPER
+    };
+
     public static final String[] ADMIN_URIS = {
             DEFAULT_LOGIN_PAGE
     };

@@ -1,6 +1,7 @@
 package com.tune_fun.v1.vote.adapter.output.persistence;
 
-import java.util.Set;
+import jakarta.persistence.Embeddable;
 
-public record Offer(String music, String artistName, Set<String> genres, String releaseDate, Integer durationMs) {
+@Embeddable
+public record Offer(String music, String artistName, String genres, String releaseDate, Integer durationMs) {
 }

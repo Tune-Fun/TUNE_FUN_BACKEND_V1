@@ -38,6 +38,7 @@ public class VoteChoiceJpaEntity extends BaseEntity {
     private VotePaperJpaEntity votePaper;
 
     @JdbcTypeCode(SqlTypes.JSON)
+    @Embedded
     @Comment("선택지 제안사항")
     private Offer offer;
 

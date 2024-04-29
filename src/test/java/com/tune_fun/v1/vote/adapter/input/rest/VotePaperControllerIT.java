@@ -1,12 +1,16 @@
 package com.tune_fun.v1.vote.adapter.input.rest;
 
+import com.jayway.jsonpath.JsonPath;
 import com.tune_fun.v1.base.ControllerBaseTest;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.dummy.DummyService;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
+import com.tune_fun.v1.vote.application.port.output.LoadVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
+import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -22,6 +26,8 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
 import static java.time.LocalDateTime.now;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.oneOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -30,6 +36,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 
+@Slf4j
 class VotePaperControllerIT extends ControllerBaseTest {
 
     @Autowired
@@ -37,6 +44,9 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
     @Autowired
     private LoadVotePaperPort loadVotePaperPort;
+
+    @Autowired
+    private LoadVoteChoicePort loadVoteChoicePort;
 
     @Test
     @Order(1)
@@ -68,7 +78,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 fieldWithPath("vote_end_at").description("투표 종료 시간").attributes(constraint("NOT NULL & FUTURE & AFTER(startAt)")),
                 fieldWithPath("offers").description("투표 선택지 목록").attributes(constraint("NOT EMPTY")),
                 fieldWithPath("offers[].music").description("노래명").attributes(constraint("NOT BLANK")),
-                fieldWithPath("offers[].artist_name").description("가수명").attributes(constraint("NOT BLANK")),
+                fieldWithPath("offers[].artist_name").description("아티스트명").attributes(constraint("NOT BLANK")),
                 fieldWithPath("offers[].genres").description("장르").attributes(constraint("NOT EMPTY")),
                 fieldWithPath("offers[].duration_ms").description("재생 시간(ms)").attributes(constraint("NOT NULL & POSITIVE")),
                 fieldWithPath("offers[].release_date").description("발매일").attributes(constraint("NOT BLANK"))
@@ -80,7 +90,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
                                 .content(toJson(command))
                                 .contentType(APPLICATION_JSON_VALUE)
                 )
-                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andExpectAll(baseAssertion(MessageCode.CREATED))
                 .andDo(
                         restDocs.document(
                                 requestHeaders(authorizationHeader),
@@ -105,6 +115,21 @@ class VotePaperControllerIT extends ControllerBaseTest {
         assertNotNull(votePaper.id());
         assertNotNull(votePaper.createdAt());
         assertNotNull(votePaper.updatedAt());
+
+        List<RegisteredVoteChoice> registeredVoteChoices = loadVoteChoicePort.loadRegisteredVoteChoice(votePaper.id());
+        assertEquals(registeredVoteChoices.size(), 2);
+
+        List<String> readMusic = JsonPath.parse(registeredVoteChoices).read("$[*].music");
+        log.info("readMusic: {}", readMusic);
+        readMusic.forEach(music -> assertThat(music, oneOf("Love Lee", "Dolphin")));
+
+        List<String> readArtistName = JsonPath.parse(registeredVoteChoices).read("$..artistName");
+        log.info("readArtistName: {}", readArtistName);
+        readArtistName.forEach(artistName -> assertThat(artistName, oneOf("AKMU", "오마이걸")));
+
+        List<List<String>> readGenres = JsonPath.parse(registeredVoteChoices).read("$..genres");
+        log.info("readGenres: {}", readGenres);
+        readGenres.forEach(genres -> assertThat(genres, oneOf(List.of("R&B", "Soul"), List.of("Dance", "Pop"))));
     }
 
 }

@@ -185,16 +185,13 @@ sourceSets {
 }
 
 tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
     options.annotationProcessorGeneratedSourcesDirectory(file(generated))
 }
 
 compileJava.doFirst {
     delete file(generated)
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-    options.compilerArgs << '-parameters'
 }
 
 tasks.withType(GenerateSwaggerUI).configureEach {

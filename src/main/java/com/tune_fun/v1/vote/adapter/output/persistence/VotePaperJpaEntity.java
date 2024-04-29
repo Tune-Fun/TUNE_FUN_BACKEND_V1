@@ -62,7 +62,7 @@ public class VotePaperJpaEntity extends BaseEntity {
     @Comment("투표 종료일")
     private LocalDateTime voteEndAt;
 
-    @Column(name = "delivery_at", nullable = false)
+    @Column(name = "delivery_at")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Comment("커버 영상 등록일")
     private LocalDateTime deliveryAt;

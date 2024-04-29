@@ -6,10 +6,12 @@ import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.vote.application.port.output.*;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
+import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -22,7 +24,7 @@ import static java.util.stream.Collectors.toSet;
 public class VotePersistenceAdapter implements
         LoadVotePort, SaveVotePort,
         LoadVotePaperPort, SaveVotePaperPort,
-        SaveVoteChoicePort {
+        LoadVoteChoicePort, SaveVoteChoicePort {
 
     private final AccountPersistenceAdapter accountPersistenceAdapter;
 
@@ -31,6 +33,7 @@ public class VotePersistenceAdapter implements
     private final VoteChoiceRepository voteChoiceRepository;
 
     private final VotePaperMapper votePaperMapper;
+    private final VoteChoiceMapper voteChoiceMapper;
 
     @Override
     public Optional<RegisteredVotePaper> loadRegisteredVotePaper(final String username) {
@@ -53,9 +56,9 @@ public class VotePersistenceAdapter implements
         VotePaperJpaEntity votePaperJpaEntity = findAvailableVotePaperById(votePaperId)
                 .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
 
-        Set<VoteChoiceJpaEntity> voteChoices = votePaperMapper.fromSaveVoteChoiceBehaviors(behavior);
+        Set<VoteChoiceJpaEntity> voteChoices = voteChoiceMapper.fromSaveVoteChoiceBehaviors(behavior);
         Set<VoteChoiceJpaEntity> updatedVoteChoices = voteChoices.stream()
-                .map(voteChoice -> votePaperMapper.updateVotePaper(votePaperJpaEntity, voteChoice.toBuilder()).build())
+                .map(voteChoice -> voteChoiceMapper.updateVoteChoice(votePaperJpaEntity, voteChoice.toBuilder()).build())
                 .collect(toSet());
 
         voteChoiceRepository.saveAll(updatedVoteChoices);
@@ -69,4 +72,9 @@ public class VotePersistenceAdapter implements
         return votePaperRepository.findByVoteEndAtAfterAndAuthorUsername(now(), username);
     }
 
+    @Override
+    public List<RegisteredVoteChoice> loadRegisteredVoteChoice(Long votePaperId) {
+        List<VoteChoiceJpaEntity> voteChoices = voteChoiceRepository.findAllByVotePaperId(votePaperId);
+        return voteChoiceMapper.registeredVoteChoices(voteChoices);
+    }
 }

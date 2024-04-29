@@ -3,12 +3,11 @@ package com.tune_fun.v1.vote.adapter.output.persistence;
 import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.common.config.BaseMapperConfig;
 import com.tune_fun.v1.common.util.StringUtil;
-import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
-import org.mapstruct.*;
-
-import java.util.Set;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(
         config = BaseMapperConfig.class,
@@ -34,26 +33,4 @@ public abstract class VotePaperMapper {
         return VotePaperOption.fromValue(option);
     }
 
-    @Mapping(target = "votePaper", source = "votePaperJpaEntity")
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    public abstract VoteChoiceJpaEntity.VoteChoiceJpaEntityBuilder<?, ?> updateVotePaper(VotePaperJpaEntity votePaperJpaEntity,
-                                                                                         @MappingTarget final VoteChoiceJpaEntity.VoteChoiceJpaEntityBuilder<?, ?> voteChoiceJpaEntityBuilder);
-
-    @IterableMapping(qualifiedByName = "fromSaveVoteChoiceBehavior")
-    public abstract Set<VoteChoiceJpaEntity> fromSaveVoteChoiceBehaviors(final Set<SaveVoteChoice> behavior);
-
-    @Named("fromSaveVoteChoiceBehavior")
-    @Mapping(target = "uuid", expression = "java(StringUtil.uuid())")
-    @Mapping(target = "offer", source = ".", qualifiedByName = "voteChoiceOffer")
-    public abstract VoteChoiceJpaEntity fromSaveVoteChoiceBehavior(final SaveVoteChoice behavior);
-
-    @Named("voteChoiceOffer")
-    @Mapping(target = "music", source = "offerName")
-    @Mapping(target = "artistName", source = "offerArtistName")
-    @Mapping(target = "genres", source = "offerGenres")
-    @Mapping(target = "releaseDate", source = "offerReleaseDate")
-    @Mapping(target = "durationMs", source = "offerDurationMs")
-    public abstract Offer voteChoiceOffer(final SaveVoteChoice behavior);
 }
