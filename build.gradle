@@ -86,7 +86,8 @@ dependencies {
 
     // development
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // @see https://github.com/awspring/spring-cloud-aws/issues/657
+//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
     // External

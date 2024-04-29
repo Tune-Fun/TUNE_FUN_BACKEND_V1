@@ -52,7 +52,7 @@ public class DeviceCustomRepositoryImpl implements DeviceCustomRepository {
                         )
                 )
                 .from(DEVICE)
-                .join(DEVICE.account, ACCOUNT).fetchJoin()
+                .join(DEVICE.account, ACCOUNT)
                 .where(predicate)
                 .fetch();
     }

@@ -8,9 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.messaging.MessageHeaders.CONTENT_TYPE;
-
 @Component
 @RequiredArgsConstructor
 public class SqsProvider {
@@ -23,7 +20,6 @@ public class SqsProvider {
 
         return sqsTemplate.send(to -> to
                 .queue(sqsProducer.queueName())
-                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .payload(message)
         );
     }

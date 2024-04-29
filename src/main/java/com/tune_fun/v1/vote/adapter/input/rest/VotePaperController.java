@@ -1,5 +1,6 @@
 package com.tune_fun.v1.vote.adapter.input.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tune_fun.v1.account.domain.value.CurrentUser;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.hexagon.WebAdapter;
@@ -29,7 +30,7 @@ public class VotePaperController {
     @PreAuthorize("hasRole('ARTIST')")
     @PostMapping(value = Uris.REGISTER_VOTE_PAPER)
     public ResponseEntity<Response<BasePayload>> registerVotePaper(@Valid @RequestBody final VotePaperCommands.Register command,
-                                                                   @CurrentUser final User user) {
+                                                                   @CurrentUser final User user) throws JsonProcessingException {
         registerVotePaperUseCase.register(command, user);
         return responseMapper.ok(MessageCode.CREATED);
     }

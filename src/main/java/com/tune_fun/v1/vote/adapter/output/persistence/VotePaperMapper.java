@@ -16,6 +16,7 @@ import org.mapstruct.Named;
 public abstract class VotePaperMapper {
 
     @Mapping(target = "option", source = "option", qualifiedByName = "toValue")
+    @Mapping(target = "author", source = "author.nickname")
     public abstract RegisteredVotePaper registeredVotePaper(final VotePaperJpaEntity votePaperJpaEntity);
 
     @Named("toValue")

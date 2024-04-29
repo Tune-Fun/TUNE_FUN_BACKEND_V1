@@ -2,7 +2,8 @@ package com.tune_fun.v1.vote.adapter.output.message;
 
 import com.tune_fun.v1.external.aws.sqs.SqsProvider;
 import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUploadEventPort;
-import com.tune_fun.v1.vote.domain.behavior.ProduceVotePaperUploadEvent;
+import com.tune_fun.v1.vote.domain.behavior.ProduceVotePaperRegisterEvent;
+import io.awspring.cloud.sqs.operations.SendResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,7 @@ public class VoteMessageBrokerAdapter implements ProduceVotePaperUploadEventPort
 
 
     @Override
-    public void produceVotePaperUploadEvent(final ProduceVotePaperUploadEvent produceVotePaperUploadEvent) {
-        sqsProvider.sendMessageRangedQueue(VOTE_PAPER_UPLOAD_QUEUE, produceVotePaperUploadEvent);
+    public SendResult<?> produceVotePaperUploadEvent(final ProduceVotePaperRegisterEvent produceVotePaperRegisterEvent) {
+        return sqsProvider.sendMessageRangedQueue(VOTE_PAPER_UPLOAD_QUEUE, produceVotePaperRegisterEvent);
     }
 }
