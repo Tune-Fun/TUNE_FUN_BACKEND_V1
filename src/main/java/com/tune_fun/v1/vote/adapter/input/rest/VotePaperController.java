@@ -39,6 +39,7 @@ public class VotePaperController {
         return responseMapper.ok(MessageCode.CREATED);
     }
 
+    // TODO : Follower 로직 구현 후 테스트 진행 예정
     @PreAuthorize("hasRole('ARTIST') && hasPermission(#command.votePaperId(), 'VOTE_PAPER', 'SET_DELIEVERY_DATE')")
     @PatchMapping(value = Uris.SET_VOTE_PAPER_DELIVERY_DATE)
     public ResponseEntity<Response<BasePayload>> updateDeliveryDate(@Valid @RequestBody final VotePaperCommands.UpdateDeliveryDate command,
