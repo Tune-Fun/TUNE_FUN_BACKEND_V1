@@ -1,27 +1,43 @@
 package com.tune_fun.v1.vote.adapter.output.message;
 
 import com.tune_fun.v1.external.aws.sqs.SqsProvider;
+import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUpdateDeliveryDateEventPort;
 import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUploadEventPort;
-import com.tune_fun.v1.vote.domain.behavior.ProduceVotePaperRegisterEvent;
-import io.awspring.cloud.sqs.operations.SendResult;
+import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
+import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class VoteMessageBrokerAdapter implements ProduceVotePaperUploadEventPort {
+public class VoteMessageBrokerAdapter implements
+        ProduceVotePaperUploadEventPort, ProduceVotePaperUpdateDeliveryDateEventPort {
 
     private final SqsProvider sqsProvider;
-    private static final String VOTE_PAPER_UPLOAD_QUEUE = "send-vote-paper-upload-notification-dev";
+
+    @Value("${event.sqs.send-vote-paper-upload-notification.queue-name}")
+    private String votePaperUploadQueue;
+
+    @Value("${event.sqs.send-vote-paper-update-delivery-date-notification.queue-name}")
+    private String votePaperUpdateDeliveryDateQueue;
 
 
     /**
-     * @param produceVotePaperRegisterEvent {@link ProduceVotePaperRegisterEvent}
-     * @return {@link SendResult}
-     * @see com.tune_fun.v1.vote.adapter.input.message.VoteMessageConsumer#consumeVotePaperUploadEvent(ProduceVotePaperRegisterEvent)
+     * @param votePaperRegisterEvent {@link VotePaperRegisterEvent}
+     * @see com.tune_fun.v1.vote.adapter.input.message.VoteMessageConsumer#consumeVotePaperUploadEvent(VotePaperRegisterEvent)
      */
     @Override
-    public SendResult<?> produceVotePaperUploadEvent(final ProduceVotePaperRegisterEvent produceVotePaperRegisterEvent) {
-        return sqsProvider.sendMessageRangedQueue(VOTE_PAPER_UPLOAD_QUEUE, produceVotePaperRegisterEvent);
+    public void produceVotePaperUploadEvent(final VotePaperRegisterEvent votePaperRegisterEvent) {
+        sqsProvider.sendMessageRangedQueue(votePaperUploadQueue, votePaperRegisterEvent);
+    }
+
+    /**
+     * @param votePaperUpdateDeliveryDateEvent {@link VotePaperUpdateDeliveryDateEvent}
+     * @see com.tune_fun.v1.vote.adapter.input.message.VoteMessageConsumer#consumeVotePaperUpdateDeliveryDateEvent(VotePaperUpdateDeliveryDateEvent)
+     */
+    @Override
+    public void produceVotePaperUpdateDeliveryDateEvent(final VotePaperUpdateDeliveryDateEvent votePaperUpdateDeliveryDateEvent) {
+        sqsProvider.sendMessageRangedQueue(votePaperUpdateDeliveryDateQueue, votePaperUpdateDeliveryDateEvent);
     }
 }

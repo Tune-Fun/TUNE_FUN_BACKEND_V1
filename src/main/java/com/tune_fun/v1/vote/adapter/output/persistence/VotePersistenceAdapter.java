@@ -11,6 +11,7 @@ import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -24,6 +25,7 @@ import static java.util.stream.Collectors.toSet;
 public class VotePersistenceAdapter implements
         LoadVotePort, SaveVotePort,
         LoadVotePaperPort, SaveVotePaperPort,
+        UpdateDeliveryAtPort,
         LoadVoteChoicePort, SaveVoteChoicePort {
 
     private final AccountPersistenceAdapter accountPersistenceAdapter;
@@ -34,6 +36,11 @@ public class VotePersistenceAdapter implements
 
     private final VotePaperMapper votePaperMapper;
     private final VoteChoiceMapper voteChoiceMapper;
+
+    @Override
+    public List<Long> loadVoterIdsByVotePaperUuid(final String uuid) {
+        return voteRepository.findVoterIdsByVotePaperUuid(uuid);
+    }
 
     @Override
     public Optional<RegisteredVotePaper> loadRegisteredVotePaper(final String username) {
@@ -52,8 +59,18 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
+    public RegisteredVotePaper updateDeliveryAt(final Long votePaperId, final LocalDateTime deliveryAt) {
+        VotePaperJpaEntity votePaper = findCompleteVotePaperById(votePaperId)
+                .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
+
+        VotePaperJpaEntity updatedVotePaper = votePaperMapper.updateDeliveryAt(deliveryAt, votePaper.toBuilder()).build();
+        VotePaperJpaEntity savedVotePaper = votePaperRepository.save(updatedVotePaper);
+        return votePaperMapper.registeredVotePaper(savedVotePaper);
+    }
+
+    @Override
     public void saveVoteChoice(final Long votePaperId, final Set<SaveVoteChoice> behavior) {
-        VotePaperJpaEntity votePaperJpaEntity = findAvailableVotePaperById(votePaperId)
+        VotePaperJpaEntity votePaperJpaEntity = findProgressingVotePaperById(votePaperId)
                 .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
 
         Set<VoteChoiceJpaEntity> voteChoices = voteChoiceMapper.fromSaveVoteChoiceBehaviors(behavior);
@@ -64,8 +81,13 @@ public class VotePersistenceAdapter implements
         voteChoiceRepository.saveAll(updatedVoteChoices);
     }
 
-    public Optional<VotePaperJpaEntity> findAvailableVotePaperById(final Long id) {
+
+    public Optional<VotePaperJpaEntity> findProgressingVotePaperById(final Long id) {
         return votePaperRepository.findByVoteEndAtAfterAndId(now(), id);
+    }
+
+    public Optional<VotePaperJpaEntity> findCompleteVotePaperById(final Long id) {
+        return votePaperRepository.findByVoteEndAtBeforeAndId(now(), id);
     }
 
     public Optional<VotePaperJpaEntity> findAvailableVotePaperByAuthor(final String username) {

@@ -9,5 +9,5 @@ public interface DeviceCustomRepository {
     Optional<DeviceJpaEntity> findByFcmTokenOrDeviceToken(final String username, final String fcmToken, final String deviceToken);
 
     List<NotificationApprovedDevice> fetchNotificationApprovedDevice(
-            final Boolean voteProgressNotification, final Boolean voteEndNotification, final Boolean voteDeliveryNotification);
+            final Boolean voteProgressNotification, final Boolean voteEndNotification, final Boolean voteDeliveryNotification, final List<Long> accountIds);
 }

@@ -10,7 +10,7 @@ import com.tune_fun.v1.vote.adapter.input.message.VoteMessageConsumer;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.output.LoadVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
-import com.tune_fun.v1.vote.domain.behavior.ProduceVotePaperRegisterEvent;
+import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.extern.slf4j.Slf4j;
@@ -134,7 +134,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
                         .thenApply(GetQueueUrlResponse::queueUrl)
                         .thenCompose(queueUrl -> sqsAsyncClient.receiveMessage(getReceiveMessageRequest(queueUrl)));
         await().untilAsserted(receiveMessageAssertionRunnable);
-        verify(voteMessageConsumer, times(1)).consumeVotePaperUploadEvent(any(ProduceVotePaperRegisterEvent.class));
+        verify(voteMessageConsumer, times(1)).consumeVotePaperUploadEvent(any(VotePaperRegisterEvent.class));
 
         // TODO : GitHub Actions 에서는 테스트 실패함. 원인 파악 필요
 //        verify(firebaseMessagingMediator).sendMulticastMessageByTokens(any());

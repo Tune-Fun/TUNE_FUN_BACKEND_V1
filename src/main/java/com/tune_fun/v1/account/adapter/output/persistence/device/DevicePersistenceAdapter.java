@@ -49,13 +49,6 @@ public class DevicePersistenceAdapter implements SaveDevicePort, LoadDevicePort,
     }
 
     @Override
-    public List<NotificationApprovedDevice> loadNotificationApprovedDevice(
-            final Boolean voteProgressNotification, final Boolean voteEndNotification, final Boolean voteDeliveryNotification) {
-        return deviceRepository.fetchNotificationApprovedDevice(voteProgressNotification, voteEndNotification,
-                voteDeliveryNotification);
-    }
-
-    @Override
     public void delete(final DeleteDevice behavior) {
         findByFcmTokenOrDeviceToken(behavior.username(), behavior.fcmToken(), behavior.deviceToken()).ifPresent(deviceRepository::delete);
     }
@@ -63,5 +56,12 @@ public class DevicePersistenceAdapter implements SaveDevicePort, LoadDevicePort,
     public Optional<DeviceJpaEntity> findByFcmTokenOrDeviceToken(String username, String fcmToken, String deviceToken) {
         return deviceRepository
                 .findByFcmTokenOrDeviceToken(username, fcmToken, deviceToken);
+    }
+
+    @Override
+    public List<NotificationApprovedDevice> loadNotificationApprovedDevice(final Boolean voteProgressNotification, final Boolean voteEndNotification,
+                                                                           final Boolean voteDeliveryNotification, final List<Long> accountIds) {
+        return deviceRepository.fetchNotificationApprovedDevice(voteProgressNotification, voteEndNotification,
+                voteDeliveryNotification, accountIds);
     }
 }

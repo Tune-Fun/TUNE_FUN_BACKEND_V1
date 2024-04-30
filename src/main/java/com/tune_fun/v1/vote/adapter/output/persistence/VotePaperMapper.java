@@ -7,7 +7,10 @@ import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+
+import java.time.LocalDateTime;
 
 @Mapper(
         config = BaseMapperConfig.class,
@@ -33,5 +36,8 @@ public abstract class VotePaperMapper {
     public VotePaperOption votePaperOption(final String option) {
         return VotePaperOption.fromValue(option);
     }
+
+    @Mapping(target = "deliveryAt", source = "deliveryAt")
+    public abstract VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?> updateDeliveryAt(LocalDateTime deliveryAt, @MappingTarget VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?> builder);
 
 }

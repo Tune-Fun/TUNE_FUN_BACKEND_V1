@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @DisabledInAotMode
 class VotePersistenceAdapterTest {
-    
+
     @MockBean
     private AccountPersistenceAdapter accountPersistenceAdapter;
 
@@ -209,10 +209,10 @@ class VotePersistenceAdapterTest {
 
     /**
      * Method under test:
-     * {@link VotePersistenceAdapter#findAvailableVotePaperById(Long)}
+     * {@link VotePersistenceAdapter#findProgressingVotePaperById(Long)}
      */
     @Test
-    void testFindAvailableVotePaperById() {
+    void testFindProgressingVotePaperById() {
         // Arrange
         Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
         when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.<LocalDateTime>any(), Mockito.<Long>any()))
@@ -220,7 +220,7 @@ class VotePersistenceAdapterTest {
 
         // Act
         Optional<VotePaperJpaEntity> actualFindAvailableVotePaperByIdResult = votePersistenceAdapter
-                .findAvailableVotePaperById(1L);
+                .findProgressingVotePaperById(1L);
 
         // Assert
         verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
@@ -229,16 +229,16 @@ class VotePersistenceAdapterTest {
 
     /**
      * Method under test:
-     * {@link VotePersistenceAdapter#findAvailableVotePaperById(Long)}
+     * {@link VotePersistenceAdapter#findProgressingVotePaperById(Long)}
      */
     @Test
-    void testFindAvailableVotePaperById2() {
+    void testFindProgressingVotePaperById2() {
         // Arrange
         when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.<LocalDateTime>any(), Mockito.<Long>any()))
                 .thenThrow(new IllegalArgumentException("foo"));
 
         // Act and Assert
-        assertThrows(IllegalArgumentException.class, () -> votePersistenceAdapter.findAvailableVotePaperById(1L));
+        assertThrows(IllegalArgumentException.class, () -> votePersistenceAdapter.findProgressingVotePaperById(1L));
         verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
     }
 
