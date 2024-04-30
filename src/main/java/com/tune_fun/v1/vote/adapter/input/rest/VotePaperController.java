@@ -31,6 +31,7 @@ public class VotePaperController {
     private final RegisterVotePaperUseCase registerVotePaperUseCase;
     private final UpdateVotePaperDeliveryDateUseCase updateVotePaperDeliveryDateUseCase;
 
+    // TODO : Follower 로직 구현 후 테스트 재진행 예정
     @PreAuthorize("hasRole('ARTIST')")
     @PostMapping(value = Uris.REGISTER_VOTE_PAPER)
     public ResponseEntity<Response<BasePayload>> registerVotePaper(@Valid @RequestBody final VotePaperCommands.Register command,
@@ -39,7 +40,7 @@ public class VotePaperController {
         return responseMapper.ok(MessageCode.CREATED);
     }
 
-    // TODO : Follower 로직 구현 후 테스트 진행 예정
+    // TODO : Vote 로직 구현 후 테스트 재진행 예정
     @PreAuthorize("hasRole('ARTIST') && hasPermission(#command.votePaperId(), 'VOTE_PAPER', 'SET_DELIEVERY_DATE')")
     @PatchMapping(value = Uris.SET_VOTE_PAPER_DELIVERY_DATE)
     public ResponseEntity<Response<BasePayload>> updateDeliveryDate(@Valid @RequestBody final VotePaperCommands.UpdateDeliveryDate command,
