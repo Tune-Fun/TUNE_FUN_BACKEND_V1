@@ -7,7 +7,6 @@ import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUpdateDelive
 import com.tune_fun.v1.vote.application.port.output.UpdateDeliveryAtPort;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
-import io.awspring.cloud.sqs.operations.SendResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +28,7 @@ public class UpdateVotePaperDeliveryDateService implements UpdateVotePaperDelive
 
         VotePaperUpdateDeliveryDateEvent event = new VotePaperUpdateDeliveryDateEvent(registeredVotePaper.uuid(),
                 registeredVotePaper.author(), registeredVotePaper.title(), registeredVotePaper.content());
-        SendResult<?> sendResult = produceVotePaperUploadEventPort.produceVotePaperUpdateDeliveryDateEvent(event);
+        produceVotePaperUploadEventPort.produceVotePaperUpdateDeliveryDateEvent(event);
     }
 
 }

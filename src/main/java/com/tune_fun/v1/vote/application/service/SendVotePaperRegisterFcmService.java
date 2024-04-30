@@ -38,8 +38,10 @@ public class SendVotePaperRegisterFcmService implements SendVotePaperRegisterFcm
     @Transactional
     @Override
     public void send(VotePaperRegisterEvent votePaperRegisterEvent) throws JsonProcessingException, FirebaseMessagingException {
+        // TODO : Follower Aggregate Root................... -> accountIds
+        
         List<NotificationApprovedDevice> notificationApprovedDevices = loadDevicePort.
-                loadNotificationApprovedDevice(true, null, null);
+                loadNotificationApprovedDevice(true, null, null, null);
         log.info("notificationApprovedDevices: \n{}", objectUtil.objectToPrettyJson(notificationApprovedDevices));
 
         sendVotePaperRegisterFcm(votePaperRegisterEvent, notificationApprovedDevices);

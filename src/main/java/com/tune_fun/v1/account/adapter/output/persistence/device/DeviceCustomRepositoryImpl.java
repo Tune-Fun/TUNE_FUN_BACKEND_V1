@@ -35,12 +35,14 @@ public class DeviceCustomRepositoryImpl implements DeviceCustomRepository {
 
     @Override
     public List<NotificationApprovedDevice> fetchNotificationApprovedDevice(
-            final Boolean voteProgressNotification, final Boolean voteEndNotification, final Boolean voteDeliveryNotification) {
+            final Boolean voteProgressNotification, final Boolean voteEndNotification, final Boolean voteDeliveryNotification,
+            final List<Long> accountIds) {
 
         Predicate predicate = PredicateBuilder.builder()
                 .and().eqBoolean(ACCOUNT.notificationConfig.voteProgressNotification, voteProgressNotification)
                 .and().eqBoolean(ACCOUNT.notificationConfig.voteEndNotification, voteEndNotification)
                 .and().eqBoolean(ACCOUNT.notificationConfig.voteDeliveryNotification, voteDeliveryNotification)
+                .and().inNumber(ACCOUNT.id, accountIds)
                 .build();
 
         return queryFactory.select(fields(NotificationApprovedDevice.class,

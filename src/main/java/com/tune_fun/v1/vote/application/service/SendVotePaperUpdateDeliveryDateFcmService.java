@@ -21,6 +21,7 @@ public class SendVotePaperUpdateDeliveryDateFcmService implements SendVotePaperU
 
     private final LoadVotePort loadVotePort;
     private final LoadDevicePort loadDevicePort;
+
     private final SendVoteFcmPort sendVoteFcmPort;
 
     private final VoteBehaviorMapper voteBehaviorMapper;
@@ -31,7 +32,7 @@ public class SendVotePaperUpdateDeliveryDateFcmService implements SendVotePaperU
         List<Long> voterIds = loadVotePort.loadVoterIdsByVotePaperUuid(event.id());
 
         List<NotificationApprovedDevice> notificationApprovedDevices =
-                loadDevicePort.loadNotificationApprovedDevice(null, null, true);
+                loadDevicePort.loadNotificationApprovedDevice(null, null, true, voterIds);
 
         SendVotePaperUpdateDeliveryDateFcm sendVotePaperUpdateDeliveryDateFcmBehavior =
                 voteBehaviorMapper.sendVotePaperUpdateDeliveryDateFcm(event, notificationApprovedDevices);

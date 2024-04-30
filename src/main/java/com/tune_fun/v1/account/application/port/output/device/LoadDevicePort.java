@@ -7,5 +7,6 @@ import java.util.List;
 public interface LoadDevicePort {
 
     List<NotificationApprovedDevice> loadNotificationApprovedDevice(
-            Boolean voteProgressNotification, Boolean voteEndNotification, Boolean voteDeliveryNotification);
+            final Boolean voteProgressNotification, final Boolean voteEndNotification, final Boolean voteDeliveryNotification,
+            final List<Long> accountIds);
 }
