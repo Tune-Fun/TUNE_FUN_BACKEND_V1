@@ -10,6 +10,7 @@ import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVotePaperUseCase;
+import com.tune_fun.v1.vote.application.port.input.usecase.UpdateVotePaperDeliveryDateUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class VotePaperController {
 
     private final ResponseMapper responseMapper;
+
     private final RegisterVotePaperUseCase registerVotePaperUseCase;
+    private final UpdateVotePaperDeliveryDateUseCase updateVotePaperDeliveryDateUseCase;
 
     @PreAuthorize("hasRole('ARTIST')")
     @PostMapping(value = Uris.REGISTER_VOTE_PAPER)
@@ -38,9 +41,9 @@ public class VotePaperController {
 
     @PreAuthorize("hasRole('ARTIST') && hasPermission(#command.votePaperId(), 'VOTE_PAPER', 'SET_DELIEVERY_DATE')")
     @PatchMapping(value = Uris.SET_VOTE_PAPER_DELIVERY_DATE)
-    public ResponseEntity<Response<BasePayload>> setDeliveryDate(@Valid @RequestBody final VotePaperCommands.SetDeliveryDate command,
-                                                                 @CurrentUser final User user) throws JsonProcessingException {
-        registerVotePaperUseCase.setDelieveryDate(command);
+    public ResponseEntity<Response<BasePayload>> updateDeliveryDate(@Valid @RequestBody final VotePaperCommands.SetDeliveryDate command,
+                                                                    @CurrentUser final User user) throws JsonProcessingException {
+        updateVotePaperDeliveryDateUseCase.updateDeliveryDate(command);
         return responseMapper.ok(MessageCode.SUCCESS);
     }
 

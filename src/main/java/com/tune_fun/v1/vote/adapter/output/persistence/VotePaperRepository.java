@@ -13,4 +13,6 @@ public interface VotePaperRepository extends JpaRepository<VotePaperJpaEntity, S
 
     Optional<VotePaperJpaEntity> findByVoteEndAtAfterAndId(LocalDateTime voteEndAt, Long id);
 
+    Optional<VotePaperJpaEntity> findByVoteEndAtBeforeAndId(LocalDateTime voteEndAt, Long id);
+
 }

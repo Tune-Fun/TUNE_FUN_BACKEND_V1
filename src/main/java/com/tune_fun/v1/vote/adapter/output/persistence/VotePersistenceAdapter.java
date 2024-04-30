@@ -11,6 +11,7 @@ import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -24,6 +25,7 @@ import static java.util.stream.Collectors.toSet;
 public class VotePersistenceAdapter implements
         LoadVotePort, SaveVotePort,
         LoadVotePaperPort, SaveVotePaperPort,
+        UpdateDeliveryAtPort,
         LoadVoteChoicePort, SaveVoteChoicePort {
 
     private final AccountPersistenceAdapter accountPersistenceAdapter;
@@ -52,8 +54,17 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
+    public void updateDeliveryAt(final Long votePaperId, final LocalDateTime deliveryAt) {
+        VotePaperJpaEntity votePaper = findCompleteVotePaperById(votePaperId)
+                .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
+
+        VotePaperJpaEntity updatedVotePaper = votePaperMapper.updateDeliveryAt(deliveryAt, votePaper.toBuilder()).build();
+        votePaperRepository.save(updatedVotePaper);
+    }
+
+    @Override
     public void saveVoteChoice(final Long votePaperId, final Set<SaveVoteChoice> behavior) {
-        VotePaperJpaEntity votePaperJpaEntity = findAvailableVotePaperById(votePaperId)
+        VotePaperJpaEntity votePaperJpaEntity = findProgressingVotePaperById(votePaperId)
                 .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
 
         Set<VoteChoiceJpaEntity> voteChoices = voteChoiceMapper.fromSaveVoteChoiceBehaviors(behavior);
@@ -64,8 +75,13 @@ public class VotePersistenceAdapter implements
         voteChoiceRepository.saveAll(updatedVoteChoices);
     }
 
-    public Optional<VotePaperJpaEntity> findAvailableVotePaperById(final Long id) {
+
+    public Optional<VotePaperJpaEntity> findProgressingVotePaperById(final Long id) {
         return votePaperRepository.findByVoteEndAtAfterAndId(now(), id);
+    }
+
+    public Optional<VotePaperJpaEntity> findCompleteVotePaperById(final Long id) {
+        return votePaperRepository.findByVoteEndAtBeforeAndId(now(), id);
     }
 
     public Optional<VotePaperJpaEntity> findAvailableVotePaperByAuthor(final String username) {

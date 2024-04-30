@@ -8,16 +8,14 @@ import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.ObjectUtil;
 import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperRegisterFcmUseCase;
 import com.tune_fun.v1.vote.application.port.output.SendVoteFcmPort;
-import com.tune_fun.v1.vote.domain.behavior.ProduceVotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterFcm;
+import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
 
 @Slf4j
 @Service
@@ -32,16 +30,16 @@ public class SendVotePaperRegisterFcmService implements SendVotePaperRegisterFcm
 
     private final ObjectUtil objectUtil;
 
-    @Transactional(propagation = REQUIRES_NEW)
+    @Transactional
     @Override
-    public void send(ProduceVotePaperRegisterEvent produceVotePaperRegisterEvent) throws JsonProcessingException, FirebaseMessagingException {
+    public void send(VotePaperRegisterEvent votePaperRegisterEvent) throws JsonProcessingException, FirebaseMessagingException {
         List<NotificationApprovedDevice> notificationApprovedDevices = loadDevicePort.
                 loadNotificationApprovedDevice(true, null, null);
 
         log.info("notificationApprovedDevices: \n{}", objectUtil.objectToPrettyJson(notificationApprovedDevices));
 
         SendVotePaperRegisterFcm sendVotePaperRegisterFcmBehavior = voteBehaviorMapper
-                .sendVotePaperRegisterFcm(produceVotePaperRegisterEvent, notificationApprovedDevices);
+                .sendVotePaperRegisterFcm(votePaperRegisterEvent, notificationApprovedDevices);
         sendVoteFcmPort.notification(sendVotePaperRegisterFcmBehavior);
     }
 }

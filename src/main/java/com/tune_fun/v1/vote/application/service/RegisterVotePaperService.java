@@ -10,9 +10,9 @@ import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
 import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUploadEventPort;
 import com.tune_fun.v1.vote.application.port.output.SaveVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.SaveVotePaperPort;
-import com.tune_fun.v1.vote.domain.behavior.ProduceVotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
+import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import io.awspring.cloud.sqs.operations.SendResult;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +51,8 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
         RegisteredVotePaper registeredVotePaper = saveVotePaper(command);
         saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
 
-        ProduceVotePaperRegisterEvent produceVotePaperRegisterEventBehavior = getProduceVotePaperUploadEventBehavior(registeredVotePaper);
-        SendResult<?> sendResult = produceVotePaperUploadEventPort.produceVotePaperUploadEvent(produceVotePaperRegisterEventBehavior);
+        VotePaperRegisterEvent votePaperRegisterEventBehavior = getProduceVotePaperUploadEventBehavior(registeredVotePaper);
+        SendResult<?> sendResult = produceVotePaperUploadEventPort.produceVotePaperUploadEvent(votePaperRegisterEventBehavior);
 
         log.info("sendResult: \n{}", objectUtil.objectToPrettyJson(sendResult.message().getPayload()));
     }
@@ -74,7 +74,7 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
         saveVoteChoicePort.saveVoteChoice(registeredVotePaper.id(), saveVoteChoicesBehavior);
     }
 
-    private static @NotNull ProduceVotePaperRegisterEvent getProduceVotePaperUploadEventBehavior(RegisteredVotePaper registeredVotePaper) {
-        return new ProduceVotePaperRegisterEvent(registeredVotePaper.uuid(), registeredVotePaper.author(), registeredVotePaper.title(), registeredVotePaper.content());
+    private static @NotNull VotePaperRegisterEvent getProduceVotePaperUploadEventBehavior(RegisteredVotePaper registeredVotePaper) {
+        return new VotePaperRegisterEvent(registeredVotePaper.uuid(), registeredVotePaper.author(), registeredVotePaper.title(), registeredVotePaper.content());
     }
 }
