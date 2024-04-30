@@ -15,6 +15,11 @@ public class VoteMessageBrokerAdapter implements ProduceVotePaperUploadEventPort
     private static final String VOTE_PAPER_UPLOAD_QUEUE = "send-vote-paper-upload-notification-dev";
 
 
+    /**
+     * @param produceVotePaperRegisterEvent {@link ProduceVotePaperRegisterEvent}
+     * @return {@link SendResult}
+     * @see com.tune_fun.v1.vote.adapter.input.message.VoteMessageConsumer#consumeVotePaperUploadEvent(ProduceVotePaperRegisterEvent)
+     */
     @Override
     public SendResult<?> produceVotePaperUploadEvent(final ProduceVotePaperRegisterEvent produceVotePaperRegisterEvent) {
         return sqsProvider.sendMessageRangedQueue(VOTE_PAPER_UPLOAD_QUEUE, produceVotePaperRegisterEvent);

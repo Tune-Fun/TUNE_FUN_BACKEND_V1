@@ -38,7 +38,7 @@ public class SendVotePaperRegisterFcmService implements SendVotePaperRegisterFcm
         List<NotificationApprovedDevice> notificationApprovedDevices = loadDevicePort.
                 loadNotificationApprovedDevice(true, null, null);
 
-        log.info("notificationApprovedDevices: {}", objectUtil.objectToPrettyJson(notificationApprovedDevices));
+        log.info("notificationApprovedDevices: \n{}", objectUtil.objectToPrettyJson(notificationApprovedDevices));
 
         SendVotePaperRegisterFcm sendVotePaperRegisterFcmBehavior = voteBehaviorMapper
                 .sendVotePaperRegisterFcm(produceVotePaperRegisterEvent, notificationApprovedDevices);

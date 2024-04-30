@@ -5,6 +5,7 @@ import com.tune_fun.v1.base.ControllerBaseTest;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.dummy.DummyService;
+import com.tune_fun.v1.external.firebase.FirebaseMessagingMediator;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.output.LoadVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.FieldDescriptor;
 
 import java.time.LocalDateTime;
@@ -29,6 +31,9 @@ import static java.time.LocalDateTime.now;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.oneOf;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -47,6 +52,9 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
     @Autowired
     private LoadVoteChoicePort loadVoteChoicePort;
+
+    @MockBean
+    private FirebaseMessagingMediator firebaseMessagingMediator;
 
     @Test
     @Order(1)
@@ -69,6 +77,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
         VotePaperCommands.Register command = new VotePaperCommands.Register("First Vote Paper", "test",
                 "deny-add-choices", voteStartAt, voteEndAt, offers);
+
+        doNothing().when(firebaseMessagingMediator).sendMulticastMessageByTokens(any());
 
         FieldDescriptor[] requestDescriptors = {
                 fieldWithPath("title").description("투표 게시물 제목").attributes(constraint("NOT BLANK")),
@@ -104,6 +114,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
                         )
                 );
 
+        verify(firebaseMessagingMediator).sendMulticastMessageByTokens(any());
+
         Optional<RegisteredVotePaper> votePaperOptional = loadVotePaperPort.loadRegisteredVotePaper(dummyService.getDefaultUsername());
         assertTrue(votePaperOptional.isPresent());
 
@@ -123,11 +135,11 @@ class VotePaperControllerIT extends ControllerBaseTest {
         log.info("readMusic: {}", readMusic);
         readMusic.forEach(music -> assertThat(music, oneOf("Love Lee", "Dolphin")));
 
-        List<String> readArtistName = JsonPath.parse(registeredVoteChoices).read("$..artistName");
+        List<String> readArtistName = JsonPath.parse(registeredVoteChoices).read("$[*].artistName");
         log.info("readArtistName: {}", readArtistName);
         readArtistName.forEach(artistName -> assertThat(artistName, oneOf("AKMU", "오마이걸")));
 
-        List<List<String>> readGenres = JsonPath.parse(registeredVoteChoices).read("$..genres");
+        List<List<String>> readGenres = JsonPath.parse(registeredVoteChoices).read("$[*].genres");
         log.info("readGenres: {}", readGenres);
         readGenres.forEach(genres -> assertThat(genres, oneOf(List.of("R&B", "Soul"), List.of("Dance", "Pop"))));
     }

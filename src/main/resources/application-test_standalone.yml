@@ -101,6 +101,8 @@ event:
   sqs:
     test:
       queue-name: test
+    send-vote-paper-upload-notification:
+      queue-name: send-vote-paper-upload-notification-dev
 
 kms:
   jwt-signature-arn:

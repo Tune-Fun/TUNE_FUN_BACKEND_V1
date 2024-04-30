@@ -51,11 +51,10 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
         RegisteredVotePaper registeredVotePaper = saveVotePaper(command);
         saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
 
-        // TODO : Scheduling 정책 수립
         ProduceVotePaperRegisterEvent produceVotePaperRegisterEventBehavior = getProduceVotePaperUploadEventBehavior(registeredVotePaper);
         SendResult<?> sendResult = produceVotePaperUploadEventPort.produceVotePaperUploadEvent(produceVotePaperRegisterEventBehavior);
 
-        log.info("sendResult: {}", objectUtil.objectToPrettyJson(sendResult.message().getPayload()));
+        log.info("sendResult: \n{}", objectUtil.objectToPrettyJson(sendResult.message().getPayload()));
     }
 
     public void validateRegistrableVotePaperCount(final User user) {
