@@ -6,18 +6,26 @@ import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.dummy.DummyService;
 import com.tune_fun.v1.external.firebase.FirebaseMessagingMediator;
+import com.tune_fun.v1.vote.adapter.input.message.VoteMessageConsumer;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.output.LoadVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
+import com.tune_fun.v1.vote.domain.behavior.ProduceVotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.extern.slf4j.Slf4j;
+import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.test.annotation.DirtiesContext;
+import software.amazon.awssdk.services.sqs.SqsAsyncClient;
+import software.amazon.awssdk.services.sqs.model.GetQueueUrlResponse;
+import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,12 +36,12 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
 import static java.time.LocalDateTime.now;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.oneOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -42,6 +50,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 
 @Slf4j
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class VotePaperControllerIT extends ControllerBaseTest {
 
     @Autowired
@@ -53,8 +62,14 @@ class VotePaperControllerIT extends ControllerBaseTest {
     @Autowired
     private LoadVoteChoicePort loadVoteChoicePort;
 
+    @Autowired
+    private SqsAsyncClient sqsAsyncClient;
+
     @MockBean
     private FirebaseMessagingMediator firebaseMessagingMediator;
+
+    @SpyBean
+    private VoteMessageConsumer voteMessageConsumer;
 
     @Test
     @Order(1)
@@ -114,6 +129,13 @@ class VotePaperControllerIT extends ControllerBaseTest {
                         )
                 );
 
+        ThrowingRunnable receiveMessageAssertionRunnable = () ->
+                sqsAsyncClient.getQueueUrl(r -> r.queueName("send-vote-paper-upload-notification-dev"))
+                        .thenApply(GetQueueUrlResponse::queueUrl)
+                        .thenCompose(queueUrl -> sqsAsyncClient.receiveMessage(getReceiveMessageRequest(queueUrl)));
+        await().untilAsserted(receiveMessageAssertionRunnable);
+        verify(voteMessageConsumer, times(1)).consumeVotePaperUploadEvent(any(ProduceVotePaperRegisterEvent.class));
+
         verify(firebaseMessagingMediator).sendMulticastMessageByTokens(any());
 
         Optional<RegisteredVotePaper> votePaperOptional = loadVotePaperPort.loadRegisteredVotePaper(dummyService.getDefaultUsername());
@@ -142,6 +164,13 @@ class VotePaperControllerIT extends ControllerBaseTest {
         List<List<String>> readGenres = JsonPath.parse(registeredVoteChoices).read("$[*].genres");
         log.info("readGenres: {}", readGenres);
         readGenres.forEach(genres -> assertThat(genres, oneOf(List.of("R&B", "Soul"), List.of("Dance", "Pop"))));
+    }
+
+    private static ReceiveMessageRequest getReceiveMessageRequest(String queueUrl) {
+        return ReceiveMessageRequest.builder()
+                .queueUrl(queueUrl)
+                .maxNumberOfMessages(1)
+                .build();
     }
 
 }
