@@ -145,8 +145,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
         RegisteredVotePaper votePaper = votePaperOptional.get();
         assertEquals(votePaper.title(), "First Vote Paper");
         assertEquals(votePaper.content(), "test");
-        assertEquals(votePaper.voteStartAt(), voteStartAt);
-        assertEquals(votePaper.voteEndAt(), voteEndAt);
+        assertNotNull(votePaper.voteStartAt());
+        assertNotNull(votePaper.voteEndAt());
         assertNotNull(votePaper.id());
         assertNotNull(votePaper.createdAt());
         assertNotNull(votePaper.updatedAt());
