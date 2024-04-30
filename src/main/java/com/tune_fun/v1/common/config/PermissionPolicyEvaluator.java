@@ -1,7 +1,9 @@
 package com.tune_fun.v1.common.config;
 
 import com.tune_fun.v1.common.exception.CommonApplicationException;
+import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
+import com.tune_fun.v1.vote.application.port.output.LoadVotePort;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import static com.tune_fun.v1.common.response.MessageCode.VOTE_POLICY_ONLY_AUTHO
 public class PermissionPolicyEvaluator implements PermissionEvaluator {
 
     private final LoadVotePaperPort loadVotePaperPort;
+    private final LoadVotePort loadVotePort;
 
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
@@ -33,10 +36,8 @@ public class PermissionPolicyEvaluator implements PermissionEvaluator {
 
         return switch (TargetType.valueOf(targetType)) {
             case VOTE_PAPER -> hasPermissionForVotePaper(principal, targetId);
-            case VOTE -> false;
-            default -> false;
+            case VOTE -> hasPermissionForVote(principal, targetId);
         };
-
     }
 
     public boolean hasPermissionForVotePaper(User principal, Serializable targetId) {
@@ -46,6 +47,11 @@ public class PermissionPolicyEvaluator implements PermissionEvaluator {
         if (registeredVotePaper.id().equals(targetId)) return true;
 
         throw new CommonApplicationException(VOTE_PAPER_NOT_FOUND);
+    }
+
+    public boolean hasPermissionForVote(User principal, Serializable targetId) {
+        if (loadVotePort.loadVoteByVoterAndVotePaperId(principal.getUsername(), (Long) targetId).isEmpty()) return true;
+        throw new CommonApplicationException(MessageCode.VOTE_POLICY_ONE_VOTE_PER_USER);
     }
 
     private enum TargetType {

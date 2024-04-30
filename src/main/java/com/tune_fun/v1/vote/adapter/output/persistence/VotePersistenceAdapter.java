@@ -6,6 +6,7 @@ import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.vote.application.port.output.*;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
+import com.tune_fun.v1.vote.domain.value.RegisteredVote;
 import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.RequiredArgsConstructor;
@@ -34,12 +35,19 @@ public class VotePersistenceAdapter implements
     private final VotePaperRepository votePaperRepository;
     private final VoteChoiceRepository voteChoiceRepository;
 
+    private final VoteMapper voteMapper;
     private final VotePaperMapper votePaperMapper;
     private final VoteChoiceMapper voteChoiceMapper;
 
     @Override
     public List<Long> loadVoterIdsByVotePaperUuid(final String uuid) {
         return voteRepository.findVoterIdsByVotePaperUuid(uuid);
+    }
+
+    @Override
+    public Optional<RegisteredVote> loadVoteByVoterAndVotePaperId(String voter, Long votePaperId) {
+        return voteRepository.findByVoterUsernameAndId(voter, votePaperId)
+                .map(voteMapper::registeredVote);
     }
 
     @Override
