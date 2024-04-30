@@ -38,6 +38,11 @@ public class VotePersistenceAdapter implements
     private final VoteChoiceMapper voteChoiceMapper;
 
     @Override
+    public List<Long> loadVoterIdsByVotePaperUuid(final String uuid) {
+        return voteRepository.findVoterIdsByVotePaperUuid(uuid);
+    }
+
+    @Override
     public Optional<RegisteredVotePaper> loadRegisteredVotePaper(final String username) {
         return findAvailableVotePaperByAuthor(username)
                 .map(votePaperMapper::registeredVotePaper);
@@ -54,12 +59,13 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
-    public void updateDeliveryAt(final Long votePaperId, final LocalDateTime deliveryAt) {
+    public RegisteredVotePaper updateDeliveryAt(final Long votePaperId, final LocalDateTime deliveryAt) {
         VotePaperJpaEntity votePaper = findCompleteVotePaperById(votePaperId)
                 .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
 
         VotePaperJpaEntity updatedVotePaper = votePaperMapper.updateDeliveryAt(deliveryAt, votePaper.toBuilder()).build();
-        votePaperRepository.save(updatedVotePaper);
+        VotePaperJpaEntity savedVotePaper = votePaperRepository.save(updatedVotePaper);
+        return votePaperMapper.registeredVotePaper(savedVotePaper);
     }
 
     @Override

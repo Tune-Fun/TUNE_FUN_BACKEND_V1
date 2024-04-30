@@ -85,6 +85,8 @@ dependencies {
     implementation 'org.postgresql:postgresql'
 
     // development
+    implementation 'org.springframework.retry:spring-retry'
+    implementation 'org.springframework:spring-aspects'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // @see https://github.com/awspring/spring-cloud-aws/issues/657
 //    developmentOnly 'org.springframework.boot:spring-boot-devtools'

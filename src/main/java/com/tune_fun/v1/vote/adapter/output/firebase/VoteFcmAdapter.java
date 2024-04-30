@@ -5,6 +5,7 @@ import com.tune_fun.v1.external.firebase.FirebaseMessagingMediator;
 import com.tune_fun.v1.external.firebase.FirebaseMto;
 import com.tune_fun.v1.vote.application.port.output.SendVoteFcmPort;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterFcm;
+import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateDeliveryDateFcm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,12 @@ public class VoteFcmAdapter implements SendVoteFcmPort {
     @Override
     public void notification(final SendVotePaperRegisterFcm behavior) throws FirebaseMessagingException {
         FirebaseMto.ByTokens mto = voteFirebaseMessagingMapper.fromSendVotePaperRegisterFcmBehavior(behavior);
+        firebaseMessagingMediator.sendMulticastMessageByTokens(mto);
+    }
+
+    @Override
+    public void notification(SendVotePaperUpdateDeliveryDateFcm sendVotePaperUpdateDeliveryDateFcmBehavior) throws FirebaseMessagingException {
+        FirebaseMto.ByTokens mto = voteFirebaseMessagingMapper.fromSendVotePaperUpdateDeliveryDateFcmBehavior(sendVotePaperUpdateDeliveryDateFcmBehavior);
         firebaseMessagingMediator.sendMulticastMessageByTokens(mto);
     }
 }

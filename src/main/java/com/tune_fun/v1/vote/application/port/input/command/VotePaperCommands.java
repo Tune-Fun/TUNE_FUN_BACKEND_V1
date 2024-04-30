@@ -58,9 +58,12 @@ public class VotePaperCommands {
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public record SetDeliveryDate(
+    public record UpdateDeliveryDate(
+            @NotNull(message = "{vote.paper.id.not_null}")
             Long votePaperId,
 
+            @NotNull(message = "{vote.paper.delivery_at.not_null}")
+            @Future(message = "{vote.paper.delivery_at.future}")
             LocalDateTime deliveryAt
     ) {
     }
