@@ -50,7 +50,8 @@ public class Uris {
     public static final String VERIFY_OTP_WITH_TOKEN = API_V1_ROOT + "/otp/verify-with-token";
     public static final String RESEND_OTP = API_V1_ROOT + "/otp/resend";
 
-    public static final String REGISTER_VOTE = API_V1_ROOT + "/vote/register";
+    public static final String REGISTER_VOTE_PAPER = API_V1_ROOT + "/votes/paper";
+    public static final String REGISTER_VOTE = API_V1_ROOT + "/votes/choice";
 
     public static final String SWAGGER_UI_ROOT = "/swagger-ui";
     public static final String SWAGGER_UI = "/swagger-ui.html";
@@ -71,7 +72,7 @@ public class Uris {
     public static final String SWAGGER_API_DOCS_SWAGGER_CONFIG = SWAGGER_API_DOCS + "/swagger-config";
     public static final String SWAGGER_API_DOCS_JSON = "/docs/com.tune_fun-open-api-3.0.1.json";
 
-    public static final String API_DOC_HTML = "/static/docs/index.html";
+    public static final String API_DOC_HTML = "/docs/index.html";
     public static final String FAVICON = "/favicon.ico";
     public static final String HEALTH_CHECK = "/health-check";
 
@@ -135,6 +136,11 @@ public class Uris {
             CUSTOM_RESPONSE_EXAMPLE,
             CUSTOM_EXCEPTION_RESPONSE_EXAMPLE
     };
+
+    public static final String[] ARTIST_URIS = {
+            REGISTER_VOTE_PAPER
+    };
+
     public static final String[] ADMIN_URIS = {
             DEFAULT_LOGIN_PAGE
     };

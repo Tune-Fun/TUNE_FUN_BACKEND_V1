@@ -13,7 +13,7 @@ import java.security.PrivateKey;
 import java.time.Instant;
 import java.util.Date;
 
-import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider.APPLE;
+import static com.tune_fun.v1.account.domain.value.oauth2.OAuth2Provider.APPLE;
 
 @Component
 @RequiredArgsConstructor

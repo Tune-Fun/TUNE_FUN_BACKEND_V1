@@ -8,10 +8,10 @@ import com.tune_fun.v1.account.application.port.output.oauth2.*;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
-import com.tune_fun.v1.account.domain.state.Account;
-import com.tune_fun.v1.account.domain.state.CurrentAccount;
-import com.tune_fun.v1.account.domain.state.RegisteredAccount;
-import com.tune_fun.v1.account.domain.state.oauth2.*;
+import com.tune_fun.v1.account.domain.value.Account;
+import com.tune_fun.v1.account.domain.value.CurrentAccount;
+import com.tune_fun.v1.account.domain.value.RegisteredAccount;
+import com.tune_fun.v1.account.domain.value.oauth2.*;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.exception.OAuth2AuthenticationProcessingException;
 import com.tune_fun.v1.common.helper.AppleOAuth2ClientSecretHelper;
@@ -35,8 +35,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.*;
-import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2AuthorizationRequestMode.fromQueryParameter;
-import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2Provider.APPLE;
+import static com.tune_fun.v1.account.domain.value.oauth2.OAuth2AuthorizationRequestMode.fromQueryParameter;
+import static com.tune_fun.v1.account.domain.value.oauth2.OAuth2Provider.APPLE;
 import static com.tune_fun.v1.common.response.MessageCode.*;
 import static com.tune_fun.v1.common.util.CookieUtil.getCookie;
 import static com.tune_fun.v1.common.util.StringUtil.getFlattenAuthorities;
@@ -196,7 +196,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Transactional
     public CurrentAccount saveBaseAccount(final OAuth2UserPrincipal principal) {
-        SaveAccount saveAccountBehavior = new SaveAccount(StringUtil.uuid(), principal.userInfo().getEmail(),
+        SaveAccount saveAccountBehavior = new SaveAccount("NORMAL", StringUtil.uuid(), principal.userInfo().getEmail(),
                 "social", principal.userInfo().getEmail(), principal.userInfo().getNickname(),
                 true, true, true);
         return saveAccountPort.saveAccount(saveAccountBehavior);

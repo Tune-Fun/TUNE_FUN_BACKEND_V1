@@ -80,8 +80,9 @@ public class SecurityConfig {
                 .sessionManagement(config -> config.sessionCreationPolicy(STATELESS))
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .requestMatchers(mvc(introspector, Uris.PERMIT_ALL_URIS)).permitAll()
                         .requestMatchers(mvc(introspector, "/static/**", "/favicon.ico")).permitAll()
+                        .requestMatchers(mvc(introspector, Uris.PERMIT_ALL_URIS)).permitAll()
+                        .requestMatchers(mvc(introspector, Uris.ARTIST_URIS)).hasRole("ARTIST")
                         .requestMatchers(mvc(introspector, Uris.ADMIN_URIS)).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

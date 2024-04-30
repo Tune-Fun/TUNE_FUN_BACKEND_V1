@@ -8,8 +8,8 @@ import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort
 import com.tune_fun.v1.account.application.port.output.jwt.CreateRefreshTokenPort;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
-import com.tune_fun.v1.account.domain.state.CurrentAccount;
-import com.tune_fun.v1.account.domain.state.RegisterResult;
+import com.tune_fun.v1.account.domain.value.CurrentAccount;
+import com.tune_fun.v1.account.domain.value.RegisterResult;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.StringUtil;
@@ -35,8 +35,8 @@ public class RegisterService implements RegisterUseCase {
     private final PasswordEncoder passwordEncoder;
 
     @NotNull
-    private static SaveAccount getSaveAccount(AccountCommands.Register command, String encodedPassword) {
-        return new SaveAccount(
+    private static SaveAccount getSaveAccount(final String registerType, final AccountCommands.Register command, final String encodedPassword) {
+        return new SaveAccount(registerType,
                 StringUtil.uuid(), command.username(), encodedPassword,
                 command.email(), command.nickname(), command.notification().voteDeliveryNotification(),
                 command.notification().voteEndNotification(), command.notification().voteDeliveryNotification()
@@ -50,11 +50,11 @@ public class RegisterService implements RegisterUseCase {
 
     @Override
     @Transactional
-    public RegisterResult register(final AccountCommands.Register command) {
+    public RegisterResult register(final String registerType, final AccountCommands.Register command) {
         checkRegisterdAccount(command);
 
         String encodedPassword = passwordEncoder.encode(command.password());
-        SaveAccount saveAccount = getSaveAccount(command, encodedPassword);
+        SaveAccount saveAccount = getSaveAccount(registerType, command, encodedPassword);
         CurrentAccount savedAccount = saveAccountPort.saveAccount(saveAccount);
 
         String authorities = String.join(",", savedAccount.roles());

@@ -11,7 +11,7 @@ import com.tune_fun.v1.otp.application.port.output.LoadOtpPort;
 import com.tune_fun.v1.otp.application.port.output.VerifyOtpPort;
 import com.tune_fun.v1.otp.domain.behavior.LoadOtp;
 import com.tune_fun.v1.otp.domain.behavior.VerifyOtp;
-import com.tune_fun.v1.otp.domain.state.CurrentDecryptedOtp;
+import com.tune_fun.v1.otp.domain.value.CurrentDecryptedOtp;
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;

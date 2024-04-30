@@ -1,6 +1,13 @@
 package com.tune_fun.v1.vote.adapter.output.persistence;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface VoteChoiceRepository extends MongoRepository<VoteChoiceMongoEntity, String> {
+import java.util.List;
+
+public interface VoteChoiceRepository extends JpaRepository<VoteChoiceJpaEntity, String> {
+
+    @EntityGraph(attributePaths = {"votePaper"})
+    List<VoteChoiceJpaEntity> findAllByVotePaperId(final Long votePaperId);
+
 }

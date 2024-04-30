@@ -18,8 +18,8 @@ import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
 import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
 import com.tune_fun.v1.otp.application.port.input.usecase.VerifyOtpUseCase;
 import com.tune_fun.v1.otp.domain.behavior.LoadOtp;
-import com.tune_fun.v1.otp.domain.state.CurrentDecryptedOtp;
-import com.tune_fun.v1.otp.domain.state.VerifyResult;
+import com.tune_fun.v1.otp.domain.value.CurrentDecryptedOtp;
+import com.tune_fun.v1.otp.domain.value.VerifyResult;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -90,7 +90,23 @@ public class DummyService {
         AccountCommands.Notification notification = new AccountCommands.Notification(true, true, true);
         AccountCommands.Register command = new AccountCommands.Register(defaultUsername, defaultPassword, defaultEmail, nickname, notification);
 
-        registerUseCase.register(command);
+        registerUseCase.register("NORMAL", command);
+
+        defaultAccount = accountPersistenceAdapter.loadAccountByUsername(defaultUsername)
+                .orElseThrow(() -> new RuntimeException("initUser 실패"));
+    }
+
+    @Transactional
+    public void initArtistAccount() throws NoSuchAlgorithmException {
+        defaultUsername = StringUtil.randomAlphanumeric(10, 15);
+        defaultPassword = StringUtil.randomAlphaNumericSymbol(15, 20);
+        defaultEmail = StringUtil.randomAlphabetic(7) + "@" + StringUtil.randomAlphabetic(5) + ".com";
+        String nickname = StringUtil.randomAlphabetic(5);
+
+        AccountCommands.Notification notification = new AccountCommands.Notification(true, true, true);
+        AccountCommands.Register command = new AccountCommands.Register(defaultUsername, defaultPassword, defaultEmail, nickname, notification);
+
+        registerUseCase.register("ARTIST", command);
 
         defaultAccount = accountPersistenceAdapter.loadAccountByUsername(defaultUsername)
                 .orElseThrow(() -> new RuntimeException("initUser 실패"));

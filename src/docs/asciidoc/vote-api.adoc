@@ -1,0 +1,8 @@
+[[Vote-API]]
+== Vote API
+
+=== 투표 게시물 등록 API
+
+==== 성공
+
+operation::register-vote-paper-success[snippets='http-request,http-response,request-fields']

@@ -15,14 +15,3 @@ services:
     restart: always
     ports:
       - '6378:6379'
-
-  mongodb:
-    image: 'mongo:7.0.4'
-    container_name: 'tune_fun_mongodb'
-    restart: always
-    environment:
-      MONGO_INITDB_DATABASE: mydatabase
-      MONGO_INITDB_ROOT_PASSWORD: secret
-      MONGO_INITDB_ROOT_USERNAME: root
-    ports:
-      - '27016:27017'
