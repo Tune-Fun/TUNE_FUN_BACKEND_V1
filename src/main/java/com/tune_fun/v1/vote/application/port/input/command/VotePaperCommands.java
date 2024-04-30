@@ -56,4 +56,12 @@ public class VotePaperCommands {
             String releaseDate
     ) {
     }
+
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public record SetDeliveryDate(
+            Long votePaperId,
+
+            LocalDateTime deliveryAt
+    ) {
+    }
 }

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,14 @@ public class VotePaperController {
                                                                    @CurrentUser final User user) throws JsonProcessingException {
         registerVotePaperUseCase.register(command, user);
         return responseMapper.ok(MessageCode.CREATED);
+    }
+
+    @PreAuthorize("hasRole('ARTIST') && hasPermission(#command.votePaperId(), 'VOTE_PAPER', 'SET_DELIEVERY_DATE')")
+    @PatchMapping(value = Uris.SET_VOTE_PAPER_DELIVERY_DATE)
+    public ResponseEntity<Response<BasePayload>> setDeliveryDate(@Valid @RequestBody final VotePaperCommands.SetDeliveryDate command,
+                                                                 @CurrentUser final User user) throws JsonProcessingException {
+        registerVotePaperUseCase.setDelieveryDate(command);
+        return responseMapper.ok(MessageCode.SUCCESS);
     }
 
 }
