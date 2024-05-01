@@ -5,6 +5,6 @@ import org.springframework.security.core.userdetails.User;
 @FunctionalInterface
 public interface RegisterVoteUseCase {
 
-    void register(final Long voteChoiceId, User user);
+    void register(Long votePaperId, final Long voteChoiceId, User user);
 
 }

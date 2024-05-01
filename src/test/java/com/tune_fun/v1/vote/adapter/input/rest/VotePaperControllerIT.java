@@ -77,8 +77,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
     void registerVotePaperSuccess() throws Exception {
         dummyService.initArtistAccount();
 
-        dummyService.login(dummyService.getDefaultAccount());
-        String accessToken = dummyService.getDefaultAccessToken();
+        dummyService.login(dummyService.getDefaultArtistAccount());
+        String accessToken = dummyService.getDefaultArtistAccessToken();
 
         Set<VotePaperCommands.Offer> offers = Set.of(
                 new VotePaperCommands.Offer("Love Lee", "AKMU", List.of("R&B", "Soul"),
@@ -139,7 +139,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
         // TODO : GitHub Actions 에서는 테스트 실패함. 원인 파악 필요
 //        verify(firebaseMessagingMediator).sendMulticastMessageByTokens(any());
 
-        Optional<RegisteredVotePaper> votePaperOptional = loadVotePaperPort.loadRegisteredVotePaper(dummyService.getDefaultUsername());
+        Optional<RegisteredVotePaper> votePaperOptional = loadVotePaperPort.loadRegisteredVotePaper(dummyService.getDefaultArtistUsername());
         assertTrue(votePaperOptional.isPresent());
 
         RegisteredVotePaper votePaper = votePaperOptional.get();

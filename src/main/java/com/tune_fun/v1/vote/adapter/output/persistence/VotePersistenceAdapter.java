@@ -46,8 +46,8 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
-    public Optional<RegisteredVote> loadVoteByVoterAndVotePaperId(String voter, Long votePaperId) {
-        return voteRepository.findByVoterUsernameAndId(voter, votePaperId)
+    public Optional<RegisteredVote> loadVoteByVoterAndVotePaperId(String voter, Long voteChoiceId) {
+        return voteRepository.findByVoterUsernameAndVotePaperId(voter, voteChoiceId)
                 .map(voteMapper::registeredVote);
     }
 
@@ -95,6 +95,12 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
+    public List<RegisteredVoteChoice> loadRegisteredVoteChoice(Long votePaperId) {
+        List<VoteChoiceJpaEntity> voteChoices = findAllByVotePaperId(votePaperId);
+        return voteChoiceMapper.registeredVoteChoices(voteChoices);
+    }
+
+    @Override
     public void saveVoteChoice(final Long votePaperId, final Set<SaveVoteChoice> behavior) {
         VotePaperJpaEntity votePaperJpaEntity = findProgressingVotePaperById(votePaperId)
                 .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
@@ -120,9 +126,7 @@ public class VotePersistenceAdapter implements
         return votePaperRepository.findByVoteEndAtAfterAndAuthorUsername(now(), username);
     }
 
-    @Override
-    public List<RegisteredVoteChoice> loadRegisteredVoteChoice(Long votePaperId) {
-        List<VoteChoiceJpaEntity> voteChoices = voteChoiceRepository.findAllByVotePaperId(votePaperId);
-        return voteChoiceMapper.registeredVoteChoices(voteChoices);
+    public List<VoteChoiceJpaEntity> findAllByVotePaperId(Long votePaperId) {
+        return voteChoiceRepository.findAllByVotePaperId(votePaperId);
     }
 }

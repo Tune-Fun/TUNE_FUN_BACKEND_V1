@@ -13,6 +13,7 @@ import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 import java.util.Set;
@@ -22,7 +23,8 @@ import static java.util.stream.Collectors.toSet;
 @Mapper(config = BaseMapperConfig.class)
 public abstract class VoteBehaviorMapper {
 
-    public abstract SaveVotePaper saveVotePaper(final VotePaperCommands.Register command);
+    @Mapping(target = "author", source = "user.username")
+    public abstract SaveVotePaper saveVotePaper(final VotePaperCommands.Register command, final User user);
 
     @IterableMapping(qualifiedByName = "saveVoteChoice")
     public abstract Set<SaveVoteChoice> saveVoteChoices(final Set<VotePaperCommands.Offer> offers);

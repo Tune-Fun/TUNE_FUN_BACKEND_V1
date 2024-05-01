@@ -5,6 +5,7 @@ import com.tune_fun.v1.account.adapter.output.persistence.QAccountJpaEntity;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class VoteCustomRepositoryImpl implements VoteCustomRepository {
@@ -29,5 +30,20 @@ public class VoteCustomRepositoryImpl implements VoteCustomRepository {
                 .join(VOTE.voter, ACCOUNT)
                 .where(VOTE_PAPER.uuid.eq(uuid))
                 .fetch();
+    }
+
+    @Override
+    public Optional<VoteJpaEntity> findByVoterUsernameAndVotePaperId(String voter, Long votePaperId) {
+        return Optional.ofNullable(
+                queryFactory.selectFrom(VOTE)
+                        .join(VOTE.voteChoice, VOTE_CHOICE)
+                        .join(VOTE_CHOICE.votePaper, VOTE_PAPER)
+                        .join(VOTE.voter, ACCOUNT)
+                        .where(
+                                ACCOUNT.username.eq(voter),
+                                VOTE_PAPER.id.eq(votePaperId)
+                        )
+                        .fetchOne()
+        );
     }
 }
