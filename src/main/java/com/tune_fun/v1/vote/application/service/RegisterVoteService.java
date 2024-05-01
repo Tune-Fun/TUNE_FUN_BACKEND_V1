@@ -17,14 +17,10 @@ import org.springframework.stereotype.Service;
 public class RegisterVoteService implements RegisterVoteUseCase {
 
     private final SaveVotePort saveVotePort;
-    private final SendVoteFcmPort sendVoteFcmPort;
 
     @Override
-    @DistributionLock(key = "registerVote")
-    public void register(@NotNull Long votePaperId, final @NotNull Long voteChoiceId, User user) {
-
-        // TODO
-
+    public void register(final Long voteChoiceId, final User user) {
+        saveVotePort.saveVote(voteChoiceId, user.getUsername());
     }
 
 

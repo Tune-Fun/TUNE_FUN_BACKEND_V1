@@ -3,6 +3,7 @@ package com.tune_fun.v1.vote.adapter.output.persistence;
 import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.AccountPersistenceAdapter;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
+import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.vote.application.port.output.*;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
@@ -48,6 +49,23 @@ public class VotePersistenceAdapter implements
     public Optional<RegisteredVote> loadVoteByVoterAndVotePaperId(String voter, Long votePaperId) {
         return voteRepository.findByVoterUsernameAndId(voter, votePaperId)
                 .map(voteMapper::registeredVote);
+    }
+
+    @Override
+    public void saveVote(Long voteChoiceId, String username) {
+        VoteChoiceJpaEntity voteChoice = voteChoiceRepository.findById(voteChoiceId)
+                .orElseThrow(() -> new IllegalArgumentException("VoteChoice not found"));
+
+        AccountJpaEntity account = accountPersistenceAdapter.loadAccountByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        VoteJpaEntity vote = VoteJpaEntity.builder()
+                .uuid(StringUtil.uuid())
+                .voteChoice(voteChoice)
+                .voter(account)
+                .build();
+
+        voteRepository.save(vote);
     }
 
     @Override

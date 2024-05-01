@@ -29,7 +29,7 @@ public class VoteController {
     public ResponseEntity<Response<?>> registerVote(@PathVariable(name = "votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
                                                     @PathVariable(name = "voteChoiceId") @NotNull(message = "{vote.choice.id.not_null}") final Long voteChoiceId,
                                                     @CurrentUser final User user) {
-        registerVoteUseCase.register(votePaperId, voteChoiceId, user);
+        registerVoteUseCase.register(voteChoiceId, user);
         return responseMapper.ok();
     }
 
