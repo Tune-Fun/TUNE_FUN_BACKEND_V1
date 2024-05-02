@@ -47,8 +47,7 @@ public class VotePersistenceAdapter implements
 
     @Override
     public Optional<RegisteredVote> loadVoteByVoterAndVotePaperId(String voter, Long voteChoiceId) {
-        return voteRepository.findByVoterUsernameAndVotePaperId(voter, voteChoiceId)
-                .map(voteMapper::registeredVote);
+        return voteRepository.findByVoterUsernameAndVotePaperId(voter, voteChoiceId);
     }
 
     @Override
