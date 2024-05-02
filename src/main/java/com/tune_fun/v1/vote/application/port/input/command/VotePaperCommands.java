@@ -1,5 +1,6 @@
 package com.tune_fun.v1.vote.application.port.input.command;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.tune_fun.v1.common.validation.Period;
@@ -19,10 +20,12 @@ public class VotePaperCommands {
             @NotBlank(message = "{vote.paper.content.not_blank}") String content,
             @NotBlank(message = "{vote.paper.option.not_blank}") String option,
 
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
             @NotNull(message = "{vote.paper.vote_start_at.not_null}")
             @Future(message = "{vote.paper.vote_start_at.future}")
             LocalDateTime voteStartAt,
 
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
             @NotNull(message = "{vote.paper.vote_end_at.not_null}")
             @Future(message = "{vote.paper.vote_end_at.future}")
             LocalDateTime voteEndAt,
@@ -59,6 +62,8 @@ public class VotePaperCommands {
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public record UpdateDeliveryDate(
+
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
             @NotNull(message = "{vote.paper.delivery_at.not_null}")
             @Future(message = "{vote.paper.delivery_at.future}")
             LocalDateTime deliveryAt

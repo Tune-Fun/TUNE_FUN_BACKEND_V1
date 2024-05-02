@@ -54,7 +54,7 @@ public class Uris {
     public static final String VOTE_ROOT = API_V1_ROOT + "/votes";
 
     public static final String REGISTER_VOTE_PAPER = VOTE_ROOT + "/paper";
-    public static final String SET_VOTE_PAPER_DELIVERY_DATE = VOTE_ROOT + "/paper/{votePaperId}/delivery-date";
+    public static final String UPDATE_VOTE_PAPER_DELIVERY_DATE = VOTE_ROOT + "/paper/{votePaperId}/delivery-date";
 
     public static final String REGISTER_VOTE = VOTE_ROOT + "/{votePaperId}" + "/register" + "/{voteChoiceId}";
 
@@ -143,7 +143,8 @@ public class Uris {
     };
 
     public static final String[] ARTIST_URIS = {
-            REGISTER_VOTE_PAPER
+            REGISTER_VOTE_PAPER,
+            UPDATE_VOTE_PAPER_DELIVERY_DATE
     };
 
     public static final String[] ADMIN_URIS = {

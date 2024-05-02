@@ -25,8 +25,8 @@ public class VoteNotificationAdapter implements SendVoteNotificationPort {
     }
 
     @Override
-    public void notification(SendVotePaperUpdateDeliveryDateNotification sendVotePaperUpdateDeliveryDateNotificationBehavior) throws FirebaseMessagingException {
-        FirebaseMto.ByTokens mto = voteFirebaseMessagingMapper.fromSendVotePaperUpdateDeliveryDateNotificationBehavior(sendVotePaperUpdateDeliveryDateNotificationBehavior);
+    public void notification(SendVotePaperUpdateDeliveryDateNotification behavior) throws FirebaseMessagingException {
+        FirebaseMto.ByTokens mto = voteFirebaseMessagingMapper.fromSendVotePaperUpdateDeliveryDateNotificationBehavior(behavior);
         firebaseMessagingMediator.sendMulticastMessageByTokens(mto);
     }
 }

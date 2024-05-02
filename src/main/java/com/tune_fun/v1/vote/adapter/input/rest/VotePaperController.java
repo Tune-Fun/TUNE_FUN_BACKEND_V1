@@ -38,12 +38,13 @@ public class VotePaperController {
         return responseMapper.ok(MessageCode.CREATED);
     }
 
-    @PreAuthorize("hasRole('ARTIST') && hasPermission(#votePaperId, 'VOTE_PAPER', 'SET_DELIEVERY_DATE')")
-    @PatchMapping(value = Uris.SET_VOTE_PAPER_DELIVERY_DATE)
+    //    @PreAuthorize("hasRole('ARTIST') && hasPermission(#votePaperId, 'VOTE_PAPER', 'SET_DELIEVERY_DATE')")
+    @PreAuthorize("hasRole('ARTIST')")
+    @PatchMapping(value = Uris.UPDATE_VOTE_PAPER_DELIVERY_DATE)
     public ResponseEntity<Response<BasePayload>> updateDeliveryDate(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
                                                                     @Valid @RequestBody final VotePaperCommands.UpdateDeliveryDate command,
-                                                                    @CurrentUser final User user) throws JsonProcessingException {
-        updateVotePaperDeliveryDateUseCase.updateDeliveryDate(votePaperId, command);
+                                                                    @CurrentUser final User user) {
+        updateVotePaperDeliveryDateUseCase.updateDeliveryDate(votePaperId, command, user);
         return responseMapper.ok(MessageCode.SUCCESS);
     }
 

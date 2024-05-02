@@ -84,7 +84,7 @@ public class VotePersistenceAdapter implements
 
     @Override
     public RegisteredVotePaper updateDeliveryAt(final Long votePaperId, final LocalDateTime deliveryAt) {
-        VotePaperJpaEntity votePaper = findCompleteVotePaperById(votePaperId)
+        VotePaperJpaEntity votePaper = findProgressingVotePaperById(votePaperId)
                 .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
 
         VotePaperJpaEntity updatedVotePaper = votePaperMapper.updateDeliveryAt(deliveryAt, votePaper.toBuilder()).build();

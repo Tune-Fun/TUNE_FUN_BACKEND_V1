@@ -11,6 +11,7 @@ import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.output.LoadVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
+import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,6 @@ import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.GetQueueUrlResponse;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +37,7 @@ import java.util.Set;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.LocalDateTime.now;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -48,9 +49,11 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
 @Slf4j
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
@@ -182,13 +185,55 @@ class VotePaperControllerIT extends ControllerBaseTest {
     @Test
     @Order(2)
     @DisplayName("투표 게시물 영상 제공일 등록, 성공")
-    void updateDeliveryDateSuccess() throws NoSuchAlgorithmException {
+    void updateDeliveryDateSuccess() throws Exception {
+        dummyService.initAndLogin();
         dummyService.initArtistAndLogin();
+
         dummyService.initVotePaper();
+        dummyService.registerVote();
 
         ParameterDescriptor pathParameter = parameterWithName("votePaperId").description("투표 게시물 ID").attributes(constraint("NOT NULL"));
+        FieldDescriptor requestDescriptor = fieldWithPath("delivery_at").description("투표 게시물 영상 제공일").attributes(constraint("NOT NULL & FUTURE"));
 
-        
+        String accessToken = dummyService.getDefaultArtistAccessToken();
+
+        Long votePaperId = dummyService.getDefaultVotePaper().getId();
+        VotePaperCommands.UpdateDeliveryDate command = new VotePaperCommands.UpdateDeliveryDate(now().plusDays(1));
+
+        doNothing().when(firebaseMessagingMediator).sendMulticastMessageByTokens(any());
+
+        mockMvc.perform(
+                        patch(Uris.UPDATE_VOTE_PAPER_DELIVERY_DATE, votePaperId)
+                                .header(AUTHORIZATION, bearerToken(accessToken))
+                                .content(toJson(command))
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .characterEncoding(UTF_8)
+                )
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andDo(
+                        restDocs.document(
+                                requestHeaders(authorizationHeader),
+                                pathParameters(pathParameter),
+                                requestFields(requestDescriptor),
+                                responseFields(baseResponseFields),
+                                resource(
+                                        builder().
+                                                description("투표 게시물 영상 제공일 등록").
+                                                pathParameters(pathParameter).
+                                                requestFields(requestDescriptor).
+                                                responseFields(baseResponseFields)
+                                                .build()
+                                )
+                        )
+                );
+
+        ThrowingRunnable receiveMessageAssertionRunnable = () ->
+                sqsAsyncClient.getQueueUrl(r -> r.queueName("send-vote-paper-update-delivery-date-notification-dev"))
+                        .thenApply(GetQueueUrlResponse::queueUrl)
+                        .thenCompose(queueUrl -> sqsAsyncClient.receiveMessage(getReceiveMessageRequest(queueUrl)));
+        await().untilAsserted(receiveMessageAssertionRunnable);
+        verify(voteMessageConsumer).consumeVotePaperUpdateDeliveryDateEvent(any(VotePaperUpdateDeliveryDateEvent.class));
+
     }
 
 }

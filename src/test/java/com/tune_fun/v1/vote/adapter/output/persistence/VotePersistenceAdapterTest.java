@@ -311,7 +311,7 @@ class VotePersistenceAdapterTest {
     void testUpdateDeliveryAt() {
         // Arrange
         Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
-        when(votePaperRepository.findByVoteEndAtBeforeAndId(Mockito.any(), Mockito.<Long>any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.any(), Mockito.<Long>any()))
                 .thenReturn(ofResult);
         Mockito.<VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?>>when(votePaperMapper.updateDeliveryAt(
                         Mockito.any(), Mockito.any()))
@@ -322,7 +322,7 @@ class VotePersistenceAdapterTest {
                 () -> votePersistenceAdapter.updateDeliveryAt(1L, LocalDate.of(1970, 1, 1).atStartOfDay()));
         verify(votePaperMapper).updateDeliveryAt(isA(LocalDateTime.class),
                 isA(VotePaperJpaEntity.VotePaperJpaEntityBuilder.class));
-        verify(votePaperRepository).findByVoteEndAtBeforeAndId(isA(LocalDateTime.class), eq(1L));
+        verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
     }
 
     /**
@@ -333,13 +333,13 @@ class VotePersistenceAdapterTest {
     void testUpdateDeliveryAt2() {
         // Arrange
         Optional<VotePaperJpaEntity> emptyResult = Optional.empty();
-        when(votePaperRepository.findByVoteEndAtBeforeAndId(Mockito.any(), Mockito.<Long>any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.any(), Mockito.<Long>any()))
                 .thenReturn(emptyResult);
 
         // Act and Assert
         assertThrows(IllegalArgumentException.class,
                 () -> votePersistenceAdapter.updateDeliveryAt(1L, LocalDate.of(1970, 1, 1).atStartOfDay()));
-        verify(votePaperRepository).findByVoteEndAtBeforeAndId(isA(LocalDateTime.class), eq(1L));
+        verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
     }
 
     /**
@@ -353,14 +353,14 @@ class VotePersistenceAdapterTest {
         Mockito.<VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?>>when(votePaperJpaEntity.toBuilder())
                 .thenThrow(new IllegalArgumentException("foo"));
         Optional<VotePaperJpaEntity> ofResult = Optional.of(votePaperJpaEntity);
-        when(votePaperRepository.findByVoteEndAtBeforeAndId(Mockito.any(), Mockito.<Long>any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.any(), Mockito.<Long>any()))
                 .thenReturn(ofResult);
 
         // Act and Assert
         assertThrows(IllegalArgumentException.class,
                 () -> votePersistenceAdapter.updateDeliveryAt(1L, LocalDate.of(1970, 1, 1).atStartOfDay()));
         verify(votePaperJpaEntity).toBuilder();
-        verify(votePaperRepository).findByVoteEndAtBeforeAndId(isA(LocalDateTime.class), eq(1L));
+        verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
     }
 
     /**

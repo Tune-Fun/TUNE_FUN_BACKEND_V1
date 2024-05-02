@@ -25,6 +25,7 @@ import com.tune_fun.v1.vote.adapter.output.persistence.VotePaperJpaEntity;
 import com.tune_fun.v1.vote.adapter.output.persistence.VotePersistenceAdapter;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVotePaperUseCase;
+import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVoteUseCase;
 import com.tune_fun.v1.vote.application.service.VoteBehaviorMapper;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
@@ -67,6 +68,9 @@ public class DummyService {
 
     @Autowired
     private RegisterVotePaperUseCase registerVotePaperUseCase;
+
+    @Autowired
+    private RegisterVoteUseCase registerVoteUseCase;
 
     @Autowired
     private AccountPersistenceAdapter accountPersistenceAdapter;
@@ -223,6 +227,11 @@ public class DummyService {
                 .ifPresent(votePaper -> defaultVotePaper = votePaper);
 
         defaultVoteChoices = votePersistenceAdapter.findAllByVotePaperId(defaultVotePaper.getId());
+    }
+
+    public void registerVote() {
+        User user = new User(defaultUsername, defaultPassword, defaultAccount.getAuthorities());
+        registerVoteUseCase.register(defaultVotePaper.getId(), defaultVoteChoices.get(0).getId(), user);
     }
 
     public void expireOtp(OtpType otpType) {

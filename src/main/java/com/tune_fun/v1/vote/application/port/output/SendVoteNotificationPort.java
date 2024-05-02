@@ -5,7 +5,7 @@ import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterNotification;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateDeliveryDateNotification;
 
 public interface SendVoteNotificationPort {
-    void notification(final SendVotePaperRegisterNotification sendVotePaperRegisterNotificationBehavior) throws FirebaseMessagingException;
+    void notification(final SendVotePaperRegisterNotification behavior) throws FirebaseMessagingException;
 
-    void notification(final SendVotePaperUpdateDeliveryDateNotification sendVotePaperUpdateDeliveryDateNotificationBehavior) throws FirebaseMessagingException;
+    void notification(final SendVotePaperUpdateDeliveryDateNotification behavior) throws FirebaseMessagingException;
 }
