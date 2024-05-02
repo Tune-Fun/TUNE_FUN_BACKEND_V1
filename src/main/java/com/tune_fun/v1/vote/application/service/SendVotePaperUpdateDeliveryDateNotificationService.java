@@ -4,7 +4,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.tune_fun.v1.account.application.port.output.device.LoadDevicePort;
 import com.tune_fun.v1.account.domain.value.NotificationApprovedDevice;
 import com.tune_fun.v1.common.hexagon.UseCase;
-import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperUpdateDeliveryDateFcmUseCase;
+import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperUpdateDeliveryDateNotificationUseCase;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePort;
 import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateDeliveryDateNotification;
@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 @UseCase
 @RequiredArgsConstructor
-public class SendVotePaperUpdateDeliveryDateFcmService implements SendVotePaperUpdateDeliveryDateFcmUseCase {
+public class SendVotePaperUpdateDeliveryDateNotificationService implements SendVotePaperUpdateDeliveryDateNotificationUseCase {
 
     private final LoadVotePort loadVotePort;
     private final LoadDevicePort loadDevicePort;
@@ -34,10 +34,8 @@ public class SendVotePaperUpdateDeliveryDateFcmService implements SendVotePaperU
         List<NotificationApprovedDevice> notificationApprovedDevices =
                 loadDevicePort.loadNotificationApprovedDevice(null, null, true, voterIds);
 
-        SendVotePaperUpdateDeliveryDateNotification sendVotePaperUpdateDeliveryDateNotificationBehavior =
-                voteBehaviorMapper.sendVotePaperUpdateDeliveryDateFcm(event, notificationApprovedDevices);
-
-        sendVoteNotificationPort.notification(sendVotePaperUpdateDeliveryDateNotificationBehavior);
+        SendVotePaperUpdateDeliveryDateNotification behavior = voteBehaviorMapper.sendVotePaperUpdateDeliveryDateNotification(event, notificationApprovedDevices);
+        sendVoteNotificationPort.notification(behavior);
     }
 
 

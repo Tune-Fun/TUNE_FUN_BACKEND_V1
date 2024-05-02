@@ -44,7 +44,7 @@ public abstract class VoteBehaviorMapper {
     @Mapping(target = "title", source = "event", qualifiedByName = "votePaperUpdateDeliveryDateFcmTitle")
     @Mapping(target = "body", source = "event.title")
     @Mapping(target = "fcmTokens", source = "devices", qualifiedByName = "fcmTokens")
-    public abstract SendVotePaperUpdateDeliveryDateNotification sendVotePaperUpdateDeliveryDateFcm(final VotePaperUpdateDeliveryDateEvent event, final List<NotificationApprovedDevice> devices);
+    public abstract SendVotePaperUpdateDeliveryDateNotification sendVotePaperUpdateDeliveryDateNotification(final VotePaperUpdateDeliveryDateEvent event, final List<NotificationApprovedDevice> devices);
 
     @Named("votePaperRegisterFcmTitle")
     public String votePaperRegisterFcmTitle(final VotePaperRegisterEvent event) {

@@ -6,7 +6,7 @@ import com.tune_fun.v1.account.application.port.output.device.LoadDevicePort;
 import com.tune_fun.v1.account.domain.value.NotificationApprovedDevice;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.ObjectUtil;
-import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperRegisterFcmUseCase;
+import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperRegisterNotificationUseCase;
 import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterNotification;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
@@ -26,7 +26,7 @@ import java.util.List;
 @Service
 @UseCase
 @RequiredArgsConstructor
-public class SendVotePaperRegisterFcmService implements SendVotePaperRegisterFcmUseCase {
+public class SendVotePaperRegisterNotificationService implements SendVotePaperRegisterNotificationUseCase {
 
     private final LoadDevicePort loadDevicePort;
     private final SendVoteNotificationPort sendVoteNotificationPort;
@@ -44,11 +44,11 @@ public class SendVotePaperRegisterFcmService implements SendVotePaperRegisterFcm
                 loadNotificationApprovedDevice(true, null, null, null);
         log.info("notificationApprovedDevices: \n{}", objectUtil.objectToPrettyJson(notificationApprovedDevices));
 
-        sendVotePaperRegisterFcm(votePaperRegisterEvent, notificationApprovedDevices);
+        sendVotePaperRegisterNotification(votePaperRegisterEvent, notificationApprovedDevices);
     }
 
     @Retryable(retryFor = FirebaseMessagingException.class, recover = "recoverSendVotePaperRegisterFcm", backoff = @Backoff(delay = 2000, multiplier = 1.5, maxDelay = 10000))
-    private void sendVotePaperRegisterFcm(final VotePaperRegisterEvent votePaperRegisterEvent, final List<NotificationApprovedDevice> notificationApprovedDevices) throws FirebaseMessagingException {
+    private void sendVotePaperRegisterNotification(final VotePaperRegisterEvent votePaperRegisterEvent, final List<NotificationApprovedDevice> notificationApprovedDevices) throws FirebaseMessagingException {
         if (RetrySynchronizationManager.getContext() != null) {
             RetryContext retryContext = RetrySynchronizationManager.getContext();
             log.info("Retry count: {}", retryContext.getRetryCount());

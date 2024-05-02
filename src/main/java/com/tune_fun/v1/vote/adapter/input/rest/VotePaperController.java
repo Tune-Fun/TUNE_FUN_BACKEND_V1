@@ -30,7 +30,7 @@ public class VotePaperController {
 
     private final RegisterVotePaperUseCase registerVotePaperUseCase;
     private final UpdateVotePaperDeliveryDateUseCase updateVotePaperDeliveryDateUseCase;
-
+    
     @GetMapping(value = Uris.VOTE_PAPER_ROOT)
     public ResponseEntity<?> getVotePapers(@PageableDefault(size = 10) final Pageable pageable) {
         return null;
