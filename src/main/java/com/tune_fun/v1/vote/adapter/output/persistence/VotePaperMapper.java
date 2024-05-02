@@ -5,6 +5,7 @@ import com.tune_fun.v1.common.config.BaseMapperConfig;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
+import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -21,6 +22,12 @@ public abstract class VotePaperMapper {
     @Mapping(target = "option", source = "option", qualifiedByName = "toValue")
     @Mapping(target = "author", source = "author.nickname")
     public abstract RegisteredVotePaper registeredVotePaper(final VotePaperJpaEntity votePaperJpaEntity);
+
+    @Mapping(target = "authorUsername", source = "author.username")
+    @Mapping(target = "authorNickname", source = "author.nickname")
+    @Mapping(target = "totalVoteCount", constant = "0")
+    @Mapping(target = "totalFavCount", constant = "0")
+    public abstract ScrollableVotePaper scrollableVotePaper(final VotePaperJpaEntity votePaperJpaEntity);
 
     @Named("toValue")
     public String toValue(final VotePaperOption option) {

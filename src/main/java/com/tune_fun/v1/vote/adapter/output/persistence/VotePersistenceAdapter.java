@@ -11,16 +11,24 @@ import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVote;
 import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
+import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.KeysetScrollPosition;
+import org.springframework.data.domain.ScrollPosition;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Window;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toSet;
+import static org.springframework.data.domain.Sort.Order.desc;
+import static org.springframework.data.domain.Sort.by;
 
 @Component
 @PersistenceAdapter
@@ -67,6 +75,20 @@ public class VotePersistenceAdapter implements
         voteRepository.save(vote);
     }
 
+    /**
+     * @param lastIdx  해당 페이지의 마지막 인덱스
+     * @param sortType 정렬 방식
+     * @return {@link org.springframework.data.domain.Window} of {@link com.tune_fun.v1.vote.domain.value.ScrollableVotePaper}
+     *
+     * @see <a href="https://github.com/spring-projects/spring-data-jpa/issues/2996">Keyset-scrolling queries add identifier columns twice when Sort already sorts by Id</a>
+     */
+    @Override
+    public Window<ScrollableVotePaper> scrollVotePaper(Integer lastIdx, String sortType) {
+        KeysetScrollPosition position = ScrollPosition.backward(Map.of("id", lastIdx));
+        Sort sort = by(desc("voteEndAt"));
+        return votePaperRepository.findFirst10(position, sort).map(votePaperMapper::scrollableVotePaper);
+    }
+
     @Override
     public Optional<RegisteredVotePaper> loadRegisteredVotePaper(final String username) {
         return findOneAvailable((Long) Constants.NULL_NUMBER, username)
@@ -79,10 +101,6 @@ public class VotePersistenceAdapter implements
                 .map(votePaperMapper::registeredVotePaper);
     }
 
-    @Override
-    public Optional<RegisteredVotePaper> loadProgressingOwnedVotePaper(final Long votePaperId, final String username) {
-        return findOneAvailable(votePaperId, username).map(votePaperMapper::registeredVotePaper);
-    }
 
     @Override
     public RegisteredVotePaper saveVotePaper(final SaveVotePaper saveVotePaper) {
