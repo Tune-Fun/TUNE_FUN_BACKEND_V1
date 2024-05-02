@@ -1,6 +1,5 @@
 package com.tune_fun.v1.base.integration;
 
-import org.springframework.boot.devtools.restart.RestartScope;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -71,7 +70,6 @@ public class TestContainersConfig {
     }
 
     @Bean
-    @RestartScope
     public DataSource dataSource() {
         return create()
                 .url(POSTGRES_CONTAINER.getJdbcUrl())

@@ -67,4 +67,8 @@ public class VotePaperJpaEntity extends BaseEntity {
     @Comment("커버 영상 등록일")
     private LocalDateTime deliveryAt;
 
+    @Column(name = "video_url")
+    @Comment("커버 영상 URL")
+    private String videoUrl;
+
 }

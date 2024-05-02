@@ -33,10 +33,7 @@ public class PermissionPolicyEvaluator implements PermissionEvaluator {
 
         return switch (TargetType.valueOf(targetType)) {
             case VOTE_PAPER -> hasPermissionForVotePaper(principal, targetId);
-            case VOTE -> false;
-            default -> false;
         };
-
     }
 
     public boolean hasPermissionForVotePaper(User principal, Serializable targetId) {
@@ -50,6 +47,5 @@ public class PermissionPolicyEvaluator implements PermissionEvaluator {
 
     private enum TargetType {
         VOTE_PAPER,
-        VOTE
     }
 }

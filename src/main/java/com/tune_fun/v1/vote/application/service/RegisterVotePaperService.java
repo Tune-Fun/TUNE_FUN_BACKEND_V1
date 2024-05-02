@@ -44,7 +44,7 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
     @Override
     public void register(final VotePaperCommands.Register command, final User user) throws JsonProcessingException {
         validateRegistrableVotePaperCount(user);
-        RegisteredVotePaper registeredVotePaper = saveVotePaper(command);
+        RegisteredVotePaper registeredVotePaper = saveVotePaper(command, user);
         saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
 
         VotePaperRegisterEvent votePaperRegisterEventBehavior = getProduceVotePaperUploadEventBehavior(registeredVotePaper);
@@ -57,8 +57,8 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
     }
 
     @Transactional
-    public RegisteredVotePaper saveVotePaper(VotePaperCommands.Register command) {
-        SaveVotePaper saveVotePaperBehavior = voteBehaviorMapper.saveVotePaper(command);
+    public RegisteredVotePaper saveVotePaper(final VotePaperCommands.Register command, final User user) {
+        SaveVotePaper saveVotePaperBehavior = voteBehaviorMapper.saveVotePaper(command, user);
         return saveVotePaperPort.saveVotePaper(saveVotePaperBehavior);
     }
 

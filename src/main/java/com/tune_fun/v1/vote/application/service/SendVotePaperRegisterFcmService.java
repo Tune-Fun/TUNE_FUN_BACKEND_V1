@@ -39,7 +39,7 @@ public class SendVotePaperRegisterFcmService implements SendVotePaperRegisterFcm
     @Override
     public void send(VotePaperRegisterEvent votePaperRegisterEvent) throws JsonProcessingException, FirebaseMessagingException {
         // TODO : Follower Aggregate Root................... -> accountIds
-        
+
         List<NotificationApprovedDevice> notificationApprovedDevices = loadDevicePort.
                 loadNotificationApprovedDevice(true, null, null, null);
         log.info("notificationApprovedDevices: \n{}", objectUtil.objectToPrettyJson(notificationApprovedDevices));
@@ -49,12 +49,12 @@ public class SendVotePaperRegisterFcmService implements SendVotePaperRegisterFcm
 
     @Retryable(retryFor = FirebaseMessagingException.class, recover = "recoverSendVotePaperRegisterFcm", backoff = @Backoff(delay = 2000, multiplier = 1.5, maxDelay = 10000))
     private void sendVotePaperRegisterFcm(final VotePaperRegisterEvent votePaperRegisterEvent, final List<NotificationApprovedDevice> notificationApprovedDevices) throws FirebaseMessagingException {
-        RetryContext retryContext = RetrySynchronizationManager.getContext();
+        if (RetrySynchronizationManager.getContext() != null) {
+            RetryContext retryContext = RetrySynchronizationManager.getContext();
+            log.info("Retry count: {}", retryContext.getRetryCount());
 
-        Throwable e = retryContext.getLastThrowable();
-        int retryCount = retryContext.getRetryCount();
-
-        if (retryCount > 0) log.error("sendVotePaperRegisterFcm FAILED. \n{}\nRetry count: {}", e, retryCount);
+            log.error("sendVotePaperRegisterFcm FAILED. \n{}\nRetry count: {}", retryContext.getLastThrowable(), retryContext.getRetryCount());
+        }
 
         SendVotePaperRegisterFcm sendVotePaperRegisterFcmBehavior = voteBehaviorMapper
                 .sendVotePaperRegisterFcm(votePaperRegisterEvent, notificationApprovedDevices);
