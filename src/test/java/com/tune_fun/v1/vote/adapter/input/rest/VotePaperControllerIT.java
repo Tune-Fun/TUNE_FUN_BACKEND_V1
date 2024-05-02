@@ -46,8 +46,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
 @Slf4j
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
@@ -120,10 +119,12 @@ class VotePaperControllerIT extends ControllerBaseTest {
                         restDocs.document(
                                 requestHeaders(authorizationHeader),
                                 requestFields(requestDescriptors),
+                                responseFields(baseResponseFields),
                                 resource(
                                         builder().
                                                 description("투표 게시물 등록").
-                                                requestFields(requestDescriptors)
+                                                requestFields(requestDescriptors).
+                                                responseFields(baseResponseFields)
                                                 .build()
                                 )
                         )
