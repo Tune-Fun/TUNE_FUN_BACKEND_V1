@@ -9,7 +9,6 @@ import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVoteUseCase;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +23,7 @@ public class VoteController {
     private final RegisterVoteUseCase registerVoteUseCase;
     private final ResponseMapper responseMapper;
 
+    //    @PreAuthorize("hasPermission(#votePaperId, 'VOTE', 'REGISTER_VOTE')")
     @PostMapping(value = Uris.REGISTER_VOTE)
     public ResponseEntity<Response<?>> registerVote(@PathVariable(name = "votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
                                                     @PathVariable(name = "voteChoiceId") @NotNull(message = "{vote.choice.id.not_null}") final Long voteChoiceId,

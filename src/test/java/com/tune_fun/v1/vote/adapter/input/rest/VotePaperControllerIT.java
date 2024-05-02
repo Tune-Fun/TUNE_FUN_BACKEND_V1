@@ -22,11 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.test.annotation.DirtiesContext;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.GetQueueUrlResponse;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -41,12 +43,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.oneOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 
 @Slf4j
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
@@ -135,7 +139,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
                         .thenApply(GetQueueUrlResponse::queueUrl)
                         .thenCompose(queueUrl -> sqsAsyncClient.receiveMessage(getReceiveMessageRequest(queueUrl)));
         await().untilAsserted(receiveMessageAssertionRunnable);
-        verify(voteMessageConsumer, times(1)).consumeVotePaperUploadEvent(any(VotePaperRegisterEvent.class));
+        verify(voteMessageConsumer).consumeVotePaperUploadEvent(any(VotePaperRegisterEvent.class));
 
         // TODO : GitHub Actions 에서는 테스트 실패함. 원인 파악 필요
 //        verify(firebaseMessagingMediator).sendMulticastMessageByTokens(any());
@@ -173,6 +177,18 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 .queueUrl(queueUrl)
                 .maxNumberOfMessages(1)
                 .build();
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("투표 게시물 영상 제공일 등록, 성공")
+    void updateDeliveryDateSuccess() throws NoSuchAlgorithmException {
+        dummyService.initArtistAndLogin();
+        dummyService.initVotePaper();
+
+        ParameterDescriptor pathParameter = parameterWithName("votePaperId").description("투표 게시물 ID").attributes(constraint("NOT NULL"));
+
+        
     }
 
 }

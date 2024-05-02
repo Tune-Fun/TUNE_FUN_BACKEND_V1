@@ -7,8 +7,8 @@ import com.tune_fun.v1.account.domain.value.NotificationApprovedDevice;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.ObjectUtil;
 import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperRegisterFcmUseCase;
-import com.tune_fun.v1.vote.application.port.output.SendVoteFcmPort;
-import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterFcm;
+import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
+import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterNotification;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import java.util.List;
 public class SendVotePaperRegisterFcmService implements SendVotePaperRegisterFcmUseCase {
 
     private final LoadDevicePort loadDevicePort;
-    private final SendVoteFcmPort sendVoteFcmPort;
+    private final SendVoteNotificationPort sendVoteNotificationPort;
 
     private final VoteBehaviorMapper voteBehaviorMapper;
 
@@ -56,9 +56,9 @@ public class SendVotePaperRegisterFcmService implements SendVotePaperRegisterFcm
             log.error("sendVotePaperRegisterFcm FAILED. \n{}\nRetry count: {}", retryContext.getLastThrowable(), retryContext.getRetryCount());
         }
 
-        SendVotePaperRegisterFcm sendVotePaperRegisterFcmBehavior = voteBehaviorMapper
+        SendVotePaperRegisterNotification sendVotePaperRegisterNotificationBehavior = voteBehaviorMapper
                 .sendVotePaperRegisterFcm(votePaperRegisterEvent, notificationApprovedDevices);
-        sendVoteFcmPort.notification(sendVotePaperRegisterFcmBehavior);
+        sendVoteNotificationPort.notification(sendVotePaperRegisterNotificationBehavior);
     }
 
     // TODO : Slack Notification?

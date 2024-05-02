@@ -12,14 +12,12 @@ import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVotePaperUseCase;
 import com.tune_fun.v1.vote.application.port.input.usecase.UpdateVotePaperDeliveryDateUseCase;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @WebAdapter
@@ -40,12 +38,12 @@ public class VotePaperController {
         return responseMapper.ok(MessageCode.CREATED);
     }
 
-    // TODO : Vote 로직 구현 후 테스트 재진행 예정
-    @PreAuthorize("hasRole('ARTIST') && hasPermission(#command.votePaperId(), 'VOTE_PAPER', 'SET_DELIEVERY_DATE')")
+    @PreAuthorize("hasRole('ARTIST') && hasPermission(#votePaperId, 'VOTE_PAPER', 'SET_DELIEVERY_DATE')")
     @PatchMapping(value = Uris.SET_VOTE_PAPER_DELIVERY_DATE)
-    public ResponseEntity<Response<BasePayload>> updateDeliveryDate(@Valid @RequestBody final VotePaperCommands.UpdateDeliveryDate command,
+    public ResponseEntity<Response<BasePayload>> updateDeliveryDate(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
+                                                                    @Valid @RequestBody final VotePaperCommands.UpdateDeliveryDate command,
                                                                     @CurrentUser final User user) throws JsonProcessingException {
-        updateVotePaperDeliveryDateUseCase.updateDeliveryDate(command);
+        updateVotePaperDeliveryDateUseCase.updateDeliveryDate(votePaperId, command);
         return responseMapper.ok(MessageCode.SUCCESS);
     }
 

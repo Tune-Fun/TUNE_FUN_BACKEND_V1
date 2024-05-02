@@ -20,11 +20,10 @@ public class UpdateVotePaperDeliveryDateService implements UpdateVotePaperDelive
 
     private final ProduceVotePaperUpdateDeliveryDateEventPort produceVotePaperUploadEventPort;
 
-
     @Transactional
     @Override
-    public void updateDeliveryDate(final VotePaperCommands.UpdateDeliveryDate command) {
-        RegisteredVotePaper registeredVotePaper = updateDeliveryAtPort.updateDeliveryAt(command.votePaperId(), command.deliveryAt());
+    public void updateDeliveryDate(Long votePaperId, VotePaperCommands.UpdateDeliveryDate command) {
+        RegisteredVotePaper registeredVotePaper = updateDeliveryAtPort.updateDeliveryAt(votePaperId, command.deliveryAt());
 
         VotePaperUpdateDeliveryDateEvent event = new VotePaperUpdateDeliveryDateEvent(registeredVotePaper.uuid(),
                 registeredVotePaper.author(), registeredVotePaper.title(), registeredVotePaper.content());

@@ -6,8 +6,8 @@ import com.tune_fun.v1.account.domain.value.NotificationApprovedDevice;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperUpdateDeliveryDateFcmUseCase;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePort;
-import com.tune_fun.v1.vote.application.port.output.SendVoteFcmPort;
-import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateDeliveryDateFcm;
+import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
+import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateDeliveryDateNotification;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class SendVotePaperUpdateDeliveryDateFcmService implements SendVotePaperU
     private final LoadVotePort loadVotePort;
     private final LoadDevicePort loadDevicePort;
 
-    private final SendVoteFcmPort sendVoteFcmPort;
+    private final SendVoteNotificationPort sendVoteNotificationPort;
 
     private final VoteBehaviorMapper voteBehaviorMapper;
 
@@ -34,10 +34,10 @@ public class SendVotePaperUpdateDeliveryDateFcmService implements SendVotePaperU
         List<NotificationApprovedDevice> notificationApprovedDevices =
                 loadDevicePort.loadNotificationApprovedDevice(null, null, true, voterIds);
 
-        SendVotePaperUpdateDeliveryDateFcm sendVotePaperUpdateDeliveryDateFcmBehavior =
+        SendVotePaperUpdateDeliveryDateNotification sendVotePaperUpdateDeliveryDateNotificationBehavior =
                 voteBehaviorMapper.sendVotePaperUpdateDeliveryDateFcm(event, notificationApprovedDevices);
 
-        sendVoteFcmPort.notification(sendVotePaperUpdateDeliveryDateFcmBehavior);
+        sendVoteNotificationPort.notification(sendVotePaperUpdateDeliveryDateNotificationBehavior);
     }
 
 
