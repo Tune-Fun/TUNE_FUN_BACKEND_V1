@@ -19,6 +19,6 @@ public interface VotePaperRepository extends JpaRepository<VotePaperJpaEntity, S
     Optional<VotePaperJpaEntity> findByVoteEndAtBeforeAndId(LocalDateTime voteEndAt, Long id);
 
     @EntityGraph(attributePaths = {"author"})
-    Window<VotePaperJpaEntity> findFirst10(KeysetScrollPosition position, Sort sort);
+    Window<VotePaperJpaEntity> findFirst10By(KeysetScrollPosition position, Sort sort);
 
 }

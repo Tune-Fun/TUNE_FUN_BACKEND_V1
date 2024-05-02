@@ -16,6 +16,7 @@ import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.extern.slf4j.Slf4j;
 import org.awaitility.core.ThrowingRunnable;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -25,10 +26,12 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.GetQueueUrlResponse;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -77,13 +80,14 @@ class VotePaperControllerIT extends ControllerBaseTest {
     @SpyBean
     private VoteMessageConsumer voteMessageConsumer;
 
+    @Transactional
     @Test
     @Order(1)
     @DisplayName("투표 게시물 등록, 성공")
     void registerVotePaperSuccess() throws Exception {
-        dummyService.initArtistAccount();
+        dummyService.initAndLogin();
+        dummyService.initArtistAndLogin();
 
-        dummyService.login(dummyService.getDefaultArtistAccount());
         String accessToken = dummyService.getDefaultArtistAccessToken();
 
         Set<VotePaperCommands.Offer> offers = Set.of(
@@ -182,6 +186,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 .build();
     }
 
+    @Transactional
     @Test
     @Order(2)
     @DisplayName("투표 게시물 영상 제공일 등록, 성공")
@@ -198,7 +203,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
         String accessToken = dummyService.getDefaultArtistAccessToken();
 
         Long votePaperId = dummyService.getDefaultVotePaper().getId();
-        VotePaperCommands.UpdateDeliveryDate command = new VotePaperCommands.UpdateDeliveryDate(now().plusDays(1));
+        VotePaperCommands.UpdateDeliveryDate command = new VotePaperCommands.UpdateDeliveryDate(now().plusDays(5));
 
         doNothing().when(firebaseMessagingMediator).sendMulticastMessageByTokens(any());
 

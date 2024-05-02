@@ -13,6 +13,6 @@ public interface LoadVotePaperPort {
 
     Optional<RegisteredVotePaper> loadRegisteredVotePaper(final String username);
 
-    Optional<RegisteredVotePaper> loadRegisteredVotePaper(@NotNull final Long votePaperId);
+    Optional<RegisteredVotePaper> loadRegisteredVotePaper(final Long votePaperId);
 
 }

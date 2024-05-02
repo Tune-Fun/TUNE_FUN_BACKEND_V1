@@ -87,19 +87,17 @@ public class VotePersistenceAdapter implements
     public Window<ScrollableVotePaper> scrollVotePaper(Integer lastIdx, String sortType) {
         KeysetScrollPosition position = ScrollPosition.backward(Map.of("id", lastIdx));
         Sort sort = by(desc("id"), desc("voteEndAt"));
-        return votePaperRepository.findFirst10(position, sort).map(votePaperMapper::scrollableVotePaper);
+        return votePaperRepository.findFirst10By(position, sort).map(votePaperMapper::scrollableVotePaper);
     }
 
     @Override
     public Optional<RegisteredVotePaper> loadRegisteredVotePaper(final String username) {
-        return findOneAvailable((Long) Constants.NULL_NUMBER, username)
-                .map(votePaperMapper::registeredVotePaper);
+        return findProgressingVotePaperByAuthor(username).map(votePaperMapper::registeredVotePaper);
     }
 
     @Override
-    public Optional<RegisteredVotePaper> loadRegisteredVotePaper(Long votePaperId) {
-        return findOneAvailable(votePaperId, Constants.NULL_STRING)
-                .map(votePaperMapper::registeredVotePaper);
+    public Optional<RegisteredVotePaper> loadRegisteredVotePaper(final Long votePaperId) {
+        return findProgressingVotePaperById(votePaperId).map(votePaperMapper::registeredVotePaper);
     }
 
 
@@ -150,11 +148,15 @@ public class VotePersistenceAdapter implements
         return votePaperRepository.findByVoteEndAtBeforeAndId(now(), id);
     }
 
-    public Optional<VotePaperJpaEntity> findAvailableVotePaperByAuthor(final String username) {
+    public Optional<VotePaperJpaEntity> findProgressingVotePaperByAuthor(final String username) {
         return votePaperRepository.findByVoteEndAtAfterAndAuthorUsername(now(), username);
     }
 
-    public List<VoteChoiceJpaEntity> findAllByVotePaperId(Long votePaperId) {
+    public Optional<VotePaperJpaEntity> findProgressingVotePaperById(final Long id) {
+        return votePaperRepository.findByVoteEndAtAfterAndId(now(), id);
+    }
+
+    public List<VoteChoiceJpaEntity> findAllByVotePaperId(final Long votePaperId) {
         return voteChoiceRepository.findAllByVotePaperId(votePaperId);
     }
 }

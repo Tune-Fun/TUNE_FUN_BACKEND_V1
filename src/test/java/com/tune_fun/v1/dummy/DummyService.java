@@ -223,7 +223,7 @@ public class DummyService {
         RegisteredVotePaper registeredVotePaper = saveVotePaper(command, user);
         saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
 
-        votePersistenceAdapter.findAvailableVotePaperByAuthor(defaultArtistUsername)
+        votePersistenceAdapter.findProgressingVotePaperByAuthor(defaultArtistUsername)
                 .ifPresent(votePaper -> defaultVotePaper = votePaper);
 
         defaultVoteChoices = votePersistenceAdapter.findAllByVotePaperId(defaultVotePaper.getId());

@@ -21,6 +21,7 @@ public abstract class VotePaperMapper {
 
     @Mapping(target = "option", source = "option", qualifiedByName = "toValue")
     @Mapping(target = "author", source = "author.nickname")
+    @Mapping(target = "authorUsername", source = "author.username")
     public abstract RegisteredVotePaper registeredVotePaper(final VotePaperJpaEntity votePaperJpaEntity);
 
     @Mapping(target = "authorUsername", source = "author.username")
