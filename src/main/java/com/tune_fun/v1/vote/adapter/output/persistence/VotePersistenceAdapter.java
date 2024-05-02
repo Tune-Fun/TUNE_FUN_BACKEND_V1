@@ -36,7 +36,6 @@ public class VotePersistenceAdapter implements
     private final VotePaperRepository votePaperRepository;
     private final VoteChoiceRepository voteChoiceRepository;
 
-    private final VoteMapper voteMapper;
     private final VotePaperMapper votePaperMapper;
     private final VoteChoiceMapper voteChoiceMapper;
 

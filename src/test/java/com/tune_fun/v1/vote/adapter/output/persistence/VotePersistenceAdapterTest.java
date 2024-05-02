@@ -40,9 +40,6 @@ class VotePersistenceAdapterTest {
     private VoteChoiceRepository voteChoiceRepository;
 
     @MockBean
-    private VoteMapper voteMapper;
-
-    @MockBean
     private VotePaperMapper votePaperMapper;
 
     @MockBean
