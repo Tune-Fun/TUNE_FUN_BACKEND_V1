@@ -14,6 +14,8 @@ import com.tune_fun.v1.vote.application.port.input.usecase.UpdateVotePaperDelive
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
@@ -29,9 +31,14 @@ public class VotePaperController {
     private final RegisterVotePaperUseCase registerVotePaperUseCase;
     private final UpdateVotePaperDeliveryDateUseCase updateVotePaperDeliveryDateUseCase;
 
+    @GetMapping(value = Uris.VOTE_PAPER_ROOT)
+    public ResponseEntity<?> getVotePapers(@PageableDefault(size = 10) final Pageable pageable) {
+        return null;
+    }
+
     // TODO : Follower 로직 구현 후 테스트 재진행 예정
     @PreAuthorize("hasRole('ARTIST')")
-    @PostMapping(value = Uris.REGISTER_VOTE_PAPER)
+    @PostMapping(value = Uris.VOTE_PAPER_ROOT)
     public ResponseEntity<Response<BasePayload>> registerVotePaper(@Valid @RequestBody final VotePaperCommands.Register command,
                                                                    @CurrentUser final User user) throws JsonProcessingException {
         registerVotePaperUseCase.register(command, user);

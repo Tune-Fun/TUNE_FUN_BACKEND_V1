@@ -457,40 +457,6 @@ class VotePersistenceAdapterTest {
         verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
     }
 
-    /**
-     * Method under test:
-     * {@link VotePersistenceAdapter#findProgressingVotePaperById(Long)}
-     */
-    @Test
-    void testFindProgressingVotePaperById() {
-        // Arrange
-        Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
-        when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.any(), Mockito.<Long>any()))
-                .thenReturn(ofResult);
-
-        // Act
-        Optional<VotePaperJpaEntity> actualFindProgressingVotePaperByIdResult = votePersistenceAdapter
-                .findProgressingVotePaperById(1L);
-
-        // Assert
-        verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
-        assertSame(ofResult, actualFindProgressingVotePaperByIdResult);
-    }
-
-    /**
-     * Method under test:
-     * {@link VotePersistenceAdapter#findProgressingVotePaperById(Long)}
-     */
-    @Test
-    void testFindProgressingVotePaperById2() {
-        // Arrange
-        when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.any(), Mockito.<Long>any()))
-                .thenThrow(new IllegalArgumentException("foo"));
-
-        // Act and Assert
-        assertThrows(IllegalArgumentException.class, () -> votePersistenceAdapter.findProgressingVotePaperById(1L));
-        verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
-    }
 
     /**
      * Method under test:

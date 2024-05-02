@@ -1,6 +1,7 @@
 package com.tune_fun.v1.vote.adapter.output.persistence;
 
 import com.tune_fun.v1.common.config.BaseMapperConfig;
+import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
@@ -11,7 +12,7 @@ import java.util.Set;
 
 @Mapper(
         config = BaseMapperConfig.class,
-        imports = {StringUtil.class}
+        imports = {StringUtil.class, Constants.class}
 )
 public abstract class VoteChoiceMapper {
 
@@ -53,11 +54,11 @@ public abstract class VoteChoiceMapper {
 
     @Named("joinString")
     public String joinString(final Set<String> strings) {
-        return String.join(",", strings);
+        return String.join(Constants.COMMA, strings);
     }
 
     @Named("splitString")
     public Set<String> splitString(final String string) {
-        return Set.of(string.split(","));
+        return Set.of(string.split(Constants.COMMA));
     }
 }

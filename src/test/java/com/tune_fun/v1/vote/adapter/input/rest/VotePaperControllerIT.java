@@ -116,7 +116,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
         };
 
         mockMvc.perform(
-                        post(Uris.REGISTER_VOTE_PAPER)
+                        post(Uris.VOTE_PAPER_ROOT)
                                 .header(AUTHORIZATION, bearerToken(accessToken))
                                 .content(toJson(command))
                                 .contentType(APPLICATION_JSON_VALUE)

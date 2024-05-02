@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public interface VotePaperRepository extends JpaRepository<VotePaperJpaEntity, String> {
+public interface VotePaperRepository extends JpaRepository<VotePaperJpaEntity, String>, VotePaperCustomRepository {
 
     @EntityGraph(attributePaths = {"author"})
     Optional<VotePaperJpaEntity> findByVoteEndAtAfterAndAuthorUsername(LocalDateTime voteEndAt, String author);

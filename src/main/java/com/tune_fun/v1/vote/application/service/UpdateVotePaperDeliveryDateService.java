@@ -14,7 +14,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.tune_fun.v1.common.response.MessageCode.VOTE_PAPER_NOT_FOUND;
 import static com.tune_fun.v1.common.response.MessageCode.VOTE_POLICY_ONLY_AUTHOR_CAN_UPDATE_DELIVERY_DATE;
+import static java.time.LocalDateTime.now;
 
 @Service
 @UseCase
@@ -29,13 +31,19 @@ public class UpdateVotePaperDeliveryDateService implements UpdateVotePaperDelive
     @Transactional
     @Override
     public void updateDeliveryDate(final Long votePaperId, final VotePaperCommands.UpdateDeliveryDate command, final User user) {
-        loadVotePaperPort.loadRegisteredVotePaper(user.getUsername())
-                .orElseThrow(() -> new CommonApplicationException(VOTE_POLICY_ONLY_AUTHOR_CAN_UPDATE_DELIVERY_DATE));
+        RegisteredVotePaper registeredVotePaper = loadVotePaperPort.loadRegisteredVotePaper(votePaperId)
+                .orElseThrow(() -> new CommonApplicationException(VOTE_PAPER_NOT_FOUND));
 
-        RegisteredVotePaper registeredVotePaper = updateDeliveryAtPort.updateDeliveryAt(votePaperId, command.deliveryAt());
+        if (!registeredVotePaper.isAuthor(user.getUsername()))
+            throw new CommonApplicationException(VOTE_POLICY_ONLY_AUTHOR_CAN_UPDATE_DELIVERY_DATE);
 
-        VotePaperUpdateDeliveryDateEvent event = new VotePaperUpdateDeliveryDateEvent(registeredVotePaper.uuid(),
-                registeredVotePaper.author(), registeredVotePaper.title(), registeredVotePaper.content());
+        if (!registeredVotePaper.isValidDeliveryAt(now(), command.deliveryAt()))
+            throw new CommonApplicationException(VOTE_POLICY_ONLY_AUTHOR_CAN_UPDATE_DELIVERY_DATE);
+
+        RegisteredVotePaper updatedVotePaper = updateDeliveryAtPort.updateDeliveryAt(votePaperId, command.deliveryAt());
+
+        VotePaperUpdateDeliveryDateEvent event = new VotePaperUpdateDeliveryDateEvent(updatedVotePaper.uuid(),
+                updatedVotePaper.author(), updatedVotePaper.title(), updatedVotePaper.content());
         produceVotePaperUploadEventPort.produceVotePaperUpdateDeliveryDateEvent(event);
     }
 

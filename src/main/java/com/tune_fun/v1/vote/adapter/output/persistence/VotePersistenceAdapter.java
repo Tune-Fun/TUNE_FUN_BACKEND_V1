@@ -2,6 +2,7 @@ package com.tune_fun.v1.vote.adapter.output.persistence;
 
 import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.AccountPersistenceAdapter;
+import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.vote.application.port.output.*;
@@ -68,8 +69,19 @@ public class VotePersistenceAdapter implements
 
     @Override
     public Optional<RegisteredVotePaper> loadRegisteredVotePaper(final String username) {
-        return findAvailableVotePaperByAuthor(username)
+        return findOneAvailable((Long) Constants.NULL_NUMBER, username)
                 .map(votePaperMapper::registeredVotePaper);
+    }
+
+    @Override
+    public Optional<RegisteredVotePaper> loadRegisteredVotePaper(Long votePaperId) {
+        return findOneAvailable(votePaperId, Constants.NULL_STRING)
+                .map(votePaperMapper::registeredVotePaper);
+    }
+
+    @Override
+    public Optional<RegisteredVotePaper> loadProgressingOwnedVotePaper(final Long votePaperId, final String username) {
+        return findOneAvailable(votePaperId, username).map(votePaperMapper::registeredVotePaper);
     }
 
     @Override
@@ -84,7 +96,7 @@ public class VotePersistenceAdapter implements
 
     @Override
     public RegisteredVotePaper updateDeliveryAt(final Long votePaperId, final LocalDateTime deliveryAt) {
-        VotePaperJpaEntity votePaper = findProgressingVotePaperById(votePaperId)
+        VotePaperJpaEntity votePaper = findOneAvailable(votePaperId, Constants.NULL_STRING)
                 .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
 
         VotePaperJpaEntity updatedVotePaper = votePaperMapper.updateDeliveryAt(deliveryAt, votePaper.toBuilder()).build();
@@ -100,7 +112,7 @@ public class VotePersistenceAdapter implements
 
     @Override
     public void saveVoteChoice(final Long votePaperId, final Set<SaveVoteChoice> behavior) {
-        VotePaperJpaEntity votePaperJpaEntity = findProgressingVotePaperById(votePaperId)
+        VotePaperJpaEntity votePaperJpaEntity = findOneAvailable(votePaperId, Constants.NULL_STRING)
                 .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
 
         Set<VoteChoiceJpaEntity> voteChoices = voteChoiceMapper.fromSaveVoteChoiceBehaviors(behavior);
@@ -111,9 +123,8 @@ public class VotePersistenceAdapter implements
         voteChoiceRepository.saveAll(updatedVoteChoices);
     }
 
-
-    public Optional<VotePaperJpaEntity> findProgressingVotePaperById(final Long id) {
-        return votePaperRepository.findByVoteEndAtAfterAndId(now(), id);
+    public Optional<VotePaperJpaEntity> findOneAvailable(final Long votePaperId, final String username) {
+        return votePaperRepository.findOneAvailable(votePaperId, username);
     }
 
     public Optional<VotePaperJpaEntity> findCompleteVotePaperById(final Long id) {

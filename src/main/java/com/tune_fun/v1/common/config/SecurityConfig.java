@@ -14,7 +14,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -85,12 +84,12 @@ public class SecurityConfig {
         http
                 .sessionManagement(config -> config.sessionCreationPolicy(STATELESS))
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .requestMatchers(mvc(introspector, "/static/**", "/favicon.ico")).permitAll()
-                        .requestMatchers(mvc(introspector, Uris.PERMIT_ALL_URIS)).permitAll()
-                        .requestMatchers(mvc(introspector, Uris.ARTIST_URIS)).hasRole("ARTIST")
-                        .requestMatchers(mvc(introspector, Uris.ADMIN_URIS)).hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                                .requestMatchers(mvc(introspector, "/static/**", "/favicon.ico")).permitAll()
+                                .requestMatchers(mvc(introspector, Uris.PERMIT_ALL_URIS)).permitAll()
+//                        .requestMatchers(mvc(introspector, Uris.ARTIST_URIS)).hasRole("ARTIST")
+//                        .requestMatchers(mvc(introspector, Uris.ADMIN_URIS)).hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(configure ->

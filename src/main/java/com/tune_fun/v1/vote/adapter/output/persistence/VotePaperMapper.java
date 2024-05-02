@@ -27,6 +27,9 @@ public abstract class VotePaperMapper {
         return option.getValue();
     }
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "uuid", expression = "java(StringUtil.uuid())")
     @Mapping(target = "author", source = "author")
     @Mapping(target = "option", source = "saveVotePaper.option", qualifiedByName = "votePaperOption")

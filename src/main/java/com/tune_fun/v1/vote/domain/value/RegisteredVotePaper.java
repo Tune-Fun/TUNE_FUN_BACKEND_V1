@@ -15,4 +15,13 @@ public record RegisteredVotePaper(
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
+
+    public boolean isAuthor(final String username) {
+        return author.equals(username);
+    }
+
+    public boolean isValidDeliveryAt(final LocalDateTime now, final LocalDateTime deliveryAt) {
+        return deliveryAt.isAfter(now) && deliveryAt.isAfter(voteEndAt);
+    }
+
 }
