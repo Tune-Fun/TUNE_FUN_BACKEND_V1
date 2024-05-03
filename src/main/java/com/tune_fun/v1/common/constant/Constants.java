@@ -1,5 +1,9 @@
 package com.tune_fun.v1.common.constant;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 public final class Constants {
 
     public static final Object NULL_OBJECT = null;
@@ -19,6 +23,10 @@ public final class Constants {
     public static final String SEMICOLON = ";";
 
     public static final String DOT = ".";
+
+    public static final LocalDateTime LOCAL_DATE_TIME_MIN = LocalDateTime.of(
+            LocalDate.of(1970, 1, 1), LocalTime.of(0, 0, 10)
+    );
 
     public static final class NicknameFragment {
 

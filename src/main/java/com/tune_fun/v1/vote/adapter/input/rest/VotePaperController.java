@@ -34,9 +34,10 @@ public class VotePaperController {
     private final UpdateVotePaperDeliveryDateUseCase updateVotePaperDeliveryDateUseCase;
 
     @GetMapping(value = Uris.VOTE_PAPER_ROOT)
-    public ResponseEntity<Response<ScrollVotePaperResponse>> getVotePapers(@RequestParam(name = "lastIdx") Integer lastIdx,
-                                                                           @RequestParam(required = false, defaultValue = "RECENT") SortType sortType) {
-        Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollVotePaper(lastIdx, sortType.name());
+    public ResponseEntity<Response<ScrollVotePaperResponse>> getVotePapers(@RequestParam(name = "last_id") Integer lastId,
+                                                                           @RequestParam(name = "sort_type", required = false, defaultValue = "RECENT") SortType sortType,
+                                                                           @CurrentUser User user) {
+        Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollVotePaper(lastId, sortType.name());
         return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
     }
 

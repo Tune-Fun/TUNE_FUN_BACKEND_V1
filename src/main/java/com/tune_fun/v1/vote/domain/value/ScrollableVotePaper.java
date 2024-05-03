@@ -11,7 +11,8 @@ public record ScrollableVotePaper(
         String authorUsername,
         String authorProfileImageUrl,
         String authorNickname,
+        Long remainDays,
         String totalVoteCount,
-        String totalFavCount
+        String totalLikeCount
 ) {
 }

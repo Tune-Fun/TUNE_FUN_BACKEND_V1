@@ -16,7 +16,6 @@ import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.extern.slf4j.Slf4j;
 import org.awaitility.core.ThrowingRunnable;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,6 @@ import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.GetQueueUrlResponse;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -52,8 +50,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -83,6 +80,28 @@ class VotePaperControllerIT extends ControllerBaseTest {
     @Transactional
     @Test
     @Order(1)
+    @DisplayName("투표 게시물 스크롤 조회, 성공")
+    void getVotePapersSuccess() throws Exception {
+        dummyService.initArtistAndLogin();
+        dummyService.initVotePaperBatch();
+
+        dummyService.initAndLogin();
+        String accessToken = dummyService.getDefaultAccessToken();
+
+        mockMvc.perform(
+                        get(Uris.VOTE_PAPER_ROOT)
+                                .queryParam("last_id", "1000")
+                                .queryParam("sort_type", "RECENT")
+                                .header(AUTHORIZATION, bearerToken(accessToken))
+                )
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS));
+
+
+    }
+
+    @Transactional
+    @Test
+    @Order(2)
     @DisplayName("투표 게시물 등록, 성공")
     void registerVotePaperSuccess() throws Exception {
         dummyService.initAndLogin();
@@ -188,7 +207,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
     @Transactional
     @Test
-    @Order(2)
+    @Order(3)
     @DisplayName("투표 게시물 영상 제공일 등록, 성공")
     void updateDeliveryDateSuccess() throws Exception {
         dummyService.initAndLogin();

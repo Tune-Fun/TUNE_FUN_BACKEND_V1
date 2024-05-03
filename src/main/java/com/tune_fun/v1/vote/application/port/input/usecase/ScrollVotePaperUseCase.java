@@ -6,6 +6,6 @@ import org.springframework.data.domain.Window;
 @FunctionalInterface
 public interface ScrollVotePaperUseCase {
 
-    Window<ScrollableVotePaper> scrollVotePaper(Integer lastIdx, String sortType);
+    Window<ScrollableVotePaper> scrollVotePaper(Integer lastId, String sortType);
 
 }

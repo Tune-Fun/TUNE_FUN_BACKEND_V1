@@ -14,7 +14,6 @@ import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.KeysetScrollPosition;
-import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Window;
 import org.springframework.stereotype.Component;
@@ -27,6 +26,7 @@ import java.util.Set;
 
 import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toSet;
+import static org.springframework.data.domain.ScrollPosition.forward;
 import static org.springframework.data.domain.Sort.Order.desc;
 import static org.springframework.data.domain.Sort.by;
 
@@ -76,16 +76,15 @@ public class VotePersistenceAdapter implements
     }
 
     /**
-     * @param lastIdx  해당 페이지의 마지막 인덱스
+     * @param lastId   해당 페이지의 마지막 인덱스
      * @param sortType 정렬 방식
      * @return {@link org.springframework.data.domain.Window} of {@link com.tune_fun.v1.vote.domain.value.ScrollableVotePaper}
-     *
      * @see <a href="https://github.com/spring-projects/spring-data-jpa/issues/2996">Keyset-scrolling queries add identifier columns twice when Sort already sorts by Id</a>
      * @see <a href="https://www.baeldung.com/spring-data-jpa-scroll-api">Spring Data JPA Scroll API</a>
      */
     @Override
-    public Window<ScrollableVotePaper> scrollVotePaper(Integer lastIdx, String sortType) {
-        KeysetScrollPosition position = ScrollPosition.backward(Map.of("id", lastIdx));
+    public Window<ScrollableVotePaper> scrollVotePaper(final Integer lastId, final String sortType) {
+        KeysetScrollPosition position = forward(Map.of("id", lastId, "voteEndAt", Constants.LOCAL_DATE_TIME_MIN));
         Sort sort = by(desc("id"), desc("voteEndAt"));
         return votePaperRepository.findFirst10By(position, sort).map(votePaperMapper::scrollableVotePaper);
     }
