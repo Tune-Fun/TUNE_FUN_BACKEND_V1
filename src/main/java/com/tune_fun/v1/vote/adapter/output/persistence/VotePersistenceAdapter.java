@@ -76,11 +76,13 @@ public class VotePersistenceAdapter implements
     }
 
     /**
+     * TODO : VOTE_COUNT 정렬은 집계 로직 구현 후 추가 예정
+     *
      * @param lastId   해당 페이지의 마지막 인덱스
      * @param sortType 정렬 방식
      * @return {@link org.springframework.data.domain.Window} of {@link com.tune_fun.v1.vote.domain.value.ScrollableVotePaper}
      * @see <a href="https://github.com/spring-projects/spring-data-jpa/issues/2996">Keyset-scrolling queries add identifier columns twice when Sort already sorts by Id</a>
-     * @see <a href="https://www.baeldung.com/spring-data-jpa-scroll-api">Spring Data JPA Scroll API</a>
+     * @see <a href="https://www.baeldung.com/spring-data-jpa-scroll-api">Spring Data JPA Scroll API</a><br>
      */
     @Override
     public Window<ScrollableVotePaper> scrollVotePaper(final Integer lastId, final String sortType) {

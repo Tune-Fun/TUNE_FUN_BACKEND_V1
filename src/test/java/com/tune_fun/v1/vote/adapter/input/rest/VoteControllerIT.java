@@ -38,7 +38,7 @@ class VoteControllerIT extends ControllerBaseTest {
 
     @Test
     @Order(1)
-    @DisplayName("투표, 성공")
+    @DisplayName("투표 등록, 성공")
     void registerVoteSuccess() throws Exception {
         dummyService.initArtistAndLogin();
         dummyService.initVotePaper();
@@ -67,7 +67,7 @@ class VoteControllerIT extends ControllerBaseTest {
                                 responseFields(baseResponseFields),
                                 resource(
                                         builder().
-                                                description("투표 게시물 등록").
+                                                description("투표 등록").
                                                 pathParameters(requestDescriptors).
                                                 responseFields(baseResponseFields)
                                                 .build()
