@@ -123,12 +123,13 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
-    public void updateVideoUrl(final Long votePaperId, final String videoUrl) {
+    public RegisteredVotePaper updateVideoUrl(final Long votePaperId, final String videoUrl) {
         VotePaperJpaEntity votePaper = findOneAvailable(votePaperId, Constants.NULL_STRING)
                 .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
 
         VotePaperJpaEntity updatedVotePaper = votePaperMapper.updateVideoUrl(videoUrl, votePaper.toBuilder()).build();
-        votePaperRepository.save(updatedVotePaper);
+        VotePaperJpaEntity savedVotePaper = votePaperRepository.save(updatedVotePaper);
+        return votePaperMapper.registeredVotePaper(savedVotePaper);
     }
 
     @Override

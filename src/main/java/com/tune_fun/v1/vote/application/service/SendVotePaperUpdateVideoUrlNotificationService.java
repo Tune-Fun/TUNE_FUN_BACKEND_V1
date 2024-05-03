@@ -4,11 +4,11 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.tune_fun.v1.account.application.port.output.device.LoadDevicePort;
 import com.tune_fun.v1.account.domain.value.NotificationApprovedDevice;
 import com.tune_fun.v1.common.hexagon.UseCase;
-import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperUpdateDeliveryDateNotificationUseCase;
+import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperUpdateVideoUrlNotificationUseCase;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePort;
 import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
-import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateDeliveryDateNotification;
-import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
+import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateVideoUrlNotification;
+import com.tune_fun.v1.vote.domain.event.VotePaperUpdateVideoUrlEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.RetryContext;
@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 @UseCase
 @RequiredArgsConstructor
-public class SendVotePaperUpdateDeliveryDateNotificationService implements SendVotePaperUpdateDeliveryDateNotificationUseCase {
+public class SendVotePaperUpdateVideoUrlNotificationService implements SendVotePaperUpdateVideoUrlNotificationUseCase {
 
     private final LoadVotePort loadVotePort;
     private final LoadDevicePort loadDevicePort;
@@ -33,20 +33,19 @@ public class SendVotePaperUpdateDeliveryDateNotificationService implements SendV
 
     private final VoteBehaviorMapper voteBehaviorMapper;
 
-
     @Override
-    public void send(final VotePaperUpdateDeliveryDateEvent event) throws FirebaseMessagingException {
+    public void send(final VotePaperUpdateVideoUrlEvent event) throws FirebaseMessagingException {
         List<Long> voterIds = loadVotePort.loadVoterIdsByVotePaperUuid(event.id());
 
         List<NotificationApprovedDevice> notificationApprovedDevices =
                 loadDevicePort.loadNotificationApprovedDevice(null, null, true, voterIds);
 
         if (!notificationApprovedDevices.isEmpty())
-            sendVotePaperUpdateDeliveryDateNotification(event, notificationApprovedDevices);
+            sendVotePaperUpdateVideoUrlNotification(event, notificationApprovedDevices);
     }
 
-    @Retryable(retryFor = FirebaseMessagingException.class, recover = "recoverSendVotePaperUpdateDeliveryDateNotification", backoff = @Backoff(delay = 2000, multiplier = 1.5, maxDelay = 10000))
-    private void sendVotePaperUpdateDeliveryDateNotification(final VotePaperUpdateDeliveryDateEvent event, final List<NotificationApprovedDevice> devices) throws FirebaseMessagingException {
+    @Retryable(retryFor = FirebaseMessagingException.class, recover = "recoverSendVotePaperUpdateVideoUrlNotification", backoff = @Backoff(delay = 2000, multiplier = 1.5, maxDelay = 10000))
+    private void sendVotePaperUpdateVideoUrlNotification(final VotePaperUpdateVideoUrlEvent event, final List<NotificationApprovedDevice> devices) throws FirebaseMessagingException {
         if (RetrySynchronizationManager.getContext() != null) {
             RetryContext retryContext = RetrySynchronizationManager.getContext();
             log.info("Retry count: {}", retryContext.getRetryCount());
@@ -54,17 +53,14 @@ public class SendVotePaperUpdateDeliveryDateNotificationService implements SendV
             log.error("sendVotePaperUpdateDeliveryDateNotification FAILED. \n{}\nRetry count: {}", retryContext.getLastThrowable(), retryContext.getRetryCount());
         }
 
-
-        SendVotePaperUpdateDeliveryDateNotification behavior = voteBehaviorMapper
-                .sendVotePaperUpdateDeliveryDateNotification(event, devices);
+        SendVotePaperUpdateVideoUrlNotification behavior = voteBehaviorMapper.sendVotePaperUpdateVideoUrlNotification(event, devices);
         sendVoteNotificationPort.notification(behavior);
     }
 
     // TODO : Slack Notification?
     @Recover
-    private void recoverSendVotePaperUpdateDeliveryDateNotification(final FirebaseMessagingException e, final VotePaperUpdateDeliveryDateEvent event, final List<NotificationApprovedDevice> devices) {
-        log.error("sendVotePaperUpdateDeliveryDateNotification FAILED. \n{}", event.id(), e);
+    private void recoverSendVotePaperUpdateVideoUrlNotification(final FirebaseMessagingException e, final VotePaperUpdateVideoUrlEvent event, final List<NotificationApprovedDevice> devices) {
+        log.error("recoverSendVotePaperUpdateVideoUrlNotification FAILED. \n{}", event.id(), e);
     }
-
 
 }

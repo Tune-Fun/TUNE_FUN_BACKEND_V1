@@ -52,7 +52,6 @@ public class VotePaperController {
         return responseMapper.ok(MessageCode.CREATED);
     }
 
-    //    @PreAuthorize("hasRole('ARTIST') && hasPermission(#votePaperId, 'VOTE_PAPER', 'SET_DELIEVERY_DATE')")
     @PreAuthorize("hasRole('ARTIST')")
     @PatchMapping(value = Uris.UPDATE_VOTE_PAPER_DELIVERY_DATE)
     public ResponseEntity<Response<BasePayload>> updateDeliveryDate(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,

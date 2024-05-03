@@ -5,7 +5,9 @@ import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.UpdateVotePaperVideoUrlUseCase;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
+import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUpdateVideoUrlPort;
 import com.tune_fun.v1.vote.application.port.output.UpdateVideoUrlPort;
+import com.tune_fun.v1.vote.domain.event.VotePaperUpdateVideoUrlEvent;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -22,6 +24,8 @@ public class UpdateVotePaperVideoUrlService implements UpdateVotePaperVideoUrlUs
     private final LoadVotePaperPort loadVotePaperPort;
     private final UpdateVideoUrlPort updateVideoUrlPort;
 
+    private final ProduceVotePaperUpdateVideoUrlPort produceVotePaperUpdateVideoUrlPort;
+
 
     @Override
     public void updateVideoUrl(final Long votePaperId, final VotePaperCommands.UpdateVideoUrl command, final User user) {
@@ -31,6 +35,10 @@ public class UpdateVotePaperVideoUrlService implements UpdateVotePaperVideoUrlUs
         if (!registeredVotePaper.isAuthor(user.getUsername()))
             throw new CommonApplicationException(VOTE_POLICY_ONLY_AUTHOR_CAN_UPDATE_VIDEO_URL);
 
-        updateVideoUrlPort.updateVideoUrl(votePaperId, command.videoUrl());
+        RegisteredVotePaper updatedVotePaper = updateVideoUrlPort.updateVideoUrl(votePaperId, command.videoUrl());
+
+        VotePaperUpdateVideoUrlEvent event = new VotePaperUpdateVideoUrlEvent(updatedVotePaper.uuid(),
+                updatedVotePaper.author(), updatedVotePaper.title(), registeredVotePaper.content(), updatedVotePaper.videoUrl());
+        produceVotePaperUpdateVideoUrlPort.produceVotePaperUpdateVideoUrlEvent(event);
     }
 }
