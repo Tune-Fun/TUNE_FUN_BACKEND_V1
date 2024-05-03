@@ -272,7 +272,7 @@ class VotePersistenceAdapterTest {
     void testScrollVotePaper() {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
-        when(votePaperRepository.findFirst10By(Mockito.any(), Mockito.any()))
+        when(votePaperRepository.findFirst10ByEnabledTrue(Mockito.any(), Mockito.any()))
                 .thenThrow(new IllegalArgumentException("id"));
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -287,7 +287,7 @@ class VotePersistenceAdapterTest {
         assertThrows(IllegalArgumentException.class,
                 () -> (new VotePersistenceAdapter(accountPersistenceAdapter, voteRepository, votePaperRepository,
                         voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl())).scrollVotePaper(1, "Sort Type"));
-        verify(votePaperRepository).findFirst10By(isA(KeysetScrollPosition.class), isA(Sort.class));
+        verify(votePaperRepository).findFirst10ByEnabledTrue(isA(KeysetScrollPosition.class), isA(Sort.class));
     }
 
     /**
@@ -299,7 +299,7 @@ class VotePersistenceAdapterTest {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
         Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
-        when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.any(), Mockito.<Long>any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndIdAndEnabledTrue(Mockito.any(), Mockito.<Long>any()))
                 .thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -316,7 +316,7 @@ class VotePersistenceAdapterTest {
                 new VoteChoiceMapperImpl())).loadRegisteredVotePaper(1L);
 
         // Assert
-        verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
+        verify(votePaperRepository).findByVoteEndAtAfterAndIdAndEnabledTrue(isA(LocalDateTime.class), eq(1L));
         RegisteredVotePaper getResult = actualLoadRegisteredVotePaperResult.get();
         assertNull(getResult.id());
         assertNull(getResult.author());
@@ -344,9 +344,9 @@ class VotePersistenceAdapterTest {
         LocalDateTime voteEndAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         Optional<VotePaperJpaEntity> ofResult = Optional
                 .of(new VotePaperJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", "Dr", "Not all who wander are lost",
-                        author, VotePaperOption.ALLOW_ADD_CHOICES, voteStartAt, voteEndAt, LocalDate.of(1970, 1, 1).atStartOfDay(),
-                        "https://example.org/example"));
-        when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.any(), Mockito.<Long>any()))
+                        author, VotePaperOption.ALLOW_ADD_CHOICES, voteStartAt, voteEndAt, LocalDate.of(1970, 1, 1).atStartOfDay(), true,
+                        "https://example.org/example", new ArrayList<>()));
+        when(votePaperRepository.findByVoteEndAtAfterAndIdAndEnabledTrue(Mockito.any(), Mockito.<Long>any()))
                 .thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -363,7 +363,7 @@ class VotePersistenceAdapterTest {
                 new VoteChoiceMapperImpl())).loadRegisteredVotePaper(1L);
 
         // Assert
-        verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
+        verify(votePaperRepository).findByVoteEndAtAfterAndIdAndEnabledTrue(isA(LocalDateTime.class), eq(1L));
         RegisteredVotePaper getResult = actualLoadRegisteredVotePaperResult.get();
         LocalTime expectedToLocalTimeResult = getResult.voteStartAt().toLocalTime();
         assertSame(expectedToLocalTimeResult, getResult.voteEndAt().toLocalTime());
@@ -378,7 +378,7 @@ class VotePersistenceAdapterTest {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
         Optional<VotePaperJpaEntity> emptyResult = Optional.empty();
-        when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.any(), Mockito.<Long>any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndIdAndEnabledTrue(Mockito.any(), Mockito.<Long>any()))
                 .thenReturn(emptyResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -395,7 +395,7 @@ class VotePersistenceAdapterTest {
                 new VoteChoiceMapperImpl())).loadRegisteredVotePaper(1L);
 
         // Assert
-        verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
+        verify(votePaperRepository).findByVoteEndAtAfterAndIdAndEnabledTrue(isA(LocalDateTime.class), eq(1L));
         assertFalse(actualLoadRegisteredVotePaperResult.isPresent());
         assertSame(emptyResult, actualLoadRegisteredVotePaperResult);
     }
@@ -408,7 +408,7 @@ class VotePersistenceAdapterTest {
     void testLoadRegisteredVotePaper4() {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
-        when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.any(), Mockito.<Long>any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndIdAndEnabledTrue(Mockito.any(), Mockito.<Long>any()))
                 .thenThrow(new IllegalArgumentException("foo"));
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -423,7 +423,7 @@ class VotePersistenceAdapterTest {
         assertThrows(IllegalArgumentException.class,
                 () -> (new VotePersistenceAdapter(accountPersistenceAdapter, voteRepository, votePaperRepository,
                         voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl())).loadRegisteredVotePaper(1L));
-        verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
+        verify(votePaperRepository).findByVoteEndAtAfterAndIdAndEnabledTrue(isA(LocalDateTime.class), eq(1L));
     }
 
     /**
@@ -435,7 +435,7 @@ class VotePersistenceAdapterTest {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
         Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
-        when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsername(Mockito.any(), Mockito.any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -452,7 +452,7 @@ class VotePersistenceAdapterTest {
                 new VoteChoiceMapperImpl())).loadRegisteredVotePaper("janedoe");
 
         // Assert
-        verify(votePaperRepository).findByVoteEndAtAfterAndAuthorUsername(isA(LocalDateTime.class), eq("janedoe"));
+        verify(votePaperRepository).findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(isA(LocalDateTime.class), eq("janedoe"));
         RegisteredVotePaper getResult = actualLoadRegisteredVotePaperResult.get();
         assertNull(getResult.id());
         assertNull(getResult.author());
@@ -480,9 +480,9 @@ class VotePersistenceAdapterTest {
         LocalDateTime voteEndAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         Optional<VotePaperJpaEntity> ofResult = Optional
                 .of(new VotePaperJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", "Dr", "Not all who wander are lost",
-                        author, VotePaperOption.ALLOW_ADD_CHOICES, voteStartAt, voteEndAt, LocalDate.of(1970, 1, 1).atStartOfDay(),
-                        "https://example.org/example"));
-        when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsername(Mockito.any(), Mockito.any()))
+                        author, VotePaperOption.ALLOW_ADD_CHOICES, voteStartAt, voteEndAt, LocalDate.of(1970, 1, 1).atStartOfDay(), true,
+                        "https://example.org/example", new ArrayList<>()));
+        when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -499,7 +499,7 @@ class VotePersistenceAdapterTest {
                 new VoteChoiceMapperImpl())).loadRegisteredVotePaper("janedoe");
 
         // Assert
-        verify(votePaperRepository).findByVoteEndAtAfterAndAuthorUsername(isA(LocalDateTime.class), eq("janedoe"));
+        verify(votePaperRepository).findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(isA(LocalDateTime.class), eq("janedoe"));
         RegisteredVotePaper getResult = actualLoadRegisteredVotePaperResult.get();
         LocalTime expectedToLocalTimeResult = getResult.voteStartAt().toLocalTime();
         assertSame(expectedToLocalTimeResult, getResult.voteEndAt().toLocalTime());
@@ -514,7 +514,7 @@ class VotePersistenceAdapterTest {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
         Optional<VotePaperJpaEntity> emptyResult = Optional.empty();
-        when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsername(Mockito.any(), Mockito.any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(Mockito.any(), Mockito.any()))
                 .thenReturn(emptyResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -531,7 +531,7 @@ class VotePersistenceAdapterTest {
                 new VoteChoiceMapperImpl())).loadRegisteredVotePaper("janedoe");
 
         // Assert
-        verify(votePaperRepository).findByVoteEndAtAfterAndAuthorUsername(isA(LocalDateTime.class), eq("janedoe"));
+        verify(votePaperRepository).findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(isA(LocalDateTime.class), eq("janedoe"));
         assertFalse(actualLoadRegisteredVotePaperResult.isPresent());
         assertSame(emptyResult, actualLoadRegisteredVotePaperResult);
     }
@@ -544,7 +544,7 @@ class VotePersistenceAdapterTest {
     void testLoadRegisteredVotePaper8() {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
-        when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsername(Mockito.any(), Mockito.any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(Mockito.any(), Mockito.any()))
                 .thenThrow(new IllegalArgumentException("foo"));
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -559,7 +559,7 @@ class VotePersistenceAdapterTest {
         assertThrows(IllegalArgumentException.class,
                 () -> (new VotePersistenceAdapter(accountPersistenceAdapter, voteRepository, votePaperRepository,
                         voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl())).loadRegisteredVotePaper("janedoe"));
-        verify(votePaperRepository).findByVoteEndAtAfterAndAuthorUsername(isA(LocalDateTime.class), eq("janedoe"));
+        verify(votePaperRepository).findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(isA(LocalDateTime.class), eq("janedoe"));
     }
 
     /**
@@ -693,7 +693,7 @@ class VotePersistenceAdapterTest {
         when(votePaperRepository.save(Mockito.any()))
                 .thenReturn(new VotePaperJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", "Dr",
                         "Not all who wander are lost", author, VotePaperOption.ALLOW_ADD_CHOICES, voteStartAt, voteEndAt,
-                        LocalDate.of(1970, 1, 1).atStartOfDay(), "https://example.org/example"));
+                        LocalDate.of(1970, 1, 1).atStartOfDay(), true, "https://example.org/example", new ArrayList<>()));
         VoteRepository voteRepository = mock(VoteRepository.class);
         VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
         VotePaperMapperImpl votePaperMapper = new VotePaperMapperImpl();
@@ -863,7 +863,7 @@ class VotePersistenceAdapterTest {
         when(votePaperRepository.save(Mockito.any()))
                 .thenReturn(new VotePaperJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", "Dr",
                         "Not all who wander are lost", author, VotePaperOption.ALLOW_ADD_CHOICES, voteStartAt, voteEndAt,
-                        LocalDate.of(1970, 1, 1).atStartOfDay(), "https://example.org/example"));
+                        LocalDate.of(1970, 1, 1).atStartOfDay(), true, "https://example.org/example", new ArrayList<>()));
         Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
         when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.any())).thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
@@ -923,9 +923,9 @@ class VotePersistenceAdapterTest {
     void testUpdateVideoUrl() {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
-        when(votePaperRepository.save(Mockito.<VotePaperJpaEntity>any())).thenReturn(new VotePaperJpaEntity());
+        when(votePaperRepository.save(Mockito.any())).thenReturn(new VotePaperJpaEntity());
         Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
-        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.<String>any())).thenReturn(ofResult);
+        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.any())).thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
         AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
@@ -966,9 +966,9 @@ class VotePersistenceAdapterTest {
     void testUpdateVideoUrl2() {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
-        when(votePaperRepository.save(Mockito.<VotePaperJpaEntity>any())).thenThrow(new IllegalArgumentException("foo"));
+        when(votePaperRepository.save(Mockito.any())).thenThrow(new IllegalArgumentException("foo"));
         Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
-        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.<String>any())).thenReturn(ofResult);
+        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.any())).thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
         AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
@@ -995,9 +995,9 @@ class VotePersistenceAdapterTest {
     void testUpdateVideoUrl3() {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
-        when(votePaperRepository.save(Mockito.<VotePaperJpaEntity>any())).thenReturn(null);
+        when(votePaperRepository.save(Mockito.any())).thenReturn(null);
         Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
-        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.<String>any())).thenReturn(ofResult);
+        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.any())).thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
         AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
@@ -1029,12 +1029,12 @@ class VotePersistenceAdapterTest {
         AccountJpaEntity author = new AccountJpaEntity();
         LocalDateTime voteStartAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime voteEndAt = LocalDate.of(1970, 1, 1).atStartOfDay();
-        when(votePaperRepository.save(Mockito.<VotePaperJpaEntity>any()))
+        when(votePaperRepository.save(Mockito.any()))
                 .thenReturn(new VotePaperJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", "Dr",
                         "Not all who wander are lost", author, VotePaperOption.ALLOW_ADD_CHOICES, voteStartAt, voteEndAt,
-                        LocalDate.of(1970, 1, 1).atStartOfDay(), "https://example.org/example"));
+                        LocalDate.of(1970, 1, 1).atStartOfDay(), true, "https://example.org/example", new ArrayList<>()));
         Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
-        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.<String>any())).thenReturn(ofResult);
+        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.any())).thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
         AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
@@ -1065,7 +1065,7 @@ class VotePersistenceAdapterTest {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
         Optional<VotePaperJpaEntity> emptyResult = Optional.empty();
-        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.<String>any())).thenReturn(emptyResult);
+        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.any())).thenReturn(emptyResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
         AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
@@ -1146,7 +1146,7 @@ class VotePersistenceAdapterTest {
         ArrayList<VoteChoiceJpaEntity> voteChoiceJpaEntityList = new ArrayList<>();
         VotePaperJpaEntity votePaper = new VotePaperJpaEntity();
         voteChoiceJpaEntityList.add(new VoteChoiceJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", votePaper,
-                new Offer(",", ",", ",", "2020-03-01", 1)));
+                new Offer(",", ",", ",", "2020-03-01", 1), new ArrayList<>()));
         VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
         when(voteChoiceRepository.findAllByVotePaperId(Mockito.<Long>any())).thenReturn(voteChoiceJpaEntityList);
         AccountRepository accountRepository = mock(AccountRepository.class);
@@ -1316,6 +1316,56 @@ class VotePersistenceAdapterTest {
     }
 
     /**
+     * Method under test: {@link VotePersistenceAdapter#disableVotePaper(Long)}
+     */
+    @Test
+    void testDisableVotePaper() {
+        // Arrange
+        VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
+        Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
+        when(votePaperRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
+        AccountRepository accountRepository = mock(AccountRepository.class);
+        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
+                oauth2AccountRepository, new AccountMapperImpl());
+
+        VoteRepository voteRepository = mock(VoteRepository.class);
+        VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
+        VotePaperMapperImpl votePaperMapper = new VotePaperMapperImpl();
+
+        // Act
+        (new VotePersistenceAdapter(accountPersistenceAdapter, voteRepository, votePaperRepository, voteChoiceRepository,
+                votePaperMapper, new VoteChoiceMapperImpl())).disableVotePaper(1L);
+
+        // Assert
+        verify(votePaperRepository).findById(eq(1L));
+    }
+
+    /**
+     * Method under test: {@link VotePersistenceAdapter#disableVotePaper(Long)}
+     */
+    @Test
+    void testDisableVotePaper2() {
+        // Arrange
+        VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
+        doThrow(new IllegalArgumentException("foo")).when(votePaperRepository).findById(Mockito.<Long>any());
+        AccountRepository accountRepository = mock(AccountRepository.class);
+        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
+                oauth2AccountRepository, new AccountMapperImpl());
+
+        VoteRepository voteRepository = mock(VoteRepository.class);
+        VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
+        VotePaperMapperImpl votePaperMapper = new VotePaperMapperImpl();
+
+        // Act and Assert
+        assertThrows(IllegalArgumentException.class,
+                () -> (new VotePersistenceAdapter(accountPersistenceAdapter, voteRepository, votePaperRepository,
+                        voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl())).disableVotePaper(1L));
+        verify(votePaperRepository).findById(eq(1L));
+    }
+
+    /**
      * Method under test:
      * {@link VotePersistenceAdapter#findOneAvailable(Long, String)}
      */
@@ -1379,7 +1429,7 @@ class VotePersistenceAdapterTest {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
         Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
-        when(votePaperRepository.findByVoteEndAtBeforeAndId(Mockito.any(), Mockito.<Long>any()))
+        when(votePaperRepository.findByVoteEndAtBeforeAndIdAndEnabledTrue(Mockito.any(), Mockito.<Long>any()))
                 .thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -1396,7 +1446,7 @@ class VotePersistenceAdapterTest {
                 new VoteChoiceMapperImpl())).findCompleteVotePaperById(1L);
 
         // Assert
-        verify(votePaperRepository).findByVoteEndAtBeforeAndId(isA(LocalDateTime.class), eq(1L));
+        verify(votePaperRepository).findByVoteEndAtBeforeAndIdAndEnabledTrue(isA(LocalDateTime.class), eq(1L));
         assertSame(ofResult, actualFindCompleteVotePaperByIdResult);
     }
 
@@ -1408,7 +1458,7 @@ class VotePersistenceAdapterTest {
     void testFindCompleteVotePaperById2() {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
-        when(votePaperRepository.findByVoteEndAtBeforeAndId(Mockito.any(), Mockito.<Long>any()))
+        when(votePaperRepository.findByVoteEndAtBeforeAndIdAndEnabledTrue(Mockito.any(), Mockito.<Long>any()))
                 .thenThrow(new IllegalArgumentException("foo"));
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -1423,7 +1473,7 @@ class VotePersistenceAdapterTest {
         assertThrows(IllegalArgumentException.class,
                 () -> (new VotePersistenceAdapter(accountPersistenceAdapter, voteRepository, votePaperRepository,
                         voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl())).findCompleteVotePaperById(1L));
-        verify(votePaperRepository).findByVoteEndAtBeforeAndId(isA(LocalDateTime.class), eq(1L));
+        verify(votePaperRepository).findByVoteEndAtBeforeAndIdAndEnabledTrue(isA(LocalDateTime.class), eq(1L));
     }
 
     /**
@@ -1435,7 +1485,7 @@ class VotePersistenceAdapterTest {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
         Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
-        when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsername(Mockito.any(), Mockito.any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(Mockito.any(), Mockito.any()))
                 .thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -1452,7 +1502,7 @@ class VotePersistenceAdapterTest {
                 new VoteChoiceMapperImpl())).findProgressingVotePaperByAuthor("janedoe");
 
         // Assert
-        verify(votePaperRepository).findByVoteEndAtAfterAndAuthorUsername(isA(LocalDateTime.class), eq("janedoe"));
+        verify(votePaperRepository).findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(isA(LocalDateTime.class), eq("janedoe"));
         assertSame(ofResult, actualFindProgressingVotePaperByAuthorResult);
     }
 
@@ -1464,7 +1514,7 @@ class VotePersistenceAdapterTest {
     void testFindProgressingVotePaperByAuthor2() {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
-        when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsername(Mockito.any(), Mockito.any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(Mockito.any(), Mockito.any()))
                 .thenThrow(new IllegalArgumentException("foo"));
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -1480,7 +1530,7 @@ class VotePersistenceAdapterTest {
                 () -> (new VotePersistenceAdapter(accountPersistenceAdapter, voteRepository, votePaperRepository,
                         voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl()))
                         .findProgressingVotePaperByAuthor("janedoe"));
-        verify(votePaperRepository).findByVoteEndAtAfterAndAuthorUsername(isA(LocalDateTime.class), eq("janedoe"));
+        verify(votePaperRepository).findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(isA(LocalDateTime.class), eq("janedoe"));
     }
 
     /**
@@ -1492,7 +1542,7 @@ class VotePersistenceAdapterTest {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
         Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
-        when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.any(), Mockito.<Long>any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndIdAndEnabledTrue(Mockito.any(), Mockito.<Long>any()))
                 .thenReturn(ofResult);
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -1509,7 +1559,7 @@ class VotePersistenceAdapterTest {
                 new VoteChoiceMapperImpl())).findProgressingVotePaperById(1L);
 
         // Assert
-        verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
+        verify(votePaperRepository).findByVoteEndAtAfterAndIdAndEnabledTrue(isA(LocalDateTime.class), eq(1L));
         assertSame(ofResult, actualFindProgressingVotePaperByIdResult);
     }
 
@@ -1521,7 +1571,7 @@ class VotePersistenceAdapterTest {
     void testFindProgressingVotePaperById2() {
         // Arrange
         VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
-        when(votePaperRepository.findByVoteEndAtAfterAndId(Mockito.any(), Mockito.<Long>any()))
+        when(votePaperRepository.findByVoteEndAtAfterAndIdAndEnabledTrue(Mockito.any(), Mockito.<Long>any()))
                 .thenThrow(new IllegalArgumentException("foo"));
         AccountRepository accountRepository = mock(AccountRepository.class);
         OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
@@ -1536,7 +1586,7 @@ class VotePersistenceAdapterTest {
         assertThrows(IllegalArgumentException.class,
                 () -> (new VotePersistenceAdapter(accountPersistenceAdapter, voteRepository, votePaperRepository,
                         voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl())).findProgressingVotePaperById(1L));
-        verify(votePaperRepository).findByVoteEndAtAfterAndId(isA(LocalDateTime.class), eq(1L));
+        verify(votePaperRepository).findByVoteEndAtAfterAndIdAndEnabledTrue(isA(LocalDateTime.class), eq(1L));
     }
 
     /**

@@ -9,10 +9,7 @@ import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
-import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVotePaperUseCase;
-import com.tune_fun.v1.vote.application.port.input.usecase.ScrollVotePaperUseCase;
-import com.tune_fun.v1.vote.application.port.input.usecase.UpdateVotePaperDeliveryDateUseCase;
-import com.tune_fun.v1.vote.application.port.input.usecase.UpdateVotePaperVideoUrlUseCase;
+import com.tune_fun.v1.vote.application.port.input.usecase.*;
 import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -31,9 +28,13 @@ public class VotePaperController {
     private final ResponseMapper responseMapper;
 
     private final ScrollVotePaperUseCase scrollVotePaperUseCase;
+
     private final RegisterVotePaperUseCase registerVotePaperUseCase;
+
     private final UpdateVotePaperDeliveryDateUseCase updateVotePaperDeliveryDateUseCase;
     private final UpdateVotePaperVideoUrlUseCase updateVotePaperVideoUrlUseCase;
+
+    private final DeleteVotePaperUseCase deleteVotePaperUseCase;
 
     @GetMapping(value = Uris.VOTE_PAPER_ROOT)
     public ResponseEntity<Response<ScrollVotePaperResponse>> getVotePapers(@RequestParam(name = "last_id") Integer lastId,
@@ -67,6 +68,14 @@ public class VotePaperController {
                                                                 @Valid @RequestBody final VotePaperCommands.UpdateVideoUrl command,
                                                                 @CurrentUser final User user) {
         updateVotePaperVideoUrlUseCase.updateVideoUrl(votePaperId, command, user);
+        return responseMapper.ok(MessageCode.SUCCESS);
+    }
+
+    @PreAuthorize("hasRole('ARTIST')")
+    @DeleteMapping(value = Uris.VOTE_PAPER_ROOT)
+    public ResponseEntity<Response<BasePayload>> deleteVotePaper(@RequestParam(name = "vote_paper_id") Long votePaperId,
+                                                                 @CurrentUser User user) {
+        deleteVotePaperUseCase.delete(votePaperId, user);
         return responseMapper.ok(MessageCode.SUCCESS);
     }
 

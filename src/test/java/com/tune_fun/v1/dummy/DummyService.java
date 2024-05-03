@@ -241,7 +241,7 @@ public class DummyService {
     public void initVotePaperBatch() {
         Long authorId = defaultArtistAccount.getId();
         String sql = "INSERT INTO vote_paper (author_id, created_at, delivery_at, updated_at, vote_end_at, vote_start_at, content,\n" +
-                "                        option, title, uuid, video_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "                        option, title, uuid, video_url, enabled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         for (int idx = 0; idx < 1000; idx++) {
             jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -258,6 +258,7 @@ public class DummyService {
                     ps.setString(9, "First Vote Paper");
                     ps.setString(10, StringUtil.uuid());
                     ps.setString(11, "test");
+                    ps.setBoolean(12, true);
                 }
 
                 @Override

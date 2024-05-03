@@ -366,6 +366,48 @@ class VotePaperControllerIT extends ControllerBaseTest {
         assertEquals(registeredVotePaper.videoUrl(), videoUrl);
     }
 
+    @Transactional
+    @Test
+    @Order(5)
+    @DisplayName("투표 게시물 삭제, 성공")
+    void deleteVotePaperSuccess() throws Exception {
+        dummyService.initAndLogin();
+        dummyService.initArtistAndLogin();
+
+        dummyService.initVotePaper();
+        dummyService.registerVote();
+
+        String accessToken = dummyService.getDefaultArtistAccessToken();
+        Long votePaperId = dummyService.getDefaultVotePaper().getId();
+
+        ParameterDescriptor queryParameter = parameterWithName("vote_paper_id").description("투표 게시물 ID").attributes(constraint("NOT NULL"));
+
+        mockMvc.perform(
+                        delete(Uris.VOTE_PAPER_ROOT)
+                                .queryParam("vote_paper_id", String.valueOf(votePaperId))
+                                .header(AUTHORIZATION, bearerToken(accessToken))
+                )
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andDo(
+                        restDocs.document(
+                                requestHeaders(authorizationHeader),
+                                queryParameters(queryParameter),
+                                responseFields(baseResponseFields),
+                                resource(
+                                        builder().
+                                                description("투표 게시물 삭제").
+                                                queryParameters(queryParameter).
+                                                responseFields(baseResponseFields)
+                                                .build()
+                                )
+                        )
+                );
+
+        assertThrows(AssertionError.class,
+                () -> loadVotePaperPort.loadRegisteredVotePaper(votePaperId)
+                        .orElseThrow(() -> new AssertionError("투표 게시물을 찾을 수 없습니다.")));
+    }
+
     private void awaitReceiveMessage(final String queueName) {
         ThrowingRunnable receiveMessageAssertionRunnable = () ->
                 sqsAsyncClient.getQueueUrl(r -> r.queueName(queueName))

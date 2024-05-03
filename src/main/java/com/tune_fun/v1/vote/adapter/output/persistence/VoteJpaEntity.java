@@ -31,7 +31,7 @@ public class VoteJpaEntity extends BaseEntity {
     @Comment("고유번호")
     private String uuid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "vote_choice_id", nullable = false, updatable = false, referencedColumnName = "id")
     @Comment("투표 선택지 ID")
     private VoteChoiceJpaEntity voteChoice;
