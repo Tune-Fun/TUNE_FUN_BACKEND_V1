@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.tune_fun.v1.common.validation.Period;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -62,11 +63,18 @@ public class VotePaperCommands {
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public record UpdateDeliveryDate(
-
             @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
             @NotNull(message = "{vote.paper.delivery_at.not_null}")
             @Future(message = "{vote.paper.delivery_at.future}")
             LocalDateTime deliveryAt
+    ) {
+    }
+
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public record UpdateVideoUrl(
+            @NotBlank(message = "{vote.paper.video_url.not_blank}")
+            @URL(message = "{vote.paper.video_url.valid}")
+            String videoUrl
     ) {
     }
 }
