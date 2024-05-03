@@ -118,6 +118,8 @@ event:
       queue-name: send-vote-paper-upload-notification-dev
     send-vote-paper-update-delivery-date-notification:
       queue-name: send-vote-paper-update-delivery-date-notification-dev
+    send-vote-paper-update-video-url-notification:
+      queue-name: send-vote-paper-update-video-url-notification-dev
   kafka:
     send-vote-paper-upload-notification:
       topic: send-vote-paper-upload-notification-dev

@@ -10,6 +10,7 @@ public record RegisteredVotePaper(
         String title,
         String content,
         String option,
+        String videoUrl,
         LocalDateTime voteStartAt,
         LocalDateTime voteEndAt,
         LocalDateTime deliveryAt,

@@ -55,6 +55,7 @@ public class Uris {
     public static final String VOTE_PAPER_ROOT = VOTE_ROOT + "/paper";
 
     public static final String UPDATE_VOTE_PAPER_DELIVERY_DATE = VOTE_PAPER_ROOT + "/{votePaperId}/delivery-date";
+    public static final String UPDATE_VOTE_PAPER_VIDEO_URL = VOTE_PAPER_ROOT + "/{votePaperId}/video-url";
 
     public static final String REGISTER_VOTE = VOTE_ROOT + "/{votePaperId}" + "/register" + "/{voteChoiceId}";
 

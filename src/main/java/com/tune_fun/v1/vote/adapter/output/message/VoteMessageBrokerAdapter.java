@@ -2,9 +2,11 @@ package com.tune_fun.v1.vote.adapter.output.message;
 
 import com.tune_fun.v1.external.aws.sqs.SqsProvider;
 import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUpdateDeliveryDateEventPort;
+import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUpdateVideoUrlPort;
 import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUploadEventPort;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
+import com.tune_fun.v1.vote.domain.event.VotePaperUpdateVideoUrlEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,7 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class VoteMessageBrokerAdapter implements
-        ProduceVotePaperUploadEventPort, ProduceVotePaperUpdateDeliveryDateEventPort {
+        ProduceVotePaperUploadEventPort, ProduceVotePaperUpdateDeliveryDateEventPort,
+        ProduceVotePaperUpdateVideoUrlPort {
 
     private final SqsProvider sqsProvider;
 
@@ -21,6 +24,9 @@ public class VoteMessageBrokerAdapter implements
 
     @Value("${event.sqs.send-vote-paper-update-delivery-date-notification.queue-name}")
     private String votePaperUpdateDeliveryDateQueue;
+
+    @Value("${event.sqs.send-vote-paper-update-video-url-notification.queue-name}")
+    private String votePaperUpdateVideoUrlQueue;
 
 
     /**
@@ -39,5 +45,14 @@ public class VoteMessageBrokerAdapter implements
     @Override
     public void produceVotePaperUpdateDeliveryDateEvent(final VotePaperUpdateDeliveryDateEvent votePaperUpdateDeliveryDateEvent) {
         sqsProvider.sendMessageRangedQueue(votePaperUpdateDeliveryDateQueue, votePaperUpdateDeliveryDateEvent);
+    }
+
+    /**
+     * @param votePaperUpdateVideoUrlEvent {@link VotePaperUpdateDeliveryDateEvent}
+     * @see com.tune_fun.v1.vote.adapter.input.message.VoteMessageConsumer#consumeVotePaperUpdateVideoUrlEvent(VotePaperUpdateVideoUrlEvent)
+     */
+    @Override
+    public void produceVotePaperUpdateVideoUrlEvent(final VotePaperUpdateVideoUrlEvent votePaperUpdateVideoUrlEvent) {
+        sqsProvider.sendMessageRangedQueue(votePaperUpdateVideoUrlQueue, votePaperUpdateVideoUrlEvent);
     }
 }

@@ -12,6 +12,7 @@ import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVotePaperUseCase;
 import com.tune_fun.v1.vote.application.port.input.usecase.ScrollVotePaperUseCase;
 import com.tune_fun.v1.vote.application.port.input.usecase.UpdateVotePaperDeliveryDateUseCase;
+import com.tune_fun.v1.vote.application.port.input.usecase.UpdateVotePaperVideoUrlUseCase;
 import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -32,6 +33,7 @@ public class VotePaperController {
     private final ScrollVotePaperUseCase scrollVotePaperUseCase;
     private final RegisterVotePaperUseCase registerVotePaperUseCase;
     private final UpdateVotePaperDeliveryDateUseCase updateVotePaperDeliveryDateUseCase;
+    private final UpdateVotePaperVideoUrlUseCase updateVotePaperVideoUrlUseCase;
 
     @GetMapping(value = Uris.VOTE_PAPER_ROOT)
     public ResponseEntity<Response<ScrollVotePaperResponse>> getVotePapers(@RequestParam(name = "last_id") Integer lastId,
@@ -50,13 +52,21 @@ public class VotePaperController {
         return responseMapper.ok(MessageCode.CREATED);
     }
 
-    //    @PreAuthorize("hasRole('ARTIST') && hasPermission(#votePaperId, 'VOTE_PAPER', 'SET_DELIEVERY_DATE')")
     @PreAuthorize("hasRole('ARTIST')")
     @PatchMapping(value = Uris.UPDATE_VOTE_PAPER_DELIVERY_DATE)
     public ResponseEntity<Response<BasePayload>> updateDeliveryDate(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
                                                                     @Valid @RequestBody final VotePaperCommands.UpdateDeliveryDate command,
                                                                     @CurrentUser final User user) {
         updateVotePaperDeliveryDateUseCase.updateDeliveryDate(votePaperId, command, user);
+        return responseMapper.ok(MessageCode.SUCCESS);
+    }
+
+    @PreAuthorize("hasRole('ARTIST')")
+    @PatchMapping(value = Uris.UPDATE_VOTE_PAPER_VIDEO_URL)
+    public ResponseEntity<Response<BasePayload>> updateVideoUrl(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
+                                                                @Valid @RequestBody final VotePaperCommands.UpdateVideoUrl command,
+                                                                @CurrentUser final User user) {
+        updateVotePaperVideoUrlUseCase.updateVideoUrl(votePaperId, command, user);
         return responseMapper.ok(MessageCode.SUCCESS);
     }
 

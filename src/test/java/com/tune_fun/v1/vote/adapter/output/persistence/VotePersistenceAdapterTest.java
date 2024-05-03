@@ -917,6 +917,174 @@ class VotePersistenceAdapterTest {
 
     /**
      * Method under test:
+     * {@link VotePersistenceAdapter#updateVideoUrl(Long, String)}
+     */
+    @Test
+    void testUpdateVideoUrl() {
+        // Arrange
+        VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
+        when(votePaperRepository.save(Mockito.<VotePaperJpaEntity>any())).thenReturn(new VotePaperJpaEntity());
+        Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
+        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.<String>any())).thenReturn(ofResult);
+        AccountRepository accountRepository = mock(AccountRepository.class);
+        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
+                oauth2AccountRepository, new AccountMapperImpl());
+
+        VoteRepository voteRepository = mock(VoteRepository.class);
+        VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
+        VotePaperMapperImpl votePaperMapper = new VotePaperMapperImpl();
+
+        // Act
+        RegisteredVotePaper actualUpdateVideoUrlResult = (new VotePersistenceAdapter(accountPersistenceAdapter,
+                voteRepository, votePaperRepository, voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl()))
+                .updateVideoUrl(1L, "https://example.org/example");
+
+        // Assert
+        verify(votePaperRepository).findOneAvailable(eq(1L), isNull());
+        verify(votePaperRepository).save(isA(VotePaperJpaEntity.class));
+        assertNull(actualUpdateVideoUrlResult.id());
+        assertNull(actualUpdateVideoUrlResult.author());
+        assertNull(actualUpdateVideoUrlResult.authorUsername());
+        assertNull(actualUpdateVideoUrlResult.content());
+        assertNull(actualUpdateVideoUrlResult.option());
+        assertNull(actualUpdateVideoUrlResult.title());
+        assertNull(actualUpdateVideoUrlResult.uuid());
+        assertNull(actualUpdateVideoUrlResult.videoUrl());
+        assertNull(actualUpdateVideoUrlResult.createdAt());
+        assertNull(actualUpdateVideoUrlResult.deliveryAt());
+        assertNull(actualUpdateVideoUrlResult.updatedAt());
+        assertNull(actualUpdateVideoUrlResult.voteEndAt());
+        assertNull(actualUpdateVideoUrlResult.voteStartAt());
+    }
+
+    /**
+     * Method under test:
+     * {@link VotePersistenceAdapter#updateVideoUrl(Long, String)}
+     */
+    @Test
+    void testUpdateVideoUrl2() {
+        // Arrange
+        VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
+        when(votePaperRepository.save(Mockito.<VotePaperJpaEntity>any())).thenThrow(new IllegalArgumentException("foo"));
+        Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
+        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.<String>any())).thenReturn(ofResult);
+        AccountRepository accountRepository = mock(AccountRepository.class);
+        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
+                oauth2AccountRepository, new AccountMapperImpl());
+
+        VoteRepository voteRepository = mock(VoteRepository.class);
+        VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
+        VotePaperMapperImpl votePaperMapper = new VotePaperMapperImpl();
+
+        // Act and Assert
+        assertThrows(IllegalArgumentException.class,
+                () -> (new VotePersistenceAdapter(accountPersistenceAdapter, voteRepository, votePaperRepository,
+                        voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl())).updateVideoUrl(1L,
+                        "https://example.org/example"));
+        verify(votePaperRepository).findOneAvailable(eq(1L), isNull());
+        verify(votePaperRepository).save(isA(VotePaperJpaEntity.class));
+    }
+
+    /**
+     * Method under test:
+     * {@link VotePersistenceAdapter#updateVideoUrl(Long, String)}
+     */
+    @Test
+    void testUpdateVideoUrl3() {
+        // Arrange
+        VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
+        when(votePaperRepository.save(Mockito.<VotePaperJpaEntity>any())).thenReturn(null);
+        Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
+        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.<String>any())).thenReturn(ofResult);
+        AccountRepository accountRepository = mock(AccountRepository.class);
+        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
+                oauth2AccountRepository, new AccountMapperImpl());
+
+        VoteRepository voteRepository = mock(VoteRepository.class);
+        VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
+        VotePaperMapperImpl votePaperMapper = new VotePaperMapperImpl();
+
+        // Act
+        RegisteredVotePaper actualUpdateVideoUrlResult = (new VotePersistenceAdapter(accountPersistenceAdapter,
+                voteRepository, votePaperRepository, voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl()))
+                .updateVideoUrl(1L, "https://example.org/example");
+
+        // Assert
+        verify(votePaperRepository).findOneAvailable(eq(1L), isNull());
+        verify(votePaperRepository).save(isA(VotePaperJpaEntity.class));
+        assertNull(actualUpdateVideoUrlResult);
+    }
+
+    /**
+     * Method under test:
+     * {@link VotePersistenceAdapter#updateVideoUrl(Long, String)}
+     */
+    @Test
+    void testUpdateVideoUrl4() {
+        // Arrange
+        VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
+        AccountJpaEntity author = new AccountJpaEntity();
+        LocalDateTime voteStartAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        LocalDateTime voteEndAt = LocalDate.of(1970, 1, 1).atStartOfDay();
+        when(votePaperRepository.save(Mockito.<VotePaperJpaEntity>any()))
+                .thenReturn(new VotePaperJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", "Dr",
+                        "Not all who wander are lost", author, VotePaperOption.ALLOW_ADD_CHOICES, voteStartAt, voteEndAt,
+                        LocalDate.of(1970, 1, 1).atStartOfDay(), "https://example.org/example"));
+        Optional<VotePaperJpaEntity> ofResult = Optional.of(new VotePaperJpaEntity());
+        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.<String>any())).thenReturn(ofResult);
+        AccountRepository accountRepository = mock(AccountRepository.class);
+        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
+                oauth2AccountRepository, new AccountMapperImpl());
+
+        VoteRepository voteRepository = mock(VoteRepository.class);
+        VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
+        VotePaperMapperImpl votePaperMapper = new VotePaperMapperImpl();
+
+        // Act
+        RegisteredVotePaper actualUpdateVideoUrlResult = (new VotePersistenceAdapter(accountPersistenceAdapter,
+                voteRepository, votePaperRepository, voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl()))
+                .updateVideoUrl(1L, "https://example.org/example");
+
+        // Assert
+        verify(votePaperRepository).findOneAvailable(eq(1L), isNull());
+        verify(votePaperRepository).save(isA(VotePaperJpaEntity.class));
+        LocalTime expectedToLocalTimeResult = actualUpdateVideoUrlResult.voteStartAt().toLocalTime();
+        assertSame(expectedToLocalTimeResult, actualUpdateVideoUrlResult.voteEndAt().toLocalTime());
+    }
+
+    /**
+     * Method under test:
+     * {@link VotePersistenceAdapter#updateVideoUrl(Long, String)}
+     */
+    @Test
+    void testUpdateVideoUrl5() {
+        // Arrange
+        VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
+        Optional<VotePaperJpaEntity> emptyResult = Optional.empty();
+        when(votePaperRepository.findOneAvailable(Mockito.<Long>any(), Mockito.<String>any())).thenReturn(emptyResult);
+        AccountRepository accountRepository = mock(AccountRepository.class);
+        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
+                oauth2AccountRepository, new AccountMapperImpl());
+
+        VoteRepository voteRepository = mock(VoteRepository.class);
+        VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
+        VotePaperMapperImpl votePaperMapper = new VotePaperMapperImpl();
+
+        // Act and Assert
+        assertThrows(IllegalArgumentException.class,
+                () -> (new VotePersistenceAdapter(accountPersistenceAdapter, voteRepository, votePaperRepository,
+                        voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl())).updateVideoUrl(1L,
+                        "https://example.org/example"));
+        verify(votePaperRepository).findOneAvailable(eq(1L), isNull());
+    }
+
+    /**
+     * Method under test:
      * {@link VotePersistenceAdapter#loadRegisteredVoteChoice(Long)}
      */
     @Test

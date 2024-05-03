@@ -12,6 +12,7 @@ import com.tune_fun.v1.vote.application.port.output.LoadVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
+import com.tune_fun.v1.vote.domain.event.VotePaperUpdateVideoUrlEvent;
 import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.restdocs.payload.FieldDescriptor;
@@ -77,6 +79,15 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
     @SpyBean
     private VoteMessageConsumer voteMessageConsumer;
+
+    @Value("${event.sqs.send-vote-paper-upload-notification.queue-name}")
+    private String votePaperUploadQueue;
+
+    @Value("${event.sqs.send-vote-paper-update-delivery-date-notification.queue-name}")
+    private String votePaperUpdateDeliveryDateQueue;
+
+    @Value("${event.sqs.send-vote-paper-update-video-url-notification.queue-name}")
+    private String votePaperUpdateVideoUrlQueue;
 
     @Transactional
     @Test
@@ -208,11 +219,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
                         )
                 );
 
-        ThrowingRunnable receiveMessageAssertionRunnable = () ->
-                sqsAsyncClient.getQueueUrl(r -> r.queueName("send-vote-paper-upload-notification-dev"))
-                        .thenApply(GetQueueUrlResponse::queueUrl)
-                        .thenCompose(queueUrl -> sqsAsyncClient.receiveMessage(getReceiveMessageRequest(queueUrl)));
-        await().untilAsserted(receiveMessageAssertionRunnable);
+        awaitReceiveMessage(votePaperUploadQueue);
         verify(voteMessageConsumer).consumeVotePaperUploadEvent(any(VotePaperRegisterEvent.class));
 
         // TODO : GitHub Actions 에서는 테스트 실패함. 원인 파악 필요
@@ -246,13 +253,6 @@ class VotePaperControllerIT extends ControllerBaseTest {
         readGenres.forEach(genres -> assertThat(genres, oneOf(List.of("R&B", "Soul"), List.of("Dance", "Pop"))));
     }
 
-    private static ReceiveMessageRequest getReceiveMessageRequest(String queueUrl) {
-        return ReceiveMessageRequest.builder()
-                .queueUrl(queueUrl)
-                .maxNumberOfMessages(1)
-                .build();
-    }
-
     @Transactional
     @Test
     @Order(3)
@@ -270,7 +270,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
         String accessToken = dummyService.getDefaultArtistAccessToken();
 
         Long votePaperId = dummyService.getDefaultVotePaper().getId();
-        VotePaperCommands.UpdateDeliveryDate command = new VotePaperCommands.UpdateDeliveryDate(now().plusDays(5));
+        LocalDateTime deliveryAt = now().plusDays(5);
+        VotePaperCommands.UpdateDeliveryDate command = new VotePaperCommands.UpdateDeliveryDate(deliveryAt);
 
         doNothing().when(firebaseMessagingMediator).sendMulticastMessageByTokens(any());
 
@@ -299,13 +300,85 @@ class VotePaperControllerIT extends ControllerBaseTest {
                         )
                 );
 
+
+        awaitReceiveMessage(votePaperUpdateDeliveryDateQueue);
+        verify(voteMessageConsumer).consumeVotePaperUpdateDeliveryDateEvent(any(VotePaperUpdateDeliveryDateEvent.class));
+
+        RegisteredVotePaper registeredVotePaper = loadVotePaperPort.loadRegisteredVotePaper(votePaperId)
+                .orElseThrow(() -> new AssertionError("투표 게시물을 찾을 수 없습니다."));
+        assertEquals(registeredVotePaper.deliveryAt(), deliveryAt.withNano(0));
+    }
+
+    @Transactional
+    @Test
+    @Order(4)
+    @DisplayName("투표 게시물 영상 업로드, 성공")
+    void updateVideoUrlSuccess() throws Exception {
+        dummyService.initAndLogin();
+        dummyService.initArtistAndLogin();
+
+        dummyService.initVotePaper();
+        dummyService.registerVote();
+
+        ParameterDescriptor pathParameter = parameterWithName("votePaperId").description("투표 게시물 ID").attributes(constraint("NOT NULL"));
+        FieldDescriptor requestDescriptor = fieldWithPath("video_url").description("영상 URL").attributes(constraint("NOT BLANK & URL FORMAT"));
+
+        String accessToken = dummyService.getDefaultArtistAccessToken();
+
+        Long votePaperId = dummyService.getDefaultVotePaper().getId();
+        String videoUrl = "https://www.youtube.com/watch?v=u9-ISLtq1g0";
+
+        VotePaperCommands.UpdateVideoUrl command = new VotePaperCommands.UpdateVideoUrl(videoUrl);
+
+        doNothing().when(firebaseMessagingMediator).sendMulticastMessageByTokens(any());
+
+        mockMvc.perform(
+                        patch(Uris.UPDATE_VOTE_PAPER_VIDEO_URL, votePaperId)
+                                .header(AUTHORIZATION, bearerToken(accessToken))
+                                .content(toJson(command))
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .characterEncoding(UTF_8)
+                )
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andDo(
+                        restDocs.document(
+                                requestHeaders(authorizationHeader),
+                                pathParameters(pathParameter),
+                                requestFields(requestDescriptor),
+                                responseFields(baseResponseFields),
+                                resource(
+                                        builder().
+                                                description("투표 게시물 영상 업로드").
+                                                pathParameters(pathParameter).
+                                                requestFields(requestDescriptor).
+                                                responseFields(baseResponseFields)
+                                                .build()
+                                )
+                        )
+                );
+
+
+        awaitReceiveMessage(votePaperUpdateVideoUrlQueue);
+        verify(voteMessageConsumer).consumeVotePaperUpdateVideoUrlEvent(any(VotePaperUpdateVideoUrlEvent.class));
+
+        RegisteredVotePaper registeredVotePaper = loadVotePaperPort.loadRegisteredVotePaper(votePaperId)
+                .orElseThrow(() -> new AssertionError("투표 게시물을 찾을 수 없습니다."));
+        assertEquals(registeredVotePaper.videoUrl(), videoUrl);
+    }
+
+    private void awaitReceiveMessage(final String queueName) {
         ThrowingRunnable receiveMessageAssertionRunnable = () ->
-                sqsAsyncClient.getQueueUrl(r -> r.queueName("send-vote-paper-update-delivery-date-notification-dev"))
+                sqsAsyncClient.getQueueUrl(r -> r.queueName(queueName))
                         .thenApply(GetQueueUrlResponse::queueUrl)
                         .thenCompose(queueUrl -> sqsAsyncClient.receiveMessage(getReceiveMessageRequest(queueUrl)));
         await().untilAsserted(receiveMessageAssertionRunnable);
-        verify(voteMessageConsumer).consumeVotePaperUpdateDeliveryDateEvent(any(VotePaperUpdateDeliveryDateEvent.class));
+    }
 
+    private static ReceiveMessageRequest getReceiveMessageRequest(String queueUrl) {
+        return ReceiveMessageRequest.builder()
+                .queueUrl(queueUrl)
+                .maxNumberOfMessages(1)
+                .build();
     }
 
 }

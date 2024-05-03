@@ -6,6 +6,7 @@ import com.tune_fun.v1.external.firebase.FirebaseMto;
 import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterNotification;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateDeliveryDateNotification;
+import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateVideoUrlNotification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,12 @@ public class VoteNotificationAdapter implements SendVoteNotificationPort {
     @Override
     public void notification(SendVotePaperUpdateDeliveryDateNotification behavior) throws FirebaseMessagingException {
         FirebaseMto.ByTokens mto = voteFirebaseMessagingMapper.fromSendVotePaperUpdateDeliveryDateNotificationBehavior(behavior);
+        firebaseMessagingMediator.sendMulticastMessageByTokens(mto);
+    }
+
+    @Override
+    public void notification(SendVotePaperUpdateVideoUrlNotification behavior) throws FirebaseMessagingException {
+        FirebaseMto.ByTokens mto = voteFirebaseMessagingMapper.fromSendVotePaperUpdateVideoUrlNotificationBehavior(behavior);
         firebaseMessagingMediator.sendMulticastMessageByTokens(mto);
     }
 }

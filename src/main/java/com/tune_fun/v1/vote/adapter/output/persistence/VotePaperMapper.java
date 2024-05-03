@@ -56,6 +56,8 @@ public abstract class VotePaperMapper {
     }
 
     @Mapping(target = "deliveryAt", source = "deliveryAt")
-    public abstract VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?> updateDeliveryAt(LocalDateTime deliveryAt, @MappingTarget VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?> builder);
+    public abstract VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?> updateDeliveryAt(final LocalDateTime deliveryAt, @MappingTarget VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?> builder);
 
+    @Mapping(target = "videoUrl", source = "videoUrl")
+    public abstract VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?> updateVideoUrl(final String videoUrl, @MappingTarget VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?> builder);
 }

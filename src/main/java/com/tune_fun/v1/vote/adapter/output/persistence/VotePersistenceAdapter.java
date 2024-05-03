@@ -36,7 +36,7 @@ import static org.springframework.data.domain.Sort.by;
 public class VotePersistenceAdapter implements
         LoadVotePort, SaveVotePort,
         LoadVotePaperPort, SaveVotePaperPort,
-        UpdateDeliveryAtPort,
+        UpdateDeliveryAtPort, UpdateVideoUrlPort,
         LoadVoteChoicePort, SaveVoteChoicePort {
 
     private final AccountPersistenceAdapter accountPersistenceAdapter;
@@ -118,6 +118,16 @@ public class VotePersistenceAdapter implements
                 .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
 
         VotePaperJpaEntity updatedVotePaper = votePaperMapper.updateDeliveryAt(deliveryAt, votePaper.toBuilder()).build();
+        VotePaperJpaEntity savedVotePaper = votePaperRepository.save(updatedVotePaper);
+        return votePaperMapper.registeredVotePaper(savedVotePaper);
+    }
+
+    @Override
+    public RegisteredVotePaper updateVideoUrl(final Long votePaperId, final String videoUrl) {
+        VotePaperJpaEntity votePaper = findOneAvailable(votePaperId, Constants.NULL_STRING)
+                .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
+
+        VotePaperJpaEntity updatedVotePaper = votePaperMapper.updateVideoUrl(videoUrl, votePaper.toBuilder()).build();
         VotePaperJpaEntity savedVotePaper = votePaperRepository.save(updatedVotePaper);
         return votePaperMapper.registeredVotePaper(savedVotePaper);
     }
