@@ -15,6 +15,7 @@ import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateVideoUrlEvent;
 import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
+import com.tune_fun.v1.vote.domain.value.VotePaperOption;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.awaitility.core.ThrowingRunnable;
@@ -179,7 +180,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
         LocalDateTime voteEndAt = now().plusDays(2);
 
         VotePaperCommands.Register command = new VotePaperCommands.Register("First Vote Paper", "test",
-                "deny-add-choices", voteStartAt, voteEndAt, offers);
+                VotePaperOption.DENY_ADD_CHOICES, voteStartAt, voteEndAt, offers);
 
         doNothing().when(firebaseMessagingMediator).sendMulticastMessageByTokens(any());
 

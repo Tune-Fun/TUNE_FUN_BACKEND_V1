@@ -6,6 +6,7 @@ import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
+import com.tune_fun.v1.vote.domain.value.VotePaperOption;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -47,13 +48,8 @@ public abstract class VotePaperMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "uuid", expression = "java(StringUtil.uuid())")
     @Mapping(target = "author", source = "author")
-    @Mapping(target = "option", source = "saveVotePaper.option", qualifiedByName = "votePaperOption")
+    @Mapping(target = "option", source = "saveVotePaper.option")
     public abstract VotePaperJpaEntity fromSaveVotePaperBehavior(final SaveVotePaper saveVotePaper, final AccountJpaEntity author);
-
-    @Named("votePaperOption")
-    public VotePaperOption votePaperOption(final String option) {
-        return VotePaperOption.fromValue(option);
-    }
 
     @Mapping(target = "deliveryAt", source = "deliveryAt")
     public abstract VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?> updateDeliveryAt(final LocalDateTime deliveryAt, @MappingTarget VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?> builder);

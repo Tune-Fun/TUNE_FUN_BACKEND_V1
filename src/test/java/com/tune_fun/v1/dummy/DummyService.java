@@ -30,6 +30,7 @@ import com.tune_fun.v1.vote.application.service.VoteBehaviorMapper;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
+import com.tune_fun.v1.vote.domain.value.VotePaperOption;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -226,7 +227,7 @@ public class DummyService {
         LocalDateTime voteEndAt = LocalDateTime.now().plusDays(2);
 
         VotePaperCommands.Register command = new VotePaperCommands.Register("First Vote Paper", "test",
-                "deny-add-choices", voteStartAt, voteEndAt, offers);
+                VotePaperOption.DENY_ADD_CHOICES, voteStartAt, voteEndAt, offers);
 
         User user = new User(defaultArtistUsername, defaultArtistPassword, defaultArtistAccount.getAuthorities());
         RegisteredVotePaper registeredVotePaper = saveVotePaper(command, user);

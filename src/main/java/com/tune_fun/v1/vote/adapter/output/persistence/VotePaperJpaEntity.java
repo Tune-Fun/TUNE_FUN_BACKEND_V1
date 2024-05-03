@@ -2,6 +2,7 @@ package com.tune_fun.v1.vote.adapter.output.persistence;
 
 import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.common.entity.BaseEntity;
+import com.tune_fun.v1.vote.domain.value.VotePaperOption;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

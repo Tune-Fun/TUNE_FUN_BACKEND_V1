@@ -10,6 +10,7 @@ import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVote;
 import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
+import com.tune_fun.v1.vote.domain.value.VotePaperOption;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.KeysetScrollPosition;
@@ -587,7 +588,7 @@ class VotePersistenceAdapterTest {
 
         // Act and Assert
         assertThrows(IllegalArgumentException.class, () -> votePersistenceAdapter.saveVotePaper(new SaveVotePaper("Dr",
-                "Not all who wander are lost", "JaneDoe", "Option", voteStartAt, LocalDate.of(1970, 1, 1).atStartOfDay())));
+                "Not all who wander are lost", "JaneDoe", VotePaperOption.DENY_ADD_CHOICES, voteStartAt, LocalDate.of(1970, 1, 1).atStartOfDay())));
         verify(accountRepository).findActive(eq("JaneDoe"), isNull(), isNull());
     }
 
@@ -617,7 +618,7 @@ class VotePersistenceAdapterTest {
 
         // Act
         RegisteredVotePaper actualSaveVotePaperResult = votePersistenceAdapter
-                .saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe", "allow-add-choices",
+                .saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe", VotePaperOption.ALLOW_ADD_CHOICES,
                         voteStartAt, LocalDate.of(1970, 1, 1).atStartOfDay()));
 
         // Assert
@@ -662,7 +663,7 @@ class VotePersistenceAdapterTest {
 
         // Act
         RegisteredVotePaper actualSaveVotePaperResult = votePersistenceAdapter
-                .saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe", "allow-add-choices",
+                .saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe", VotePaperOption.ALLOW_ADD_CHOICES,
                         voteStartAt, LocalDate.of(1970, 1, 1).atStartOfDay()));
 
         // Assert
@@ -703,7 +704,7 @@ class VotePersistenceAdapterTest {
 
         // Act
         RegisteredVotePaper actualSaveVotePaperResult = votePersistenceAdapter
-                .saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe", "allow-add-choices",
+                .saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe", VotePaperOption.ALLOW_ADD_CHOICES,
                         voteStartAt2, LocalDate.of(1970, 1, 1).atStartOfDay()));
 
         // Assert
@@ -741,7 +742,7 @@ class VotePersistenceAdapterTest {
         // Act and Assert
         assertThrows(IllegalArgumentException.class,
                 () -> votePersistenceAdapter.saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe",
-                        "allow-add-choices", voteStartAt, LocalDate.of(1970, 1, 1).atStartOfDay())));
+                        VotePaperOption.ALLOW_ADD_CHOICES, voteStartAt, LocalDate.of(1970, 1, 1).atStartOfDay())));
         verify(accountRepository).findActive(eq("JaneDoe"), isNull(), isNull());
         verify(votePaperRepository).save(isA(VotePaperJpaEntity.class));
     }
