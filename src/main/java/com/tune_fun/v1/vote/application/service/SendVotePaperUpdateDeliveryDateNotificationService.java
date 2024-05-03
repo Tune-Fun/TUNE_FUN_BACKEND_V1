@@ -10,10 +10,17 @@ import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateDeliveryDateNotification;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.RetryContext;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
+import org.springframework.retry.support.RetrySynchronizationManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @UseCase
 @RequiredArgsConstructor
@@ -34,8 +41,29 @@ public class SendVotePaperUpdateDeliveryDateNotificationService implements SendV
         List<NotificationApprovedDevice> notificationApprovedDevices =
                 loadDevicePort.loadNotificationApprovedDevice(null, null, true, voterIds);
 
-        SendVotePaperUpdateDeliveryDateNotification behavior = voteBehaviorMapper.sendVotePaperUpdateDeliveryDateNotification(event, notificationApprovedDevices);
+        if (!notificationApprovedDevices.isEmpty())
+            sendVotePaperUpdateDeliveryDateNotification(event, notificationApprovedDevices);
+    }
+
+    @Retryable(retryFor = FirebaseMessagingException.class, recover = "recoverSendVotePaperUpdateDeliveryDateNotification", backoff = @Backoff(delay = 2000, multiplier = 1.5, maxDelay = 10000))
+    private void sendVotePaperUpdateDeliveryDateNotification(final VotePaperUpdateDeliveryDateEvent event, final List<NotificationApprovedDevice> devices) throws FirebaseMessagingException {
+        if (RetrySynchronizationManager.getContext() != null) {
+            RetryContext retryContext = RetrySynchronizationManager.getContext();
+            log.info("Retry count: {}", retryContext.getRetryCount());
+
+            log.error("sendVotePaperUpdateDeliveryDateNotification FAILED. \n{}\nRetry count: {}", retryContext.getLastThrowable(), retryContext.getRetryCount());
+        }
+
+
+        SendVotePaperUpdateDeliveryDateNotification behavior = voteBehaviorMapper
+                .sendVotePaperUpdateDeliveryDateNotification(event, devices);
         sendVoteNotificationPort.notification(behavior);
+    }
+
+    // TODO : Slack Notification?
+    @Recover
+    private void recoverSendVotePaperUpdateDeliveryDateNotification(final FirebaseMessagingException e, final VotePaperUpdateDeliveryDateEvent event, final List<NotificationApprovedDevice> notificationApprovedDevices) {
+        log.error("sendVotePaperUpdateDeliveryDateNotification FAILED. \n{}", event.id(), e);
     }
 
 
