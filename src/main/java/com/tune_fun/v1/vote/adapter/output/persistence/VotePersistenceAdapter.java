@@ -35,7 +35,7 @@ import static org.springframework.data.domain.Sort.by;
 @RequiredArgsConstructor
 public class VotePersistenceAdapter implements
         LoadVotePort, SaveVotePort,
-        LoadVotePaperPort, SaveVotePaperPort,
+        LoadVotePaperPort, SaveVotePaperPort, DeleteVotePaperPort,
         UpdateDeliveryAtPort, UpdateVideoUrlPort,
         LoadVoteChoicePort, SaveVoteChoicePort {
 
@@ -88,7 +88,7 @@ public class VotePersistenceAdapter implements
     public Window<ScrollableVotePaper> scrollVotePaper(final Integer lastId, final String sortType) {
         KeysetScrollPosition position = forward(Map.of("id", lastId, "voteEndAt", Constants.LOCAL_DATE_TIME_MIN));
         Sort sort = by(desc("id"), desc("voteEndAt"));
-        return votePaperRepository.findFirst10By(position, sort).map(votePaperMapper::scrollableVotePaper);
+        return votePaperRepository.findFirst10ByEnabledTrue(position, sort).map(votePaperMapper::scrollableVotePaper);
     }
 
     @Override
@@ -110,6 +110,15 @@ public class VotePersistenceAdapter implements
         VotePaperJpaEntity votePaper = votePaperMapper.fromSaveVotePaperBehavior(saveVotePaper, account);
         VotePaperJpaEntity savedVotePaper = votePaperRepository.save(votePaper);
         return votePaperMapper.registeredVotePaper(savedVotePaper);
+    }
+
+    @Override
+    public void disableVotePaper(final Long votePaperId) {
+        votePaperRepository.findById(votePaperId)
+                .ifPresent(votePaper -> {
+                    votePaper.disable();
+                    votePaperRepository.save(votePaper);
+                });
     }
 
     @Override
@@ -156,15 +165,15 @@ public class VotePersistenceAdapter implements
     }
 
     public Optional<VotePaperJpaEntity> findCompleteVotePaperById(final Long id) {
-        return votePaperRepository.findByVoteEndAtBeforeAndId(now(), id);
+        return votePaperRepository.findByVoteEndAtBeforeAndIdAndEnabledTrue(now(), id);
     }
 
     public Optional<VotePaperJpaEntity> findProgressingVotePaperByAuthor(final String username) {
-        return votePaperRepository.findByVoteEndAtAfterAndAuthorUsername(now(), username);
+        return votePaperRepository.findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(now(), username);
     }
 
     public Optional<VotePaperJpaEntity> findProgressingVotePaperById(final Long id) {
-        return votePaperRepository.findByVoteEndAtAfterAndId(now(), id);
+        return votePaperRepository.findByVoteEndAtAfterAndIdAndEnabledTrue(now(), id);
     }
 
     public List<VoteChoiceJpaEntity> findAllByVotePaperId(final Long votePaperId) {

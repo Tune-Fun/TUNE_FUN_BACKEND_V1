@@ -5,14 +5,13 @@ import com.tune_fun.v1.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
@@ -67,8 +66,21 @@ public class VotePaperJpaEntity extends BaseEntity {
     @Comment("커버 영상 등록일")
     private LocalDateTime deliveryAt;
 
+    @Builder.Default
+    @Column(name = "enabled")
+    @Comment("사용 여부")
+    private boolean enabled = true;
+
     @Column(name = "video_url")
     @Comment("커버 영상 URL")
     private String videoUrl;
+
+    @Singular
+    @OneToMany(mappedBy = "votePaper", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<VoteChoiceJpaEntity> choices;
+
+    public void disable() {
+        this.enabled = false;
+    }
 
 }

@@ -9,16 +9,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public interface VotePaperRepository extends JpaRepository<VotePaperJpaEntity, String>, VotePaperCustomRepository {
+public interface VotePaperRepository extends JpaRepository<VotePaperJpaEntity, Long>, VotePaperCustomRepository {
 
     @EntityGraph(attributePaths = {"author"})
-    Optional<VotePaperJpaEntity> findByVoteEndAtAfterAndAuthorUsername(LocalDateTime voteEndAt, String author);
+    Optional<VotePaperJpaEntity> findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(LocalDateTime voteEndAt, String author);
 
-    Optional<VotePaperJpaEntity> findByVoteEndAtAfterAndId(LocalDateTime voteEndAt, Long id);
+    Optional<VotePaperJpaEntity> findByVoteEndAtAfterAndIdAndEnabledTrue(LocalDateTime voteEndAt, Long id);
 
-    Optional<VotePaperJpaEntity> findByVoteEndAtBeforeAndId(LocalDateTime voteEndAt, Long id);
+    Optional<VotePaperJpaEntity> findByVoteEndAtBeforeAndIdAndEnabledTrue(LocalDateTime voteEndAt, Long id);
 
     @EntityGraph(attributePaths = {"author"})
-    Window<VotePaperJpaEntity> findFirst10By(KeysetScrollPosition position, Sort sort);
+    Window<VotePaperJpaEntity> findFirst10ByEnabledTrue(KeysetScrollPosition position, Sort sort);
 
 }

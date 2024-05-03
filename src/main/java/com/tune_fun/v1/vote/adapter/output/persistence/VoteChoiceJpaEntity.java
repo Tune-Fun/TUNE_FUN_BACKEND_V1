@@ -7,10 +7,13 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+
+import java.util.List;
 
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
@@ -32,7 +35,7 @@ public class VoteChoiceJpaEntity extends BaseEntity {
     @Comment("고유번호")
     private String uuid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "vote_paper_id", nullable = false, updatable = false, referencedColumnName = "id")
     @Comment("투표 게시물 ID")
     private VotePaperJpaEntity votePaper;
@@ -41,5 +44,9 @@ public class VoteChoiceJpaEntity extends BaseEntity {
     @Embedded
     @Comment("선택지 제안사항")
     private Offer offer;
+
+    @Singular
+    @OneToMany(mappedBy = "voteChoice", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<VoteJpaEntity> votes;
 
 }
