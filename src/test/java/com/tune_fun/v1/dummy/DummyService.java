@@ -25,12 +25,16 @@ import com.tune_fun.v1.vote.adapter.output.persistence.VotePaperJpaEntity;
 import com.tune_fun.v1.vote.adapter.output.persistence.VotePersistenceAdapter;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVotePaperUseCase;
+import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVoteUseCase;
 import com.tune_fun.v1.vote.application.service.VoteBehaviorMapper;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -38,6 +42,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -69,6 +76,9 @@ public class DummyService {
     private RegisterVotePaperUseCase registerVotePaperUseCase;
 
     @Autowired
+    private RegisterVoteUseCase registerVoteUseCase;
+
+    @Autowired
     private AccountPersistenceAdapter accountPersistenceAdapter;
 
     @Autowired
@@ -82,6 +92,9 @@ public class DummyService {
 
     @Autowired
     private VoteBehaviorMapper voteBehaviorMapper;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     private AccountJpaEntity defaultAccount = null;
     private DeviceJpaEntity defaultDevice = null;
@@ -219,10 +232,45 @@ public class DummyService {
         RegisteredVotePaper registeredVotePaper = saveVotePaper(command, user);
         saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
 
-        votePersistenceAdapter.findAvailableVotePaperByAuthor(defaultArtistUsername)
+        votePersistenceAdapter.findProgressingVotePaperByAuthor(defaultArtistUsername)
                 .ifPresent(votePaper -> defaultVotePaper = votePaper);
 
         defaultVoteChoices = votePersistenceAdapter.findAllByVotePaperId(defaultVotePaper.getId());
+    }
+
+    public void initVotePaperBatch() {
+        Long authorId = defaultArtistAccount.getId();
+        String sql = "INSERT INTO vote_paper (author_id, created_at, delivery_at, updated_at, vote_end_at, vote_start_at, content,\n" +
+                "                        option, title, uuid, video_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        for (int idx = 0; idx < 1000; idx++) {
+            jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+                @Override
+                public void setValues(@NotNull PreparedStatement ps, int i) throws SQLException {
+                    ps.setLong(1, authorId);
+                    ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+                    ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now().plusDays(10)));
+                    ps.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
+                    ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now().plusDays(3)));
+                    ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+                    ps.setString(7, "test");
+                    ps.setString(8, "DENY_ADD_CHOICES");
+                    ps.setString(9, "First Vote Paper");
+                    ps.setString(10, StringUtil.uuid());
+                    ps.setString(11, "test");
+                }
+
+                @Override
+                public int getBatchSize() {
+                    return 100;
+                }
+            });
+        }
+    }
+
+    public void registerVote() {
+        User user = new User(defaultUsername, defaultPassword, defaultAccount.getAuthorities());
+        registerVoteUseCase.register(defaultVotePaper.getId(), defaultVoteChoices.get(0).getId(), user);
     }
 
     public void expireOtp(OtpType otpType) {

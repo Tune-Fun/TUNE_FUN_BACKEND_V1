@@ -4,7 +4,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 
 @FunctionalInterface
-public interface SendVotePaperUpdateDeliveryDateFcmUseCase {
+public interface SendVotePaperUpdateDeliveryDateNotificationUseCase {
 
     void send(final VotePaperUpdateDeliveryDateEvent event) throws FirebaseMessagingException;
 

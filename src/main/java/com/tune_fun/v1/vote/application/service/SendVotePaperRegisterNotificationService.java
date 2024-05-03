@@ -6,9 +6,9 @@ import com.tune_fun.v1.account.application.port.output.device.LoadDevicePort;
 import com.tune_fun.v1.account.domain.value.NotificationApprovedDevice;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.ObjectUtil;
-import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperRegisterFcmUseCase;
-import com.tune_fun.v1.vote.application.port.output.SendVoteFcmPort;
-import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterFcm;
+import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperRegisterNotificationUseCase;
+import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
+import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterNotification;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +26,10 @@ import java.util.List;
 @Service
 @UseCase
 @RequiredArgsConstructor
-public class SendVotePaperRegisterFcmService implements SendVotePaperRegisterFcmUseCase {
+public class SendVotePaperRegisterNotificationService implements SendVotePaperRegisterNotificationUseCase {
 
     private final LoadDevicePort loadDevicePort;
-    private final SendVoteFcmPort sendVoteFcmPort;
+    private final SendVoteNotificationPort sendVoteNotificationPort;
 
     private final VoteBehaviorMapper voteBehaviorMapper;
 
@@ -44,26 +44,27 @@ public class SendVotePaperRegisterFcmService implements SendVotePaperRegisterFcm
                 loadNotificationApprovedDevice(true, null, null, null);
         log.info("notificationApprovedDevices: \n{}", objectUtil.objectToPrettyJson(notificationApprovedDevices));
 
-        sendVotePaperRegisterFcm(votePaperRegisterEvent, notificationApprovedDevices);
+        if (!notificationApprovedDevices.isEmpty())
+            sendVotePaperRegisterNotification(votePaperRegisterEvent, notificationApprovedDevices);
     }
 
-    @Retryable(retryFor = FirebaseMessagingException.class, recover = "recoverSendVotePaperRegisterFcm", backoff = @Backoff(delay = 2000, multiplier = 1.5, maxDelay = 10000))
-    private void sendVotePaperRegisterFcm(final VotePaperRegisterEvent votePaperRegisterEvent, final List<NotificationApprovedDevice> notificationApprovedDevices) throws FirebaseMessagingException {
+    @Retryable(retryFor = FirebaseMessagingException.class, recover = "recoverSendVotePaperRegisterNotification", backoff = @Backoff(delay = 2000, multiplier = 1.5, maxDelay = 10000))
+    private void sendVotePaperRegisterNotification(final VotePaperRegisterEvent event, final List<NotificationApprovedDevice> devices) throws FirebaseMessagingException {
         if (RetrySynchronizationManager.getContext() != null) {
             RetryContext retryContext = RetrySynchronizationManager.getContext();
             log.info("Retry count: {}", retryContext.getRetryCount());
 
-            log.error("sendVotePaperRegisterFcm FAILED. \n{}\nRetry count: {}", retryContext.getLastThrowable(), retryContext.getRetryCount());
+            log.error("sendVotePaperRegisterNotification FAILED. \n{}\nRetry count: {}", retryContext.getLastThrowable(), retryContext.getRetryCount());
         }
 
-        SendVotePaperRegisterFcm sendVotePaperRegisterFcmBehavior = voteBehaviorMapper
-                .sendVotePaperRegisterFcm(votePaperRegisterEvent, notificationApprovedDevices);
-        sendVoteFcmPort.notification(sendVotePaperRegisterFcmBehavior);
+        SendVotePaperRegisterNotification sendVotePaperRegisterNotificationBehavior = voteBehaviorMapper
+                .sendVotePaperRegisterFcm(event, devices);
+        sendVoteNotificationPort.notification(sendVotePaperRegisterNotificationBehavior);
     }
 
     // TODO : Slack Notification?
     @Recover
-    private void recoverSendVotePaperRegisterFcm(FirebaseMessagingException e, VotePaperRegisterEvent votePaperRegisterEvent, List<NotificationApprovedDevice> notificationApprovedDevices) {
-        log.error("Failed to send FCM notification for vote paper register event: {}", votePaperRegisterEvent.id(), e);
+    private void recoverSendVotePaperRegisterNotification(FirebaseMessagingException e, VotePaperRegisterEvent event, List<NotificationApprovedDevice> notificationApprovedDevices) {
+        log.error("Failed to send FCM notification for vote paper register event: {}", event.id(), e);
     }
 }

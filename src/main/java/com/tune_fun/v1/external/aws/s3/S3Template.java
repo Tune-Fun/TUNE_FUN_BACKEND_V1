@@ -1,5 +1,6 @@
 package com.tune_fun.v1.external.aws.s3;
 
+import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.common.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -84,7 +85,7 @@ public class S3Template {
                 "jpeg" : extractedExtension;
         log.info("extension is {}", extension);
 
-        return rootPath + "/" + generatedFileName + "." + extension;
+        return rootPath + "/" + generatedFileName + Constants.DOT + extension;
     }
 
     public String getUrl(String s3BucketName, String key) {

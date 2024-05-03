@@ -5,8 +5,8 @@ import com.tune_fun.v1.common.config.BaseMapperConfig;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
-import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterFcm;
-import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateDeliveryDateFcm;
+import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterNotification;
+import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateDeliveryDateNotification;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import org.mapstruct.IterableMapping;
@@ -39,12 +39,12 @@ public abstract class VoteBehaviorMapper {
     @Mapping(target = "title", source = "event", qualifiedByName = "votePaperRegisterFcmTitle")
     @Mapping(target = "body", source = "event.title")
     @Mapping(target = "fcmTokens", source = "devices", qualifiedByName = "fcmTokens")
-    public abstract SendVotePaperRegisterFcm sendVotePaperRegisterFcm(final VotePaperRegisterEvent event, final List<NotificationApprovedDevice> devices);
+    public abstract SendVotePaperRegisterNotification sendVotePaperRegisterFcm(final VotePaperRegisterEvent event, final List<NotificationApprovedDevice> devices);
 
     @Mapping(target = "title", source = "event", qualifiedByName = "votePaperUpdateDeliveryDateFcmTitle")
     @Mapping(target = "body", source = "event.title")
     @Mapping(target = "fcmTokens", source = "devices", qualifiedByName = "fcmTokens")
-    public abstract SendVotePaperUpdateDeliveryDateFcm sendVotePaperUpdateDeliveryDateFcm(final VotePaperUpdateDeliveryDateEvent event, final List<NotificationApprovedDevice> devices);
+    public abstract SendVotePaperUpdateDeliveryDateNotification sendVotePaperUpdateDeliveryDateNotification(final VotePaperUpdateDeliveryDateEvent event, final List<NotificationApprovedDevice> devices);
 
     @Named("votePaperRegisterFcmTitle")
     public String votePaperRegisterFcmTitle(final VotePaperRegisterEvent event) {

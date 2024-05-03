@@ -6,6 +6,7 @@ public record RegisteredVotePaper(
         Long id,
         String uuid,
         String author,
+        String authorUsername,
         String title,
         String content,
         String option,
@@ -15,4 +16,13 @@ public record RegisteredVotePaper(
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
+
+    public boolean isAuthor(final String username) {
+        return authorUsername.equals(username);
+    }
+
+    public boolean isValidDeliveryAt(final LocalDateTime now, final LocalDateTime deliveryAt) {
+        return deliveryAt.isAfter(now) && deliveryAt.isAfter(voteEndAt);
+    }
+
 }

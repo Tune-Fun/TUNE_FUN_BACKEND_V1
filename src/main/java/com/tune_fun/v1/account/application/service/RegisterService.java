@@ -10,6 +10,7 @@ import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.value.CurrentAccount;
 import com.tune_fun.v1.account.domain.value.RegisterResult;
+import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.util.StringUtil;
@@ -51,13 +52,13 @@ public class RegisterService implements RegisterUseCase {
     @Override
     @Transactional
     public RegisterResult register(final String registerType, final AccountCommands.Register command) {
-        checkRegisterdAccount(command);
+        checkRegisteredAccount(command);
 
         String encodedPassword = passwordEncoder.encode(command.password());
         SaveAccount saveAccount = getSaveAccount(registerType, command, encodedPassword);
         CurrentAccount savedAccount = saveAccountPort.saveAccount(saveAccount);
 
-        String authorities = String.join(",", savedAccount.roles());
+        String authorities = String.join(Constants.COMMA, savedAccount.roles());
 
         SaveJwtToken saveJwtToken = new SaveJwtToken(savedAccount.username(), authorities);
 
@@ -68,7 +69,7 @@ public class RegisterService implements RegisterUseCase {
     }
 
     @Transactional(readOnly = true)
-    public void checkRegisterdAccount(AccountCommands.Register command) {
+    public void checkRegisteredAccount(AccountCommands.Register command) {
         loadAccountPort.currentAccountInfo(command.username()).ifPresent(accountInfo -> {
             throw new CommonApplicationException(USER_POLICY_ACCOUNT_REGISTERED);
         });

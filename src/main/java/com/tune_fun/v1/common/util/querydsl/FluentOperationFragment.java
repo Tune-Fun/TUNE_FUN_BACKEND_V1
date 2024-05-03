@@ -131,6 +131,22 @@ public abstract class FluentOperationFragment {
         return operate();
     }
 
+    public PredicateBuilder gtDateTime(DateTimeExpression<LocalDateTime> column, LocalDateTime value) {
+        if (value != null) {
+            return operate(column.gt(value));
+        }
+
+        return operate();
+    }
+
+    public PredicateBuilder ltDateTime(DateTimeExpression<LocalDateTime> column, LocalDateTime value) {
+        if (value != null) {
+            return operate(column.lt(value));
+        }
+
+        return operate();
+    }
+
     public PredicateBuilder betweenDateTime(DateTimeExpression<LocalDateTime> column, LocalDateTime startDate, LocalDateTime endDate) {
         if (startDate != null && endDate != null) {
             return operate(column.between(startDate, endDate));

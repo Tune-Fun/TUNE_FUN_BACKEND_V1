@@ -1,12 +1,15 @@
 package com.tune_fun.v1.vote.adapter.output.persistence;
 
+import org.springframework.data.domain.KeysetScrollPosition;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Window;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public interface VotePaperRepository extends JpaRepository<VotePaperJpaEntity, String> {
+public interface VotePaperRepository extends JpaRepository<VotePaperJpaEntity, String>, VotePaperCustomRepository {
 
     @EntityGraph(attributePaths = {"author"})
     Optional<VotePaperJpaEntity> findByVoteEndAtAfterAndAuthorUsername(LocalDateTime voteEndAt, String author);
@@ -14,5 +17,8 @@ public interface VotePaperRepository extends JpaRepository<VotePaperJpaEntity, S
     Optional<VotePaperJpaEntity> findByVoteEndAtAfterAndId(LocalDateTime voteEndAt, Long id);
 
     Optional<VotePaperJpaEntity> findByVoteEndAtBeforeAndId(LocalDateTime voteEndAt, Long id);
+
+    @EntityGraph(attributePaths = {"author"})
+    Window<VotePaperJpaEntity> findFirst10By(KeysetScrollPosition position, Sort sort);
 
 }

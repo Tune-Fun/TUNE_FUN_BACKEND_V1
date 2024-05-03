@@ -19,6 +19,7 @@ import java.util.Map;
 
 import static com.google.common.base.CaseFormat.LOWER_CAMEL;
 import static com.google.common.base.CaseFormat.LOWER_UNDERSCORE;
+import static com.tune_fun.v1.common.constant.Constants.DOT;
 import static com.tune_fun.v1.common.response.MessageCode.ERROR;
 import static com.tune_fun.v1.common.response.MessageCode.EXCEPTION_ILLEGAL_ARGUMENT;
 import static java.util.stream.Collectors.toMap;
@@ -31,7 +32,7 @@ public class GlobalExceptionHandler {
     private final ResponseMapper responseMapper;
 
     protected static String getPropertyName(String propertyPath) {
-        return propertyPath.substring(propertyPath.lastIndexOf('.') + 1);
+        return propertyPath.substring(propertyPath.lastIndexOf(DOT) + 1);
     }
 
     @ExceptionHandler(CommonApplicationException.class)

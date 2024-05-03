@@ -16,7 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ValidationErrorData implements BasePayload {
+public final class ValidationErrorData implements BasePayload {
 
     @JsonIgnore
     private Map<String, String> errors = new HashMap<>();

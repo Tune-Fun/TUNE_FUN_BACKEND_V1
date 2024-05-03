@@ -2,8 +2,8 @@ package com.tune_fun.v1.vote.adapter.input.message;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.firebase.messaging.FirebaseMessagingException;
-import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperRegisterFcmUseCase;
-import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperUpdateDeliveryDateFcmUseCase;
+import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperRegisterNotificationUseCase;
+import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperUpdateDeliveryDateNotificationUseCase;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import io.awspring.cloud.sqs.annotation.SqsListener;
@@ -16,19 +16,19 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class VoteMessageConsumer {
 
-    private final SendVotePaperRegisterFcmUseCase sendVotePaperRegisterFcmUseCase;
-    private final SendVotePaperUpdateDeliveryDateFcmUseCase sendVotePaperUpdateDeliveryDateFcmUseCase;
+    private final SendVotePaperRegisterNotificationUseCase sendVotePaperRegisterNotificationUseCase;
+    private final SendVotePaperUpdateDeliveryDateNotificationUseCase sendVotePaperUpdateDeliveryDateNotificationUseCase;
 
     @SqsListener(value = "${event.sqs.send-vote-paper-upload-notification.queue-name}")
-    public void consumeVotePaperUploadEvent(final VotePaperRegisterEvent votePaperRegisterEvent) throws JsonProcessingException, FirebaseMessagingException {
-        log.info("send-vote-paper-upload-notification-dev: {}", votePaperRegisterEvent.id());
-        sendVotePaperRegisterFcmUseCase.send(votePaperRegisterEvent);
+    public void consumeVotePaperUploadEvent(final VotePaperRegisterEvent event) throws JsonProcessingException, FirebaseMessagingException {
+        log.info("CONSUME 'send-vote-paper-upload-notification-dev': {}", event.id());
+        sendVotePaperRegisterNotificationUseCase.send(event);
     }
 
     @SqsListener(value = "${event.sqs.send-vote-paper-update-delivery-date-notification.queue-name}")
-    public void consumeVotePaperUpdateDeliveryDateEvent(final VotePaperUpdateDeliveryDateEvent votePaperUpdateDeliveryDateEvent) throws JsonProcessingException, FirebaseMessagingException {
-        log.info("send-vote-paper-update-delivery-date-notification-dev: {}", votePaperUpdateDeliveryDateEvent.id());
-        sendVotePaperUpdateDeliveryDateFcmUseCase.send(votePaperUpdateDeliveryDateEvent);
+    public void consumeVotePaperUpdateDeliveryDateEvent(final VotePaperUpdateDeliveryDateEvent event) throws FirebaseMessagingException {
+        log.info("CONSUME 'send-vote-paper-update-delivery-date-notification-dev': {}", event.id());
+        sendVotePaperUpdateDeliveryDateNotificationUseCase.send(event);
     }
 
 }
