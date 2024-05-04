@@ -30,6 +30,7 @@ public class VotePaperController {
     private final ScrollVotePaperUseCase scrollVotePaperUseCase;
 
     private final RegisterVotePaperUseCase registerVotePaperUseCase;
+    private final RegisterVoteChoiceUseCase registerVoteChoiceUseCase;
 
     private final UpdateVotePaperDeliveryDateUseCase updateVotePaperDeliveryDateUseCase;
     private final UpdateVotePaperVideoUrlUseCase updateVotePaperVideoUrlUseCase;
@@ -50,6 +51,15 @@ public class VotePaperController {
     public ResponseEntity<Response<BasePayload>> registerVotePaper(@Valid @RequestBody final VotePaperCommands.Register command,
                                                                    @CurrentUser final User user) throws JsonProcessingException {
         registerVotePaperUseCase.register(command, user);
+        return responseMapper.ok(MessageCode.CREATED);
+    }
+
+    @PreAuthorize("hasRole('NORMAL')")
+    @PostMapping(value = Uris.VOTE_PAPER_CHOICE)
+    public ResponseEntity<Response<BasePayload>> registerVotePaperChoice(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
+                                                                         @Valid @RequestBody final VotePaperCommands.Offer offer,
+                                                                         @CurrentUser final User user) {
+        registerVoteChoiceUseCase.registerVoteChoice(votePaperId, offer, user);
         return responseMapper.ok(MessageCode.CREATED);
     }
 

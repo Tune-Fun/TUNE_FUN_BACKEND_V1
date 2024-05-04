@@ -10,6 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.Objects;
 
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
@@ -27,7 +30,7 @@ public class VoteJpaEntity extends BaseEntity {
 
     @Size(max = 255)
     @NotNull
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "uuid", nullable = false, updatable = false, unique = true)
     @Comment("고유번호")
     private String uuid;
 
@@ -41,4 +44,19 @@ public class VoteJpaEntity extends BaseEntity {
     @Comment("투표자 ID")
     private AccountJpaEntity voter;
 
+    @Override
+    public final boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null) return false;
+        Class<?> oEffectiveClass = object instanceof HibernateProxy ? ((HibernateProxy) object).getHibernateLazyInitializer().getPersistentClass() : object.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        VoteJpaEntity that = (VoteJpaEntity) object;
+        return getId() != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
 }

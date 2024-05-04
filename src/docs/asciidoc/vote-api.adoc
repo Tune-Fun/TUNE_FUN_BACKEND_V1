@@ -13,6 +13,12 @@ operation::get-vote-papers-success[snippets='http-request,http-response,query-pa
 
 operation::register-vote-paper-success[snippets='http-request,http-response,request-fields']
 
+=== 투표 선택지 등록 API
+
+==== 성공
+
+operation::register-vote-paper-choice-success[snippets='http-request,http-response,path-parameters,request-fields,response-fields']
+
 === 투표 게시물 영상 제공일 등록 API
 
 ==== 성공

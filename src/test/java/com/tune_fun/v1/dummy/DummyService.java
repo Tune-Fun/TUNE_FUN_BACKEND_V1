@@ -30,6 +30,7 @@ import com.tune_fun.v1.vote.application.service.VoteBehaviorMapper;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
+import com.tune_fun.v1.vote.domain.value.VotePaperOption;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
+import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @IntegrationTest
@@ -217,16 +219,41 @@ public class DummyService {
     public void initVotePaper() {
         Set<VotePaperCommands.Offer> offers = Set.of(
                 new VotePaperCommands.Offer("Love Lee", "AKMU", List.of("R&B", "Soul"),
-                        300000, "2024-04-28"),
+                        300_000, "2024-04-28"),
                 new VotePaperCommands.Offer("Dolphin", "오마이걸", List.of("Dance", "Pop"),
-                        200000, "2020-04-27")
+                        200_000, "2020-04-27")
         );
 
         LocalDateTime voteStartAt = LocalDateTime.now().plusDays(1);
         LocalDateTime voteEndAt = LocalDateTime.now().plusDays(2);
 
         VotePaperCommands.Register command = new VotePaperCommands.Register("First Vote Paper", "test",
-                "deny-add-choices", voteStartAt, voteEndAt, offers);
+                VotePaperOption.DENY_ADD_CHOICES, voteStartAt, voteEndAt, offers);
+
+        User user = new User(defaultArtistUsername, defaultArtistPassword, defaultArtistAccount.getAuthorities());
+        RegisteredVotePaper registeredVotePaper = saveVotePaper(command, user);
+        saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
+
+        votePersistenceAdapter.findProgressingVotePaperByAuthor(defaultArtistUsername)
+                .ifPresent(votePaper -> defaultVotePaper = votePaper);
+
+        defaultVoteChoices = votePersistenceAdapter.findAllByVotePaperId(defaultVotePaper.getId());
+    }
+
+    @Transactional
+    public void initVotePaperAllowAddChoices() {
+        Set<VotePaperCommands.Offer> offers = Set.of(
+                new VotePaperCommands.Offer("KNOCK (With 박문치)", "권진아", singletonList("Dance"),
+                        206_000, "2021-07-27"),
+                new VotePaperCommands.Offer("Orange, You're Not a Joke to Me!", "스텔라장 (Stella Jang)", singletonList("Rock"),
+                        220_000, "2023-06-18")
+        );
+
+        LocalDateTime voteStartAt = LocalDateTime.now().plusDays(1);
+        LocalDateTime voteEndAt = LocalDateTime.now().plusDays(2);
+
+        VotePaperCommands.Register command = new VotePaperCommands.Register("First Vote Paper", "test",
+                VotePaperOption.ALLOW_ADD_CHOICES, voteStartAt, voteEndAt, offers);
 
         User user = new User(defaultArtistUsername, defaultArtistPassword, defaultArtistAccount.getAuthorities());
         RegisteredVotePaper registeredVotePaper = saveVotePaper(command, user);

@@ -3,7 +3,9 @@ package com.tune_fun.v1.vote.application.port.input.command;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.tune_fun.v1.common.validation.Enum;
 import com.tune_fun.v1.common.validation.Period;
+import com.tune_fun.v1.vote.domain.value.VotePaperOption;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
@@ -19,7 +21,7 @@ public class VotePaperCommands {
     public record Register(
             @NotBlank(message = "{vote.paper.title.not_blank}") String title,
             @NotBlank(message = "{vote.paper.content.not_blank}") String content,
-            @NotBlank(message = "{vote.paper.option.not_blank}") String option,
+            @NotNull(message = "{vote.paper.option.not_null}") @Enum(message = "{vote.paper.option.valid}", target = VotePaperOption.class) VotePaperOption option,
 
             @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
             @NotNull(message = "{vote.paper.vote_start_at.not_null}")
@@ -37,7 +39,6 @@ public class VotePaperCommands {
             @Size(min = 2, message = "{vote.paper.offers.size}")
             Set<Offer> offers
     ) {
-
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -77,4 +78,5 @@ public class VotePaperCommands {
             String videoUrl
     ) {
     }
+
 }

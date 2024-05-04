@@ -44,6 +44,7 @@ def jacocoExcludePatterns = [
         "**.*Converter*",
         "**.*Entity*",
         "**.Q*",
+        "**.*Mapper",
         "**.*MapperImpl"
 ]
 
@@ -87,6 +88,7 @@ dependencies {
     // development
     implementation 'org.springframework.retry:spring-retry'
     implementation 'org.springframework:spring-aspects'
+    implementation 'com.github.f4b6a3:ulid-creator:5.2.2'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // @see https://github.com/awspring/spring-cloud-aws/issues/657
 //    developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -238,20 +240,20 @@ jacocoTestReport {
 jacocoTestCoverageVerification {
     violationRules {
         rule {
+            failOnViolation = false
             enabled = true
-
             element = 'CLASS'
 
             limit {
                 counter = 'LINE'
                 value = 'COVEREDRATIO'
-                minimum = 0.00
+                minimum = 0.70
             }
 
             limit {
                 counter = 'BRANCH'
                 value = 'COVEREDRATIO'
-                minimum = 0.00
+                minimum = 0.70
             }
 
             excludes = jacocoExcludePatterns

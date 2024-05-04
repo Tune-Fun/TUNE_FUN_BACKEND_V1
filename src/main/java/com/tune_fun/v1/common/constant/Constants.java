@@ -25,7 +25,7 @@ public final class Constants {
     public static final String DOT = ".";
 
     public static final LocalDateTime LOCAL_DATE_TIME_MIN = LocalDateTime.of(
-            LocalDate.of(1970, 1, 1), LocalTime.of(0, 0, 10)
+            LocalDate.of(1970, 1, 1), LocalTime.of(0, 0, 1)
     );
 
     public static final class NicknameFragment {

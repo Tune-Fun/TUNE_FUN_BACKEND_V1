@@ -10,6 +10,7 @@ import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVote;
 import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
+import com.tune_fun.v1.vote.domain.value.VotePaperOption;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.KeysetScrollPosition;
@@ -587,7 +588,7 @@ class VotePersistenceAdapterTest {
 
         // Act and Assert
         assertThrows(IllegalArgumentException.class, () -> votePersistenceAdapter.saveVotePaper(new SaveVotePaper("Dr",
-                "Not all who wander are lost", "JaneDoe", "Option", voteStartAt, LocalDate.of(1970, 1, 1).atStartOfDay())));
+                "Not all who wander are lost", "JaneDoe", VotePaperOption.DENY_ADD_CHOICES, voteStartAt, LocalDate.of(1970, 1, 1).atStartOfDay())));
         verify(accountRepository).findActive(eq("JaneDoe"), isNull(), isNull());
     }
 
@@ -617,7 +618,7 @@ class VotePersistenceAdapterTest {
 
         // Act
         RegisteredVotePaper actualSaveVotePaperResult = votePersistenceAdapter
-                .saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe", "allow-add-choices",
+                .saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe", VotePaperOption.ALLOW_ADD_CHOICES,
                         voteStartAt, LocalDate.of(1970, 1, 1).atStartOfDay()));
 
         // Assert
@@ -662,7 +663,7 @@ class VotePersistenceAdapterTest {
 
         // Act
         RegisteredVotePaper actualSaveVotePaperResult = votePersistenceAdapter
-                .saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe", "allow-add-choices",
+                .saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe", VotePaperOption.ALLOW_ADD_CHOICES,
                         voteStartAt, LocalDate.of(1970, 1, 1).atStartOfDay()));
 
         // Assert
@@ -703,7 +704,7 @@ class VotePersistenceAdapterTest {
 
         // Act
         RegisteredVotePaper actualSaveVotePaperResult = votePersistenceAdapter
-                .saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe", "allow-add-choices",
+                .saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe", VotePaperOption.ALLOW_ADD_CHOICES,
                         voteStartAt2, LocalDate.of(1970, 1, 1).atStartOfDay()));
 
         // Assert
@@ -741,7 +742,7 @@ class VotePersistenceAdapterTest {
         // Act and Assert
         assertThrows(IllegalArgumentException.class,
                 () -> votePersistenceAdapter.saveVotePaper(new SaveVotePaper("Dr", "Not all who wander are lost", "JaneDoe",
-                        "allow-add-choices", voteStartAt, LocalDate.of(1970, 1, 1).atStartOfDay())));
+                        VotePaperOption.ALLOW_ADD_CHOICES, voteStartAt, LocalDate.of(1970, 1, 1).atStartOfDay())));
         verify(accountRepository).findActive(eq("JaneDoe"), isNull(), isNull());
         verify(votePaperRepository).save(isA(VotePaperJpaEntity.class));
     }
@@ -1146,7 +1147,7 @@ class VotePersistenceAdapterTest {
         ArrayList<VoteChoiceJpaEntity> voteChoiceJpaEntityList = new ArrayList<>();
         VotePaperJpaEntity votePaper = new VotePaperJpaEntity();
         voteChoiceJpaEntityList.add(new VoteChoiceJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", votePaper,
-                new Offer(",", ",", ",", "2020-03-01", 1), new ArrayList<>()));
+                new Offer(",", ",", ",", "2020-03-01", 1), new ArrayList<>(), "jain doe"));
         VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
         when(voteChoiceRepository.findAllByVotePaperId(Mockito.<Long>any())).thenReturn(voteChoiceJpaEntityList);
         AccountRepository accountRepository = mock(AccountRepository.class);
@@ -1166,6 +1167,105 @@ class VotePersistenceAdapterTest {
         // Assert
         verify(voteChoiceRepository).findAllByVotePaperId(eq(1L));
         assertEquals(1, actualLoadRegisteredVoteChoiceResult.size());
+    }
+
+    /**
+     * Method under test:
+     * {@link VotePersistenceAdapter#loadVoteChoiceByUsername(Long, String)}
+     */
+    @Test
+    void testLoadVoteChoiceByUsername() {
+        // Arrange
+        VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
+        VotePaperJpaEntity votePaper = new VotePaperJpaEntity();
+        Offer offer = new Offer(",", ",", ",", "2020-03-01", 2);
+
+        Optional<VoteChoiceJpaEntity> ofResult = Optional.of(new VoteChoiceJpaEntity(1L,
+                "01234567-89AB-CDEF-FEDC-BA9876543210", votePaper, offer, new ArrayList<>(), "Jan 1, 2020 8:00am GMT+0100"));
+        when(voteChoiceRepository.findByVotePaperIdAndCreatedBy(Mockito.<Long>any(), Mockito.<String>any()))
+                .thenReturn(ofResult);
+        AccountRepository accountRepository = mock(AccountRepository.class);
+        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
+                oauth2AccountRepository, new AccountMapperImpl());
+
+        VoteRepository voteRepository = mock(VoteRepository.class);
+        VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
+        VotePaperMapperImpl votePaperMapper = new VotePaperMapperImpl();
+
+        // Act
+        Optional<RegisteredVoteChoice> actualLoadVoteChoiceByUsernameResult = (new VotePersistenceAdapter(
+                accountPersistenceAdapter, voteRepository, votePaperRepository, voteChoiceRepository, votePaperMapper,
+                new VoteChoiceMapperImpl())).loadVoteChoiceByUsername(1L, "janedoe");
+
+        // Assert
+        verify(voteChoiceRepository).findByVotePaperIdAndCreatedBy(eq(1L), eq("janedoe"));
+        RegisteredVoteChoice getResult = actualLoadVoteChoiceByUsernameResult.get();
+        assertEquals(",", getResult.artistName());
+        assertEquals(",", getResult.music());
+        assertEquals("2020-03-01", getResult.releaseDate());
+        assertNull(getResult.votePaperId());
+        assertEquals(1L, getResult.id().longValue());
+        assertEquals(2, getResult.durationMs().intValue());
+        assertTrue(getResult.genres().isEmpty());
+    }
+
+    /**
+     * Method under test:
+     * {@link VotePersistenceAdapter#loadVoteChoiceByUsername(Long, String)}
+     */
+    @Test
+    void testLoadVoteChoiceByUsername2() {
+        // Arrange
+        VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
+        Optional<VoteChoiceJpaEntity> emptyResult = Optional.empty();
+        when(voteChoiceRepository.findByVotePaperIdAndCreatedBy(Mockito.<Long>any(), Mockito.<String>any()))
+                .thenReturn(emptyResult);
+        AccountRepository accountRepository = mock(AccountRepository.class);
+        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
+                oauth2AccountRepository, new AccountMapperImpl());
+
+        VoteRepository voteRepository = mock(VoteRepository.class);
+        VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
+        VotePaperMapperImpl votePaperMapper = new VotePaperMapperImpl();
+
+        // Act
+        Optional<RegisteredVoteChoice> actualLoadVoteChoiceByUsernameResult = (new VotePersistenceAdapter(
+                accountPersistenceAdapter, voteRepository, votePaperRepository, voteChoiceRepository, votePaperMapper,
+                new VoteChoiceMapperImpl())).loadVoteChoiceByUsername(1L, "janedoe");
+
+        // Assert
+        verify(voteChoiceRepository).findByVotePaperIdAndCreatedBy(eq(1L), eq("janedoe"));
+        assertFalse(actualLoadVoteChoiceByUsernameResult.isPresent());
+        assertSame(emptyResult, actualLoadVoteChoiceByUsernameResult);
+    }
+
+    /**
+     * Method under test:
+     * {@link VotePersistenceAdapter#loadVoteChoiceByUsername(Long, String)}
+     */
+    @Test
+    void testLoadVoteChoiceByUsername3() {
+        // Arrange
+        VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
+        when(voteChoiceRepository.findByVotePaperIdAndCreatedBy(Mockito.<Long>any(), Mockito.<String>any()))
+                .thenThrow(new IllegalArgumentException("foo"));
+        AccountRepository accountRepository = mock(AccountRepository.class);
+        OAuth2AccountRepository oauth2AccountRepository = mock(OAuth2AccountRepository.class);
+        AccountPersistenceAdapter accountPersistenceAdapter = new AccountPersistenceAdapter(accountRepository,
+                oauth2AccountRepository, new AccountMapperImpl());
+
+        VoteRepository voteRepository = mock(VoteRepository.class);
+        VotePaperRepository votePaperRepository = mock(VotePaperRepository.class);
+        VotePaperMapperImpl votePaperMapper = new VotePaperMapperImpl();
+
+        // Act and Assert
+        assertThrows(IllegalArgumentException.class,
+                () -> (new VotePersistenceAdapter(accountPersistenceAdapter, voteRepository, votePaperRepository,
+                        voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl())).loadVoteChoiceByUsername(1L,
+                        "janedoe"));
+        verify(voteChoiceRepository).findByVotePaperIdAndCreatedBy(eq(1L), eq("janedoe"));
     }
 
     /**

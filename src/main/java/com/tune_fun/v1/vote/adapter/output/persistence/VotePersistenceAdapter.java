@@ -148,6 +148,11 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
+    public Optional<RegisteredVoteChoice> loadVoteChoiceByUsername(Long votePaperId, String username) {
+        return findByVotePaperIdAndUsername(votePaperId, username).map(voteChoiceMapper::registeredVoteChoice);
+    }
+
+    @Override
     public void saveVoteChoice(final Long votePaperId, final Set<SaveVoteChoice> behavior) {
         VotePaperJpaEntity votePaperJpaEntity = findOneAvailable(votePaperId, Constants.NULL_STRING)
                 .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
@@ -178,5 +183,9 @@ public class VotePersistenceAdapter implements
 
     public List<VoteChoiceJpaEntity> findAllByVotePaperId(final Long votePaperId) {
         return voteChoiceRepository.findAllByVotePaperId(votePaperId);
+    }
+
+    public Optional<VoteChoiceJpaEntity> findByVotePaperIdAndUsername(final Long votePaperId, final String username) {
+        return voteChoiceRepository.findByVotePaperIdAndCreatedBy(votePaperId, username);
     }
 }

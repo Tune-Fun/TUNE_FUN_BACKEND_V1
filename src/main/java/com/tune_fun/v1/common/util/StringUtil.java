@@ -67,7 +67,7 @@ public class StringUtil {
     }
 
     private String generateRandomString(final int count, final boolean letters, final boolean numbers) throws NoSuchAlgorithmException {
-        return RandomStringUtils.random(count, 0, 0, letters, numbers, null, secureRandom());
+        return RandomStringUtils.random(count, 0, 0, letters, numbers, (char[]) Constants.NULL_OBJECT, secureRandom());
     }
 
     private String generateRandomString(final int count, char... chars) throws NoSuchAlgorithmException {
@@ -87,7 +87,8 @@ public class StringUtil {
     }
 
     public static String removeBearerPrefix(String accessTokenFromRequest) {
-        return matches("^Bearer .*", accessTokenFromRequest) ? accessTokenFromRequest.substring(7) : null;
+        return matches("^Bearer .*", accessTokenFromRequest) ?
+                accessTokenFromRequest.substring(7) : Constants.NULL_STRING;
     }
 
     public static String getFlattenAuthorities(Collection<? extends GrantedAuthority> authorities) {

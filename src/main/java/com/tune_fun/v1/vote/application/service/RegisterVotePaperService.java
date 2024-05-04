@@ -22,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
+import static com.tune_fun.v1.common.response.MessageCode.VOTE_POLICY_OFFERS_COUNT_SHOULD_BE_MORE_THAN_TWO;
 import static com.tune_fun.v1.common.response.MessageCode.VOTE_POLICY_ONE_VOTE_PAPER_PER_USER;
+import static com.tune_fun.v1.vote.domain.value.VotePaperOption.DENY_ADD_CHOICES;
 
 @Slf4j
 @Service
@@ -43,12 +45,19 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
     @Transactional
     @Override
     public void register(final VotePaperCommands.Register command, final User user) throws JsonProcessingException {
+        validateOffersCount(command);
+
         validateRegistrableVotePaperCount(user);
         RegisteredVotePaper registeredVotePaper = saveVotePaper(command, user);
         saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
 
         VotePaperRegisterEvent votePaperRegisterEventBehavior = getProduceVotePaperUploadEventBehavior(registeredVotePaper);
         produceVotePaperUploadEventPort.produceVotePaperUploadEvent(votePaperRegisterEventBehavior);
+    }
+
+    private static void validateOffersCount(final VotePaperCommands.Register command) {
+        if(DENY_ADD_CHOICES.equals(command.option()) && command.offers().size() < 2)
+            throw new CommonApplicationException(VOTE_POLICY_OFFERS_COUNT_SHOULD_BE_MORE_THAN_TWO);
     }
 
     public void validateRegistrableVotePaperCount(final User user) {
