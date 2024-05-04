@@ -29,6 +29,8 @@ public class VotePaperController {
 
     private final ScrollVotePaperUseCase scrollVotePaperUseCase;
 
+    private final GetVotePaperUseCase getVotePaperUseCase;
+
     private final RegisterVotePaperUseCase registerVotePaperUseCase;
     private final RegisterVoteChoiceUseCase registerVoteChoiceUseCase;
 
@@ -43,6 +45,13 @@ public class VotePaperController {
                                                                            @CurrentUser User user) {
         Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollVotePaper(lastId, sortType.name());
         return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
+    }
+
+    @GetMapping(value = Uris.VOTE_PAPER_ROOT + "/{votePaperId}")
+    public ResponseEntity<Response<BasePayload>> getVotePaper(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
+                                                              @CurrentUser final User user) {
+        getVotePaperUseCase.getVotePaper(votePaperId);
+        return responseMapper.ok(MessageCode.SUCCESS);
     }
 
     // TODO : Follower 로직 구현 후 테스트 재진행 예정
