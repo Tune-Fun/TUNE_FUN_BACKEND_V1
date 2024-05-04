@@ -1,5 +1,6 @@
 package com.tune_fun.v1.vote.adapter.input.rest;
 
+import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.tune_fun.v1.base.ControllerBaseTest;
 import com.tune_fun.v1.common.config.Uris;
@@ -44,6 +45,7 @@ import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.LocalDateTime.now;
+import static java.util.Collections.singletonList;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -170,10 +172,10 @@ class VotePaperControllerIT extends ControllerBaseTest {
         String accessToken = dummyService.getDefaultArtistAccessToken();
 
         Set<VotePaperCommands.Offer> offers = Set.of(
-                new VotePaperCommands.Offer("Love Lee", "AKMU", List.of("R&B", "Soul"),
-                        300000, "2024-04-28"),
-                new VotePaperCommands.Offer("Dolphin", "오마이걸", List.of("Dance", "Pop"),
-                        200000, "2020-04-27")
+                new VotePaperCommands.Offer("KNOCK (With 박문치)", "권진아", singletonList("Dance"),
+                        206_000, "2021-07-27"),
+                new VotePaperCommands.Offer("Orange, You're Not a Joke to Me!", "스텔라장 (Stella Jang)", singletonList("Rock"),
+                        220_000, "2023-06-18")
         );
 
         LocalDateTime voteStartAt = now().plusDays(1);
@@ -241,22 +243,97 @@ class VotePaperControllerIT extends ControllerBaseTest {
         List<RegisteredVoteChoice> registeredVoteChoices = loadVoteChoicePort.loadRegisteredVoteChoice(votePaper.id());
         assertEquals(registeredVoteChoices.size(), 2);
 
-        List<String> readMusic = JsonPath.parse(registeredVoteChoices).read("$[*].music");
+        DocumentContext parsedChoices = JsonPath.parse(toJson(registeredVoteChoices));
+
+        List<String> readMusic = parsedChoices.read("$[*].music");
         log.info("readMusic: {}", readMusic);
-        readMusic.forEach(music -> assertThat(music, oneOf("Love Lee", "Dolphin")));
+        assertThat(readMusic, hasItems("KNOCK (With 박문치)", "Orange, You're Not a Joke to Me!"));
 
-        List<String> readArtistName = JsonPath.parse(registeredVoteChoices).read("$[*].artistName");
+        List<String> readArtistName = parsedChoices.read("$[*].artistName");
         log.info("readArtistName: {}", readArtistName);
-        readArtistName.forEach(artistName -> assertThat(artistName, oneOf("AKMU", "오마이걸")));
+        assertThat(readArtistName, hasItems("권진아", "스텔라장 (Stella Jang)"));
 
-        List<List<String>> readGenres = JsonPath.parse(registeredVoteChoices).read("$[*].genres");
+        List<List<String>> readGenres = parsedChoices.read("$[*].genres");
         log.info("readGenres: {}", readGenres);
-        readGenres.forEach(genres -> assertThat(genres, oneOf(List.of("R&B", "Soul"), List.of("Dance", "Pop"))));
+        assertThat(readGenres, hasItems(singletonList("Dance"), singletonList("Rock")));
     }
 
     @Transactional
     @Test
     @Order(3)
+    @DisplayName("투표 선택지 등록, 성공")
+    void registerVotePaperChoiceSuccess() throws Exception {
+        dummyService.initAccount();
+        dummyService.initArtistAndLogin();
+
+        dummyService.initVotePaperAllowAddChoices();
+        dummyService.login(dummyService.getDefaultAccount());
+
+        String accessToken = dummyService.getDefaultAccessToken();
+        Long votePaperId = dummyService.getDefaultVotePaper().getId();
+
+        ParameterDescriptor pathParameter = parameterWithName("votePaperId").description("투표 게시물 ID").attributes(constraint("NOT NULL"));
+
+        FieldDescriptor[] requestDescriptors = {
+                fieldWithPath("music").description("노래명").attributes(constraint("NOT BLANK")),
+                fieldWithPath("artist_name").description("아티스트명").attributes(constraint("NOT BLANK")),
+                fieldWithPath("genres").description("장르").attributes(constraint("NOT EMPTY")),
+                fieldWithPath("duration_ms").description("재생 시간(ms)").attributes(constraint("NOT NULL & POSITIVE")),
+                fieldWithPath("release_date").description("발매일").attributes(constraint("NOT BLANK"))
+        };
+
+        VotePaperCommands.Offer command = new VotePaperCommands.Offer("이별이란 어느 별에 (Feat. 조광일)", "HYNN (박혜원)",
+                singletonList("Ballad"), 231000, "2022-02-11");
+
+        mockMvc.perform(
+                        post(Uris.VOTE_PAPER_CHOICE, votePaperId)
+                                .header(AUTHORIZATION, bearerToken(accessToken))
+                                .content(toJson(command))
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .characterEncoding(UTF_8)
+                )
+                .andExpectAll(baseAssertion(MessageCode.CREATED))
+                .andDo(
+                        restDocs.document(
+                                requestHeaders(authorizationHeader),
+                                pathParameters(pathParameter),
+                                requestFields(requestDescriptors),
+                                responseFields(baseResponseFields),
+                                resource(
+                                        builder().
+                                                description("투표 선택지 등록").
+                                                pathParameters(pathParameter).
+                                                requestFields(requestDescriptors).
+                                                responseFields(baseResponseFields)
+                                                .build()
+                                )
+                        )
+                );
+
+        List<RegisteredVoteChoice> registeredVoteChoices = loadVoteChoicePort.loadRegisteredVoteChoice(votePaperId);
+        assertEquals(registeredVoteChoices.size(), 3);
+
+        DocumentContext parsedVoteChoices = JsonPath.parse(toJson(registeredVoteChoices));
+        
+        List<String> readMusic = parsedVoteChoices.read("$[*].music");
+        assertThat(readMusic, hasItem("이별이란 어느 별에 (Feat. 조광일)"));
+
+        List<String> readArtistName = parsedVoteChoices.read("$[*].artistName");
+        assertThat(readArtistName, hasItem("HYNN (박혜원)"));
+
+        List<List<String>> readGenres = parsedVoteChoices.read("$[*].genres");
+        assertThat(readGenres, hasItem(singletonList("Ballad")));
+
+        List<Integer> readDurationMs = parsedVoteChoices.read("$[*].durationMs");
+        assertThat(readDurationMs, hasItem(231_000));
+
+        List<String> readReleaseDate = parsedVoteChoices.read("$[*].releaseDate");
+        assertThat(readReleaseDate, hasItem("2022-02-11"));
+    }
+
+    @Transactional
+    @Test
+    @Order(4)
     @DisplayName("투표 게시물 영상 제공일 등록, 성공")
     void updateDeliveryDateSuccess() throws Exception {
         dummyService.initAndLogin();
@@ -312,7 +389,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
     @Transactional
     @Test
-    @Order(4)
+    @Order(5)
     @DisplayName("투표 게시물 영상 업로드, 성공")
     void updateVideoUrlSuccess() throws Exception {
         dummyService.initAndLogin();
@@ -369,7 +446,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
     @Transactional
     @Test
-    @Order(5)
+    @Order(6)
     @DisplayName("투표 게시물 삭제, 성공")
     void deleteVotePaperSuccess() throws Exception {
         dummyService.initAndLogin();
