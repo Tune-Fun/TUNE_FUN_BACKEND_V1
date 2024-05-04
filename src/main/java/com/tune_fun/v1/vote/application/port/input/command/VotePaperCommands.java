@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static com.tune_fun.v1.vote.domain.value.VotePaperOption.DENY_ADD_CHOICES;
-
 public class VotePaperCommands {
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -41,7 +39,6 @@ public class VotePaperCommands {
             @Size(min = 2, message = "{vote.paper.offers.size}")
             Set<Offer> offers
     ) {
-
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -81,4 +78,5 @@ public class VotePaperCommands {
             String videoUrl
     ) {
     }
+
 }

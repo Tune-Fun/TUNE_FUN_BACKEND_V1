@@ -21,7 +21,6 @@ import java.time.temporal.ChronoUnit;
 )
 public abstract class VotePaperMapper {
 
-    @Mapping(target = "option", source = "option", qualifiedByName = "toValue")
     @Mapping(target = "author", source = "author.nickname")
     @Mapping(target = "authorUsername", source = "author.username")
     public abstract RegisteredVotePaper registeredVotePaper(final VotePaperJpaEntity votePaperJpaEntity);
@@ -32,11 +31,6 @@ public abstract class VotePaperMapper {
     @Mapping(target = "totalVoteCount", constant = "0")
     @Mapping(target = "totalLikeCount", constant = "0")
     public abstract ScrollableVotePaper scrollableVotePaper(final VotePaperJpaEntity votePaperJpaEntity);
-
-    @Named("toValue")
-    public String toValue(final VotePaperOption option) {
-        return option.getValue();
-    }
 
     @Named("remainDays")
     public Long remainDays(final VotePaperJpaEntity votePaperJpaEntity) {
@@ -49,6 +43,7 @@ public abstract class VotePaperMapper {
     @Mapping(target = "uuid", expression = "java(StringUtil.uuid())")
     @Mapping(target = "author", source = "author")
     @Mapping(target = "option", source = "saveVotePaper.option")
+    @Mapping(target = "enabled", ignore = true)
     public abstract VotePaperJpaEntity fromSaveVotePaperBehavior(final SaveVotePaper saveVotePaper, final AccountJpaEntity author);
 
     @Mapping(target = "deliveryAt", source = "deliveryAt")
