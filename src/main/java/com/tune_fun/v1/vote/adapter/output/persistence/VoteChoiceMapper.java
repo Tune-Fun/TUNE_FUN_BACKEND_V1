@@ -33,6 +33,7 @@ public abstract class VoteChoiceMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "uuid", ignore = true)
     public abstract VoteChoiceJpaEntity.VoteChoiceJpaEntityBuilder<?, ?> updateVoteChoice(VotePaperJpaEntity votePaperJpaEntity,
                                                                                           @MappingTarget final VoteChoiceJpaEntity.VoteChoiceJpaEntityBuilder<?, ?> voteChoiceJpaEntityBuilder);
 
