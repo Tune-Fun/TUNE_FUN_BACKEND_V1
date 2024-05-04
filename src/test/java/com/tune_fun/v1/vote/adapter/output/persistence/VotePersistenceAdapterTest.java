@@ -1147,7 +1147,7 @@ class VotePersistenceAdapterTest {
         ArrayList<VoteChoiceJpaEntity> voteChoiceJpaEntityList = new ArrayList<>();
         VotePaperJpaEntity votePaper = new VotePaperJpaEntity();
         voteChoiceJpaEntityList.add(new VoteChoiceJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", votePaper,
-                new Offer(",", ",", ",", "2020-03-01", 1), new ArrayList<>()));
+                new Offer(",", ",", ",", "2020-03-01", 1), new ArrayList<>(), "jain doe"));
         VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
         when(voteChoiceRepository.findAllByVotePaperId(Mockito.<Long>any())).thenReturn(voteChoiceJpaEntityList);
         AccountRepository accountRepository = mock(AccountRepository.class);
