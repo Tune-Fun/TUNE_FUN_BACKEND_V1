@@ -14,6 +14,7 @@ public interface VotePaperRepository extends JpaRepository<VotePaperJpaEntity, L
     @EntityGraph(attributePaths = {"author"})
     Optional<VotePaperJpaEntity> findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(LocalDateTime voteEndAt, String author);
 
+    @EntityGraph(attributePaths = {"author", "choices"})
     Optional<VotePaperJpaEntity> findByVoteEndAtAfterAndIdAndEnabledTrue(LocalDateTime voteEndAt, Long id);
 
     Optional<VotePaperJpaEntity> findByVoteEndAtBeforeAndIdAndEnabledTrue(LocalDateTime voteEndAt, Long id);

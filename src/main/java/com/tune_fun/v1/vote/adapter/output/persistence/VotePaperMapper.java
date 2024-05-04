@@ -4,6 +4,7 @@ import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.common.config.BaseMapperConfig;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
+import com.tune_fun.v1.vote.domain.value.FullVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
 import com.tune_fun.v1.vote.domain.value.VotePaperOption;
@@ -51,4 +52,11 @@ public abstract class VotePaperMapper {
 
     @Mapping(target = "videoUrl", source = "videoUrl")
     public abstract VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?> updateVideoUrl(final String videoUrl, @MappingTarget VotePaperJpaEntity.VotePaperJpaEntityBuilder<?, ?> builder);
+
+    @Mapping(target = "authorUsername", source = "author.username")
+    @Mapping(target = "authorNickname", source = "author.nickname")
+    @Mapping(target = "remainDays", source = ".", qualifiedByName = "remainDays")
+    @Mapping(target = "totalVoteCount", constant = "0")
+    @Mapping(target = "totalLikeCount", constant = "0")
+    public abstract FullVotePaper fullVotePaper(VotePaperJpaEntity votePaperJpaEntity);
 }
