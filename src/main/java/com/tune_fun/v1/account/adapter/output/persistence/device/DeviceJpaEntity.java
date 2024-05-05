@@ -2,6 +2,7 @@ package com.tune_fun.v1.account.adapter.output.persistence.device;
 
 import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.common.entity.BaseEntity;
+import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -23,9 +24,9 @@ import java.util.Objects;
 public class DeviceJpaEntity extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Tsid
     @Column(name = "id", nullable = false, updatable = false)
-    @Comment("Sequence")
+    @Comment("TSID")
     private Long id;
 
     @Size(max = 255)
@@ -65,5 +66,5 @@ public class DeviceJpaEntity extends BaseEntity {
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
-    
+
 }

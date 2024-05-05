@@ -164,6 +164,89 @@ class VotePaperControllerIT extends ControllerBaseTest {
     @Transactional
     @Test
     @Order(2)
+    @DisplayName("투표 게시물 상세 조회, 성공")
+    void getVotePaperSuccess() throws Exception {
+        dummyService.initAndLogin();
+        dummyService.initArtistAndLogin();
+
+        dummyService.initVotePaper();
+        dummyService.registerVote();
+
+        Long votePaperId = dummyService.getDefaultVotePaper().getId();
+        String accessToken = dummyService.getDefaultAccessToken();
+
+        ParameterDescriptor pathParameter = parameterWithName("votePaperId").description("투표 게시물 ID").attributes(constraint("NOT NULL"));
+
+        FieldDescriptor[] responseDescriptors = ArrayUtils.addAll(baseResponseFields,
+                fieldWithPath("data.id").description("투표 게시물 ID").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.uuid").description("투표 게시물 UUID").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.author").description("투표 게시물 작성자 닉네임").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.author_username").description("투표 게시물 작성자 아이디").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.title").description("투표 게시물 제목").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.content").description("투표 게시물 내용").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.option").description("투표 종류").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.video_url").description("투표 게시물 영상 URL").attributes(constraint("NULL or NOT NULL")),
+                fieldWithPath("data.vote_start_at").description("투표 시작 시간").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.vote_end_at").description("투표 종료 시간").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.delivery_at").description("투표 게시물 영상 제공일").attributes(constraint("NULL or NOT NULL")),
+                fieldWithPath("data.created_at").description("투표 게시물 생성 시간").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.updated_at").description("투표 게시물 수정 시간").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.choices").description("투표 선택지 목록").attributes(constraint("NOT EMPTY")),
+                fieldWithPath("data.choices[].id").description("아이디").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.choices[].music").description("노래명").attributes(constraint("NOT BLANK")),
+                fieldWithPath("data.choices[].artist_name").description("아티스트명").attributes(constraint("NOT BLANK")),
+                fieldWithPath("data.choices[].genres[]").description("장르").attributes(constraint("NOT EMPTY")),
+                fieldWithPath("data.choices[].duration_ms").description("재생 시간(ms)").attributes(constraint("NOT NULL & POSITIVE")),
+                fieldWithPath("data.choices[].release_date").description("발매일").attributes(constraint("NOT BLANK")),
+                fieldWithPath("data.choices[].vote_paper_id").description("투표 게시물 ID").attributes(constraint("NOT NULL"))
+        );
+
+        mockMvc.perform(
+                        get(Uris.VOTE_PAPER_ROOT + "/{votePaperId}", votePaperId)
+                                .header(AUTHORIZATION, bearerToken(accessToken))
+                )
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andExpect(jsonPath("data.id", notNullValue()))
+                .andExpect(jsonPath("data.uuid", notNullValue()))
+                .andExpect(jsonPath("data.author", notNullValue()))
+                .andExpect(jsonPath("data.author_username", notNullValue()))
+                .andExpect(jsonPath("data.title", notNullValue()))
+                .andExpect(jsonPath("data.content", notNullValue()))
+                .andExpect(jsonPath("data.option", notNullValue()))
+                .andExpect(jsonPath("data.video_url", nullValue()))
+                .andExpect(jsonPath("data.vote_start_at", notNullValue()))
+                .andExpect(jsonPath("data.vote_end_at", notNullValue()))
+                .andExpect(jsonPath("data.delivery_at", nullValue()))
+                .andExpect(jsonPath("data.created_at", notNullValue()))
+                .andExpect(jsonPath("data.updated_at", notNullValue()))
+                .andExpect(jsonPath("data.choices", notNullValue()))
+                .andExpect(jsonPath("data.choices[*].id", notNullValue()))
+                .andExpect(jsonPath("data.choices[*].music", notNullValue()))
+                .andExpect(jsonPath("data.choices[*].artist_name", notNullValue()))
+                .andExpect(jsonPath("data.choices[*].genres[*]", notNullValue()))
+                .andExpect(jsonPath("data.choices[*].duration_ms", notNullValue()))
+                .andExpect(jsonPath("data.choices[*].release_date", notNullValue()))
+                .andExpect(jsonPath("data.choices[*].vote_paper_id", notNullValue()))
+                .andDo(
+                        restDocs.document(
+                                requestHeaders(authorizationHeader),
+                                pathParameters(pathParameter),
+                                responseFields(responseDescriptors),
+                                resource(
+                                        builder().
+                                                description("투표 게시물 상세 조회").
+                                                pathParameters(pathParameter).
+                                                responseFields(responseDescriptors)
+                                                .build()
+                                )
+                        )
+                );
+
+    }
+
+    @Transactional
+    @Test
+    @Order(3)
     @DisplayName("투표 게시물 등록, 성공")
     void registerVotePaperSuccess() throws Exception {
         dummyService.initAndLogin();
@@ -249,7 +332,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
         log.info("readMusic: {}", readMusic);
         assertThat(readMusic, hasItems("KNOCK (With 박문치)", "Orange, You're Not a Joke to Me!"));
 
-        List<String> readArtistName = parsedChoices.read("$[*].artistName");
+        List<String> readArtistName = parsedChoices.read("$[*].artist_name");
         log.info("readArtistName: {}", readArtistName);
         assertThat(readArtistName, hasItems("권진아", "스텔라장 (Stella Jang)"));
 
@@ -260,7 +343,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
     @Transactional
     @Test
-    @Order(3)
+    @Order(4)
     @DisplayName("투표 선택지 등록, 성공")
     void registerVotePaperChoiceSuccess() throws Exception {
         dummyService.initAccount();
@@ -314,26 +397,26 @@ class VotePaperControllerIT extends ControllerBaseTest {
         assertEquals(registeredVoteChoices.size(), 3);
 
         DocumentContext parsedVoteChoices = JsonPath.parse(toJson(registeredVoteChoices));
-        
+
         List<String> readMusic = parsedVoteChoices.read("$[*].music");
         assertThat(readMusic, hasItem("이별이란 어느 별에 (Feat. 조광일)"));
 
-        List<String> readArtistName = parsedVoteChoices.read("$[*].artistName");
+        List<String> readArtistName = parsedVoteChoices.read("$[*].artist_name");
         assertThat(readArtistName, hasItem("HYNN (박혜원)"));
 
         List<List<String>> readGenres = parsedVoteChoices.read("$[*].genres");
         assertThat(readGenres, hasItem(singletonList("Ballad")));
 
-        List<Integer> readDurationMs = parsedVoteChoices.read("$[*].durationMs");
+        List<Integer> readDurationMs = parsedVoteChoices.read("$[*].duration_ms");
         assertThat(readDurationMs, hasItem(231_000));
 
-        List<String> readReleaseDate = parsedVoteChoices.read("$[*].releaseDate");
+        List<String> readReleaseDate = parsedVoteChoices.read("$[*].release_date");
         assertThat(readReleaseDate, hasItem("2022-02-11"));
     }
 
     @Transactional
     @Test
-    @Order(4)
+    @Order(5)
     @DisplayName("투표 게시물 영상 제공일 등록, 성공")
     void updateDeliveryDateSuccess() throws Exception {
         dummyService.initAndLogin();
@@ -389,7 +472,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
     @Transactional
     @Test
-    @Order(5)
+    @Order(6)
     @DisplayName("투표 게시물 영상 업로드, 성공")
     void updateVideoUrlSuccess() throws Exception {
         dummyService.initAndLogin();
@@ -446,7 +529,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
     @Transactional
     @Test
-    @Order(6)
+    @Order(7)
     @DisplayName("투표 게시물 삭제, 성공")
     void deleteVotePaperSuccess() throws Exception {
         dummyService.initAndLogin();

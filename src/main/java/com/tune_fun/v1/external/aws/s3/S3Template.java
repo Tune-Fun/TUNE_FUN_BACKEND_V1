@@ -74,8 +74,8 @@ public class S3Template {
     }
 
     @NotNull
-    public String getKey(String rootPath, MultipartFile multipartFile) throws NoSuchAlgorithmException {
-        String generatedFileName = StringUtil.randomAlphanumeric(40);
+    public String getKey(String rootPath, MultipartFile multipartFile) {
+        String generatedFileName = StringUtil.ulid();
         log.info("generated file name is {}", generatedFileName);
 
         String extractedExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());

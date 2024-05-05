@@ -10,6 +10,7 @@ import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.*;
+import com.tune_fun.v1.vote.domain.value.FullVotePaper;
 import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -29,6 +30,8 @@ public class VotePaperController {
 
     private final ScrollVotePaperUseCase scrollVotePaperUseCase;
 
+    private final GetVotePaperUseCase getVotePaperUseCase;
+
     private final RegisterVotePaperUseCase registerVotePaperUseCase;
     private final RegisterVoteChoiceUseCase registerVoteChoiceUseCase;
 
@@ -43,6 +46,13 @@ public class VotePaperController {
                                                                            @CurrentUser User user) {
         Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollVotePaper(lastId, sortType.name());
         return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
+    }
+
+    @GetMapping(value = Uris.VOTE_PAPER_ROOT + "/{votePaperId}")
+    public ResponseEntity<Response<FullVotePaper>> getVotePaper(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
+                                                                @CurrentUser final User user) {
+        FullVotePaper votePaper = getVotePaperUseCase.getVotePaper(votePaperId);
+        return responseMapper.ok(MessageCode.SUCCESS, votePaper);
     }
 
     // TODO : Follower 로직 구현 후 테스트 재진행 예정

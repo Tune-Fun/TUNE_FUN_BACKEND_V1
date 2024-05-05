@@ -6,7 +6,6 @@ import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
-import com.tune_fun.v1.vote.domain.value.VotePaperOption;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
