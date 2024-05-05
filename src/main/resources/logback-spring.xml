@@ -4,14 +4,49 @@
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
     <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
-    <property name="CONSOLE_LOG_PATTERN"
-              value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}){faint} [%thread] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} [CORRELATION_ID: %X{CORRELATION_ID:-NO CORRELATION ID}] %clr(${LOG_CORRELATION_PATTERN:-}){faint}%clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <property name="CUSTOM_LOG_PATTERN"
+              value="${CUSTOM_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}){faint} [%thread] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} [CORRELATION_ID: %X{CORRELATION_ID:-NO CORRELATION ID}] %clr(${LOG_CORRELATION_PATTERN:-}){faint}%clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
 
     <logger name="org.zalando.logbook" level="TRACE">
     </logger>
 
+    <appender name="CUSTOM_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${CONSOLE_LOG_THRESHOLD}</level>
+        </filter>
+        <encoder>
+            <pattern>${CUSTOM_LOG_PATTERN}</pattern>
+            <charset>${CONSOLE_LOG_CHARSET}</charset>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_AWS_LOGS" class="com.tune_fun.v1.external.aws.cloudwatch.logs.AwsLogsAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${CONSOLE_LOG_THRESHOLD}</level>
+        </filter>
+        <layout>
+            <pattern>${CUSTOM_LOG_PATTERN}</pattern>
+        </layout>
+        <if condition='property("spring.profiles.active").equals("dev_standalone")'>
+            <then>
+                <logGroupName>DEV_STANDALONE</logGroupName>
+            </then>
+        </if>
+        <if condition='property("spring.profiles.active").equals("dev")'>
+            <then>
+                <logGroupName>DEV</logGroupName>
+            </then>
+        </if>
+        <logStreamUuidPrefix>error-</logStreamUuidPrefix>
+        <maxBatchLogEvents>50</maxBatchLogEvents>
+        <maxFlushTimeMillis>30000</maxFlushTimeMillis>
+        <maxBlockTimeMillis>5000</maxBlockTimeMillis>
+        <retentionTimeDays>0</retentionTimeDays>
+    </appender>
+
     <root level="INFO">
-        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="CUSTOM_CONSOLE"/>
+        <appender-ref ref="ASYNC_AWS_LOGS"/>
     </root>
 
 </configuration>

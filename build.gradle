@@ -89,6 +89,7 @@ dependencies {
     implementation 'org.springframework.retry:spring-retry'
     implementation 'org.springframework:spring-aspects'
     implementation 'com.github.f4b6a3:ulid-creator:5.2.3'
+    implementation 'org.codehaus.janino:janino:3.1.12'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // @see https://github.com/awspring/spring-cloud-aws/issues/657
 //    developmentOnly 'org.springframework.boot:spring-boot-devtools'

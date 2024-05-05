@@ -54,7 +54,7 @@ class AWSLogsStub {
 
             CloudWatchLogsClient awsLogs = builder
                     .region(AP_NORTHEAST_2)
-                    .credentialsProvider(AwsCredentialFactory.ec2Instance())
+                    .credentialsProvider(AwsCredentialFactory.provideDefault())
                     .build();
 
             initLogGroup(awsLogs);

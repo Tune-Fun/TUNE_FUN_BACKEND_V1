@@ -113,6 +113,7 @@ public class Uris {
     };
     public static final String[] PERMIT_ALL_URIS = {
             TEMP_ACCOUNT_RESET,
+            "/error",
 
             ACTUATOR,
             DEFAULT_LOGIN_PAGE,
