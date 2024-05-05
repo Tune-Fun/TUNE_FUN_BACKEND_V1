@@ -68,4 +68,8 @@ public final class CustomPointCuts {
     public void useCase() {
     }
 
+    @Pointcut("execution(* com.tune_fun.v1.common.*.*(..))")
+    public void common() {
+    }
+
 }

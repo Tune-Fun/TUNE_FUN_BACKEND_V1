@@ -91,7 +91,6 @@ public class SecurityConfig {
 //                        .requestMatchers(mvc(introspector, Uris.ADMIN_URIS)).hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(configure ->
                         configure
                                 .tokenEndpoint(config -> config.accessTokenResponseClient(OAuth2AccessTokenResponseClientDecorator))

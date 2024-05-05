@@ -43,7 +43,8 @@ public class LoggingAspect {
             "|| com.tune_fun.v1.common.aspect.CustomPointCuts.useCase()" +
             "&& !com.tune_fun.v1.common.aspect.CustomPointCuts.swaggerUI()" +
             "&& !com.tune_fun.v1.common.aspect.CustomPointCuts.springdoc() " +
-            "&& !com.tune_fun.v1.common.aspect.CustomPointCuts.healthCheck()")
+            "&& !com.tune_fun.v1.common.aspect.CustomPointCuts.healthCheck() " +
+            "&& !com.tune_fun.v1.common.aspect.CustomPointCuts.common()")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         StopWatch stopWatch = new StopWatch("LogExecutionTime Aop");
 

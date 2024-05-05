@@ -1,5 +1,6 @@
 package com.tune_fun.v1.common.config;
 
+import com.tune_fun.v1.common.async.MDCTaskDecorator;
 import com.tune_fun.v1.common.config.annotation.OnlyDevelopmentConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
@@ -33,6 +34,7 @@ public class MailExecutorConfig implements AsyncConfigurer {
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(60);
         executor.setThreadNamePrefix(threadNamePrefix);
+        executor.setTaskDecorator(new MDCTaskDecorator());
         executor.initialize();
 
         return executor;

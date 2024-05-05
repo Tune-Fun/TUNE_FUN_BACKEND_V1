@@ -14,6 +14,9 @@ public class Uris {
 
     public static final String TEMP_ACCOUNT_RESET = TEMP_ROOT + "/account";
 
+    public static final String ACTUATOR = "/actuator";
+    public static final String SERVICE_WORKER_JS = "/service-worker.js";
+
     public static final String API_V1_ROOT = "/v1";
 
     public static final String REST_NAME_ID = "/{id}";
@@ -86,6 +89,7 @@ public class Uris {
 
     public static final String[] NOT_LOGGING_URIS = {
             DEFAULT_LOGIN_PAGE,
+            SERVICE_WORKER_JS,
             SWAGGER_UI,
             SWAGGER_INDEX_HTML,
             SWAGGER_INDEX_CSS,
@@ -109,7 +113,11 @@ public class Uris {
     };
     public static final String[] PERMIT_ALL_URIS = {
             TEMP_ACCOUNT_RESET,
+            "/error",
 
+            ACTUATOR,
+            DEFAULT_LOGIN_PAGE,
+            SERVICE_WORKER_JS,
             CHECK_USERNAME_DUPLICATE,
             CHECK_EMAIL_DUPLICATE,
             FIND_USERNAME,
@@ -150,7 +158,6 @@ public class Uris {
     };
 
     public static final String[] ADMIN_URIS = {
-            DEFAULT_LOGIN_PAGE
     };
 
 
