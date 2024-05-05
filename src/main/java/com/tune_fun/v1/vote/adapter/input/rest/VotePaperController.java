@@ -10,6 +10,7 @@ import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.*;
+import com.tune_fun.v1.vote.domain.value.FullVotePaper;
 import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -48,10 +49,10 @@ public class VotePaperController {
     }
 
     @GetMapping(value = Uris.VOTE_PAPER_ROOT + "/{votePaperId}")
-    public ResponseEntity<Response<BasePayload>> getVotePaper(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
-                                                              @CurrentUser final User user) {
-        getVotePaperUseCase.getVotePaper(votePaperId);
-        return responseMapper.ok(MessageCode.SUCCESS);
+    public ResponseEntity<Response<FullVotePaper>> getVotePaper(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
+                                                                @CurrentUser final User user) {
+        FullVotePaper votePaper = getVotePaperUseCase.getVotePaper(votePaperId);
+        return responseMapper.ok(MessageCode.SUCCESS, votePaper);
     }
 
     // TODO : Follower 로직 구현 후 테스트 재진행 예정

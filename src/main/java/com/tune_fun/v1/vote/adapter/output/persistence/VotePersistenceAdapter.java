@@ -8,7 +8,10 @@ import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.vote.application.port.output.*;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
-import com.tune_fun.v1.vote.domain.value.*;
+import com.tune_fun.v1.vote.domain.value.RegisteredVote;
+import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
+import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
+import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.KeysetScrollPosition;
 import org.springframework.data.domain.Sort;
@@ -86,12 +89,6 @@ public class VotePersistenceAdapter implements
         KeysetScrollPosition position = forward(Map.of("id", lastId, "voteEndAt", Constants.LOCAL_DATE_TIME_MIN));
         Sort sort = by(desc("id"), desc("voteEndAt"));
         return votePaperRepository.findFirst10ByEnabledTrue(position, sort).map(votePaperMapper::scrollableVotePaper);
-    }
-
-    @Override
-    public Optional<FullVotePaper> loadFullVotePaper(final Long votePaperId) {
-        return votePaperRepository.findByVoteEndAtAfterAndIdAndEnabledTrue(now(), votePaperId)
-                .map(votePaperMapper::fullVotePaper);
     }
 
     @Override
