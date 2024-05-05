@@ -20,15 +20,12 @@ public class AwsLogsAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     private String logGroupName;
     private String logStreamName;
     private String logStreamUuidPrefix;
-    private String logRegion;
     private String cloudWatchEndpoint;
     private int maxBatchLogEvents = 50;
     private long maxFlushTimeMillis = 0;
     private long maxBlockTimeMillis = 5000;
     private int retentionTimeDays = 0;
     private boolean verbose = true;
-    private String accessKeyId;
-    private String secretAccessKey;
 
     private AWSLogsStub awsLogsStub;
     private Worker worker;
@@ -93,16 +90,6 @@ public class AwsLogsAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         if (isNotBlank(logStreamUuidPrefix)) {
             this.logStreamUuidPrefix = logStreamUuidPrefix;
         }
-    }
-
-    @SuppressWarnings({"unused", "WeakerAccess"})
-    public String getLogRegion() {
-        return logRegion;
-    }
-
-    @SuppressWarnings({"unused", "WeakerAccess"})
-    public void setLogRegion(String logRegion) {
-        this.logRegion = logRegion;
     }
 
     @SuppressWarnings({"unused", "WeakerAccess"})
@@ -186,14 +173,6 @@ public class AwsLogsAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         this.verbose = verbose;
     }
 
-    public void setAccessKeyId(String accessKeyId) {
-        this.accessKeyId = accessKeyId;
-    }
-
-    public void setSecretAccessKey(String secretAccessKey) {
-        this.secretAccessKey = secretAccessKey;
-    }
-
     @Override
     public synchronized void start() {
         if (!isStarted()) {
@@ -214,8 +193,7 @@ public class AwsLogsAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
                 }
             }
             if (this.awsLogsStub == null) {
-                this.awsLogsStub = new AWSLogsStub(logGroupName, logStreamName, logRegion, retentionTimeDays
-                        , cloudWatchEndpoint, verbose, accessKeyId, secretAccessKey);
+                this.awsLogsStub = new AWSLogsStub(logGroupName, logStreamName, retentionTimeDays, cloudWatchEndpoint, verbose);
                 this.awsLogsStub.start();
             }
             if (this.worker == null) {
