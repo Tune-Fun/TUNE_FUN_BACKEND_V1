@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
-import static com.tune_fun.v1.account.adapter.output.persistence.Role.CLIENT_0;
+import static com.tune_fun.v1.account.adapter.output.persistence.Role.NORMAL;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
 import static com.tune_fun.v1.common.util.StringUtil.randomAlphaNumericSymbol;
 import static org.hamcrest.Matchers.*;
@@ -55,7 +55,7 @@ class LoginControllerIT extends ControllerBaseTest {
                 .andExpect(jsonPath("$.data", notNullValue()))
                 .andExpect(jsonPath("$.data.username", notNullValue()))
                 .andExpect(jsonPath("$.data.roles", allOf(notNullValue(), hasSize(1))))
-                .andExpect(jsonPath("$.data.roles[0]", is(CLIENT_0.getAuthority().split("ROLE_")[1])))
+                .andExpect(jsonPath("$.data.roles[0]", is(NORMAL.getAuthority().split("ROLE_")[1])))
                 .andExpect(jsonPath("$.data.access_token", notNullValue()))
                 .andExpect(jsonPath("$.data.refresh_token", notNullValue()));
 

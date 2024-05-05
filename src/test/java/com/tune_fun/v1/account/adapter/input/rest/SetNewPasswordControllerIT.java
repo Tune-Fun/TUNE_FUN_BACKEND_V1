@@ -8,7 +8,7 @@ import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.dummy.DummyService;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
-import com.tune_fun.v1.otp.domain.state.CurrentDecryptedOtp;
+import com.tune_fun.v1.otp.domain.value.CurrentDecryptedOtp;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;

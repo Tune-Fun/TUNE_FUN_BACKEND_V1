@@ -1,14 +1,14 @@
 package com.tune_fun.v1.common.hexagon;
 
 import org.springframework.core.annotation.AliasFor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.lang.annotation.*;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Component
+@Service
 public @interface UseCase {
 
     /**
@@ -17,7 +17,7 @@ public @interface UseCase {
      *
      * @return the suggested component name, if any (or empty String otherwise)
      */
-    @AliasFor(annotation = Component.class)
+    @AliasFor(annotation = Service.class)
     String value() default "";
 
 }

@@ -2,7 +2,7 @@ package com.tune_fun.v1.account.adapter.input.rest;
 
 import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.LoginUseCase;
-import com.tune_fun.v1.account.domain.state.LoginResult;
+import com.tune_fun.v1.account.domain.value.LoginResult;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.hexagon.WebAdapter;
 import com.tune_fun.v1.common.response.Response;

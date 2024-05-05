@@ -1,5 +1,6 @@
 package com.tune_fun.v1.common.aspect;
 
+import com.tune_fun.v1.common.constant.Constants;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -51,7 +52,7 @@ public class LoggingAspect {
         Object proceed = joinPoint.proceed();
         stopWatch.stop();
 
-        String msg = joinPoint.getSignature().getDeclaringType() + "." +
+        String msg = joinPoint.getSignature().getDeclaringType() + Constants.DOT +
                 joinPoint.getSignature().getName() + " : " +
                 "running time = " +
                 stopWatch.getTotalTimeMillis() + "ms";

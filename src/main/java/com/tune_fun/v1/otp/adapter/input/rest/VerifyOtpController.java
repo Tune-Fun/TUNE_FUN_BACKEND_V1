@@ -7,7 +7,7 @@ import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
 import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
 import com.tune_fun.v1.otp.application.port.input.usecase.VerifyOtpUseCase;
-import com.tune_fun.v1.otp.domain.state.VerifyResult;
+import com.tune_fun.v1.otp.domain.value.VerifyResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

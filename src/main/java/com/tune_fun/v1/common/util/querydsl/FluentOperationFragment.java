@@ -107,6 +107,14 @@ public abstract class FluentOperationFragment {
         return operate();
     }
 
+    public PredicateBuilder eqBoolean(BooleanExpression column, Boolean value) {
+        if (value != null) {
+            return operate(column.eq(value));
+        }
+
+        return operate();
+    }
+
     public <E extends Enum<E>> PredicateBuilder eqEnum(EnumExpression<E> column, E value) {
         if (value != null) {
             return operate(column.eq(value));
@@ -118,6 +126,22 @@ public abstract class FluentOperationFragment {
     public <E extends Enum<E>> PredicateBuilder inEnum(EnumExpression<E> column, List<E> value) {
         if (value != null) {
             return operate(column.in(value));
+        }
+
+        return operate();
+    }
+
+    public PredicateBuilder gtDateTime(DateTimeExpression<LocalDateTime> column, LocalDateTime value) {
+        if (value != null) {
+            return operate(column.gt(value));
+        }
+
+        return operate();
+    }
+
+    public PredicateBuilder ltDateTime(DateTimeExpression<LocalDateTime> column, LocalDateTime value) {
+        if (value != null) {
+            return operate(column.lt(value));
         }
 
         return operate();

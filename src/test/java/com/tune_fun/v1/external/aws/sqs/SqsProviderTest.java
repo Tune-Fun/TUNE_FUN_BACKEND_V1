@@ -18,8 +18,8 @@ import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @IntegrationTest
@@ -41,35 +41,35 @@ class SqsProviderTest {
     @SpyBean
     private TestConsumer testConsumer;
 
+    private static final String QUEUE_NAME = "test";
+
     @Test
     @Order(1)
     @DisplayName("AWS SQS 메시지 전송, 성공")
     void sendMessageRangedQueue() {
         // given
-        EventProperty.SqsProducer sqsProducer = eventProperty.sqs().values().stream().findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("sqsProducer is null"));
-        String queueName = sqsProducer.queueName();
+        assertDoesNotThrow(() -> eventProperty.validateSqsQueueName(QUEUE_NAME));
         TestMessage message = new TestMessage("Hello!");
 
         // when
-        SendResult<?> sendResult = sut.sendMessageRangedQueue(queueName, message);
+        SendResult<?> sendResult = sut.sendMessageRangedQueue(QUEUE_NAME, message);
         assertSame(sendResult.message().getPayload(), message);
 
         // then
         ThrowingRunnable receiveMessageAssertionRunnable = () ->
-                sqsAsyncClient.getQueueUrl(r -> r.queueName(queueName))
+                sqsAsyncClient.getQueueUrl(r -> r.queueName(QUEUE_NAME))
                         .thenApply(GetQueueUrlResponse::queueUrl)
-                        .thenCompose(queueUrl -> sqsAsyncClient.receiveMessage(getReceiveMessageRequest(queueUrl)))
+                        .thenCompose(queueUrl -> sqsAsyncClient.receiveMessage(buildReceiveMessageRequest(queueUrl)))
                         .thenAccept(r -> {
                                     receiveMessageIsEmpty(r);
                                     receiveMessagePayloadIsSame(r, message);
                                 }
                         );
         await().untilAsserted(receiveMessageAssertionRunnable);
-        verify(testConsumer, times(1)).consume(message);
+        verify(testConsumer).consume(message);
     }
 
-    private static ReceiveMessageRequest getReceiveMessageRequest(String queueUrl) {
+    private static ReceiveMessageRequest buildReceiveMessageRequest(String queueUrl) {
         return ReceiveMessageRequest.builder()
                 .queueUrl(queueUrl)
                 .maxNumberOfMessages(1)

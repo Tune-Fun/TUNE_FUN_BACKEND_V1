@@ -5,9 +5,9 @@ import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountJp
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountRepository;
 import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
-import com.tune_fun.v1.account.domain.state.CurrentAccount;
-import com.tune_fun.v1.account.domain.state.RegisteredAccount;
-import com.tune_fun.v1.account.domain.state.oauth2.RegisteredOAuth2Account;
+import com.tune_fun.v1.account.domain.value.CurrentAccount;
+import com.tune_fun.v1.account.domain.value.RegisteredAccount;
+import com.tune_fun.v1.account.domain.value.oauth2.RegisteredOAuth2Account;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -523,7 +523,7 @@ class AccountPersistenceAdapterTest {
 
         // Act
         CurrentAccount actualSaveAccountResult = accountPersistenceAdapter
-                .saveAccount(new SaveAccount("01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe", "iloveyou",
+                .saveAccount(new SaveAccount("NORMAL", "01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe", "iloveyou",
                         "jane.doe@example.org", "Nickname", true, true, true));
 
         // Assert

@@ -35,8 +35,7 @@ public record EventProperty(
     }
 
     public record SqsProducer(
-            String queueName,
-            String messageGroupId
+            String queueName
     ) {
     }
 

@@ -3,7 +3,7 @@ package com.tune_fun.v1.base;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import com.tune_fun.v1.account.domain.state.oauth2.OAuth2AuthorizationRequestMode;
+import com.tune_fun.v1.account.domain.value.oauth2.OAuth2AuthorizationRequestMode;
 import com.tune_fun.v1.base.annotation.IntegrationTest;
 import com.tune_fun.v1.base.doc.RestDocsConfig;
 import com.tune_fun.v1.common.response.MessageCode;

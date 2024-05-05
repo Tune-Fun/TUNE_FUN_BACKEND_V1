@@ -2,7 +2,9 @@ package com.tune_fun.v1.base.architecture;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import org.junit.jupiter.api.Test;
+import com.tune_fun.v1.common.constant.Constants;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
@@ -26,7 +28,7 @@ public abstract class BoundedContextDependencyRuleTest {
         assertDependency(rootPackage, classesToCheck);
     }
 
-    private static void assertDependency(String rootPackage, JavaClasses classesToCheck) {
+    private static void assertDependency(@NotBlank String rootPackage, @NotNull JavaClasses classesToCheck) {
         checkNoDependencyFromTo(rootPackage, DOMAIN_PACKAGE, APPLICATION_PACKAGE, classesToCheck);
 
         checkNoDependencyFromTo(rootPackage, DOMAIN_PACKAGE, ADAPTER_PACKAGE, classesToCheck);
@@ -50,11 +52,11 @@ public abstract class BoundedContextDependencyRuleTest {
     }
 
     private static String fullyBoundedContextPackage(String boundedContextPackage) {
-        return ROOT_PACKAGE + "." + boundedContextPackage;
+        return ROOT_PACKAGE + Constants.DOT + boundedContextPackage;
     }
 
     private static String fullyQualified(String rootPackage, String packageName) {
-        return rootPackage + '.' + packageName + "..";
+        return rootPackage + Constants.DOT + packageName + "..";
     }
 
     public abstract String getBoundedContextPackage();

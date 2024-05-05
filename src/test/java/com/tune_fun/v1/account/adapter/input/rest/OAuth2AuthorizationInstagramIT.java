@@ -11,7 +11,7 @@ import org.springframework.restdocs.headers.HeaderDescriptor;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
-import static com.tune_fun.v1.account.domain.state.oauth2.OAuth2AuthorizationRequestMode.*;
+import static com.tune_fun.v1.account.domain.value.oauth2.OAuth2AuthorizationRequestMode.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -95,8 +95,6 @@ public class OAuth2AuthorizationInstagramIT extends ControllerBaseTest {
                         )
                 ));
     }
-
-
 
 
 }

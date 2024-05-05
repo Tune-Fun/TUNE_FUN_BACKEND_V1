@@ -1,0 +1,46 @@
+[[Vote-API]]
+== Vote Paper API
+
+=== 투표 게시물 스크롤 조회 API
+
+==== 성공
+
+operation::get-vote-papers-success[snippets='http-request,http-response,query-parameters,response-fields']
+
+=== 투표 게시물 등록 API
+
+==== 성공
+
+operation::register-vote-paper-success[snippets='http-request,http-response,request-fields']
+
+=== 투표 선택지 등록 API
+
+==== 성공
+
+operation::register-vote-paper-choice-success[snippets='http-request,http-response,path-parameters,request-fields,response-fields']
+
+=== 투표 게시물 영상 제공일 등록 API
+
+==== 성공
+
+operation::update-delivery-date-success[snippets='http-request,http-response,path-parameters,request-fields,response-fields']
+
+=== 투표 게시물 영상 업로드 API
+
+==== 성공
+
+operation::update-video-url-success[snippets='http-request,http-response,path-parameters,request-fields,response-fields']
+
+=== 투표 게시물 삭제 API
+
+==== 성공
+
+operation::delete-vote-paper-success[snippets='http-request,http-response,query-parameters,response-fields']
+
+== Vote API
+
+=== 투표 등록 API
+
+==== 성공
+
+operation::register-vote-success[snippets='http-request,http-response,path-parameters,response-fields']

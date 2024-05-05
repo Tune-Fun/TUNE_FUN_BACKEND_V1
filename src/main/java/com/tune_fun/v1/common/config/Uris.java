@@ -5,6 +5,7 @@ public class Uris {
     private Uris() {
     }
 
+
     public static final String MESSAGE_CODES = "/message-codes";
     public static final String CUSTOM_RESPONSE_EXAMPLE = "/custom-response-example";
     public static final String CUSTOM_EXCEPTION_RESPONSE_EXAMPLE = "/custom-exception-response-example";
@@ -53,7 +54,15 @@ public class Uris {
     public static final String VERIFY_OTP_WITH_TOKEN = API_V1_ROOT + "/otp/verify-with-token";
     public static final String RESEND_OTP = API_V1_ROOT + "/otp/resend";
 
-    public static final String REGISTER_VOTE = API_V1_ROOT + "/vote/register";
+    public static final String VOTE_ROOT = API_V1_ROOT + "/votes";
+    public static final String VOTE_PAPER_ROOT = VOTE_ROOT + "/paper";
+
+    public static final String VOTE_PAPER_CHOICE = VOTE_PAPER_ROOT + "/choice/{votePaperId}";
+
+    public static final String UPDATE_VOTE_PAPER_DELIVERY_DATE = VOTE_PAPER_ROOT + "/{votePaperId}/delivery-date";
+    public static final String UPDATE_VOTE_PAPER_VIDEO_URL = VOTE_PAPER_ROOT + "/{votePaperId}/video-url";
+
+    public static final String REGISTER_VOTE = VOTE_ROOT + "/{votePaperId}" + "/register" + "/{voteChoiceId}";
 
     public static final String SWAGGER_UI_ROOT = "/swagger-ui";
     public static final String SWAGGER_UI = "/swagger-ui.html";
@@ -74,7 +83,7 @@ public class Uris {
     public static final String SWAGGER_API_DOCS_SWAGGER_CONFIG = SWAGGER_API_DOCS + "/swagger-config";
     public static final String SWAGGER_API_DOCS_JSON = "/docs/com.tune_fun-open-api-3.0.1.json";
 
-    public static final String API_DOC_HTML = "/static/docs/index.html";
+    public static final String API_DOC_HTML = "/docs/index.html";
     public static final String FAVICON = "/favicon.ico";
     public static final String HEALTH_CHECK = "/health-check";
 
@@ -142,6 +151,11 @@ public class Uris {
             CUSTOM_RESPONSE_EXAMPLE,
             CUSTOM_EXCEPTION_RESPONSE_EXAMPLE
     };
+
+    public static final String[] ARTIST_URIS = {
+            UPDATE_VOTE_PAPER_DELIVERY_DATE
+    };
+
     public static final String[] ADMIN_URIS = {
     };
 

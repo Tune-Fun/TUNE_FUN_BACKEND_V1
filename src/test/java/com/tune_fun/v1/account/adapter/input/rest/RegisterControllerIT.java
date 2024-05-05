@@ -14,19 +14,22 @@ import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.Issue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
-import static com.tune_fun.v1.account.adapter.output.persistence.Role.CLIENT_0;
+import static com.tune_fun.v1.account.adapter.output.persistence.Role.NORMAL;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 class RegisterControllerIT extends ControllerBaseTest {
@@ -56,6 +59,7 @@ class RegisterControllerIT extends ControllerBaseTest {
 
         ResultActions resultActions = mockMvc.perform(
                         post(Uris.REGISTER)
+                                .queryParam("type", "NORMAL")
                                 .content(toJson(command))
                                 .contentType(APPLICATION_JSON_VALUE)
                 )
@@ -63,7 +67,7 @@ class RegisterControllerIT extends ControllerBaseTest {
                 .andExpect(jsonPath("$.data", notNullValue()))
                 .andExpect(jsonPath("$.data.username", notNullValue()))
                 .andExpect(jsonPath("$.data.roles", allOf(notNullValue(), hasSize(1))))
-                .andExpect(jsonPath("$.data.roles[0]", is(CLIENT_0.getAuthority().split("ROLE_")[1])))
+                .andExpect(jsonPath("$.data.roles[0]", is(NORMAL.getAuthority().split("ROLE_")[1])))
                 .andExpect(jsonPath("$.data.access_token", notNullValue()))
                 .andExpect(jsonPath("$.data.refresh_token", notNullValue()));
 
@@ -72,12 +76,14 @@ class RegisterControllerIT extends ControllerBaseTest {
                         () -> assertEquals(username, accountInfo.username()),
                         () -> assertTrue(passwordEncoder.matches(password, accountInfo.password())),
                         () -> assertEquals(1, accountInfo.roles().size()),
-                        () -> assertEquals(CLIENT_0.name(), accountInfo.roles().stream().toList().getFirst())
+                        () -> assertEquals(NORMAL.name(), accountInfo.roles().stream().toList().getFirst())
                 ),
                 () -> fail("회원가입 실패")
         );
 
         assertTrue(validateAccessTokenUseCase.validateAccessToken(getAccessToken(resultActions)));
+
+        ParameterDescriptor queryParameterDescriptor = parameterWithName("type").description("회원가입 타입").attributes(constraint("NOT BLANK, NORMAL | ARTIST"));
 
         FieldDescriptor[] requestDescriptors = {
                 fieldWithPath("username").description("아이디").attributes(constraint("NOT BLANK")),
@@ -99,10 +105,12 @@ class RegisterControllerIT extends ControllerBaseTest {
         );
 
         resultActions.andDo(restDocs.document(
+                        queryParameters(queryParameterDescriptor),
                         requestFields(requestDescriptors), responseFields(responseDescriptors),
                         resource(
                                 builder().
                                         description("회원가입").
+                                        queryParameters(queryParameterDescriptor).
                                         requestFields(requestDescriptors).
                                         responseFields(responseDescriptors)
                                         .build()

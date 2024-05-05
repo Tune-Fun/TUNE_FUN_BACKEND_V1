@@ -7,6 +7,7 @@ import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.response.ExceptionResponse;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.util.ObjectUtil;
+import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.common.util.i18n.MessageSourceUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -26,7 +27,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -90,11 +90,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     return new CommonApplicationException(MessageCode.EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND);
                 });
 
-        return removeBearerPrefix(accessToken);
-    }
-
-    private String removeBearerPrefix(String accessTokenFromRequest) {
-        return Pattern.matches("^Bearer .*", accessTokenFromRequest) ? accessTokenFromRequest.substring(7) : null;
+        return StringUtil.removeBearerPrefix(accessToken);
     }
 
     private PreAuthenticatedAuthenticationToken getAuthentication(final String token) {
