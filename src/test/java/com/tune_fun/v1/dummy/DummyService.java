@@ -31,6 +31,8 @@ import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import com.tune_fun.v1.vote.domain.value.VotePaperOption;
+import io.hypersistence.tsid.TSID;
+import io.hypersistence.utils.hibernate.id.TsidGenerator;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;

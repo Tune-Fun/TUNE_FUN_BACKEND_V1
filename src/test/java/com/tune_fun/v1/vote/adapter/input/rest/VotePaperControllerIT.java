@@ -314,7 +314,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
         assertEquals(registeredVoteChoices.size(), 3);
 
         DocumentContext parsedVoteChoices = JsonPath.parse(toJson(registeredVoteChoices));
-        
+
         List<String> readMusic = parsedVoteChoices.read("$[*].music");
         assertThat(readMusic, hasItem("이별이란 어느 별에 (Feat. 조광일)"));
 

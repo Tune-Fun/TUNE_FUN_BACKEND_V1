@@ -1,5 +1,6 @@
 package com.tune_fun.v1.common.util;
 
+import com.github.f4b6a3.ulid.UlidCreator;
 import com.tune_fun.v1.common.constant.Constants;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -76,6 +77,10 @@ public class StringUtil {
 
     public static String uuid() {
         return UUID.randomUUID().toString();
+    }
+
+    public static String ulid() {
+        return UlidCreator.getMonotonicUlid().toString();
     }
 
     public boolean hasText(String text) {

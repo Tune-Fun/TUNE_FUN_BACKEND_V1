@@ -24,6 +24,7 @@ import java.util.Objects;
 @Table(name = "vote_paper")
 public class VotePaperJpaEntity extends BaseEntity {
 
+    // TODO : TSID Generation으로 변경 필요하나 DummyService.initVotePaperBatch()에서 사용하므로 일단 미적용
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
