@@ -14,6 +14,7 @@ import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.KeysetScrollPosition;
+import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Window;
 import org.springframework.stereotype.Component;
@@ -86,7 +87,13 @@ public class VotePersistenceAdapter implements
      */
     @Override
     public Window<ScrollableVotePaper> scrollVotePaper(final Integer lastId, final String sortType) {
-        KeysetScrollPosition position = forward(Map.of("id", lastId, "voteEndAt", Constants.LOCAL_DATE_TIME_MIN));
+        KeysetScrollPosition position;
+
+        if (lastId == null || lastId == 0)
+            position = ScrollPosition.keyset();
+
+        position = forward(Map.of("id", lastId, "voteEndAt", Constants.LOCAL_DATE_TIME_MIN));
+
         Sort sort = by(desc("id"), desc("voteEndAt"));
         return votePaperRepository.findFirst10ByEnabledTrue(position, sort).map(votePaperMapper::scrollableVotePaper);
     }

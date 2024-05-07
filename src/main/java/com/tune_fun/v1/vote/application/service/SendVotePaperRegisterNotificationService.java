@@ -20,7 +20,10 @@ import org.springframework.retry.support.RetrySynchronizationManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.tune_fun.v1.common.constant.Constants.NULL_BOOLEAN;
 
 @Slf4j
 @Service
@@ -41,7 +44,7 @@ public class SendVotePaperRegisterNotificationService implements SendVotePaperRe
         // TODO : Follower Aggregate Root................... -> accountIds
 
         List<NotificationApprovedDevice> notificationApprovedDevices = loadDevicePort.
-                loadNotificationApprovedDevice(true, null, null, null);
+                loadNotificationApprovedDevice(true, NULL_BOOLEAN, NULL_BOOLEAN, new ArrayList<>());
         log.info("notificationApprovedDevices: \n{}", objectUtil.objectToPrettyJson(notificationApprovedDevices));
 
         if (!notificationApprovedDevices.isEmpty())

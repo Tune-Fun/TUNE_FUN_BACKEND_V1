@@ -12,6 +12,8 @@ public final class Constants {
 
     public static final String NULL_STRING = null;
 
+    public static final Boolean NULL_BOOLEAN = null;
+
     public static final String EMPTY_STRING = "";
 
     public static final String SPACE = " ";
