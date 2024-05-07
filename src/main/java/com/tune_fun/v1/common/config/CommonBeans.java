@@ -18,6 +18,7 @@ import org.zalando.logbook.Logbook;
 import org.zalando.logbook.core.Conditions;
 import org.zalando.logbook.json.PrettyPrintingJsonBodyFilter;
 
+import java.time.Clock;
 import java.util.Properties;
 import java.util.function.Predicate;
 
@@ -105,6 +106,11 @@ public class CommonBeans {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemDefaultZone();
     }
 
     @Bean

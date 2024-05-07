@@ -12,6 +12,8 @@ import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedBy;

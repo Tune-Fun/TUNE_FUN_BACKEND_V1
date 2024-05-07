@@ -61,7 +61,7 @@ public class SendVotePaperRegisterNotificationService implements SendVotePaperRe
         }
 
         SendVotePaperRegisterNotification sendVotePaperRegisterNotificationBehavior = voteBehaviorMapper
-                .sendVotePaperRegisterFcm(event, devices);
+                .sendVotePaperRegisterNotification(event, devices);
         sendVoteNotificationPort.notification(sendVotePaperRegisterNotificationBehavior);
     }
 

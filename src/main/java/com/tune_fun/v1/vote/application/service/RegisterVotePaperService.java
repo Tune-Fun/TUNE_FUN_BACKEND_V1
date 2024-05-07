@@ -6,7 +6,7 @@ import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVotePaperUseCase;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
-import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUploadEventPort;
+import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperRegisterEventPort;
 import com.tune_fun.v1.vote.application.port.output.SaveVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.SaveVotePaperPort;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
@@ -37,7 +37,7 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
 
     private final SaveVoteChoicePort saveVoteChoicePort;
 
-    private final ProduceVotePaperUploadEventPort produceVotePaperUploadEventPort;
+    private final ProduceVotePaperRegisterEventPort produceVotePaperRegisterEventPort;
 
     private final VoteBehaviorMapper voteBehaviorMapper;
 
@@ -52,11 +52,11 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
         saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
 
         VotePaperRegisterEvent votePaperRegisterEventBehavior = getProduceVotePaperUploadEventBehavior(registeredVotePaper);
-        produceVotePaperUploadEventPort.produceVotePaperUploadEvent(votePaperRegisterEventBehavior);
+        produceVotePaperRegisterEventPort.produceVotePaperUploadEvent(votePaperRegisterEventBehavior);
     }
 
     private static void validateOffersCount(final VotePaperCommands.Register command) {
-        if(DENY_ADD_CHOICES.equals(command.option()) && command.offers().size() < 2)
+        if (DENY_ADD_CHOICES.equals(command.option()) && command.offers().size() < 2)
             throw new CommonApplicationException(VOTE_POLICY_OFFERS_COUNT_SHOULD_BE_MORE_THAN_TWO);
     }
 
@@ -78,6 +78,7 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
     }
 
     private static @NotNull VotePaperRegisterEvent getProduceVotePaperUploadEventBehavior(RegisteredVotePaper registeredVotePaper) {
-        return new VotePaperRegisterEvent(registeredVotePaper.uuid(), registeredVotePaper.author(), registeredVotePaper.title(), registeredVotePaper.content());
+        return new VotePaperRegisterEvent(registeredVotePaper.uuid(), registeredVotePaper.author(), registeredVotePaper.title(),
+                registeredVotePaper.content(), registeredVotePaper.voteEndAt());
     }
 }

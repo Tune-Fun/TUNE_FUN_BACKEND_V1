@@ -3,20 +3,22 @@ package com.tune_fun.v1.vote.adapter.output.message;
 import com.tune_fun.v1.external.aws.sqs.SqsProvider;
 import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUpdateDeliveryDateEventPort;
 import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUpdateVideoUrlPort;
-import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUploadEventPort;
+import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperRegisterEventPort;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateVideoUrlEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class VoteMessageBrokerAdapter implements
-        ProduceVotePaperUploadEventPort, ProduceVotePaperUpdateDeliveryDateEventPort,
+        ProduceVotePaperRegisterEventPort, ProduceVotePaperUpdateDeliveryDateEventPort,
         ProduceVotePaperUpdateVideoUrlPort {
 
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final SqsProvider sqsProvider;
 
     @Value("${event.sqs.send-vote-paper-upload-notification.queue-name}")
@@ -31,10 +33,13 @@ public class VoteMessageBrokerAdapter implements
 
     /**
      * @param votePaperRegisterEvent {@link VotePaperRegisterEvent}
+     *
+     * @see com.tune_fun.v1.vote.adapter.input.event.VoteEventListener#handleVotePaperRegisterEvent(VotePaperRegisterEvent)
      * @see com.tune_fun.v1.vote.adapter.input.message.VoteMessageConsumer#consumeVotePaperUploadEvent(VotePaperRegisterEvent)
      */
     @Override
     public void produceVotePaperUploadEvent(final VotePaperRegisterEvent votePaperRegisterEvent) {
+        applicationEventPublisher.publishEvent(votePaperRegisterEvent);
         sqsProvider.sendMessageRangedQueue(votePaperUploadQueue, votePaperRegisterEvent);
     }
 
