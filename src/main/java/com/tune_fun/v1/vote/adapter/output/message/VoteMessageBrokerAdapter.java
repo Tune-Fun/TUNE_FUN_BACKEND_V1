@@ -1,9 +1,9 @@
 package com.tune_fun.v1.vote.adapter.output.message;
 
 import com.tune_fun.v1.external.aws.sqs.SqsProvider;
+import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperRegisterEventPort;
 import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUpdateDeliveryDateEventPort;
 import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUpdateVideoUrlPort;
-import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUploadEventPort;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateVideoUrlEvent;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class VoteMessageBrokerAdapter implements
-        ProduceVotePaperUploadEventPort, ProduceVotePaperUpdateDeliveryDateEventPort,
+        ProduceVotePaperRegisterEventPort, ProduceVotePaperUpdateDeliveryDateEventPort,
         ProduceVotePaperUpdateVideoUrlPort {
 
     private final SqsProvider sqsProvider;

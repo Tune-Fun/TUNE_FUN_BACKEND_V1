@@ -88,6 +88,9 @@ spring:
             token-uri: https://api.instagram.com/oauth/access_token
             user-info-uri: https://graph.instagram.com/me
             user-name-attribute: username
+  threads:
+    virtual:
+      enabled: true
 
 fcm:
   sdk-file: tunefun-firebase-adminsdk.json

@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.tune_fun.v1.common.constant.Constants.NULL_BOOLEAN;
+
 @Slf4j
 @Service
 @UseCase
@@ -38,7 +40,7 @@ public class SendVotePaperUpdateVideoUrlNotificationService implements SendVoteP
         List<Long> voterIds = loadVotePort.loadVoterIdsByVotePaperUuid(event.id());
 
         List<NotificationApprovedDevice> notificationApprovedDevices =
-                loadDevicePort.loadNotificationApprovedDevice(null, null, true, voterIds);
+                loadDevicePort.loadNotificationApprovedDevice(NULL_BOOLEAN, NULL_BOOLEAN, true, voterIds);
 
         if (!notificationApprovedDevices.isEmpty())
             sendVotePaperUpdateVideoUrlNotification(event, notificationApprovedDevices);

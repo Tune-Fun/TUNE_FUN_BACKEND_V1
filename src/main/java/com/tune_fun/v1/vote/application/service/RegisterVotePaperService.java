@@ -6,16 +6,18 @@ import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVotePaperUseCase;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
-import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperUploadEventPort;
+import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperRegisterEventPort;
 import com.tune_fun.v1.vote.application.port.output.SaveVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.SaveVotePaperPort;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
+import com.tune_fun.v1.vote.domain.event.VotePaperDeadlineEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,11 +39,15 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
 
     private final SaveVoteChoicePort saveVoteChoicePort;
 
-    private final ProduceVotePaperUploadEventPort produceVotePaperUploadEventPort;
+    private final ProduceVotePaperRegisterEventPort produceVotePaperRegisterEventPort;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     private final VoteBehaviorMapper voteBehaviorMapper;
 
-
+    /**
+     * @see com.tune_fun.v1.vote.adapter.input.event.VoteEventListener#handleVotePaperDeadlineEvent(VotePaperDeadlineEvent)
+     */
     @Transactional
     @Override
     public void register(final VotePaperCommands.Register command, final User user) throws JsonProcessingException {
@@ -52,11 +58,13 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
         saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
 
         VotePaperRegisterEvent votePaperRegisterEventBehavior = getProduceVotePaperUploadEventBehavior(registeredVotePaper);
-        produceVotePaperUploadEventPort.produceVotePaperUploadEvent(votePaperRegisterEventBehavior);
+        applicationEventPublisher.publishEvent(new VotePaperDeadlineEvent(registeredVotePaper.uuid(), registeredVotePaper.author(),
+                registeredVotePaper.title(), registeredVotePaper.content(), registeredVotePaper.voteEndAt()));
+        produceVotePaperRegisterEventPort.produceVotePaperUploadEvent(votePaperRegisterEventBehavior);
     }
 
     private static void validateOffersCount(final VotePaperCommands.Register command) {
-        if(DENY_ADD_CHOICES.equals(command.option()) && command.offers().size() < 2)
+        if (DENY_ADD_CHOICES.equals(command.option()) && command.offers().size() < 2)
             throw new CommonApplicationException(VOTE_POLICY_OFFERS_COUNT_SHOULD_BE_MORE_THAN_TWO);
     }
 
@@ -78,6 +86,7 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
     }
 
     private static @NotNull VotePaperRegisterEvent getProduceVotePaperUploadEventBehavior(RegisteredVotePaper registeredVotePaper) {
-        return new VotePaperRegisterEvent(registeredVotePaper.uuid(), registeredVotePaper.author(), registeredVotePaper.title(), registeredVotePaper.content());
+        return new VotePaperRegisterEvent(registeredVotePaper.uuid(), registeredVotePaper.author(), registeredVotePaper.title(),
+                registeredVotePaper.content());
     }
 }

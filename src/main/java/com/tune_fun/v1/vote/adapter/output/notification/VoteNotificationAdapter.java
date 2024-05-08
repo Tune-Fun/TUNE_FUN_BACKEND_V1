@@ -4,6 +4,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.tune_fun.v1.external.firebase.FirebaseMessagingMediator;
 import com.tune_fun.v1.external.firebase.FirebaseMto;
 import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
+import com.tune_fun.v1.vote.domain.behavior.SendVotePaperEndNotification;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterNotification;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateDeliveryDateNotification;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperUpdateVideoUrlNotification;
@@ -22,6 +23,12 @@ public class VoteNotificationAdapter implements SendVoteNotificationPort {
     @Override
     public void notification(final SendVotePaperRegisterNotification behavior) throws FirebaseMessagingException {
         FirebaseMto.ByTokens mto = voteFirebaseMessagingMapper.fromSendVotePaperRegisterNotificationBehavior(behavior);
+        firebaseMessagingMediator.sendMulticastMessageByTokens(mto);
+    }
+
+    @Override
+    public void notification(SendVotePaperEndNotification behavior) throws FirebaseMessagingException {
+        FirebaseMto.ByTokens mto = voteFirebaseMessagingMapper.fromSendVotePaperEndNotificationBehavior(behavior);
         firebaseMessagingMediator.sendMulticastMessageByTokens(mto);
     }
 

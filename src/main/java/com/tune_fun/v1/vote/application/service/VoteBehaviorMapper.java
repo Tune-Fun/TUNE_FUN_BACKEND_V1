@@ -4,6 +4,7 @@ import com.tune_fun.v1.account.domain.value.NotificationApprovedDevice;
 import com.tune_fun.v1.common.config.BaseMapperConfig;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.domain.behavior.*;
+import com.tune_fun.v1.vote.domain.event.VotePaperDeadlineEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateVideoUrlEvent;
@@ -34,34 +35,44 @@ public abstract class VoteBehaviorMapper {
     @Mapping(target = "offerReleaseDate", source = "releaseDate")
     public abstract SaveVoteChoice saveVoteChoice(final VotePaperCommands.Offer offer);
 
-    @Mapping(target = "title", source = "event", qualifiedByName = "votePaperRegisterFcmTitle")
+    @Mapping(target = "title", source = "event", qualifiedByName = "votePaperRegisterNotificationTitle")
     @Mapping(target = "body", source = "event.title")
     @Mapping(target = "fcmTokens", source = "devices", qualifiedByName = "fcmTokens")
-    public abstract SendVotePaperRegisterNotification sendVotePaperRegisterFcm(final VotePaperRegisterEvent event, final List<NotificationApprovedDevice> devices);
+    public abstract SendVotePaperRegisterNotification sendVotePaperRegisterNotification(final VotePaperRegisterEvent event, final List<NotificationApprovedDevice> devices);
 
-    @Mapping(target = "title", source = "event", qualifiedByName = "votePaperUpdateDeliveryDateFcmTitle")
+    @Mapping(target = "title", source = "event", qualifiedByName = "votePaperEndNotificationTitle")
+    @Mapping(target = "body", source = "event.title")
+    @Mapping(target = "fcmTokens", source = "devices", qualifiedByName = "fcmTokens")
+    public abstract SendVotePaperEndNotification sendVotePaperEndNotification(final VotePaperDeadlineEvent event, final List<NotificationApprovedDevice> devices);
+
+    @Mapping(target = "title", source = "event", qualifiedByName = "votePaperUpdateDeliveryDateNotificationTitle")
     @Mapping(target = "body", source = "event.title")
     @Mapping(target = "fcmTokens", source = "devices", qualifiedByName = "fcmTokens")
     public abstract SendVotePaperUpdateDeliveryDateNotification sendVotePaperUpdateDeliveryDateNotification(final VotePaperUpdateDeliveryDateEvent event, final List<NotificationApprovedDevice> devices);
 
-    @Mapping(target = "title", source = "event", qualifiedByName = "votePaperUpdateVideoUrlFcmTitle")
+    @Mapping(target = "title", source = "event", qualifiedByName = "votePaperUpdateVideoUrlNotificationTitle")
     @Mapping(target = "body", source = "event.title")
     @Mapping(target = "fcmTokens", source = "devices", qualifiedByName = "fcmTokens")
     @Mapping(target = "videoUrl", source = "event.videoUrl")
     public abstract SendVotePaperUpdateVideoUrlNotification sendVotePaperUpdateVideoUrlNotification(final VotePaperUpdateVideoUrlEvent event, final List<NotificationApprovedDevice> devices);
 
-    @Named("votePaperRegisterFcmTitle")
-    public String votePaperRegisterFcmTitle(final VotePaperRegisterEvent event) {
+    @Named("votePaperRegisterNotificationTitle")
+    public String votePaperRegisterNotificationTitle(final VotePaperRegisterEvent event) {
         return String.format("[%s]님이 투표를 게재하였습니다.", event.author());
     }
 
-    @Named("votePaperUpdateDeliveryDateFcmTitle")
-    public String votePaperUpdateDeliveryDateFcmTitle(final VotePaperUpdateDeliveryDateEvent event) {
+    @Named("votePaperEndNotificationTitle")
+    public String votePaperEndNotificationTitle(final VotePaperDeadlineEvent event) {
+        return String.format("[%s]님의 투표가 종료되었습니다. 최종 선정된 곡을 확인해 주세요.", event.author());
+    }
+
+    @Named("votePaperUpdateDeliveryDateNotificationTitle")
+    public String votePaperUpdateDeliveryDateNotificationTitle(final VotePaperUpdateDeliveryDateEvent event) {
         return String.format("[%s]님이 제공일을 설정하였습니다.", event.author());
     }
 
-    @Named("votePaperUpdateVideoUrlFcmTitle")
-    public String votePaperUpdateVideoUrlFcmTitle(final VotePaperUpdateVideoUrlEvent event) {
+    @Named("votePaperUpdateVideoUrlNotificationTitle")
+    public String votePaperUpdateVideoUrlNotificationTitle(final VotePaperUpdateVideoUrlEvent event) {
         return String.format("[%s]님이 선정된 곡에 대해 영상을 업로드 하였습니다.", event.author());
     }
 

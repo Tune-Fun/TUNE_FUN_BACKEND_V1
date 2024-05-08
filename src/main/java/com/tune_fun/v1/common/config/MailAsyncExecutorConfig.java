@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @EnableAsync
 @OnlyDevelopmentConfiguration
-public class MailExecutorConfig implements AsyncConfigurer {
+public class MailAsyncExecutorConfig implements AsyncConfigurer {
 
     private final int corePoolSize = 4;
 
