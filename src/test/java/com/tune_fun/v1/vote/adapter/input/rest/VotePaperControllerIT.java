@@ -7,10 +7,14 @@ import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.dummy.DummyService;
 import com.tune_fun.v1.external.firebase.FirebaseMessagingMediator;
+import com.tune_fun.v1.vote.adapter.input.event.VoteEventListener;
 import com.tune_fun.v1.vote.adapter.input.message.VoteMessageConsumer;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.output.LoadVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
+import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
+import com.tune_fun.v1.vote.application.service.ScheduleVotePaperDeadlineService;
+import com.tune_fun.v1.vote.domain.event.VotePaperDeadlineEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateVideoUrlEvent;
@@ -82,6 +86,15 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
     @SpyBean
     private VoteMessageConsumer voteMessageConsumer;
+
+    @SpyBean
+    private VoteEventListener voteEventListener;
+
+    @SpyBean
+    private ScheduleVotePaperDeadlineService scheduleVotePaperDeadlineService;
+
+    @SpyBean
+    private SendVoteNotificationPort sendVoteNotificationPort;
 
     @Value("${event.sqs.send-vote-paper-upload-notification.queue-name}")
     private String votePaperUploadQueue;
@@ -261,8 +274,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
                         220_000, "2023-06-18")
         );
 
-        LocalDateTime voteStartAt = now().plusDays(1);
-        LocalDateTime voteEndAt = now().plusDays(2);
+        LocalDateTime voteStartAt = now().plusSeconds(3);
+        LocalDateTime voteEndAt = now().plusDays(5);
 
         VotePaperCommands.Register command = new VotePaperCommands.Register("First Vote Paper", "test",
                 VotePaperOption.DENY_ADD_CHOICES, voteStartAt, voteEndAt, offers);
@@ -307,6 +320,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
         awaitReceiveMessage(votePaperUploadQueue);
         verify(voteMessageConsumer).consumeVotePaperUploadEvent(any(VotePaperRegisterEvent.class));
+        verify(voteEventListener).handleVotePaperDeadlineEvent(any(VotePaperDeadlineEvent.class));
+        verify(scheduleVotePaperDeadlineService).scheduleVotePaperDeadlineAction(any(VotePaperDeadlineEvent.class));
 
         // TODO : GitHub Actions 에서는 테스트 실패함. 원인 파악 필요
 //        verify(firebaseMessagingMediator).sendMulticastMessageByTokens(any());
@@ -339,6 +354,10 @@ class VotePaperControllerIT extends ControllerBaseTest {
         List<List<String>> readGenres = parsedChoices.read("$[*].genres");
         log.info("readGenres: {}", readGenres);
         assertThat(readGenres, hasItems(singletonList("Dance"), singletonList("Rock")));
+
+// TODO : 수동 테스트가 필요함
+//        Thread.sleep(5000);
+//        verify(sendVoteNotificationPort).notification(any(SendVotePaperEndNotification.class));
     }
 
     @Transactional

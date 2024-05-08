@@ -1,7 +1,9 @@
 package com.tune_fun.v1.common.config.aws;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.awspring.cloud.sqs.config.SqsMessageListenerContainerFactory;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
+import io.awspring.cloud.sqs.support.converter.SqsMessagingMessageConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,9 +49,19 @@ public class AwsSqsConfig {
 
     @Bean
     @DependsOn("sqsAsyncClient")
-    public SqsTemplate sqsTemplate(SqsAsyncClient sqsAsyncClient) {
+    public SqsTemplate sqsTemplate(SqsAsyncClient sqsAsyncClient, SqsMessagingMessageConverter messageConverter) {
         log.info("SqsTemplate is created");
-        return SqsTemplate.newTemplate(sqsAsyncClient);
+        return SqsTemplate.builder()
+                .sqsAsyncClient(sqsAsyncClient)
+                .messageConverter(messageConverter)
+                .build();
+    }
+
+    @Bean
+    public SqsMessagingMessageConverter messageConverter(ObjectMapper objectMapper) {
+        SqsMessagingMessageConverter converter = new SqsMessagingMessageConverter();
+        converter.setObjectMapper(objectMapper);
+        return converter;
     }
 
 }

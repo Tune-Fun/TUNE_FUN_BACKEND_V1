@@ -6,13 +6,12 @@ import com.tune_fun.v1.account.domain.value.NotificationApprovedDevice;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.common.response.MessageCode;
-import com.tune_fun.v1.vote.application.port.input.usecase.ScheduleVotePaperDeadlineActionUseCase;
+import com.tune_fun.v1.vote.application.port.input.usecase.ScheduleVotePaperDeadlineUseCase;
 import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperEndNotification;
-import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
+import com.tune_fun.v1.vote.domain.event.VotePaperDeadlineEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.concurrent.SimpleAsyncTaskScheduler;
 import org.springframework.stereotype.Service;
 
@@ -28,18 +27,18 @@ import static com.tune_fun.v1.common.constant.Constants.NULL_BOOLEAN;
 @Service
 @UseCase
 @RequiredArgsConstructor
-public class ScheduleVotePaperDeadlineActionService implements ScheduleVotePaperDeadlineActionUseCase {
+public class ScheduleVotePaperDeadlineService implements ScheduleVotePaperDeadlineUseCase {
 
     private final LoadDevicePort loadDevicePort;
     private final SendVoteNotificationPort sendVoteNotificationPort;
+
     private final Clock clock;
     private final SimpleAsyncTaskScheduler taskScheduler;
 
     private final VoteBehaviorMapper voteBehaviorMapper;
 
-    @Async
     @Override
-    public void scheduleVotePaperDeadlineAction(VotePaperRegisterEvent event) {
+    public void scheduleVotePaperDeadlineAction(VotePaperDeadlineEvent event) {
         final LocalDateTime deadline = event.voteEndAt();
         final Instant deadlineInstant = toInstant(deadline);
 
@@ -53,7 +52,7 @@ public class ScheduleVotePaperDeadlineActionService implements ScheduleVotePaper
 
     }
 
-    public void sendVotePaperEndNotification(VotePaperRegisterEvent event) throws FirebaseMessagingException {
+    public void sendVotePaperEndNotification(VotePaperDeadlineEvent event) throws FirebaseMessagingException {
         List<NotificationApprovedDevice> devices = loadDevicePort.
                 loadNotificationApprovedDevice(NULL_BOOLEAN, true, NULL_BOOLEAN, new ArrayList<>());
 

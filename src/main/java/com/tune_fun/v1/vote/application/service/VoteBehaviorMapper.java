@@ -4,6 +4,7 @@ import com.tune_fun.v1.account.domain.value.NotificationApprovedDevice;
 import com.tune_fun.v1.common.config.BaseMapperConfig;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.domain.behavior.*;
+import com.tune_fun.v1.vote.domain.event.VotePaperDeadlineEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateVideoUrlEvent;
@@ -42,7 +43,7 @@ public abstract class VoteBehaviorMapper {
     @Mapping(target = "title", source = "event", qualifiedByName = "votePaperEndNotificationTitle")
     @Mapping(target = "body", source = "event.title")
     @Mapping(target = "fcmTokens", source = "devices", qualifiedByName = "fcmTokens")
-    public abstract SendVotePaperEndNotification sendVotePaperEndNotification(final VotePaperRegisterEvent event, final List<NotificationApprovedDevice> devices);
+    public abstract SendVotePaperEndNotification sendVotePaperEndNotification(final VotePaperDeadlineEvent event, final List<NotificationApprovedDevice> devices);
 
     @Mapping(target = "title", source = "event", qualifiedByName = "votePaperUpdateDeliveryDateNotificationTitle")
     @Mapping(target = "body", source = "event.title")
@@ -61,7 +62,7 @@ public abstract class VoteBehaviorMapper {
     }
 
     @Named("votePaperEndNotificationTitle")
-    public String votePaperEndNotificationTitle(final VotePaperRegisterEvent event) {
+    public String votePaperEndNotificationTitle(final VotePaperDeadlineEvent event) {
         return String.format("[%s]님의 투표가 종료되었습니다. 최종 선정된 곡을 확인해 주세요.", event.author());
     }
 
