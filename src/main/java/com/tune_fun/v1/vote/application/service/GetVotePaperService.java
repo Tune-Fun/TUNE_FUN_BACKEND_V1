@@ -25,7 +25,6 @@ public class GetVotePaperService implements GetVotePaperUseCase {
 
     private final VoteValueMapper voteValueMapper;
 
-
     @Override
     public FullVotePaper getVotePaper(final Long votePaperId) {
         RegisteredVotePaper registeredVotePaper = loadVotePaperPort.loadRegisteredVotePaper(votePaperId)

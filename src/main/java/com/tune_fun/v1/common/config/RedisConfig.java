@@ -3,6 +3,7 @@ package com.tune_fun.v1.common.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tune_fun.v1.account.adapter.output.persistence.jwt.AccessTokenRedisEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.jwt.RefreshTokenRedisEntity;
+import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpRedisEntity;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
@@ -25,7 +26,11 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
+import static java.time.Duration.ofDays;
+import static java.time.Duration.ofHours;
 import static org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair.fromSerializer;
 
 @Slf4j
@@ -69,9 +74,14 @@ public class RedisConfig {
                 .prefixCacheNameWith("Cache_")
                 .entryTtl(Duration.ofMinutes(30));
 
+        Map<String, RedisCacheConfiguration> redisCacheConfigMap = new HashMap<>();
+        redisCacheConfigMap.put(Constants.CacheNames.VOTE_PAPER, redisCacheConfiguration.entryTtl(ofHours(1)));
+        redisCacheConfigMap.put(Constants.CacheNames.VOTE_CHOICE, redisCacheConfiguration.entryTtl(ofDays(1)));
+
         return RedisCacheManager.RedisCacheManagerBuilder
                 .fromConnectionFactory(redisConnectionFactory)
                 .cacheDefaults(redisCacheConfiguration)
+                .withInitialCacheConfigurations(redisCacheConfigMap)
                 .build();
     }
 

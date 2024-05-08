@@ -16,7 +16,7 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
  */
 @Component
 @Order(HIGHEST_PRECEDENCE)
-class MDCLoggingFilter implements Filter {
+public class MDCLoggingFilter implements Filter {
 
     @Override
     public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain filterChain) throws IOException, ServletException {

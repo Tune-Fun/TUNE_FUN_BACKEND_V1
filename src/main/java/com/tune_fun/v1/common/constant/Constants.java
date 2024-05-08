@@ -30,6 +30,11 @@ public final class Constants {
             LocalDate.of(1970, 1, 1), LocalTime.of(0, 0, 1)
     );
 
+    public static final class CacheNames {
+        public static final String VOTE_PAPER = "votePaper";
+        public static final String VOTE_CHOICE = "voteChoice";
+    }
+
     public static final class NicknameFragment {
 
         public static final String[] PREFIX_NAMES = {
