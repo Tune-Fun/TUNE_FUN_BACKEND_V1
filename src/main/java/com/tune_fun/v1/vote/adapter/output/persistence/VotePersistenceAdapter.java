@@ -5,6 +5,8 @@ import com.tune_fun.v1.account.adapter.output.persistence.AccountPersistenceAdap
 import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.interaction.application.port.output.DeleteLikePort;
+import com.tune_fun.v1.interaction.application.port.output.SaveLikePort;
 import com.tune_fun.v1.vote.application.port.output.*;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
@@ -38,7 +40,8 @@ public class VotePersistenceAdapter implements
         LoadVotePort, SaveVotePort,
         LoadVotePaperPort, SaveVotePaperPort, DeleteVotePaperPort,
         UpdateDeliveryAtPort, UpdateVideoUrlPort,
-        LoadVoteChoicePort, SaveVoteChoicePort {
+        LoadVoteChoicePort, SaveVoteChoicePort,
+        SaveLikePort, DeleteLikePort {
 
     private final AccountPersistenceAdapter accountPersistenceAdapter;
 

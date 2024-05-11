@@ -16,8 +16,8 @@ public class LikeVotePaperService implements LikeVotePaperUseCase {
 
 
     @Override
-    public void likeVotePaper(Long votePaperId, User user) {
-
+    public void likeVotePaper(final Long votePaperId, final User user) {
+        saveLikePort.saveLike(votePaperId, user);
     }
 
 }
