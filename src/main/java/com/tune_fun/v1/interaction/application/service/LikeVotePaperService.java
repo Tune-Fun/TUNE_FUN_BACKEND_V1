@@ -6,6 +6,7 @@ import com.tune_fun.v1.interaction.application.port.output.SaveLikePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @UseCase
@@ -15,9 +16,10 @@ public class LikeVotePaperService implements LikeVotePaperUseCase {
     private final SaveLikePort saveLikePort;
 
 
+    @Transactional
     @Override
     public void likeVotePaper(final Long votePaperId, final User user) {
-        saveLikePort.saveLike(votePaperId, user);
+        saveLikePort.saveLike(votePaperId, user.getUsername());
     }
 
 }

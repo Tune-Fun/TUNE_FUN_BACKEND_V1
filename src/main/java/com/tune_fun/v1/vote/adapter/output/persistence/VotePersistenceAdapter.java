@@ -5,6 +5,8 @@ import com.tune_fun.v1.account.adapter.output.persistence.AccountPersistenceAdap
 import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeJpaEntity;
+import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeRepository;
 import com.tune_fun.v1.interaction.application.port.output.DeleteLikePort;
 import com.tune_fun.v1.interaction.application.port.output.SaveLikePort;
 import com.tune_fun.v1.vote.application.port.output.*;
@@ -48,6 +50,7 @@ public class VotePersistenceAdapter implements
     private final VoteRepository voteRepository;
     private final VotePaperRepository votePaperRepository;
     private final VoteChoiceRepository voteChoiceRepository;
+    private final VotePaperLikeRepository votePaperLikeRepository;
 
     private final VotePaperMapper votePaperMapper;
     private final VoteChoiceMapper voteChoiceMapper;
@@ -173,6 +176,27 @@ public class VotePersistenceAdapter implements
                 .collect(toSet());
 
         voteChoiceRepository.saveAll(updatedVoteChoices);
+    }
+
+    @Override
+    public void saveLike(final Long votePaperId, final String username) {
+        AccountJpaEntity account = accountPersistenceAdapter.loadAccountByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        VotePaperJpaEntity votePaper = votePaperRepository.findById(votePaperId)
+                .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
+
+        VotePaperLikeJpaEntity votePaperLike = VotePaperLikeJpaEntity.builder()
+                .votePaper(votePaper)
+                .liker(account)
+                .build();
+
+        votePaperLikeRepository.save(votePaperLike);
+    }
+
+    @Override
+    public void deleteLike(final Long likeId) {
+        votePaperLikeRepository.deleteById(likeId);
     }
 
     public Optional<VotePaperJpaEntity> findOneAvailable(final Long votePaperId, final String username) {

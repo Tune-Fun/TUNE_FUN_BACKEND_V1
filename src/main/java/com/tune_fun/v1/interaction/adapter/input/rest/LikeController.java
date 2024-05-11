@@ -31,9 +31,9 @@ public class LikeController {
         return responseMapper.ok();
     }
 
-    @DeleteMapping(value = Uris.LIKE_VOTE_PAPER)
-    public ResponseEntity<Response<?>> unlikeVotePaper(@PathVariable(name = "votePaperId") Long votePaperId, @CurrentUser final User user) {
-        unlikeVotePaperUseCase.unlikeVotePaper(votePaperId, user);
+    @DeleteMapping(value = Uris.LIKE_ROOT + "/{likeId}")
+    public ResponseEntity<Response<?>> unlikeVotePaper(@PathVariable(name = "likeId") Long likeId, @CurrentUser final User user) {
+        unlikeVotePaperUseCase.unlikeVotePaper(likeId);
         return responseMapper.ok();
     }
 

@@ -31,8 +31,8 @@ public class VotePaperLikeJpaEntity extends BaseEntity {
     private VotePaperJpaEntity votePaper;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "voter_id", nullable = false, updatable = false, referencedColumnName = "id")
-    @Comment("투표자 ID")
-    private AccountJpaEntity voter;
+    @JoinColumn(name = "liker_id", nullable = false, updatable = false, referencedColumnName = "id")
+    @Comment("좋아요 한 사용자 ID")
+    private AccountJpaEntity liker;
 
 }

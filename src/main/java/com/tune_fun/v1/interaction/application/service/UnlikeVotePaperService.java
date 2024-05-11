@@ -4,8 +4,8 @@ import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.interaction.application.port.input.usecase.UnlikeVotePaperUseCase;
 import com.tune_fun.v1.interaction.application.port.output.DeleteLikePort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @UseCase
@@ -14,10 +14,10 @@ public class UnlikeVotePaperService implements UnlikeVotePaperUseCase {
 
     private final DeleteLikePort deleteLikePort;
 
-
+    @Transactional
     @Override
-    public void unlikeVotePaper(Long votePaperId, User user) {
-
+    public void unlikeVotePaper(final Long likeId) {
+        deleteLikePort.deleteLike(likeId);
     }
 
 
