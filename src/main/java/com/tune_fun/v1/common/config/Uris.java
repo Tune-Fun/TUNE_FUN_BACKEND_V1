@@ -83,7 +83,7 @@ public class Uris {
     public static final String SWAGGER_API_DOCS_SWAGGER_CONFIG = SWAGGER_API_DOCS + "/swagger-config";
     public static final String SWAGGER_API_DOCS_JSON = "/docs/com.tune_fun-open-api-3.0.1.json";
 
-    public static final String API_DOC_HTML = "/docs/index.html";
+    public static final String API_DOC_HTML = "/static/docs/index.html";
     public static final String FAVICON = "/favicon.ico";
     public static final String HEALTH_CHECK = "/health-check";
 
