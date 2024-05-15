@@ -44,21 +44,13 @@ public class VotePaperCommands {
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public record Offer(
             @NotBlank(message = "{vote.paper.offer.music.not_blank}")
+            String id,
+
+            @NotBlank(message = "{vote.paper.offer.music.not_blank}")
             String music,
 
             @NotBlank(message = "{vote.paper.offer.artist_name.not_blank}")
-            String artistName,
-
-            @NotNull(message = "{vote.paper.offer.genres.not_null}")
-            @NotEmpty(message = "{vote.paper.offer.genres.not_empty}")
-            List<String> genres,
-
-            @NotNull(message = "{vote.paper.offer.duration_ms.not_null}")
-            @Positive(message = "{vote.paper.offer.duration_ms.positive}")
-            Integer durationMs,
-
-            @NotBlank(message = "{vote.paper.offer.release_date.not_blank}")
-            String releaseDate
+            String artistName
     ) {
     }
 

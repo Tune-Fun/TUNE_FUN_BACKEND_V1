@@ -31,8 +31,6 @@ import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
 import com.tune_fun.v1.vote.domain.value.VotePaperOption;
-import io.hypersistence.tsid.TSID;
-import io.hypersistence.utils.hibernate.id.TsidGenerator;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +50,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import static com.tune_fun.v1.common.util.StringUtil.ulid;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -220,10 +219,8 @@ public class DummyService {
     @Transactional
     public void initVotePaper() {
         Set<VotePaperCommands.Offer> offers = Set.of(
-                new VotePaperCommands.Offer("Love Lee", "AKMU", List.of("R&B", "Soul"),
-                        300_000, "2024-04-28"),
-                new VotePaperCommands.Offer("Dolphin", "오마이걸", List.of("Dance", "Pop"),
-                        200_000, "2020-04-27")
+                new VotePaperCommands.Offer(ulid(), "Love Lee", "AKMU"),
+                new VotePaperCommands.Offer(ulid(), "Dolphin", "오마이걸")
         );
 
         LocalDateTime voteStartAt = LocalDateTime.now().plusDays(1);
@@ -245,10 +242,8 @@ public class DummyService {
     @Transactional
     public void initVotePaperAllowAddChoices() {
         Set<VotePaperCommands.Offer> offers = Set.of(
-                new VotePaperCommands.Offer("KNOCK (With 박문치)", "권진아", singletonList("Dance"),
-                        206_000, "2021-07-27"),
-                new VotePaperCommands.Offer("Orange, You're Not a Joke to Me!", "스텔라장 (Stella Jang)", singletonList("Rock"),
-                        220_000, "2023-06-18")
+                new VotePaperCommands.Offer(ulid(), "KNOCK (With 박문치)", "권진아"),
+                new VotePaperCommands.Offer(ulid(), "Orange, You're Not a Joke to Me!", "스텔라장 (Stella Jang)")
         );
 
         LocalDateTime voteStartAt = LocalDateTime.now().plusDays(1);

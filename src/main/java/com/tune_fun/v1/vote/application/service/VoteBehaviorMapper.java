@@ -29,10 +29,7 @@ public abstract class VoteBehaviorMapper {
     public abstract Set<SaveVoteChoice> saveVoteChoices(final Set<VotePaperCommands.Offer> offers);
 
     @Named("saveVoteChoice")
-    @Mapping(target = "offerArtistName", source = "artistName")
-    @Mapping(target = "offerGenres", source = "genres")
-    @Mapping(target = "offerDurationMs", source = "durationMs")
-    @Mapping(target = "offerReleaseDate", source = "releaseDate")
+    @Mapping(target = "artistName", source = "artistName")
     public abstract SaveVoteChoice saveVoteChoice(final VotePaperCommands.Offer offer);
 
     @Mapping(target = "title", source = "event", qualifiedByName = "votePaperRegisterNotificationTitle")

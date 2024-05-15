@@ -22,11 +22,9 @@ public abstract class VoteChoiceMapper {
     @Named("registeredVoteChoice")
     @Mapping(target = "id", source = "id")
     @Mapping(target = "votePaperId", source = "votePaper.id")
+    @Mapping(target = "offerId", source = "offer.offerId")
     @Mapping(target = "music", source = "offer.music")
     @Mapping(target = "artistName", source = "offer.artistName")
-    @Mapping(target = "genres", source = "offer.genres", qualifiedByName = "splitString")
-    @Mapping(target = "releaseDate", source = "offer.releaseDate")
-    @Mapping(target = "durationMs", source = "offer.durationMs")
     public abstract RegisteredVoteChoice registeredVoteChoice(final VoteChoiceJpaEntity voteChoiceJpaEntity);
 
     @Mapping(target = "votePaper", source = "votePaperJpaEntity")
@@ -41,25 +39,15 @@ public abstract class VoteChoiceMapper {
     public abstract Set<VoteChoiceJpaEntity> fromSaveVoteChoiceBehaviors(final Set<SaveVoteChoice> behavior);
 
     @Named("fromSaveVoteChoiceBehavior")
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "uuid", expression = "java(StringUtil.uuid())")
     @Mapping(target = "offer", source = ".", qualifiedByName = "voteChoiceOffer")
     public abstract VoteChoiceJpaEntity fromSaveVoteChoiceBehavior(final SaveVoteChoice behavior);
 
     @Named("voteChoiceOffer")
+    @Mapping(target = "offerId", source = "id")
     @Mapping(target = "music", source = "music")
-    @Mapping(target = "artistName", source = "offerArtistName")
-    @Mapping(target = "genres", source = "offerGenres", qualifiedByName = "joinString")
-    @Mapping(target = "releaseDate", source = "offerReleaseDate")
-    @Mapping(target = "durationMs", source = "offerDurationMs")
+    @Mapping(target = "artistName", source = "artistName")
     public abstract Offer voteChoiceOffer(final SaveVoteChoice behavior);
 
-    @Named("joinString")
-    public String joinString(final Set<String> strings) {
-        return String.join(Constants.COMMA, strings);
-    }
-
-    @Named("splitString")
-    public Set<String> splitString(final String string) {
-        return Set.of(string.split(Constants.COMMA));
-    }
 }

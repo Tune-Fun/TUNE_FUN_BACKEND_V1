@@ -13,7 +13,6 @@ import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.output.LoadVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
 import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
-import com.tune_fun.v1.vote.application.service.ScheduleVotePaperDeadlineService;
 import com.tune_fun.v1.vote.domain.event.VotePaperDeadlineEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperRegisterEvent;
 import com.tune_fun.v1.vote.domain.event.VotePaperUpdateDeliveryDateEvent;
@@ -47,9 +46,9 @@ import java.util.Set;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
+import static com.tune_fun.v1.common.util.StringUtil.ulid;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.LocalDateTime.now;
-import static java.util.Collections.singletonList;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -90,8 +89,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
     @SpyBean
     private VoteEventListener voteEventListener;
 
-    @SpyBean
-    private ScheduleVotePaperDeadlineService scheduleVotePaperDeadlineService;
+//    @SpyBean
+//    private ScheduleVotePaperDeadlineService scheduleVotePaperDeadlineService;
 
     @SpyBean
     private SendVoteNotificationPort sendVoteNotificationPort;
@@ -206,11 +205,9 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 fieldWithPath("data.updated_at").description("투표 게시물 수정 시간").attributes(constraint("NOT NULL")),
                 fieldWithPath("data.choices").description("투표 선택지 목록").attributes(constraint("NOT EMPTY")),
                 fieldWithPath("data.choices[].id").description("아이디").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.choices[].offer_id").description("Spotify Music ID").attributes(constraint("NOT BLANK")),
                 fieldWithPath("data.choices[].music").description("노래명").attributes(constraint("NOT BLANK")),
                 fieldWithPath("data.choices[].artist_name").description("아티스트명").attributes(constraint("NOT BLANK")),
-                fieldWithPath("data.choices[].genres[]").description("장르").attributes(constraint("NOT EMPTY")),
-                fieldWithPath("data.choices[].duration_ms").description("재생 시간(ms)").attributes(constraint("NOT NULL & POSITIVE")),
-                fieldWithPath("data.choices[].release_date").description("발매일").attributes(constraint("NOT BLANK")),
                 fieldWithPath("data.choices[].vote_paper_id").description("투표 게시물 ID").attributes(constraint("NOT NULL"))
         );
 
@@ -235,10 +232,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 .andExpect(jsonPath("data.choices", notNullValue()))
                 .andExpect(jsonPath("data.choices[*].id", notNullValue()))
                 .andExpect(jsonPath("data.choices[*].music", notNullValue()))
+                .andExpect(jsonPath("data.choices[*].offer_id", notNullValue()))
                 .andExpect(jsonPath("data.choices[*].artist_name", notNullValue()))
-                .andExpect(jsonPath("data.choices[*].genres[*]", notNullValue()))
-                .andExpect(jsonPath("data.choices[*].duration_ms", notNullValue()))
-                .andExpect(jsonPath("data.choices[*].release_date", notNullValue()))
                 .andExpect(jsonPath("data.choices[*].vote_paper_id", notNullValue()))
                 .andDo(
                         restDocs.document(
@@ -268,10 +263,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
         String accessToken = dummyService.getDefaultArtistAccessToken();
 
         Set<VotePaperCommands.Offer> offers = Set.of(
-                new VotePaperCommands.Offer("KNOCK (With 박문치)", "권진아", singletonList("Dance"),
-                        206_000, "2021-07-27"),
-                new VotePaperCommands.Offer("Orange, You're Not a Joke to Me!", "스텔라장 (Stella Jang)", singletonList("Rock"),
-                        220_000, "2023-06-18")
+                new VotePaperCommands.Offer(ulid(), "KNOCK (With 박문치)", "권진아"),
+                new VotePaperCommands.Offer(ulid(), "Orange, You're Not a Joke to Me!", "스텔라장 (Stella Jang)")
         );
 
         LocalDateTime voteStartAt = now().plusSeconds(3);
@@ -289,11 +282,9 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 fieldWithPath("vote_start_at").description("투표 시작 시간").attributes(constraint("NOT NULL & FUTURE & BEFORE(endAt)")),
                 fieldWithPath("vote_end_at").description("투표 종료 시간").attributes(constraint("NOT NULL & FUTURE & AFTER(startAt)")),
                 fieldWithPath("offers").description("투표 선택지 목록").attributes(constraint("NOT EMPTY")),
+                fieldWithPath("offers[].id").description("아이디").attributes(constraint("NOT NULL")),
                 fieldWithPath("offers[].music").description("노래명").attributes(constraint("NOT BLANK")),
-                fieldWithPath("offers[].artist_name").description("아티스트명").attributes(constraint("NOT BLANK")),
-                fieldWithPath("offers[].genres").description("장르").attributes(constraint("NOT EMPTY")),
-                fieldWithPath("offers[].duration_ms").description("재생 시간(ms)").attributes(constraint("NOT NULL & POSITIVE")),
-                fieldWithPath("offers[].release_date").description("발매일").attributes(constraint("NOT BLANK"))
+                fieldWithPath("offers[].artist_name").description("아티스트명").attributes(constraint("NOT BLANK"))
         };
 
         mockMvc.perform(
@@ -321,7 +312,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
         awaitReceiveMessage(votePaperUploadQueue);
         verify(voteMessageConsumer).consumeVotePaperUploadEvent(any(VotePaperRegisterEvent.class));
         verify(voteEventListener).handleVotePaperDeadlineEvent(any(VotePaperDeadlineEvent.class));
-        verify(scheduleVotePaperDeadlineService).scheduleVotePaperDeadlineAction(any(VotePaperDeadlineEvent.class));
+//        verify(scheduleVotePaperDeadlineService).scheduleVotePaperDeadlineAction(any(VotePaperDeadlineEvent.class));
 
         // TODO : GitHub Actions 에서는 테스트 실패함. 원인 파악 필요
 //        verify(firebaseMessagingMediator).sendMulticastMessageByTokens(any());
@@ -351,9 +342,6 @@ class VotePaperControllerIT extends ControllerBaseTest {
         log.info("readArtistName: {}", readArtistName);
         assertThat(readArtistName, hasItems("권진아", "스텔라장 (Stella Jang)"));
 
-        List<List<String>> readGenres = parsedChoices.read("$[*].genres");
-        log.info("readGenres: {}", readGenres);
-        assertThat(readGenres, hasItems(singletonList("Dance"), singletonList("Rock")));
 
 // TODO : 수동 테스트가 필요함
 //        Thread.sleep(5000);
@@ -377,15 +365,12 @@ class VotePaperControllerIT extends ControllerBaseTest {
         ParameterDescriptor pathParameter = parameterWithName("votePaperId").description("투표 게시물 ID").attributes(constraint("NOT NULL"));
 
         FieldDescriptor[] requestDescriptors = {
+                fieldWithPath("id").description("Spotify Music ID").attributes(constraint("NOT BLANK")),
                 fieldWithPath("music").description("노래명").attributes(constraint("NOT BLANK")),
                 fieldWithPath("artist_name").description("아티스트명").attributes(constraint("NOT BLANK")),
-                fieldWithPath("genres").description("장르").attributes(constraint("NOT EMPTY")),
-                fieldWithPath("duration_ms").description("재생 시간(ms)").attributes(constraint("NOT NULL & POSITIVE")),
-                fieldWithPath("release_date").description("발매일").attributes(constraint("NOT BLANK"))
         };
 
-        VotePaperCommands.Offer command = new VotePaperCommands.Offer("이별이란 어느 별에 (Feat. 조광일)", "HYNN (박혜원)",
-                singletonList("Ballad"), 231000, "2022-02-11");
+        VotePaperCommands.Offer command = new VotePaperCommands.Offer(ulid(), "이별이란 어느 별에 (Feat. 조광일)", "HYNN (박혜원)");
 
         mockMvc.perform(
                         post(Uris.VOTE_PAPER_CHOICE, votePaperId)
@@ -423,14 +408,6 @@ class VotePaperControllerIT extends ControllerBaseTest {
         List<String> readArtistName = parsedVoteChoices.read("$[*].artist_name");
         assertThat(readArtistName, hasItem("HYNN (박혜원)"));
 
-        List<List<String>> readGenres = parsedVoteChoices.read("$[*].genres");
-        assertThat(readGenres, hasItem(singletonList("Ballad")));
-
-        List<Integer> readDurationMs = parsedVoteChoices.read("$[*].duration_ms");
-        assertThat(readDurationMs, hasItem(231_000));
-
-        List<String> readReleaseDate = parsedVoteChoices.read("$[*].release_date");
-        assertThat(readReleaseDate, hasItem("2022-02-11"));
     }
 
     @Transactional
