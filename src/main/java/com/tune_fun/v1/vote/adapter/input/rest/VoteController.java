@@ -25,8 +25,8 @@ public class VoteController {
 
     //    @PreAuthorize("hasPermission(#votePaperId, 'VOTE', 'REGISTER_VOTE')")
     @PostMapping(value = Uris.REGISTER_VOTE)
-    public ResponseEntity<Response<?>> registerVote(@PathVariable(name = "votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
-                                                    @PathVariable(name = "voteChoiceId") @NotNull(message = "{vote.choice.id.not_null}") final Long voteChoiceId,
+    public ResponseEntity<Response<?>> registerVote(@PathVariable(name = "votePaperId") @NotNull(message = "{vote.paper.offerId.not_null}") final Long votePaperId,
+                                                    @PathVariable(name = "voteChoiceId") @NotNull(message = "{vote.choice.offerId.not_null}") final Long voteChoiceId,
                                                     @CurrentUser final User user) {
         registerVoteUseCase.register(votePaperId, voteChoiceId, user);
         return responseMapper.ok();

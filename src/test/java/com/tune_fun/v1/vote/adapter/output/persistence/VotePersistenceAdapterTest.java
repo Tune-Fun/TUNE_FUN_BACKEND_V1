@@ -1147,7 +1147,7 @@ class VotePersistenceAdapterTest {
         ArrayList<VoteChoiceJpaEntity> voteChoiceJpaEntityList = new ArrayList<>();
         VotePaperJpaEntity votePaper = new VotePaperJpaEntity();
         voteChoiceJpaEntityList.add(new VoteChoiceJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", votePaper,
-                new Offer(",", ",", ",", "2020-03-01", 1), new ArrayList<>(), "jain doe"));
+                new Offer(",", ",", ","), new ArrayList<>(), "jain doe"));
         VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
         when(voteChoiceRepository.findAllByVotePaperId(Mockito.<Long>any())).thenReturn(voteChoiceJpaEntityList);
         AccountRepository accountRepository = mock(AccountRepository.class);
@@ -1178,7 +1178,7 @@ class VotePersistenceAdapterTest {
         // Arrange
         VoteChoiceRepository voteChoiceRepository = mock(VoteChoiceRepository.class);
         VotePaperJpaEntity votePaper = new VotePaperJpaEntity();
-        Offer offer = new Offer(",", ",", ",", "2020-03-01", 2);
+        Offer offer = new Offer(",", ",", ",");
 
         Optional<VoteChoiceJpaEntity> ofResult = Optional.of(new VoteChoiceJpaEntity(1L,
                 "01234567-89AB-CDEF-FEDC-BA9876543210", votePaper, offer, new ArrayList<>(), "Jan 1, 2020 8:00am GMT+0100"));
@@ -1203,11 +1203,8 @@ class VotePersistenceAdapterTest {
         RegisteredVoteChoice getResult = actualLoadVoteChoiceByUsernameResult.get();
         assertEquals(",", getResult.artistName());
         assertEquals(",", getResult.music());
-        assertEquals("2020-03-01", getResult.releaseDate());
         assertNull(getResult.votePaperId());
         assertEquals(1L, getResult.id().longValue());
-        assertEquals(2, getResult.durationMs().intValue());
-        assertTrue(getResult.genres().isEmpty());
     }
 
     /**
@@ -1372,7 +1369,7 @@ class VotePersistenceAdapterTest {
                 voteRepository, votePaperRepository, voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl());
 
         HashSet<SaveVoteChoice> behavior = new HashSet<>();
-        behavior.add(new SaveVoteChoice("Music", "Offer Artist Name", new HashSet<>(), 2, "2020-03-01"));
+        behavior.add(new SaveVoteChoice("Id", "Music", "Offer Artist Name"));
 
         // Act
         votePersistenceAdapter.saveVoteChoice(1L, behavior);
@@ -1404,8 +1401,8 @@ class VotePersistenceAdapterTest {
                 voteRepository, votePaperRepository, voteChoiceRepository, votePaperMapper, new VoteChoiceMapperImpl());
 
         HashSet<SaveVoteChoice> behavior = new HashSet<>();
-        behavior.add(new SaveVoteChoice(",", ",", new HashSet<>(), 2, "2020-03-01"));
-        behavior.add(new SaveVoteChoice("Music", "Offer Artist Name", new HashSet<>(), 2, "2020-03-01"));
+        behavior.add(new SaveVoteChoice(",", ",",","));
+        behavior.add(new SaveVoteChoice("Id", "Music", "Offer Artist Name"));
 
         // Act
         votePersistenceAdapter.saveVoteChoice(1L, behavior);
