@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tune_fun.v1.account.adapter.output.persistence.jwt.AccessTokenRedisEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.jwt.RefreshTokenRedisEntity;
 import com.tune_fun.v1.common.constant.Constants;
+import com.tune_fun.v1.common.util.count.AtomicCounter;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpRedisEntity;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
@@ -86,7 +87,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, AccessTokenRedisEntity> redisTemplateForAccessToken() throws JsonProcessingException {
+    public RedisTemplate<String, AccessTokenRedisEntity> redisTemplateForAccessToken() {
         RedisTemplate<String, AccessTokenRedisEntity> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
@@ -95,7 +96,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, RefreshTokenRedisEntity> redisTemplateForRefreshToken() throws JsonProcessingException {
+    public RedisTemplate<String, RefreshTokenRedisEntity> redisTemplateForRefreshToken() {
         RedisTemplate<String, RefreshTokenRedisEntity> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
@@ -104,7 +105,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, OtpRedisEntity> redisTemplateForOtp() throws JsonProcessingException {
+    public RedisTemplate<String, OtpRedisEntity> redisTemplateForOtp() {
         RedisTemplate<String, OtpRedisEntity> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
@@ -113,14 +114,14 @@ public class RedisConfig {
     }
 
     @Bean
-    public StringRedisTemplate stringRedisTemplate() throws JsonProcessingException {
+    public StringRedisTemplate stringRedisTemplate() {
         StringRedisTemplate redisTemplate = new StringRedisTemplate();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         return redisTemplate;
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplateForObject() throws JsonProcessingException {
+    public RedisTemplate<String, Object> redisTemplateForObject() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
