@@ -1,13 +1,16 @@
 package com.tune_fun.v1.vote.adapter.output.persistence;
 
+import com.querydsl.core.ResultTransformer;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tune_fun.v1.account.adapter.output.persistence.QAccountJpaEntity;
 import com.tune_fun.v1.vote.domain.value.RegisteredVote;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.types.Projections.fields;
 
 @RequiredArgsConstructor
@@ -57,5 +60,16 @@ public class VoteCustomRepositoryImpl implements VoteCustomRepository {
                 .fetchOne();
 
         return Optional.ofNullable(registeredVote);
+    }
+
+    @Override
+    public Map<Long, Long> countVotesByVotePaperIds(List<Long> votePaperIds) {
+        ResultTransformer<Map<Long, Long>> transformer = groupBy(VOTE_PAPER.id).as(VOTE.id.count());
+        
+        return queryFactory.from(VOTE)
+                .join(VOTE.voteChoice, VOTE_CHOICE)
+                .join(VOTE_CHOICE.votePaper, VOTE_PAPER)
+                .where(VOTE_PAPER.id.in(votePaperIds))
+                .transform(transformer);
     }
 }

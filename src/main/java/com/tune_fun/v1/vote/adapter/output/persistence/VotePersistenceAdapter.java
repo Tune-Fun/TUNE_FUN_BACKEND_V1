@@ -179,7 +179,7 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
-    public void saveLike(final Long votePaperId, final String username) {
+    public void saveVotePaperLike(final Long votePaperId, final String username) {
         AccountJpaEntity account = accountPersistenceAdapter.loadAccountByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found"));
 
@@ -195,7 +195,7 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
-    public void deleteLike(final Long likeId) {
+    public void deleteVotePaperLike(final Long likeId) {
         votePaperLikeRepository.deleteById(likeId);
     }
 

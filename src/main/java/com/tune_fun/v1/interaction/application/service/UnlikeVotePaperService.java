@@ -17,7 +17,7 @@ public class UnlikeVotePaperService implements UnlikeVotePaperUseCase {
     @Transactional
     @Override
     public void unlikeVotePaper(final Long likeId) {
-        deleteLikePort.deleteLike(likeId);
+        deleteLikePort.deleteVotePaperLike(likeId);
     }
 
 

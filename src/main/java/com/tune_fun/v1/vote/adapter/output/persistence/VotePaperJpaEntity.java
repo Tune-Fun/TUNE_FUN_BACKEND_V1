@@ -2,6 +2,7 @@ package com.tune_fun.v1.vote.adapter.output.persistence;
 
 import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.common.entity.BaseEntity;
+import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeJpaEntity;
 import com.tune_fun.v1.vote.domain.value.VotePaperOption;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -45,6 +46,10 @@ public class VotePaperJpaEntity extends BaseEntity {
     @Comment("내용")
     private String content;
 
+    @Column(name = "page_link")
+    @Comment("View 페이지 다이나믹 링크")
+    private String pageLink;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false, updatable = false, referencedColumnName = "id")
     @Comment("작성자")
@@ -82,6 +87,10 @@ public class VotePaperJpaEntity extends BaseEntity {
     @Singular
     @OneToMany(mappedBy = "votePaper", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<VoteChoiceJpaEntity> choices;
+
+    @Singular
+    @OneToMany(mappedBy = "votePaper", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<VotePaperLikeJpaEntity> likes;
 
     public void disable() {
         this.enabled = false;
