@@ -44,7 +44,7 @@ public class VotePersistenceAdapter implements
         UpdateDeliveryAtPort, UpdateVideoUrlPort,
         LoadVoteChoicePort, SaveVoteChoicePort,
         SaveLikePort, DeleteLikePort,
-        SaveVotePaperStatisticsPort {
+        SaveVotePaperStatisticsPort, LoadVotePaperStatisticsPort {
 
     private final AccountPersistenceAdapter accountPersistenceAdapter;
 
@@ -215,6 +215,13 @@ public class VotePersistenceAdapter implements
     @Override
     public void updateLikeCount(final Long votePaperId, final Long likeCount) {
         votePaperStatisticsRepository.updateLikeCount(votePaperId, likeCount);
+    }
+
+    @Override
+    public Long getLikeCount(final Long votePaperId) {
+        VotePaperStatisticsJpaEntity stat = votePaperStatisticsRepository.findByVotePaperId(votePaperId)
+                .orElseThrow(() -> new IllegalArgumentException("VotePaperStatistics not found"));
+        return stat.getLikeCount();
     }
 
     public Optional<VotePaperJpaEntity> findOneAvailable(final Long votePaperId, final String username) {

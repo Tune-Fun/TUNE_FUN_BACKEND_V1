@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.tune_fun.v1.common.constant.Constants.DOUBLE_COLON;
+
 @Component
 @RequiredArgsConstructor
 public class LikeCountPersistenceAdapter implements SaveVotePaperLikeCountPort, LoadVotePaperLikeCountPort {
@@ -26,12 +28,12 @@ public class LikeCountPersistenceAdapter implements SaveVotePaperLikeCountPort, 
 
     @Override
     public Long getVotePaperLikeCount(String key) {
-        return (Long) redisTemplate.opsForHash().get(key, LIKE_COUNT_HASH_KEY);
+        return Long.valueOf(String.valueOf(redisTemplate.opsForHash().get(key, LIKE_COUNT_HASH_KEY)));
     }
 
     @Override
     public void incrementVotePaperLikeCount(final Long votePaperId) {
-        getVotePaperLikeCount(votePaperId).ifPresentOrElse(
+        getVotePaperLikeCountById(votePaperId).ifPresentOrElse(
                 likeCount -> redisTemplate.opsForHash().increment(getKey(votePaperId), LIKE_COUNT_HASH_KEY, 1),
                 () -> redisTemplate.opsForHash().put(getKey(votePaperId), LIKE_COUNT_HASH_KEY, 1)
         );
@@ -44,15 +46,16 @@ public class LikeCountPersistenceAdapter implements SaveVotePaperLikeCountPort, 
 
     @Override
     public String getKey(final Long votePaperId) {
-        return VOTE_PAPER_LIKE_COUNT_KEY + "::" + votePaperId;
+        return VOTE_PAPER_LIKE_COUNT_KEY + DOUBLE_COLON + votePaperId;
     }
 
     @Override
     public Long getVotePaperId(final String key) {
-        return Long.parseLong(key.split("::")[1]);
+        return Long.parseLong(key.split(DOUBLE_COLON)[1]);
     }
 
-    public Optional<Object> getVotePaperLikeCount(final Long votePaperId) {
+    @Override
+    public Optional<Object> getVotePaperLikeCountById(final Long votePaperId) {
         return Optional.ofNullable(redisTemplate.opsForHash().get(getKey(votePaperId), LIKE_COUNT_HASH_KEY));
     }
 

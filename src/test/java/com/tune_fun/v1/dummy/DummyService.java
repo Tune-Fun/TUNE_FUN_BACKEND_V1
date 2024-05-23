@@ -52,7 +52,6 @@ import java.util.Set;
 
 import static com.tune_fun.v1.common.util.StringUtil.ulid;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
-import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @IntegrationTest
@@ -236,6 +235,8 @@ public class DummyService {
         votePersistenceAdapter.findProgressingVotePaperByAuthor(defaultArtistUsername)
                 .ifPresent(votePaper -> defaultVotePaper = votePaper);
 
+        votePersistenceAdapter.initializeStatistics(defaultVotePaper.getId());
+
         defaultVoteChoices = votePersistenceAdapter.findAllByVotePaperId(defaultVotePaper.getId());
     }
 
@@ -258,6 +259,8 @@ public class DummyService {
 
         votePersistenceAdapter.findProgressingVotePaperByAuthor(defaultArtistUsername)
                 .ifPresent(votePaper -> defaultVotePaper = votePaper);
+
+        votePersistenceAdapter.initializeStatistics(defaultVotePaper.getId());
 
         defaultVoteChoices = votePersistenceAdapter.findAllByVotePaperId(defaultVotePaper.getId());
     }

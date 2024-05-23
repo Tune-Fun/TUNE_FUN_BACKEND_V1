@@ -22,6 +22,8 @@ public final class Constants {
 
     public static final String COLON = ":";
 
+    public static final String DOUBLE_COLON = "::";
+
     public static final String SEMICOLON = ";";
 
     public static final String DOT = ".";

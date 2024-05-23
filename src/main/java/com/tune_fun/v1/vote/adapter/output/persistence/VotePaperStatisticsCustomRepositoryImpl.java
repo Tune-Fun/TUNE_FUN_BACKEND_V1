@@ -3,6 +3,7 @@ package com.tune_fun.v1.vote.adapter.output.persistence;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,7 @@ public class VotePaperStatisticsCustomRepositoryImpl implements VotePaperStatist
 
     public static final QVotePaperStatisticsJpaEntity VOTE_PAPER_STATISTICS = QVotePaperStatisticsJpaEntity.votePaperStatisticsJpaEntity;
 
+    @Transactional
     @Override
     public void updateLikeCount(Long votePaperId, Long likeCount) {
         queryFactory.update(VOTE_PAPER_STATISTICS)

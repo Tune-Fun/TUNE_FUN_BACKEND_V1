@@ -43,6 +43,8 @@ public class VotePaperStatisticsJpaEntity extends BaseEntity {
 
     public VotePaperStatisticsJpaEntity(final Long votePaperId) {
         this.votePaperId = votePaperId;
+        this.likeCount = 0L;
+        this.voteCount = 0L;
     }
 
 }
