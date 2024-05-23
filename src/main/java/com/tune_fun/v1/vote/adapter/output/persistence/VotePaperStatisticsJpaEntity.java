@@ -2,7 +2,10 @@ package com.tune_fun.v1.vote.adapter.output.persistence;
 
 import com.tune_fun.v1.common.entity.BaseEntity;
 import io.hypersistence.utils.hibernate.id.Tsid;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,8 +18,8 @@ import org.hibernate.annotations.Comment;
 @AllArgsConstructor
 @Getter
 @Entity
-@Table(name = "vote_statistics")
-public class VoteStatisticsJpaEntity extends BaseEntity {
+@Table(name = "vote_paper_statistics")
+public class VotePaperStatisticsJpaEntity extends BaseEntity {
 
     @Id
     @Tsid
@@ -24,10 +27,9 @@ public class VoteStatisticsJpaEntity extends BaseEntity {
     @Comment("TSID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "vote_paper_id", nullable = false, updatable = false, referencedColumnName = "id")
+    @Column(name = "vote_paper_id", nullable = false, updatable = false)
     @Comment("투표 게시물 ID")
-    private VotePaperJpaEntity votePaper;
+    private Long votePaperId;
 
     @Builder.Default
     @Column(name = "like_count", nullable = false)
@@ -39,5 +41,8 @@ public class VoteStatisticsJpaEntity extends BaseEntity {
     @Comment("투표 수")
     private Long voteCount = 0L;
 
+    public VotePaperStatisticsJpaEntity(final Long votePaperId) {
+        this.votePaperId = votePaperId;
+    }
 
 }

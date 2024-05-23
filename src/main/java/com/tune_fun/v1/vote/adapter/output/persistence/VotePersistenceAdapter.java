@@ -43,7 +43,8 @@ public class VotePersistenceAdapter implements
         LoadVotePaperPort, SaveVotePaperPort, DeleteVotePaperPort,
         UpdateDeliveryAtPort, UpdateVideoUrlPort,
         LoadVoteChoicePort, SaveVoteChoicePort,
-        SaveLikePort, DeleteLikePort {
+        SaveLikePort, DeleteLikePort,
+        SaveVotePaperStatisticsPort {
 
     private final AccountPersistenceAdapter accountPersistenceAdapter;
 
@@ -51,6 +52,7 @@ public class VotePersistenceAdapter implements
     private final VotePaperRepository votePaperRepository;
     private final VoteChoiceRepository voteChoiceRepository;
     private final VotePaperLikeRepository votePaperLikeRepository;
+    private final VotePaperStatisticsRepository votePaperStatisticsRepository;
 
     private final VotePaperMapper votePaperMapper;
     private final VoteChoiceMapper voteChoiceMapper;
@@ -101,7 +103,12 @@ public class VotePersistenceAdapter implements
         position = forward(Map.of("id", lastId, "voteEndAt", Constants.LOCAL_DATE_TIME_MIN));
 
         Sort sort = by(desc("id"), desc("voteEndAt"));
-        return votePaperRepository.findFirst10ByEnabledTrue(position, sort).map(votePaperMapper::scrollableVotePaper);
+        Window<VotePaperJpaEntity> scroll = votePaperRepository.findFirst10ByEnabledTrue(position, sort);
+
+        Set<Long> votePaperIds = scroll.stream().map(VotePaperJpaEntity::getId).collect(toSet());
+        Map<Long, Long> likeCountMap = votePaperStatisticsRepository.findLikeCountMap(votePaperIds);
+
+        return scroll.map(votePaperJpaEntity -> votePaperMapper.scrollableVotePaper(votePaperJpaEntity, likeCountMap.get(votePaperJpaEntity.getId())));
     }
 
     @Override
@@ -197,6 +204,17 @@ public class VotePersistenceAdapter implements
     @Override
     public void deleteVotePaperLike(final Long likeId) {
         votePaperLikeRepository.deleteById(likeId);
+    }
+
+    @Override
+    public void initializeStatistics(final Long votePaperId) {
+        VotePaperStatisticsJpaEntity stat = new VotePaperStatisticsJpaEntity(votePaperId);
+        votePaperStatisticsRepository.save(stat);
+    }
+
+    @Override
+    public void updateLikeCount(final Long votePaperId, final Long likeCount) {
+        votePaperStatisticsRepository.updateLikeCount(votePaperId, likeCount);
     }
 
     public Optional<VotePaperJpaEntity> findOneAvailable(final Long votePaperId, final String username) {

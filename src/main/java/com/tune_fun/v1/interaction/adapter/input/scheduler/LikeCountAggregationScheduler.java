@@ -11,7 +11,6 @@ public class LikeCountAggregationScheduler {
 
     private final UpdateVotePaperStatisticsUseCase updateVotePaperStatisticsUseCase;
 
-
     @Scheduled(fixedDelay = 1000L * 5L)
     public void aggregateLikeCount() {
         updateVotePaperStatisticsUseCase.updateVotePaperStatistics();

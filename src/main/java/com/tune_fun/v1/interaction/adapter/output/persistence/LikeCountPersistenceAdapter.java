@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
-import static java.util.stream.Collectors.toSet;
-
 @Component
 @RequiredArgsConstructor
 public class LikeCountPersistenceAdapter implements SaveVotePaperLikeCountPort, LoadVotePaperLikeCountPort {
@@ -21,26 +19,33 @@ public class LikeCountPersistenceAdapter implements SaveVotePaperLikeCountPort, 
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public Set<Long> getVotePaperIds() {
-        Set<String> keys = redisTemplate.keys(VOTE_PAPER_LIKE_COUNT_KEY + "*");
+    public Set<String> getVotePaperLikeCountKeys() {
+        return redisTemplate.keys(VOTE_PAPER_LIKE_COUNT_KEY + "*");
+    }
 
-        if (keys == null) return Set.of();
-
-        return keys.stream().map(key -> Long.valueOf(key.split("::")[1])).collect(toSet());
+    @Override
+    public Long getVotePaperLikeCount(String key) {
+        return (Long) redisTemplate.opsForHash().get(key, LIKE_COUNT_HASH_KEY);
     }
 
     @Override
     public void incrementVotePaperLikeCount(final Long votePaperId) {
-        redisTemplate.opsForHash().increment(key(votePaperId), LIKE_COUNT_HASH_KEY, 1);
+        redisTemplate.opsForHash().increment(getKey(votePaperId), LIKE_COUNT_HASH_KEY, 1);
     }
 
     @Override
     public void decrementVotePaperLikeCount(final Long votePaperId) {
-        redisTemplate.opsForHash().increment(key(votePaperId), LIKE_COUNT_HASH_KEY, -1);
+        redisTemplate.opsForHash().increment(getKey(votePaperId), LIKE_COUNT_HASH_KEY, -1);
     }
 
-    private static String key(final Long votePaperId) {
+    @Override
+    public String getKey(final Long votePaperId) {
         return VOTE_PAPER_LIKE_COUNT_KEY + "::" + votePaperId;
+    }
+
+    @Override
+    public Long getVotePaperId(final String key) {
+        return Long.parseLong(key.split("::")[1]);
     }
 
 }

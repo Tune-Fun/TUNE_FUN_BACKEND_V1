@@ -4,6 +4,11 @@ import java.util.Set;
 
 public interface LoadVotePaperLikeCountPort {
 
-    Set<Long> getVotePaperIds();
+    Set<String> getVotePaperLikeCountKeys();
 
+    Long getVotePaperLikeCount(final String key);
+
+    String getKey(Long votePaperId);
+
+    Long getVotePaperId(String key);
 }
