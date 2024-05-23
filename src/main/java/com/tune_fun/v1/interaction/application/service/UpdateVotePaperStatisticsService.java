@@ -6,6 +6,7 @@ import com.tune_fun.v1.interaction.application.port.output.LoadVotePaperLikeCoun
 import com.tune_fun.v1.vote.application.port.output.SaveVotePaperStatisticsPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -31,5 +32,7 @@ public class UpdateVotePaperStatisticsService implements UpdateVotePaperStatisti
             saveVotePaperStatPort.updateLikeCount(votePaperId, likeCount);
             log.info("Update vote paper statistics for vote paper id: {} with like count: {}", votePaperId, likeCount);
         });
+
+        MDC.clear();
     }
 }

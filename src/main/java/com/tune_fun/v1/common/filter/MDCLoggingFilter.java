@@ -20,7 +20,7 @@ public class MDCLoggingFilter implements Filter {
 
     @Override
     public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain filterChain) throws IOException, ServletException {
-        MDC.put("CORRELATION_ID", StringUtil.uuid());
+        MDC.put("CORRELATION_ID", StringUtil.ulid());
         filterChain.doFilter(servletRequest, servletResponse);
         MDC.clear();
     }
