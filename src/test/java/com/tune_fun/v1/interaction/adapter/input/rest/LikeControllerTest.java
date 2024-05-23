@@ -28,6 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -88,7 +89,49 @@ class LikeControllerTest extends ControllerBaseTest {
 
         assertTrue(loadVotePaperLikeCountPort.getVotePaperLikeCountById(votePaperId).isPresent());
         awaitLikeCountAggregationScheduler();
-        awaitUpdateLikeCount(votePaperId);
+        awaitIncrementLikeCount(votePaperId);
+    }
+
+    @Transactional
+    @Test
+    @Order(2)
+    @DisplayName("투표 게시물 좋아요 취소, 성공")
+    void unlikeVotePaperSuccess() throws Exception {
+        dummyService.initArtistAndLogin();
+        dummyService.initVotePaper();
+        Long votePaperId = dummyService.getDefaultVotePaper().getId();
+
+        dummyService.initAndLogin();
+        dummyService.likeVotePaper(votePaperId, dummyService.getDefaultAccount().getUsername());
+
+        String accessToken = dummyService.getDefaultAccessToken();
+
+        ParameterDescriptor pathParameter = parameterWithName("votePaperId").description("투표 게시물 ID").attributes(constraint("NOT NULL"));
+
+        mockMvc.perform(
+                        delete(Uris.LIKE_VOTE_PAPER, votePaperId)
+                                .header(AUTHORIZATION, bearerToken(accessToken))
+                                .contentType(APPLICATION_JSON_VALUE)
+                )
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andDo(
+                        restDocs.document(
+                                requestHeaders(authorizationHeader),
+                                pathParameters(pathParameter),
+                                responseFields(baseResponseFields),
+                                resource(
+                                        builder().
+                                                description("투표 게시물 좋아요 추가").
+                                                pathParameters(pathParameter).
+                                                responseFields(baseResponseFields)
+                                                .build()
+                                )
+                        )
+                );
+
+        assertTrue(loadVotePaperLikeCountPort.getVotePaperLikeCountById(votePaperId).isPresent());
+        awaitLikeCountAggregationScheduler();
+        awaitDecrementLikeCount(votePaperId);
     }
 
     private void awaitLikeCountAggregationScheduler() {
@@ -99,11 +142,19 @@ class LikeControllerTest extends ControllerBaseTest {
         verify(likeCountAggregationScheduler, times(1)).aggregateLikeCount();
     }
 
-    private void awaitUpdateLikeCount(Long votePaperId) {
-        await().untilAsserted(() -> verifyInvokeUpdateLikeCount(votePaperId));
+    private void awaitIncrementLikeCount(Long votePaperId) {
+        await().untilAsserted(() -> verifyInvokeIncrementLikeCount(votePaperId));
     }
 
-    private void verifyInvokeUpdateLikeCount(Long votePaperId) {
+    private void verifyInvokeIncrementLikeCount(Long votePaperId) {
         verify(saveVotePaperStatPort, times(1)).updateLikeCount(votePaperId, 1L);
+    }
+
+    private void awaitDecrementLikeCount(Long votePaperId) {
+        await().untilAsserted(() -> verifyInvokeDecrementLikeCount(votePaperId));
+    }
+
+    private void verifyInvokeDecrementLikeCount(Long votePaperId) {
+        verify(saveVotePaperStatPort, times(1)).updateLikeCount(votePaperId, 0L);
     }
 }

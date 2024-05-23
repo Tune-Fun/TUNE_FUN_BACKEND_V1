@@ -13,6 +13,7 @@ import com.tune_fun.v1.account.application.port.input.usecase.jwt.GenerateRefres
 import com.tune_fun.v1.account.domain.behavior.SaveDevice;
 import com.tune_fun.v1.base.annotation.IntegrationTest;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.interaction.adapter.output.persistence.LikeCountPersistenceAdapter;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpPersistenceAdapter;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
 import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
@@ -91,6 +92,9 @@ public class DummyService {
 
     @Autowired
     private VotePersistenceAdapter votePersistenceAdapter;
+
+    @Autowired
+    private LikeCountPersistenceAdapter likeCountPersistenceAdapter;
 
     @Autowired
     private VoteBehaviorMapper voteBehaviorMapper;
@@ -315,5 +319,11 @@ public class DummyService {
     public void saveVoteChoiceByRegisteredVotePaper(VotePaperCommands.Register command, RegisteredVotePaper registeredVotePaper) {
         Set<SaveVoteChoice> saveVoteChoicesBehavior = voteBehaviorMapper.saveVoteChoices(command.offers());
         votePersistenceAdapter.saveVoteChoice(registeredVotePaper.id(), saveVoteChoicesBehavior);
+    }
+
+    @Transactional
+    public void likeVotePaper(final Long votePaperId, final String username) {
+        votePersistenceAdapter.saveVotePaperLike(votePaperId, username);
+        likeCountPersistenceAdapter.incrementVotePaperLikeCount(votePaperId);
     }
 }

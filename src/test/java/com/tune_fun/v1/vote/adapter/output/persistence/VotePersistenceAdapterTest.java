@@ -758,31 +758,35 @@ class VotePersistenceAdapterTest {
     }
 
     /**
-     * Method under test: {@link VotePersistenceAdapter#deleteVotePaperLike(Long)}
+     * Method under test:
+     * {@link VotePersistenceAdapter#deleteVotePaperLike(Long, String)}
      */
     @Test
     void testDeleteVotePaperLike() {
         // Arrange
-        doNothing().when(votePaperLikeRepository).deleteById(Mockito.<Long>any());
+        doNothing().when(votePaperLikeRepository)
+                .deleteByVotePaperIdAndLikerUsername(Mockito.<Long>any(), Mockito.<String>any());
 
         // Act
-        votePersistenceAdapter.deleteVotePaperLike(1L);
+        votePersistenceAdapter.deleteVotePaperLike(1L, "janedoe");
 
         // Assert that nothing has changed
-        verify(votePaperLikeRepository).deleteById(eq(1L));
+        verify(votePaperLikeRepository).deleteByVotePaperIdAndLikerUsername(eq(1L), eq("janedoe"));
     }
 
     /**
-     * Method under test: {@link VotePersistenceAdapter#deleteVotePaperLike(Long)}
+     * Method under test:
+     * {@link VotePersistenceAdapter#deleteVotePaperLike(Long, String)}
      */
     @Test
     void testDeleteVotePaperLike2() {
         // Arrange
-        doThrow(new IllegalArgumentException("foo")).when(votePaperLikeRepository).deleteById(Mockito.<Long>any());
+        doThrow(new IllegalArgumentException("foo")).when(votePaperLikeRepository)
+                .deleteByVotePaperIdAndLikerUsername(Mockito.<Long>any(), Mockito.<String>any());
 
         // Act and Assert
-        assertThrows(IllegalArgumentException.class, () -> votePersistenceAdapter.deleteVotePaperLike(1L));
-        verify(votePaperLikeRepository).deleteById(eq(1L));
+        assertThrows(IllegalArgumentException.class, () -> votePersistenceAdapter.deleteVotePaperLike(1L, "janedoe"));
+        verify(votePaperLikeRepository).deleteByVotePaperIdAndLikerUsername(eq(1L), eq("janedoe"));
     }
 
     /**

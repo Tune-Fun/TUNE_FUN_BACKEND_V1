@@ -3,6 +3,7 @@ package com.tune_fun.v1.interaction.adapter.output.persistence;
 import com.tune_fun.v1.interaction.application.port.output.LoadVotePaperLikeCountPort;
 import com.tune_fun.v1.interaction.application.port.output.SaveVotePaperLikeCountPort;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import java.util.Set;
 
 import static com.tune_fun.v1.common.constant.Constants.DOUBLE_COLON;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class LikeCountPersistenceAdapter implements SaveVotePaperLikeCountPort, LoadVotePaperLikeCountPort {
@@ -28,20 +30,34 @@ public class LikeCountPersistenceAdapter implements SaveVotePaperLikeCountPort, 
 
     @Override
     public Long getVotePaperLikeCount(String key) {
-        return Long.valueOf(String.valueOf(redisTemplate.opsForHash().get(key, LIKE_COUNT_HASH_KEY)));
+        log.info("Get vote paper like count for key: {}", key);
+        String value = String.valueOf(redisTemplate.opsForValue().get(key));
+        return Long.parseLong(value);
     }
 
     @Override
     public void incrementVotePaperLikeCount(final Long votePaperId) {
         getVotePaperLikeCountById(votePaperId).ifPresentOrElse(
-                likeCount -> redisTemplate.opsForHash().increment(getKey(votePaperId), LIKE_COUNT_HASH_KEY, 1),
-                () -> redisTemplate.opsForHash().put(getKey(votePaperId), LIKE_COUNT_HASH_KEY, 1)
+                likeCount -> redisTemplate.opsForValue().increment(getKey(votePaperId)),
+                () -> redisTemplate.opsForValue().set(getKey(votePaperId), 1)
         );
     }
 
     @Override
     public void decrementVotePaperLikeCount(final Long votePaperId) {
-        redisTemplate.opsForHash().increment(getKey(votePaperId), LIKE_COUNT_HASH_KEY, -1);
+        Optional<Object> votePaperLikeCountById = getVotePaperLikeCountById(votePaperId);
+
+        if (votePaperLikeCountById.isEmpty()) {
+            redisTemplate.opsForValue().set(getKey(votePaperId), 0);
+            return;
+        }
+
+        log.info("vote paper like count : {}", votePaperLikeCountById.get());
+
+        if (Long.parseLong(String.valueOf(votePaperLikeCountById.get())) == 0)
+            return;
+
+        redisTemplate.opsForValue().decrement(getKey(votePaperId));
     }
 
     @Override
@@ -56,7 +72,7 @@ public class LikeCountPersistenceAdapter implements SaveVotePaperLikeCountPort, 
 
     @Override
     public Optional<Object> getVotePaperLikeCountById(final Long votePaperId) {
-        return Optional.ofNullable(redisTemplate.opsForHash().get(getKey(votePaperId), LIKE_COUNT_HASH_KEY));
+        return Optional.ofNullable(redisTemplate.opsForValue().get(getKey(votePaperId)));
     }
 
 }

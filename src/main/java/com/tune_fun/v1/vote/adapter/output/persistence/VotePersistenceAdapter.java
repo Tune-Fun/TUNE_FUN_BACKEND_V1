@@ -202,8 +202,8 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
-    public void deleteVotePaperLike(final Long likeId) {
-        votePaperLikeRepository.deleteById(likeId);
+    public void deleteVotePaperLike(final Long votePaperId, final String username) {
+        votePaperLikeRepository.deleteByVotePaperIdAndLikerUsername(votePaperId, username);
     }
 
     @Override
