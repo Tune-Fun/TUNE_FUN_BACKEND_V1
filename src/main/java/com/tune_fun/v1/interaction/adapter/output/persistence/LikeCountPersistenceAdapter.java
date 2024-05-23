@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -30,7 +31,10 @@ public class LikeCountPersistenceAdapter implements SaveVotePaperLikeCountPort, 
 
     @Override
     public void incrementVotePaperLikeCount(final Long votePaperId) {
-        redisTemplate.opsForHash().increment(getKey(votePaperId), LIKE_COUNT_HASH_KEY, 1);
+        getVotePaperLikeCount(votePaperId).ifPresentOrElse(
+                likeCount -> redisTemplate.opsForHash().increment(getKey(votePaperId), LIKE_COUNT_HASH_KEY, 1),
+                () -> redisTemplate.opsForHash().put(getKey(votePaperId), LIKE_COUNT_HASH_KEY, 1)
+        );
     }
 
     @Override
@@ -46,6 +50,10 @@ public class LikeCountPersistenceAdapter implements SaveVotePaperLikeCountPort, 
     @Override
     public Long getVotePaperId(final String key) {
         return Long.parseLong(key.split("::")[1]);
+    }
+
+    public Optional<Object> getVotePaperLikeCount(final Long votePaperId) {
+        return Optional.ofNullable(redisTemplate.opsForHash().get(getKey(votePaperId), LIKE_COUNT_HASH_KEY));
     }
 
 }
