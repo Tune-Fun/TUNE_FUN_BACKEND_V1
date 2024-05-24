@@ -8,14 +8,12 @@ import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeJpaEntity;
 import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeRepository;
 import com.tune_fun.v1.interaction.application.port.output.DeleteLikePort;
+import com.tune_fun.v1.interaction.application.port.output.LoadLikePort;
 import com.tune_fun.v1.interaction.application.port.output.SaveLikePort;
 import com.tune_fun.v1.vote.application.port.output.*;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
-import com.tune_fun.v1.vote.domain.value.RegisteredVote;
-import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
-import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
-import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
+import com.tune_fun.v1.vote.domain.value.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.KeysetScrollPosition;
 import org.springframework.data.domain.ScrollPosition;
@@ -43,8 +41,8 @@ public class VotePersistenceAdapter implements
         LoadVotePaperPort, SaveVotePaperPort, DeleteVotePaperPort,
         UpdateDeliveryAtPort, UpdateVideoUrlPort,
         LoadVoteChoicePort, SaveVoteChoicePort,
-        SaveLikePort, DeleteLikePort,
-        SaveVotePaperStatisticsPort, LoadVotePaperStatisticsPort {
+        LoadLikePort, SaveLikePort, DeleteLikePort,
+        LoadVotePaperStatisticsPort, SaveVotePaperStatisticsPort {
 
     private final AccountPersistenceAdapter accountPersistenceAdapter;
 
@@ -183,6 +181,11 @@ public class VotePersistenceAdapter implements
                 .collect(toSet());
 
         voteChoiceRepository.saveAll(updatedVoteChoices);
+    }
+
+    @Override
+    public Optional<RegisteredVotePaperLike> loadVotePaperLike(Long votePaperId, String username) {
+        return votePaperLikeRepository.findByVotePaperIdAndLikerUsername(votePaperId, username);
     }
 
     @Override

@@ -19,8 +19,6 @@ public class LikeCountPersistenceAdapter implements SaveVotePaperLikeCountPort, 
 
     private static final String VOTE_PAPER_LIKE_COUNT_KEY = "vote_paper_like_count";
 
-    private static final String LIKE_COUNT_HASH_KEY = "like_count";
-
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
