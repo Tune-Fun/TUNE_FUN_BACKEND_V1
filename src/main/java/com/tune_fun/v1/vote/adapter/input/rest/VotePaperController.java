@@ -49,7 +49,7 @@ public class VotePaperController {
     }
 
     @GetMapping(value = Uris.VOTE_PAPER_ROOT + "/{votePaperId}")
-    public ResponseEntity<Response<FullVotePaper>> getVotePaper(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.offerId.not_null}") final Long votePaperId,
+    public ResponseEntity<Response<FullVotePaper>> getVotePaper(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
                                                                 @CurrentUser final User user) {
         FullVotePaper votePaper = getVotePaperUseCase.getVotePaper(votePaperId);
         return responseMapper.ok(MessageCode.SUCCESS, votePaper);
@@ -66,7 +66,7 @@ public class VotePaperController {
 
     @PreAuthorize("hasRole('NORMAL')")
     @PostMapping(value = Uris.VOTE_PAPER_CHOICE)
-    public ResponseEntity<Response<BasePayload>> registerVotePaperChoice(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.offerId.not_null}") final Long votePaperId,
+    public ResponseEntity<Response<BasePayload>> registerVotePaperChoice(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
                                                                          @Valid @RequestBody final VotePaperCommands.Offer offer,
                                                                          @CurrentUser final User user) {
         registerVoteChoiceUseCase.registerVoteChoice(votePaperId, offer, user);
@@ -75,7 +75,7 @@ public class VotePaperController {
 
     @PreAuthorize("hasRole('ARTIST')")
     @PatchMapping(value = Uris.UPDATE_VOTE_PAPER_DELIVERY_DATE)
-    public ResponseEntity<Response<BasePayload>> updateDeliveryDate(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.offerId.not_null}") final Long votePaperId,
+    public ResponseEntity<Response<BasePayload>> updateDeliveryDate(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
                                                                     @Valid @RequestBody final VotePaperCommands.UpdateDeliveryDate command,
                                                                     @CurrentUser final User user) {
         updateVotePaperDeliveryDateUseCase.updateDeliveryDate(votePaperId, command, user);
@@ -84,7 +84,7 @@ public class VotePaperController {
 
     @PreAuthorize("hasRole('ARTIST')")
     @PatchMapping(value = Uris.UPDATE_VOTE_PAPER_VIDEO_URL)
-    public ResponseEntity<Response<BasePayload>> updateVideoUrl(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.offerId.not_null}") final Long votePaperId,
+    public ResponseEntity<Response<BasePayload>> updateVideoUrl(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
                                                                 @Valid @RequestBody final VotePaperCommands.UpdateVideoUrl command,
                                                                 @CurrentUser final User user) {
         updateVotePaperVideoUrlUseCase.updateVideoUrl(votePaperId, command, user);
@@ -93,7 +93,7 @@ public class VotePaperController {
 
     @PreAuthorize("hasRole('ARTIST')")
     @DeleteMapping(value = Uris.VOTE_PAPER_ROOT)
-    public ResponseEntity<Response<BasePayload>> deleteVotePaper(@RequestParam(name = "vote_paper_id") Long votePaperId,
+    public ResponseEntity<Response<BasePayload>> deleteVotePaper(@RequestParam(name = "vote_paper_id") @NotNull(message = "{vote.paper.id.not_null}") Long votePaperId,
                                                                  @CurrentUser User user) {
         deleteVotePaperUseCase.delete(votePaperId, user);
         return responseMapper.ok(MessageCode.SUCCESS);

@@ -620,7 +620,7 @@ class VotePersistenceAdapterTest {
         when(voteChoiceRepository.findByVotePaperIdAndCreatedBy(Mockito.<Long>any(), Mockito.any()))
                 .thenReturn(ofResult);
         when(voteChoiceMapper.registeredVoteChoice(Mockito.any()))
-                .thenReturn(new RegisteredVoteChoice(1L, 1L, "42", "Music", "Artist Name"));
+                .thenReturn(new RegisteredVoteChoice(1L, 1L, "42", "Music", "Music Image", "Artist Name"));
 
         // Act
         votePersistenceAdapter.loadVoteChoiceByUsername(1L, "janedoe");

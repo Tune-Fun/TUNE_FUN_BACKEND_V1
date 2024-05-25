@@ -13,7 +13,7 @@ public final class RegisteredVotePaperLike {
 
     private Long id;
     private Long votePaperId;
-    private String likerAccountId;
+    private Long likerAccountId;
     private String likerUsername;
     private LocalDateTime createdAt;
 

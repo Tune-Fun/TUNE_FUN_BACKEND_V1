@@ -32,8 +32,8 @@ public class VotePaperLikeCustomRepositoryImpl implements VotePaperLikeCustomRep
                                 )
                         )
                         .from(VOTE_PAPER_LIKE)
-                        .join(VOTE_PAPER_LIKE.votePaper, VOTE_PAPER).fetchJoin()
-                        .join(VOTE_PAPER_LIKE.liker, ACCOUNT).fetchJoin()
+                        .join(VOTE_PAPER_LIKE.votePaper, VOTE_PAPER)
+                        .join(VOTE_PAPER_LIKE.liker, ACCOUNT)
                         .where(VOTE_PAPER.id.eq(votePaperId), ACCOUNT.username.eq(username))
                         .fetchOne()
         );

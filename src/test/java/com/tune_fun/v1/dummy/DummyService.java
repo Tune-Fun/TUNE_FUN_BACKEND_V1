@@ -222,8 +222,8 @@ public class DummyService {
     @Transactional
     public void initVotePaper() {
         Set<VotePaperCommands.Offer> offers = Set.of(
-                new VotePaperCommands.Offer(ulid(), "Love Lee", "AKMU"),
-                new VotePaperCommands.Offer(ulid(), "Dolphin", "오마이걸")
+                new VotePaperCommands.Offer(ulid(), "Love Lee", ulid(), "AKMU"),
+                new VotePaperCommands.Offer(ulid(), "Dolphin", ulid(), "오마이걸")
         );
 
         LocalDateTime voteStartAt = LocalDateTime.now().plusDays(1);
@@ -247,8 +247,8 @@ public class DummyService {
     @Transactional
     public void initVotePaperAllowAddChoices() {
         Set<VotePaperCommands.Offer> offers = Set.of(
-                new VotePaperCommands.Offer(ulid(), "KNOCK (With 박문치)", "권진아"),
-                new VotePaperCommands.Offer(ulid(), "Orange, You're Not a Joke to Me!", "스텔라장 (Stella Jang)")
+                new VotePaperCommands.Offer(ulid(), "KNOCK (With 박문치)", ulid(), "권진아"),
+                new VotePaperCommands.Offer(ulid(), "Orange, You're Not a Joke to Me!", ulid(), "스텔라장 (Stella Jang)")
         );
 
         LocalDateTime voteStartAt = LocalDateTime.now().plusDays(1);

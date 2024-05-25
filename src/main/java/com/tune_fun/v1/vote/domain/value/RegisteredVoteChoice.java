@@ -7,6 +7,7 @@ public record RegisteredVoteChoice(
         Long votePaperId,
         String offerId,
         String music,
+        String musicImage,
         String artistName
 ) implements BasePayload {
 }
