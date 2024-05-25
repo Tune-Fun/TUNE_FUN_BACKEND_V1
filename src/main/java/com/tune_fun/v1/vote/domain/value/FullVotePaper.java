@@ -16,6 +16,8 @@ public record FullVotePaper(
         VotePaperOption option,
         String videoUrl,
 
+        Boolean isVoted,
+
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime voteStartAt,
 
@@ -30,7 +32,7 @@ public record FullVotePaper(
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime updatedAt,
-        
+
         Set<RegisteredVoteChoice> choices
 ) implements BasePayload {
 

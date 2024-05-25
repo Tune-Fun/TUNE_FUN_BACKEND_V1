@@ -51,7 +51,7 @@ public class VotePaperController {
     @GetMapping(value = Uris.VOTE_PAPER_ROOT + "/{votePaperId}")
     public ResponseEntity<Response<FullVotePaper>> getVotePaper(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
                                                                 @CurrentUser final User user) {
-        FullVotePaper votePaper = getVotePaperUseCase.getVotePaper(votePaperId);
+        FullVotePaper votePaper = getVotePaperUseCase.getVotePaper(votePaperId, user);
         return responseMapper.ok(MessageCode.SUCCESS, votePaper);
     }
 

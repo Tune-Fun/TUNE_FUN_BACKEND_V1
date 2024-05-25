@@ -172,10 +172,10 @@ class VotePaperControllerIT extends ControllerBaseTest {
     @Order(2)
     @DisplayName("투표 게시물 상세 조회, 성공")
     void getVotePaperSuccess() throws Exception {
-        dummyService.initAndLogin();
         dummyService.initArtistAndLogin();
-
         dummyService.initVotePaper();
+        
+        dummyService.initAndLogin();
         dummyService.registerVote();
 
         Long votePaperId = dummyService.getDefaultVotePaper().getId();
@@ -192,6 +192,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 fieldWithPath("data.content").description("투표 게시물 내용").attributes(constraint("NOT NULL")),
                 fieldWithPath("data.option").description("투표 종류").attributes(constraint("NOT NULL, allow-add-choices || deny-add-choices")),
                 fieldWithPath("data.video_url").description("투표 게시물 영상 URL").attributes(constraint("NULL or NOT NULL")),
+                fieldWithPath("data.is_voted").description("투표 여부").attributes(constraint("NOT NULL")),
                 fieldWithPath("data.vote_start_at").description("투표 시작 시간").attributes(constraint("NOT NULL")),
                 fieldWithPath("data.vote_end_at").description("투표 종료 시간").attributes(constraint("NOT NULL")),
                 fieldWithPath("data.delivery_at").description("투표 게시물 영상 제공일").attributes(constraint("NULL or NOT NULL")),
@@ -219,6 +220,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 .andExpect(jsonPath("data.content", notNullValue()))
                 .andExpect(jsonPath("data.option", notNullValue()))
                 .andExpect(jsonPath("data.video_url", nullValue()))
+                .andExpectAll(jsonPath("data.is_voted", notNullValue()), jsonPath("data.is_voted", is(true)))
                 .andExpect(jsonPath("data.vote_start_at", notNullValue()))
                 .andExpect(jsonPath("data.vote_end_at", notNullValue()))
                 .andExpect(jsonPath("data.delivery_at", nullValue()))

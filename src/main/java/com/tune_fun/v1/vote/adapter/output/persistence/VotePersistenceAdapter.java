@@ -61,12 +61,12 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
-    public Optional<RegisteredVote> loadVoteByVoterAndVotePaperId(String voter, Long voteChoiceId) {
-        return voteRepository.findByVoterUsernameAndVotePaperId(voter, voteChoiceId);
+    public Optional<RegisteredVote> loadVoteByVoterAndVotePaperId(final String voter, final Long votePaperId) {
+        return voteRepository.findByVoterUsernameAndVotePaperId(voter, votePaperId);
     }
 
     @Override
-    public void saveVote(Long voteChoiceId, String username) {
+    public void saveVote(final Long voteChoiceId, final String username) {
         VoteChoiceJpaEntity voteChoice = voteChoiceRepository.findById(voteChoiceId)
                 .orElseThrow(() -> new IllegalArgumentException("VoteChoice not found"));
 
