@@ -8,5 +8,6 @@ import java.util.Optional;
 public interface LoadVotePort {
     List<Long> loadVoterIdsByVotePaperUuid(final String uuid);
 
-    Optional<RegisteredVote> loadVoteByVoterAndVotePaperId(final String voter, final Long voteChoiceId);
+    Optional<RegisteredVote> loadVoteByVoterAndVotePaperId(final String voter, final Long votePaperId);
+
 }

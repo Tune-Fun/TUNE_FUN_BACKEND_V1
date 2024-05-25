@@ -11,7 +11,6 @@ import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 public class VotePaperCommands {
@@ -20,7 +19,7 @@ public class VotePaperCommands {
     @Period(start = "voteStartAt", end = "voteEndAt", message = "{vote.paper.vote_period.not_match}")
     public record Register(
             @NotBlank(message = "{vote.paper.title.not_blank}") String title,
-            @NotBlank(message = "{vote.paper.content.not_blank}") String content,
+            String content,
             @NotNull(message = "{vote.paper.option.not_null}") @Enum(message = "{vote.paper.option.valid}", target = VotePaperOption.class) VotePaperOption option,
 
             @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -48,6 +47,8 @@ public class VotePaperCommands {
 
             @NotBlank(message = "{vote.paper.offer.music.not_blank}")
             String music,
+
+            String musicImage,
 
             @NotBlank(message = "{vote.paper.offer.artist_name.not_blank}")
             String artistName

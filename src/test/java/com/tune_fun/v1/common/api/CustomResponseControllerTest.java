@@ -35,7 +35,7 @@ class CustomResponseControllerTest extends ControllerBaseTest {
     }
 
     private static CustomResponseFieldsSnippet customResponseFields(FieldDescriptor... fieldDescriptors) {
-        return new CustomResponseFieldsSnippet(CustomResponseControllerTest.CUSTOM_RESPONSE_SNIPPET_FILE, Arrays.asList(fieldDescriptors), true);
+        return new CustomResponseFieldsSnippet(CUSTOM_RESPONSE_SNIPPET_FILE, Arrays.asList(fieldDescriptors), true);
     }
 
 }

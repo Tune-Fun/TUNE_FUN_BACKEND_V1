@@ -1,0 +1,14 @@
+[[Interaction-API]]
+== Like API
+
+=== 투표 게시물 좋아요 등록 API
+
+==== 성공
+
+operation::like-vote-paper-success[snipeets='http-request,http-response,path-parameter,response-fields']
+
+=== 투표 게시물 좋아요 취소 API
+
+==== 성공
+
+operation::unlike-vote-paper-success[snipeets='http-request,http-response,path-parameter,response-fields']

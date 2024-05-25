@@ -64,6 +64,10 @@ public class Uris {
 
     public static final String REGISTER_VOTE = VOTE_ROOT + "/{votePaperId}" + "/register" + "/{voteChoiceId}";
 
+    public static final String LIKE_ROOT = API_V1_ROOT + "/likes";
+
+    public static final String LIKE_VOTE_PAPER = LIKE_ROOT + "/{votePaperId}";
+
     public static final String SWAGGER_UI_ROOT = "/swagger-ui";
     public static final String SWAGGER_UI = "/swagger-ui.html";
     public static final String SWAGGER_DOCS = "/docs/com.tune_fun-open-api-3.0.1.json";

@@ -22,6 +22,8 @@ public final class Constants {
 
     public static final String COLON = ":";
 
+    public static final String DOUBLE_COLON = "::";
+
     public static final String SEMICOLON = ";";
 
     public static final String DOT = ".";
@@ -29,6 +31,11 @@ public final class Constants {
     public static final LocalDateTime LOCAL_DATE_TIME_MIN = LocalDateTime.of(
             LocalDate.of(1970, 1, 1), LocalTime.of(0, 0, 1)
     );
+
+    public static final class CacheNames {
+        public static final String VOTE_PAPER = "votePaper";
+        public static final String VOTE_CHOICE = "voteChoice";
+    }
 
     public static final class NicknameFragment {
 

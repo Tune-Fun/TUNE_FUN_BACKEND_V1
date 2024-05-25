@@ -5,13 +5,15 @@ import com.tune_fun.v1.account.adapter.output.persistence.AccountPersistenceAdap
 import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeJpaEntity;
+import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeRepository;
+import com.tune_fun.v1.interaction.application.port.output.DeleteLikePort;
+import com.tune_fun.v1.interaction.application.port.output.LoadLikePort;
+import com.tune_fun.v1.interaction.application.port.output.SaveLikePort;
 import com.tune_fun.v1.vote.application.port.output.*;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
-import com.tune_fun.v1.vote.domain.value.RegisteredVote;
-import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
-import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
-import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;
+import com.tune_fun.v1.vote.domain.value.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.KeysetScrollPosition;
 import org.springframework.data.domain.ScrollPosition;
@@ -38,13 +40,17 @@ public class VotePersistenceAdapter implements
         LoadVotePort, SaveVotePort,
         LoadVotePaperPort, SaveVotePaperPort, DeleteVotePaperPort,
         UpdateDeliveryAtPort, UpdateVideoUrlPort,
-        LoadVoteChoicePort, SaveVoteChoicePort {
+        LoadVoteChoicePort, SaveVoteChoicePort,
+        LoadLikePort, SaveLikePort, DeleteLikePort,
+        LoadVotePaperStatisticsPort, SaveVotePaperStatisticsPort {
 
     private final AccountPersistenceAdapter accountPersistenceAdapter;
 
     private final VoteRepository voteRepository;
     private final VotePaperRepository votePaperRepository;
     private final VoteChoiceRepository voteChoiceRepository;
+    private final VotePaperLikeRepository votePaperLikeRepository;
+    private final VotePaperStatisticsRepository votePaperStatisticsRepository;
 
     private final VotePaperMapper votePaperMapper;
     private final VoteChoiceMapper voteChoiceMapper;
@@ -55,12 +61,12 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
-    public Optional<RegisteredVote> loadVoteByVoterAndVotePaperId(String voter, Long voteChoiceId) {
-        return voteRepository.findByVoterUsernameAndVotePaperId(voter, voteChoiceId);
+    public Optional<RegisteredVote> loadVoteByVoterAndVotePaperId(final String voter, final Long votePaperId) {
+        return voteRepository.findByVoterUsernameAndVotePaperId(voter, votePaperId);
     }
 
     @Override
-    public void saveVote(Long voteChoiceId, String username) {
+    public void saveVote(final Long voteChoiceId, final String username) {
         VoteChoiceJpaEntity voteChoice = voteChoiceRepository.findById(voteChoiceId)
                 .orElseThrow(() -> new IllegalArgumentException("VoteChoice not found"));
 
@@ -95,7 +101,12 @@ public class VotePersistenceAdapter implements
         position = forward(Map.of("id", lastId, "voteEndAt", Constants.LOCAL_DATE_TIME_MIN));
 
         Sort sort = by(desc("id"), desc("voteEndAt"));
-        return votePaperRepository.findFirst10ByEnabledTrue(position, sort).map(votePaperMapper::scrollableVotePaper);
+        Window<VotePaperJpaEntity> scroll = votePaperRepository.findFirst10ByEnabledTrue(position, sort);
+
+        Set<Long> votePaperIds = scroll.stream().map(VotePaperJpaEntity::getId).collect(toSet());
+        Map<Long, Long> likeCountMap = votePaperStatisticsRepository.findLikeCountMap(votePaperIds);
+
+        return scroll.map(votePaperJpaEntity -> votePaperMapper.scrollableVotePaper(votePaperJpaEntity, likeCountMap.get(votePaperJpaEntity.getId())));
     }
 
     @Override
@@ -170,6 +181,50 @@ public class VotePersistenceAdapter implements
                 .collect(toSet());
 
         voteChoiceRepository.saveAll(updatedVoteChoices);
+    }
+
+    @Override
+    public Optional<RegisteredVotePaperLike> loadVotePaperLike(Long votePaperId, String username) {
+        return votePaperLikeRepository.findByVotePaperIdAndLikerUsername(votePaperId, username);
+    }
+
+    @Override
+    public void saveVotePaperLike(final Long votePaperId, final String username) {
+        AccountJpaEntity account = accountPersistenceAdapter.loadAccountByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        VotePaperJpaEntity votePaper = votePaperRepository.findById(votePaperId)
+                .orElseThrow(() -> new IllegalArgumentException("VotePaper not found"));
+
+        VotePaperLikeJpaEntity votePaperLike = VotePaperLikeJpaEntity.builder()
+                .votePaper(votePaper)
+                .liker(account)
+                .build();
+
+        votePaperLikeRepository.save(votePaperLike);
+    }
+
+    @Override
+    public void deleteVotePaperLike(final Long votePaperId, final String username) {
+        votePaperLikeRepository.deleteByVotePaperIdAndLikerUsername(votePaperId, username);
+    }
+
+    @Override
+    public void initializeStatistics(final Long votePaperId) {
+        VotePaperStatisticsJpaEntity stat = new VotePaperStatisticsJpaEntity(votePaperId);
+        votePaperStatisticsRepository.save(stat);
+    }
+
+    @Override
+    public void updateLikeCount(final Long votePaperId, final Long likeCount) {
+        votePaperStatisticsRepository.updateLikeCount(votePaperId, likeCount);
+    }
+
+    @Override
+    public Long getLikeCount(final Long votePaperId) {
+        VotePaperStatisticsJpaEntity stat = votePaperStatisticsRepository.findByVotePaperId(votePaperId)
+                .orElseThrow(() -> new IllegalArgumentException("VotePaperStatistics not found"));
+        return stat.getLikeCount();
     }
 
     public Optional<VotePaperJpaEntity> findOneAvailable(final Long votePaperId, final String username) {

@@ -13,6 +13,7 @@ import com.tune_fun.v1.account.application.port.input.usecase.jwt.GenerateRefres
 import com.tune_fun.v1.account.domain.behavior.SaveDevice;
 import com.tune_fun.v1.base.annotation.IntegrationTest;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.interaction.adapter.output.persistence.LikeCountPersistenceAdapter;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpPersistenceAdapter;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
 import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
@@ -52,7 +53,6 @@ import java.util.Set;
 
 import static com.tune_fun.v1.common.util.StringUtil.ulid;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
-import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @IntegrationTest
@@ -92,6 +92,9 @@ public class DummyService {
 
     @Autowired
     private VotePersistenceAdapter votePersistenceAdapter;
+
+    @Autowired
+    private LikeCountPersistenceAdapter likeCountPersistenceAdapter;
 
     @Autowired
     private VoteBehaviorMapper voteBehaviorMapper;
@@ -219,8 +222,8 @@ public class DummyService {
     @Transactional
     public void initVotePaper() {
         Set<VotePaperCommands.Offer> offers = Set.of(
-                new VotePaperCommands.Offer(ulid(), "Love Lee", "AKMU"),
-                new VotePaperCommands.Offer(ulid(), "Dolphin", "오마이걸")
+                new VotePaperCommands.Offer(ulid(), "Love Lee", ulid(), "AKMU"),
+                new VotePaperCommands.Offer(ulid(), "Dolphin", ulid(), "오마이걸")
         );
 
         LocalDateTime voteStartAt = LocalDateTime.now().plusDays(1);
@@ -236,14 +239,16 @@ public class DummyService {
         votePersistenceAdapter.findProgressingVotePaperByAuthor(defaultArtistUsername)
                 .ifPresent(votePaper -> defaultVotePaper = votePaper);
 
+        votePersistenceAdapter.initializeStatistics(defaultVotePaper.getId());
+
         defaultVoteChoices = votePersistenceAdapter.findAllByVotePaperId(defaultVotePaper.getId());
     }
 
     @Transactional
     public void initVotePaperAllowAddChoices() {
         Set<VotePaperCommands.Offer> offers = Set.of(
-                new VotePaperCommands.Offer(ulid(), "KNOCK (With 박문치)", "권진아"),
-                new VotePaperCommands.Offer(ulid(), "Orange, You're Not a Joke to Me!", "스텔라장 (Stella Jang)")
+                new VotePaperCommands.Offer(ulid(), "KNOCK (With 박문치)", ulid(), "권진아"),
+                new VotePaperCommands.Offer(ulid(), "Orange, You're Not a Joke to Me!", ulid(), "스텔라장 (Stella Jang)")
         );
 
         LocalDateTime voteStartAt = LocalDateTime.now().plusDays(1);
@@ -258,6 +263,8 @@ public class DummyService {
 
         votePersistenceAdapter.findProgressingVotePaperByAuthor(defaultArtistUsername)
                 .ifPresent(votePaper -> defaultVotePaper = votePaper);
+
+        votePersistenceAdapter.initializeStatistics(defaultVotePaper.getId());
 
         defaultVoteChoices = votePersistenceAdapter.findAllByVotePaperId(defaultVotePaper.getId());
     }
@@ -312,5 +319,11 @@ public class DummyService {
     public void saveVoteChoiceByRegisteredVotePaper(VotePaperCommands.Register command, RegisteredVotePaper registeredVotePaper) {
         Set<SaveVoteChoice> saveVoteChoicesBehavior = voteBehaviorMapper.saveVoteChoices(command.offers());
         votePersistenceAdapter.saveVoteChoice(registeredVotePaper.id(), saveVoteChoicesBehavior);
+    }
+
+    @Transactional
+    public void likeVotePaper(final Long votePaperId, final String username) {
+        votePersistenceAdapter.saveVotePaperLike(votePaperId, username);
+        likeCountPersistenceAdapter.incrementVotePaperLikeCount(votePaperId);
     }
 }

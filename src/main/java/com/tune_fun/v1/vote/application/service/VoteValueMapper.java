@@ -20,12 +20,13 @@ public abstract class VoteValueMapper {
     @Mapping(target = "content", source = "votePaper.content")
     @Mapping(target = "option", source = "votePaper.option")
     @Mapping(target = "videoUrl", source = "votePaper.videoUrl")
+    @Mapping(target = "isVoted", source = "isVoted")
     @Mapping(target = "voteStartAt", source = "votePaper.voteStartAt")
     @Mapping(target = "voteEndAt", source = "votePaper.voteEndAt")
     @Mapping(target = "deliveryAt", source = "votePaper.deliveryAt")
     @Mapping(target = "createdAt", source = "votePaper.createdAt")
     @Mapping(target = "updatedAt", source = "votePaper.updatedAt")
     @Mapping(target = "choices", source = "voteChoices")
-    public abstract FullVotePaper fullVotePaper(final RegisteredVotePaper votePaper, final List<RegisteredVoteChoice> voteChoices);
+    public abstract FullVotePaper fullVotePaper(final RegisteredVotePaper votePaper, final List<RegisteredVoteChoice> voteChoices, Boolean isVoted);
 
 }

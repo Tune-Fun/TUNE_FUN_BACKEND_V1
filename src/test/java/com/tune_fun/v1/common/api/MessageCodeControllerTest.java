@@ -26,7 +26,7 @@ class MessageCodeControllerTest extends ControllerBaseTest {
     void getMessageCodes() throws Exception {
         mockMvc.perform(get(Uris.MESSAGE_CODES).contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
-                .andDo(restDocs.document(messageCodeResponseFields(MESSAGE_CODE_SNIPPET_FILE, fieldDescriptors())));
+                .andDo(restDocs.document(messageCodeResponseFields(fieldDescriptors())));
     }
 
     private List<FieldDescriptor> fieldDescriptors() {
@@ -45,8 +45,8 @@ class MessageCodeControllerTest extends ControllerBaseTest {
         return fieldDescriptors;
     }
 
-    private static MessageCodeResponseFieldsSnippet messageCodeResponseFields(String snippetFilePrefix, List<FieldDescriptor> fieldDescriptors) {
-        return new MessageCodeResponseFieldsSnippet(snippetFilePrefix, fieldDescriptors, true);
+    private static MessageCodeResponseFieldsSnippet messageCodeResponseFields(List<FieldDescriptor> fieldDescriptors) {
+        return new MessageCodeResponseFieldsSnippet(MESSAGE_CODE_SNIPPET_FILE, fieldDescriptors, true);
     }
 
 }

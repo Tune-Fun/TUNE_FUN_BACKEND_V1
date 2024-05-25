@@ -24,12 +24,12 @@ public abstract class VotePaperMapper {
     @Mapping(target = "authorUsername", source = "author.username")
     public abstract RegisteredVotePaper registeredVotePaper(final VotePaperJpaEntity votePaperJpaEntity);
 
-    @Mapping(target = "authorUsername", source = "author.username")
-    @Mapping(target = "authorNickname", source = "author.nickname")
-    @Mapping(target = "remainDays", source = ".", qualifiedByName = "remainDays")
+    @Mapping(target = "authorUsername", source = "votePaperJpaEntity.author.username")
+    @Mapping(target = "authorNickname", source = "votePaperJpaEntity.author.nickname")
+    @Mapping(target = "remainDays", source = "votePaperJpaEntity", qualifiedByName = "remainDays")
     @Mapping(target = "totalVoteCount", constant = "0")
-    @Mapping(target = "totalLikeCount", constant = "0")
-    public abstract ScrollableVotePaper scrollableVotePaper(final VotePaperJpaEntity votePaperJpaEntity);
+    @Mapping(target = "totalLikeCount", source = "likeCount")
+    public abstract ScrollableVotePaper scrollableVotePaper(final VotePaperJpaEntity votePaperJpaEntity, final Long likeCount);
 
     @Named("remainDays")
     public Long remainDays(final VotePaperJpaEntity votePaperJpaEntity) {

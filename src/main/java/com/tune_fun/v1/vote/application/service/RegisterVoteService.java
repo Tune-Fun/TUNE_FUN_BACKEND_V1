@@ -21,7 +21,7 @@ public class RegisterVoteService implements RegisterVoteUseCase {
     private final SaveVotePort saveVotePort;
 
     @Override
-    public void register(Long votePaperId, final Long voteChoiceId, final User user) {
+    public void register(final Long votePaperId, final Long voteChoiceId, final User user) {
         if (loadVotePort.loadVoteByVoterAndVotePaperId(user.getUsername(), votePaperId).isPresent())
             throw new CommonApplicationException(VOTE_POLICY_ONE_VOTE_PER_USER);
 

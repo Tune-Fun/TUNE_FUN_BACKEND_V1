@@ -24,6 +24,7 @@ public abstract class VoteChoiceMapper {
     @Mapping(target = "votePaperId", source = "votePaper.id")
     @Mapping(target = "offerId", source = "offer.offerId")
     @Mapping(target = "music", source = "offer.music")
+    @Mapping(target = "musicImage", source = "offer.musicImage")
     @Mapping(target = "artistName", source = "offer.artistName")
     public abstract RegisteredVoteChoice registeredVoteChoice(final VoteChoiceJpaEntity voteChoiceJpaEntity);
 
@@ -32,6 +33,7 @@ public abstract class VoteChoiceMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "uuid", ignore = true)
+    @Mapping(target = "offer", ignore = true)
     public abstract VoteChoiceJpaEntity.VoteChoiceJpaEntityBuilder<?, ?> updateVoteChoice(VotePaperJpaEntity votePaperJpaEntity,
                                                                                           @MappingTarget final VoteChoiceJpaEntity.VoteChoiceJpaEntityBuilder<?, ?> voteChoiceJpaEntityBuilder);
 
@@ -47,6 +49,7 @@ public abstract class VoteChoiceMapper {
     @Named("voteChoiceOffer")
     @Mapping(target = "offerId", source = "id")
     @Mapping(target = "music", source = "music")
+    @Mapping(target = "musicImage", source = "musicImage")
     @Mapping(target = "artistName", source = "artistName")
     public abstract Offer voteChoiceOffer(final SaveVoteChoice behavior);
 

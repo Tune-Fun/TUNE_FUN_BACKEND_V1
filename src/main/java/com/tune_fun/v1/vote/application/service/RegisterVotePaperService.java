@@ -5,10 +5,7 @@ import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVotePaperUseCase;
-import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
-import com.tune_fun.v1.vote.application.port.output.ProduceVotePaperRegisterEventPort;
-import com.tune_fun.v1.vote.application.port.output.SaveVoteChoicePort;
-import com.tune_fun.v1.vote.application.port.output.SaveVotePaperPort;
+import com.tune_fun.v1.vote.application.port.output.*;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.event.VotePaperDeadlineEvent;
@@ -39,6 +36,8 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
 
     private final SaveVoteChoicePort saveVoteChoicePort;
 
+    private final SaveVotePaperStatisticsPort saveVotePaperStatisticsPort;
+
     private final ProduceVotePaperRegisterEventPort produceVotePaperRegisterEventPort;
 
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -55,6 +54,9 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
 
         validateRegistrableVotePaperCount(user);
         RegisteredVotePaper registeredVotePaper = saveVotePaper(command, user);
+
+        saveVotePaperStatisticsPort.initializeStatistics(registeredVotePaper.id());
+
         saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
 
         VotePaperRegisterEvent votePaperRegisterEventBehavior = getProduceVotePaperUploadEventBehavior(registeredVotePaper);
