@@ -72,4 +72,8 @@ public class AccountCommands {
     public record UpdateNickname(@NotBlank(message = "{new_nickname.not_blank}") String newNickname) {
     }
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public record SaveEmail(@NotBlank(message = "{email.not_blank}") String email) {
+    }
+
 }

@@ -49,6 +49,7 @@ public class Uris {
     public static final String FORGOT_PASSWORD_SEND_OTP = API_V1_ROOT + "/forgot-password/send-otp";
 
     public static final String CHECK_EMAIL_VERIFIED = API_V1_ROOT + "/check-email-verified";
+    public static final String EMAIL_ROOT = API_V1_ROOT + "/accounts/email";
 
     public static final String VERIFY_OTP = API_V1_ROOT + "/otp/verify";
     public static final String VERIFY_OTP_WITH_TOKEN = API_V1_ROOT + "/otp/verify-with-token";
