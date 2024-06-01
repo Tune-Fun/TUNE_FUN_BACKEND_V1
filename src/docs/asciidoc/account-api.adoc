@@ -25,12 +25,6 @@ operation::logout-success[snippets='http-request,http-response,request-fields,re
 
 operation::refresh-success[snippets='http-request,http-response,request-fields,response-fields']
 
-=== 이메일 중복확인 API
-
-==== 성공
-
-operation::check-email-duplicate-success[snippets='http-request,http-response,query-parameters,response-fields']
-
 ==== 실패
 
 operation::check-email-duplicate-failed[snippets='http-request,http-response,query-parameters,response-fields']
@@ -44,12 +38,6 @@ operation::check-username-duplicate-success[snippets='http-request,http-response
 ==== 실패
 
 operation::check-username-duplicate-success-failed[snippets='http-request,http-response']
-
-=== 이메일 인증여부 확인 API
-
-==== 성공
-
-operation::check-email-verified-success[snippets='http-request,http-response,response-fields']
 
 === 비밀번호 찾기 OTP 전송 API
 
@@ -67,4 +55,46 @@ operation::set-new-password-success[snippets='http-request,http-response,request
 
 ==== 성공
 
-operation::update-nickname-success[snippets='http-request,http-response,request-fields,response-fields']
+operation::update-nickname-success[snippets='http-request,http-response,request-fields,response-fields'
+
+== Email API
+
+=== 이메일 중복확인 API
+
+==== 성공
+
+operation::check-email-duplicate-success[snippets='http-request,http-response,query-parameters,response-fields']
+
+==== 실패
+
+operation::check-email-duplicate-failed[snippets='http-request,http-response,query-parameters,response-fields']
+
+=== 이메일 인증여부 확인 API
+
+==== 성공
+
+operation::check-email-verified-success[snippets='http-request,http-response,response-fields']
+
+=== 이메일 등록 API
+
+==== 성공
+
+operation::register-email-success[snippets='http-request,http-response,request-fields,response-fields']
+
+=== 이메일 인증번호 발송 API
+
+==== 성공
+
+operation::verify-email-success[snippets='http-request,http-response,response-fields']
+
+=== 이메일 변경 API
+
+==== 성공
+
+operation::change-email-success[snippets='http-request,http-response,request-fields,response-fields']
+
+=== 이메일 해제 API
+
+==== 성공
+
+operation::unlink-email-success[snippets='http-request,http-response,response-fields']
