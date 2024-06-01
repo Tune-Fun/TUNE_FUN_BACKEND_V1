@@ -26,7 +26,7 @@ import java.util.Optional;
 public class AccountPersistenceAdapter implements
         LoadAccountPort, SaveAccountPort,
         SaveOAuth2AccountPort, DisableOAuth2AccountPort,
-        DeleteAccountPort,
+        DeleteAccountPort, SaveEmailPort,
         RecordLastLoginAtPort, RecordEmailVerifiedAtPort,
         UpdatePasswordPort, UpdateNicknamePort {
 
@@ -74,11 +74,28 @@ public class AccountPersistenceAdapter implements
     }
 
     @Override
+    public void saveEmail(final String email, final String username) {
+        loadAccountByUsername(username)
+                .ifPresent(account -> {
+                    AccountJpaEntity updatedAccount = account.toBuilder().email(email).build();
+                    accountRepository.save(updatedAccount);
+                });
+    }
+
+    @Override
+    public void clearEmail(String username) {
+        loadAccountByUsername(username)
+                .ifPresent(account -> {
+                    AccountJpaEntity updatedAccount = account.toBuilder().email(null).build();
+                    accountRepository.save(updatedAccount);
+                });
+    }
+
+    @Override
     public void recordLastLoginAt(final String username) {
         loadAccountByUsername(username)
                 .ifPresent(account -> {
-                    AccountJpaEntity updatedAccount = account.toBuilder()
-                            .lastLoginAt(LocalDateTime.now()).build();
+                    AccountJpaEntity updatedAccount = account.toBuilder().lastLoginAt(LocalDateTime.now()).build();
                     accountRepository.save(updatedAccount);
                 });
     }
@@ -87,8 +104,16 @@ public class AccountPersistenceAdapter implements
     public void recordEmailVerifiedAt(final String username) {
         loadAccountByUsername(username)
                 .ifPresent(account -> {
-                    AccountJpaEntity updatedAccount = account.toBuilder()
-                            .emailVerifiedAt(LocalDateTime.now()).build();
+                    AccountJpaEntity updatedAccount = account.toBuilder().emailVerifiedAt(LocalDateTime.now()).build();
+                    accountRepository.save(updatedAccount);
+                });
+    }
+
+    @Override
+    public void clearEmailVerifiedAt(final String username) {
+        loadAccountByUsername(username)
+                .ifPresent(account -> {
+                    AccountJpaEntity updatedAccount = account.toBuilder().emailVerifiedAt(null).build();
                     accountRepository.save(updatedAccount);
                 });
     }

@@ -1,6 +1,6 @@
-package com.tune_fun.v1.account.application.service;
+package com.tune_fun.v1.account.application.service.email;
 
-import com.tune_fun.v1.account.application.port.input.usecase.CheckEmailDuplicateUseCase;
+import com.tune_fun.v1.account.application.port.input.usecase.email.CheckEmailDuplicateUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;

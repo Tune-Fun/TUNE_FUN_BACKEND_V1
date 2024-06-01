@@ -1,9 +1,7 @@
 package com.tune_fun.v1.account.adapter.input.rest;
 
 import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
-import com.tune_fun.v1.account.application.port.input.usecase.CheckEmailDuplicateUseCase;
-import com.tune_fun.v1.account.application.port.input.usecase.CheckEmailVerifiedUseCase;
-import com.tune_fun.v1.account.application.port.input.usecase.RegisterEmailUseCase;
+import com.tune_fun.v1.account.application.port.input.usecase.email.*;
 import com.tune_fun.v1.account.domain.value.CurrentUser;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.hexagon.WebAdapter;
@@ -29,8 +27,11 @@ public class EmailController {
 
     private final CheckEmailDuplicateUseCase checkEmailDuplicateUseCase;
     private final CheckEmailVerifiedUseCase checkEmailVerifiedUseCase;
-    
+
     private final RegisterEmailUseCase registerEmailUseCase;
+    private final VerifyEmailUseCase verifyEmailUseCase;
+    private final ChangeEmailUseCase changeEmailUseCase;
+    private final UnlinkEmailUseCase unlinkEmailUseCase;
 
     private final ResponseMapper responseMapper;
 
@@ -48,23 +49,27 @@ public class EmailController {
     }
 
     @PostMapping(value = Uris.EMAIL_ROOT)
-    public ResponseEntity<?> registerEmail(@Valid @RequestBody AccountCommands.SaveEmail command, @CurrentUser User user) {
-        return null;
+    public ResponseEntity<?> registerEmail(@Valid @RequestBody AccountCommands.SaveEmail command, @CurrentUser User user) throws Exception {
+        registerEmailUseCase.registerEmail(command, user);
+        return responseMapper.ok();
     }
 
-    @PostMapping(value = Uris.EMAIL_ROOT + "/verify")
-    public ResponseEntity<?> verifyEmail(@CurrentUser User user) {
-        return null;
+    @PostMapping(value = Uris.VERIFY_EMAIL)
+    public ResponseEntity<?> verifyEmail(@CurrentUser User user) throws Exception {
+        verifyEmailUseCase.verifyEmail(user);
+        return responseMapper.ok();
     }
 
     @PatchMapping(value = Uris.EMAIL_ROOT)
     public ResponseEntity<?> changeEmail(@Valid @RequestBody AccountCommands.SaveEmail command, @CurrentUser User user) {
-        return null;
+        changeEmailUseCase.changeEmail(command, user);
+        return responseMapper.ok();
     }
 
     @DeleteMapping(value = Uris.EMAIL_ROOT)
     public ResponseEntity<?> unlinkEmail(@CurrentUser User user) {
-        return null;
+        unlinkEmailUseCase.unlinkEmail(user);
+        return responseMapper.ok();
     }
 
 }

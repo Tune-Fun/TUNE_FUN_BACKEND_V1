@@ -1,9 +1,7 @@
-package com.tune_fun.v1.account.application.service;
+package com.tune_fun.v1.account.application.service.email;
 
-import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
-import com.tune_fun.v1.account.application.port.input.usecase.RegisterEmailUseCase;
+import com.tune_fun.v1.account.application.port.input.usecase.email.VerifyEmailUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
-import com.tune_fun.v1.account.application.port.output.SaveEmailPort;
 import com.tune_fun.v1.account.domain.value.CurrentAccount;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.hexagon.UseCase;
@@ -19,24 +17,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
-import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.VERIFY_EMAIL;
 
 @Service
 @UseCase
 @RequiredArgsConstructor
-public class RegisterEmailService implements RegisterEmailUseCase {
+public class VerifyEmailService implements VerifyEmailUseCase {
 
     private final LoadAccountPort loadAccountPort;
-    private final SaveEmailPort saveEmailPort;
 
     private final SaveOtpPort saveOtpPort;
     private final SendOtpPort sendOtpPort;
 
     @Transactional
     @Override
-    public void registerEmail(AccountCommands.Register command, User user) throws Exception {
-        CurrentAccount currentAccount = getCurrentAccount(command);
+    public void verifyEmail(final User user) throws Exception {
+        CurrentAccount currentAccount = getCurrentAccount(user.getUsername());
 
         SaveOtp saveOtp = getSaveOtp(user.getUsername());
         CurrentOtp currentOtp = saveOtpPort.saveOtp(saveOtp);
@@ -51,8 +47,8 @@ public class RegisterEmailService implements RegisterEmailUseCase {
     }
 
     @Transactional(readOnly = true)
-    public CurrentAccount getCurrentAccount(final AccountCommands.Register command) {
-        return loadAccountPort.currentAccountInfo(command.username())
+    public CurrentAccount getCurrentAccount(final String username) {
+        return loadAccountPort.currentAccountInfo(username)
                 .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
     }
 }
