@@ -36,7 +36,7 @@ class UpdateNicknameControllerIT extends ControllerBaseTest {
     @Transactional
     @Test
     @Order(1)
-    @DisplayName("닉네임, 성공")
+    @DisplayName("닉네임 변경, 성공")
     void updateNicknameSuccess() throws Exception {
         dummyService.initAndLogin();
 

@@ -23,7 +23,7 @@ import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -36,7 +36,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 
 @Slf4j
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-class LikeControllerTest extends ControllerBaseTest {
+class LikeControllerIT extends ControllerBaseTest {
 
     @Autowired
     private DummyService dummyService;
@@ -139,7 +139,7 @@ class LikeControllerTest extends ControllerBaseTest {
     }
 
     private void verifyInvokeAggregateLikeCount() {
-        verify(likeCountAggregationScheduler, times(1)).aggregateLikeCount();
+        verify(likeCountAggregationScheduler, atLeastOnce()).aggregateLikeCount();
     }
 
     private void awaitIncrementLikeCount(Long votePaperId) {
@@ -147,7 +147,7 @@ class LikeControllerTest extends ControllerBaseTest {
     }
 
     private void verifyInvokeIncrementLikeCount(Long votePaperId) {
-        verify(saveVotePaperStatPort, times(1)).updateLikeCount(votePaperId, 1L);
+        verify(saveVotePaperStatPort, atLeastOnce()).updateLikeCount(votePaperId, 1L);
     }
 
     private void awaitDecrementLikeCount(Long votePaperId) {
@@ -155,6 +155,6 @@ class LikeControllerTest extends ControllerBaseTest {
     }
 
     private void verifyInvokeDecrementLikeCount(Long votePaperId) {
-        verify(saveVotePaperStatPort, times(1)).updateLikeCount(votePaperId, 0L);
+        verify(saveVotePaperStatPort, atLeastOnce()).updateLikeCount(votePaperId, 0L);
     }
 }

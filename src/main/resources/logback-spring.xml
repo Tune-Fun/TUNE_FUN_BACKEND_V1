@@ -27,17 +27,18 @@
         <layout>
             <pattern>${CUSTOM_LOG_PATTERN}</pattern>
         </layout>
-        <if condition='property("spring.profiles.active").equals("dev_standalone")'>
-            <then>
-                <logGroupName>DEV_STANDALONE</logGroupName>
-            </then>
-        </if>
+        <logGroupName>DEV</logGroupName>
         <if condition='property("spring.profiles.active").equals("dev")'>
             <then>
                 <logGroupName>DEV</logGroupName>
             </then>
         </if>
-        <logStreamUuidPrefix>error-</logStreamUuidPrefix>
+        <if condition='property("spring.profiles.active").equals("dev_standalone")'>
+            <then>
+                <logGroupName>DEV_STANDALONE</logGroupName>
+            </then>
+        </if>
+        <logStreamUuidPrefix>TuneFun-</logStreamUuidPrefix>
         <maxBatchLogEvents>50</maxBatchLogEvents>
         <maxFlushTimeMillis>30000</maxFlushTimeMillis>
         <maxBlockTimeMillis>5000</maxBlockTimeMillis>

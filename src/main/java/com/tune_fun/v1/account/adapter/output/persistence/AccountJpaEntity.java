@@ -51,7 +51,6 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
     @Comment("비밀번호")
     private String password;
 
-    @NotNull
     @Column(name = "email", length = 2000)
     @Comment("이메일")
     private String email;

@@ -8,6 +8,7 @@ import com.tune_fun.v1.account.adapter.output.persistence.device.DevicePersisten
 import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.RegisterUseCase;
 import com.tune_fun.v1.account.application.port.input.usecase.SendForgotPasswordOtpUseCase;
+import com.tune_fun.v1.account.application.port.input.usecase.email.RegisterEmailUseCase;
 import com.tune_fun.v1.account.application.port.input.usecase.jwt.GenerateAccessTokenUseCase;
 import com.tune_fun.v1.account.application.port.input.usecase.jwt.GenerateRefreshTokenUseCase;
 import com.tune_fun.v1.account.domain.behavior.SaveDevice;
@@ -71,6 +72,9 @@ public class DummyService {
 
     @Autowired
     private SendForgotPasswordOtpUseCase sendForgotPasswordOtpUseCase;
+
+    @Autowired
+    private RegisterEmailUseCase registerEmailUseCase;
 
     @Autowired
     private VerifyOtpUseCase verifyOtpUseCase;
@@ -204,6 +208,19 @@ public class DummyService {
     }
 
     @Transactional
+    public void clearEmail() throws Exception {
+        accountPersistenceAdapter.clearEmail(defaultUsername);
+    }
+
+    @Transactional
+    public void registerEmail() throws Exception {
+        String email = StringUtil.randomAlphabetic(7) + "@" + StringUtil.randomAlphabetic(5) + ".com";
+        AccountCommands.SaveEmail command = new AccountCommands.SaveEmail(email);
+
+        registerEmailUseCase.registerEmail(command, getSecurityUser(defaultAccount));
+    }
+
+    @Transactional
     public void forgotPasswordOtp() throws Exception {
         AccountCommands.SendForgotPasswordOtp command = new AccountCommands.SendForgotPasswordOtp(defaultUsername);
         assertDoesNotThrow(() -> sendForgotPasswordOtpUseCase.sendOtp(command));
@@ -232,7 +249,7 @@ public class DummyService {
         VotePaperCommands.Register command = new VotePaperCommands.Register("First Vote Paper", "test",
                 VotePaperOption.DENY_ADD_CHOICES, voteStartAt, voteEndAt, offers);
 
-        User user = new User(defaultArtistUsername, defaultArtistPassword, defaultArtistAccount.getAuthorities());
+        User user = getSecurityUser(defaultArtistAccount);
         RegisteredVotePaper registeredVotePaper = saveVotePaper(command, user);
         saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
 
@@ -257,7 +274,7 @@ public class DummyService {
         VotePaperCommands.Register command = new VotePaperCommands.Register("First Vote Paper", "test",
                 VotePaperOption.ALLOW_ADD_CHOICES, voteStartAt, voteEndAt, offers);
 
-        User user = new User(defaultArtistUsername, defaultArtistPassword, defaultArtistAccount.getAuthorities());
+        User user = getSecurityUser(defaultArtistAccount);
         RegisteredVotePaper registeredVotePaper = saveVotePaper(command, user);
         saveVoteChoiceByRegisteredVotePaper(command, registeredVotePaper);
 
@@ -301,8 +318,7 @@ public class DummyService {
     }
 
     public void registerVote() {
-        User user = new User(defaultUsername, defaultPassword, defaultAccount.getAuthorities());
-        registerVoteUseCase.register(defaultVotePaper.getId(), defaultVoteChoices.get(0).getId(), user);
+        registerVoteUseCase.register(defaultVotePaper.getId(), defaultVoteChoices.get(0).getId(), getSecurityUser(defaultAccount));
     }
 
     public void expireOtp(OtpType otpType) {
@@ -325,5 +341,9 @@ public class DummyService {
     public void likeVotePaper(final Long votePaperId, final String username) {
         votePersistenceAdapter.saveVotePaperLike(votePaperId, username);
         likeCountPersistenceAdapter.incrementVotePaperLikeCount(votePaperId);
+    }
+
+    private static User getSecurityUser(AccountJpaEntity account) {
+        return new User(account.getUsername(), account.getPassword(), account.getAuthorities());
     }
 }
