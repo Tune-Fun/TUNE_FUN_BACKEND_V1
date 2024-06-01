@@ -3,6 +3,7 @@ package com.tune_fun.v1.common.util.i18n;
 import com.tune_fun.v1.common.response.MessageCode;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
@@ -17,7 +18,7 @@ public class MessageSourceUtil {
     }
 
     public String getMessage(String code) {
-        return messageSource.getMessage(code, null, Locale.getDefault());
+        return messageSource.getMessage(code, null, LocaleContextHolder.getLocale());
     }
 
     public String getMessage(MessageCode code) {
