@@ -2,7 +2,7 @@ name: CI/CD
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, test/cicd ]
 
 env:
   S3_BUCKET_NAME: tuenfun-dev-deploy
