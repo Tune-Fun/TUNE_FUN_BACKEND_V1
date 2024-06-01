@@ -29,6 +29,7 @@ public class EmailController {
 
     private final CheckEmailDuplicateUseCase checkEmailDuplicateUseCase;
     private final CheckEmailVerifiedUseCase checkEmailVerifiedUseCase;
+    
     private final RegisterEmailUseCase registerEmailUseCase;
 
     private final ResponseMapper responseMapper;
@@ -47,7 +48,22 @@ public class EmailController {
     }
 
     @PostMapping(value = Uris.EMAIL_ROOT)
-    public ResponseEntity<?> sendRegisterEmailOtp(@Valid @RequestBody AccountCommands.SaveEmail command, @CurrentUser User user) {
+    public ResponseEntity<?> registerEmail(@Valid @RequestBody AccountCommands.SaveEmail command, @CurrentUser User user) {
+        return null;
+    }
+
+    @PostMapping(value = Uris.EMAIL_ROOT + "/verify")
+    public ResponseEntity<?> verifyEmail(@CurrentUser User user) {
+        return null;
+    }
+
+    @PatchMapping(value = Uris.EMAIL_ROOT)
+    public ResponseEntity<?> changeEmail(@Valid @RequestBody AccountCommands.SaveEmail command, @CurrentUser User user) {
+        return null;
+    }
+
+    @DeleteMapping(value = Uris.EMAIL_ROOT)
+    public ResponseEntity<?> unlinkEmail(@CurrentUser User user) {
         return null;
     }
 

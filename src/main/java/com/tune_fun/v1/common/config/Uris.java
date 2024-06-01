@@ -52,7 +52,7 @@ public class Uris {
     public static final String EMAIL_ROOT = API_V1_ROOT + "/accounts/email";
 
     public static final String VERIFY_OTP = API_V1_ROOT + "/otp/verify";
-    public static final String VERIFY_OTP_WITH_TOKEN = API_V1_ROOT + "/otp/verify-with-token";
+    public static final String VERIFY_OTP_WITH_AUTHORIZATION = API_V1_ROOT + "/otp/verify-with-authorization";
     public static final String RESEND_OTP = API_V1_ROOT + "/otp/resend";
 
     public static final String VOTE_ROOT = API_V1_ROOT + "/votes";
