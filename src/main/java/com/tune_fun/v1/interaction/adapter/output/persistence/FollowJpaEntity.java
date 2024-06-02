@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 
-import java.time.LocalDateTime;
-
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,9 +36,5 @@ public class FollowJpaEntity extends BaseEntity {
     @Column(name = "followee_id", nullable = false, updatable = false)
     @Comment("팔로이 ID")
     private Long followeeId;
-
-    @Column(name = "followed_at", nullable = false, updatable = false)
-    @Comment("팔로우 일시")
-    private LocalDateTime followedAt;
 
 }
