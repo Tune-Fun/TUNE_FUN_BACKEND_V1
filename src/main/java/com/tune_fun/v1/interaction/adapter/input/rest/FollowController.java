@@ -26,7 +26,6 @@ public class FollowController {
     private final UnFollowUserUseCase unFollowUserUseCase;
 
     private final FollowingQuery followingQuery;
-    private final FollowerQuery followerQuery;
 
     @PostMapping(value = Uris.FOLLOW_ROOT)
     public void follow(final User user) {
@@ -41,13 +40,6 @@ public class FollowController {
     @GetMapping(value = Uris.FOLLOWING)
     public ResponseEntity<Response<ScrollableFollowInfoResponse>> fetchFollowingUser(@RequestParam(name = "last_id", required = false) Integer lastId, final User user) {
         Window<ScrollableFollowInfo> followInfos = followingQuery.fetchFollowingUser(lastId, user);
-        ScrollableFollowInfoResponse response = new ScrollableFollowInfoResponse(followInfos);
-        return responseMapper.ok(response);
-    }
-
-    @GetMapping(value = Uris.FOLLOWER)
-    public ResponseEntity<Response<ScrollableFollowInfoResponse>> fetchFollowerUser(@RequestParam(name = "last_id", required = false) Integer lastId, final User user) {
-        Window<ScrollableFollowInfo> followInfos = followerQuery.fetchFollowerUser(lastId, user);
         ScrollableFollowInfoResponse response = new ScrollableFollowInfoResponse(followInfos);
         return responseMapper.ok(response);
     }
