@@ -1,15 +1,15 @@
-package com.tune_fun.v1.common.hexagon;
+package com.tune_fun.v1.common.stereotype;
 
 import org.springframework.core.annotation.AliasFor;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.annotation.*;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Component
-public @interface PersistenceAdapter {
+@RestController
+public @interface WebAdapter {
 
     /**
      * The value may indicate a suggestion for a logical component name,
@@ -17,7 +17,7 @@ public @interface PersistenceAdapter {
      *
      * @return the suggested component name, if any (or empty String otherwise)
      */
-    @AliasFor(annotation = Component.class)
+    @AliasFor(annotation = RestController.class)
     String value() default "";
 
 }

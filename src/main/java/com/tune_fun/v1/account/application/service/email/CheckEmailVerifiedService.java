@@ -4,7 +4,7 @@ import com.tune_fun.v1.account.application.port.input.usecase.email.CheckEmailVe
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.domain.value.CurrentAccount;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
-import com.tune_fun.v1.common.hexagon.UseCase;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;

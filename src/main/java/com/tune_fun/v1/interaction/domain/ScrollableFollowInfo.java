@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record ScrollableFollowInfo(
         Long accountId,
-        String username,
         String nickname,
         String profileImageUrl,
 

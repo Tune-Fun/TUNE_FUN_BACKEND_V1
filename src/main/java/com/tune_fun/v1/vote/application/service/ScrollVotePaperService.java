@@ -1,6 +1,6 @@
 package com.tune_fun.v1.vote.application.service;
 
-import com.tune_fun.v1.common.hexagon.UseCase;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import com.tune_fun.v1.vote.application.port.input.usecase.ScrollVotePaperUseCase;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
 import com.tune_fun.v1.vote.domain.value.ScrollableVotePaper;

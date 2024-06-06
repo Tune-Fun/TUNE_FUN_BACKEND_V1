@@ -1,6 +1,7 @@
 package com.tune_fun.v1.account.application.service.oauth2.handler;
 
 import com.tune_fun.v1.account.application.port.output.oauth2.DeleteAuthorizationRequestPort;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import com.tune_fun.v1.common.util.CookieUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,15 +9,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
 import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.REDIRECT_URI_PARAM_COOKIE_NAME;
 
+@UseCase
 @RequiredArgsConstructor
-@Component
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
     private final DeleteAuthorizationRequestPort deleteAuthorizationRequestPort;

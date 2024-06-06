@@ -7,7 +7,7 @@ import com.tune_fun.v1.account.application.port.output.SendUsernamePort;
 import com.tune_fun.v1.account.domain.behavior.SendUsername;
 import com.tune_fun.v1.account.domain.value.RegisteredAccount;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
-import com.tune_fun.v1.common.hexagon.UseCase;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

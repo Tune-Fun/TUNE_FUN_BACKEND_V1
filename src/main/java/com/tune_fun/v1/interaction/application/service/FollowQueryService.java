@@ -1,7 +1,6 @@
 package com.tune_fun.v1.interaction.application.service;
 
-import com.tune_fun.v1.common.hexagon.UseCase;
-import com.tune_fun.v1.interaction.application.port.input.query.FollowerQuery;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import com.tune_fun.v1.interaction.application.port.input.query.FollowingQuery;
 import com.tune_fun.v1.interaction.domain.ScrollableFollowInfo;
 import lombok.RequiredArgsConstructor;

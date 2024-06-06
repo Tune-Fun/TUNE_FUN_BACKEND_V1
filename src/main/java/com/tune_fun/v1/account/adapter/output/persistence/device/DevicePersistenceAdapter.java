@@ -7,7 +7,7 @@ import com.tune_fun.v1.account.application.port.output.device.SaveDevicePort;
 import com.tune_fun.v1.account.domain.behavior.DeleteDevice;
 import com.tune_fun.v1.account.domain.behavior.SaveDevice;
 import com.tune_fun.v1.account.domain.value.NotificationApprovedDevice;
-import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
+import com.tune_fun.v1.common.stereotype.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -10,7 +10,7 @@ import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
 import com.tune_fun.v1.account.domain.value.CurrentAccount;
 import com.tune_fun.v1.account.domain.value.RegisteredAccount;
 import com.tune_fun.v1.account.domain.value.oauth2.RegisteredOAuth2Account;
-import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
+import com.tune_fun.v1.common.stereotype.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;

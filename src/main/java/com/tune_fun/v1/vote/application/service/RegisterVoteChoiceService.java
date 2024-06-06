@@ -1,7 +1,7 @@
 package com.tune_fun.v1.vote.application.service;
 
 import com.tune_fun.v1.common.exception.CommonApplicationException;
-import com.tune_fun.v1.common.hexagon.UseCase;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVoteChoiceUseCase;
 import com.tune_fun.v1.vote.application.port.output.LoadVoteChoicePort;

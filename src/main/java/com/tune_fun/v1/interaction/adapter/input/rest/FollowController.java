@@ -1,10 +1,10 @@
 package com.tune_fun.v1.interaction.adapter.input.rest;
 
 import com.tune_fun.v1.common.config.Uris;
-import com.tune_fun.v1.common.hexagon.WebAdapter;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
-import com.tune_fun.v1.interaction.application.port.input.query.FollowerQuery;
+import com.tune_fun.v1.common.stereotype.WebAdapter;
+import com.tune_fun.v1.interaction.application.port.input.command.InteractionCommands;
 import com.tune_fun.v1.interaction.application.port.input.query.FollowingQuery;
 import com.tune_fun.v1.interaction.application.port.input.usecase.FollowUserUseCase;
 import com.tune_fun.v1.interaction.application.port.input.usecase.UnFollowUserUseCase;
@@ -13,9 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Window;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RestController
 @WebAdapter
 @RequiredArgsConstructor
 public class FollowController {
@@ -28,12 +30,14 @@ public class FollowController {
     private final FollowingQuery followingQuery;
 
     @PostMapping(value = Uris.FOLLOW_ROOT)
-    public void follow(final User user) {
+    public void follow(final InteractionCommands.Follow command, final User user) {
+        followUserUseCase.follow(command, user);
         responseMapper.ok();
     }
 
     @DeleteMapping(value = Uris.FOLLOW_ROOT)
-    public void unfollow(final User user) {
+    public void unfollow(final InteractionCommands.UnFollow command, final User user) {
+        unFollowUserUseCase.unfollow(command, user);
         responseMapper.ok();
     }
 

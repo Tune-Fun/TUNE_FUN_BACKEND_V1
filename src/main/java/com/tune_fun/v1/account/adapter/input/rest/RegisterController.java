@@ -4,7 +4,7 @@ import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.RegisterUseCase;
 import com.tune_fun.v1.account.domain.value.RegisterResult;
 import com.tune_fun.v1.common.config.Uris;
-import com.tune_fun.v1.common.hexagon.WebAdapter;
+import com.tune_fun.v1.common.stereotype.WebAdapter;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
 import jakarta.validation.Valid;

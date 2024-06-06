@@ -5,9 +5,9 @@ import com.tune_fun.v1.account.application.port.input.usecase.LogoutUseCase;
 import com.tune_fun.v1.account.domain.value.CurrentUser;
 import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
-import com.tune_fun.v1.common.hexagon.WebAdapter;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
+import com.tune_fun.v1.common.stereotype.WebAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -16,14 +16,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
 import static com.tune_fun.v1.common.response.MessageCode.EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-@RestController
 @WebAdapter
 @RequiredArgsConstructor
 public class LogoutController {

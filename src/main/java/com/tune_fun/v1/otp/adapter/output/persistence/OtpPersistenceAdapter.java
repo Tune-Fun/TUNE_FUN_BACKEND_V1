@@ -2,7 +2,7 @@ package com.tune_fun.v1.otp.adapter.output.persistence;
 
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.helper.KmsEncryptionHelper;
-import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
+import com.tune_fun.v1.common.stereotype.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.otp.application.port.output.DeleteOtpPort;
 import com.tune_fun.v1.otp.application.port.output.LoadOtpPort;
