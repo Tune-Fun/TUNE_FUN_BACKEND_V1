@@ -15,7 +15,8 @@ public class UnFollowService implements UnFollowUserUseCase {
 
     @Transactional
     @Override
-    public void unfollow(InteractionCommands.UnFollow command, User user) {
+    public void unfollow(final InteractionCommands.UnFollow command, final User user) {
         
     }
+
 }

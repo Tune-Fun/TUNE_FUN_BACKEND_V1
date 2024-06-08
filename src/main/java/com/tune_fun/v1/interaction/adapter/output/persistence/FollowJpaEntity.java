@@ -33,16 +33,8 @@ public class FollowJpaEntity extends BaseEntity {
     @Comment("팔로워 ID")
     private Long followerId;
 
-    @Column(name = "follower_nickname", nullable = false, updatable = false)
-    @Comment("팔로워 닉네임")
-    private String followerNickname;
-
     @Column(name = "followee_id", nullable = false, updatable = false)
     @Comment("팔로이 ID")
     private Long followeeId;
-
-    @Column(name = "followee_nickname", nullable = false, updatable = false)
-    @Comment("팔로이 닉네임")
-    private String followeeNickname;
 
 }
