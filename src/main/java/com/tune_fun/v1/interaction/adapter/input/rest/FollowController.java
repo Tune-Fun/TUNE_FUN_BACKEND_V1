@@ -42,8 +42,8 @@ public class FollowController {
     }
 
     @GetMapping(value = Uris.FOLLOWING)
-    public ResponseEntity<Response<ScrollableFollowInfoResponse>> fetchFollowingUser(@RequestParam(name = "last_id", required = false) Integer lastId, final User user) {
-        Window<ScrollableFollowInfo> followInfos = followingQuery.fetchFollowingUser(lastId, user);
+    public ResponseEntity<Response<ScrollableFollowInfoResponse>> fetchFollowingUser(@RequestParam(name = "last_id", required = false) Long lastId, final User user) {
+        Window<ScrollableFollowInfo> followInfos = followingQuery.scrollFollowingUser(lastId, user);
         ScrollableFollowInfoResponse response = new ScrollableFollowInfoResponse(followInfos);
         return responseMapper.ok(response);
     }

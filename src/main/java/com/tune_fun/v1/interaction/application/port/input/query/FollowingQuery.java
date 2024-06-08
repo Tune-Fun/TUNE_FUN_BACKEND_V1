@@ -5,5 +5,5 @@ import org.springframework.data.domain.Window;
 import org.springframework.security.core.userdetails.User;
 
 public interface FollowingQuery {
-    Window<ScrollableFollowInfo> fetchFollowingUser(Integer lastId, User user);
+    Window<ScrollableFollowInfo> scrollFollowingUser(final Long lastId, final User user);
 }
