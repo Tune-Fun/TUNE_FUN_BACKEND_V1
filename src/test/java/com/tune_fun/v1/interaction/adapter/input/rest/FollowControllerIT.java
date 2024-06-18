@@ -21,6 +21,7 @@ import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
@@ -74,6 +75,50 @@ class FollowControllerIT extends ControllerBaseTest {
                         follow -> log.info("팔로우 성공"),
                         () -> Assertions.fail("팔로우 실패")
                 );
+    }
 
+    @Transactional
+    @Test
+    @Order(2)
+    @DisplayName("팔로우 취소, 성공")
+    void unfollowSuccess() throws Exception {
+        dummyService.initAndLogin();
+        dummyService.initSecondAccount();
+
+        Long followeeId = dummyService.getDefaultSecondAccount().getId();
+        dummyService.follow();
+
+        InteractionCommands.UnFollow command = new InteractionCommands.UnFollow(followeeId);
+        String accessToken = dummyService.getDefaultAccessToken();
+
+        FieldDescriptor requestDescriptor = fieldWithPath("target_account_id").description("언팔로우할 대상의 계정 ID").attributes(constraint("NOT NULL"));
+
+        mockMvc.perform(
+                        delete(Uris.FOLLOW_ROOT)
+                                .header(AUTHORIZATION, bearerToken(accessToken))
+                                .content(toJson(command))
+                                .contentType(APPLICATION_JSON_VALUE)
+                )
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andDo(
+                        restDocs.document(
+                                requestHeaders(authorizationHeader),
+                                requestFields(requestDescriptor),
+                                responseFields(baseResponseFields),
+                                resource(
+                                        builder().
+                                                description("팔로우 취소").
+                                                requestFields(requestDescriptor).
+                                                responseFields(baseResponseFields)
+                                                .build()
+                                )
+                        )
+                );
+
+        loadFollowPort.loadFollow(followeeId, dummyService.getDefaultAccount().getId())
+                .ifPresentOrElse(
+                        follow -> Assertions.fail("팔로우 취소 실패"),
+                        () -> log.info("팔로우 취소 성공")
+                );
     }
 }

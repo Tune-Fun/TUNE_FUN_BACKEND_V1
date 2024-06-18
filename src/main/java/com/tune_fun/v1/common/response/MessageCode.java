@@ -76,6 +76,7 @@ public enum MessageCode {
 
     // 상호작용 관련
     ALREADY_FOLLOWED(BAD_REQUEST, "3301"),
+    NOT_FOLLOWED(BAD_REQUEST, "3302"),
 
     // 분산 락 관련
     LOCK_ACQUISITION_FAILED_ERROR(INTERNAL_SERVER_ERROR, "4001"),

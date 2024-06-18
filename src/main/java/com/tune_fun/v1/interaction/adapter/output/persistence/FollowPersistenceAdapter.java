@@ -1,6 +1,7 @@
 package com.tune_fun.v1.interaction.adapter.output.persistence;
 
 import com.tune_fun.v1.common.stereotype.PersistenceAdapter;
+import com.tune_fun.v1.interaction.application.port.output.DeleteFollowPort;
 import com.tune_fun.v1.interaction.application.port.output.LoadFollowPort;
 import com.tune_fun.v1.interaction.application.port.output.SaveFollowPort;
 import com.tune_fun.v1.interaction.domain.RegisteredFollow;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class FollowPersistenceAdapter implements LoadFollowPort, SaveFollowPort {
+public class FollowPersistenceAdapter implements LoadFollowPort, SaveFollowPort, DeleteFollowPort {
 
     private final FollowRepository followRepository;
     private final FollowMapper followMapper;
@@ -31,5 +32,10 @@ public class FollowPersistenceAdapter implements LoadFollowPort, SaveFollowPort 
     @Override
     public void saveFollow(final Long followeeId, final Long followerId) {
         followRepository.save(followMapper.follow(followeeId, followerId));
+    }
+
+    @Override
+    public void deleteFollow(final Long followeeId, final Long followerId) {
+        followRepository.deleteByFolloweeIdAndFollowerId(followeeId, followerId);
     }
 }

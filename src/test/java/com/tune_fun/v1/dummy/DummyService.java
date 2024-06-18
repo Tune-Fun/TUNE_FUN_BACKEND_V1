@@ -15,6 +15,8 @@ import com.tune_fun.v1.account.domain.behavior.SaveDevice;
 import com.tune_fun.v1.base.annotation.IntegrationTest;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.interaction.adapter.output.persistence.LikeCountPersistenceAdapter;
+import com.tune_fun.v1.interaction.application.port.input.command.InteractionCommands;
+import com.tune_fun.v1.interaction.application.port.input.usecase.FollowUserUseCase;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpPersistenceAdapter;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
 import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
@@ -84,6 +86,9 @@ public class DummyService {
 
     @Autowired
     private RegisterVoteUseCase registerVoteUseCase;
+
+    @Autowired
+    private FollowUserUseCase followUserUseCase;
 
     @Autowired
     private AccountPersistenceAdapter accountPersistenceAdapter;
@@ -364,6 +369,12 @@ public class DummyService {
     public void likeVotePaper(final Long votePaperId, final String username) {
         votePersistenceAdapter.saveVotePaperLike(votePaperId, username);
         likeCountPersistenceAdapter.incrementVotePaperLikeCount(votePaperId);
+    }
+
+    @Transactional
+    public void follow() {
+        InteractionCommands.Follow command = new InteractionCommands.Follow(defaultSecondAccount.getId());
+        followUserUseCase.follow(command, getSecurityUser(defaultAccount));
     }
 
     private static User getSecurityUser(AccountJpaEntity account) {

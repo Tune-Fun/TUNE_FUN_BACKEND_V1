@@ -35,9 +35,9 @@ public class FollowController {
     }
 
     @DeleteMapping(value = Uris.FOLLOW_ROOT)
-    public void unfollow(final InteractionCommands.UnFollow command, @CurrentUser final User user) {
+    public ResponseEntity<Response<?>> unfollow(@Valid @RequestBody final InteractionCommands.UnFollow command, @CurrentUser final User user) {
         unFollowUserUseCase.unfollow(command, user);
-        responseMapper.ok();
+        return responseMapper.ok();
     }
 
     @GetMapping(value = Uris.FOLLOWING)
