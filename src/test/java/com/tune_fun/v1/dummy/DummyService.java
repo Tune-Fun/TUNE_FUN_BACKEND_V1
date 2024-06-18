@@ -109,6 +109,9 @@ public class DummyService {
     private AccountJpaEntity defaultAccount = null;
     private DeviceJpaEntity defaultDevice = null;
 
+    private AccountJpaEntity defaultSecondAccount = null;
+    private DeviceJpaEntity defatulSecondDevice = null;
+
     private AccountJpaEntity defaultArtistAccount = null;
     private DeviceJpaEntity defaultArtistDevice = null;
 
@@ -118,6 +121,10 @@ public class DummyService {
     private String defaultUsername = null;
     private String defaultPassword = null;
     private String defaultEmail = null;
+
+    private String defaultSecondUsername = null;
+    private String defaultSecondPassword = null;
+    private String defaultSecondEmail = null;
 
     private String defaultAccessToken = null;
     private String defaultRefreshToken = null;
@@ -156,6 +163,22 @@ public class DummyService {
         registerUseCase.register("NORMAL", command);
 
         defaultAccount = accountPersistenceAdapter.loadAccountByUsername(defaultUsername)
+                .orElseThrow(() -> new RuntimeException("initUser 실패"));
+    }
+
+    @Transactional
+    public void initSecondAccount() throws NoSuchAlgorithmException {
+        defaultSecondUsername = StringUtil.randomAlphanumeric(10, 15);
+        defaultSecondPassword = StringUtil.randomAlphaNumericSymbol(15, 20);
+        defaultSecondEmail = StringUtil.randomAlphabetic(7) + "@" + StringUtil.randomAlphabetic(5) + ".com";
+        String nickname = StringUtil.randomAlphabetic(5);
+
+        AccountCommands.Notification notification = new AccountCommands.Notification(true, true, true);
+        AccountCommands.Register command = new AccountCommands.Register(defaultSecondUsername, defaultSecondPassword, defaultSecondEmail, nickname, notification);
+
+        registerUseCase.register("NORMAL", command);
+
+        defaultSecondAccount = accountPersistenceAdapter.loadAccountByUsername(defaultSecondUsername)
                 .orElseThrow(() -> new RuntimeException("initUser 실패"));
     }
 

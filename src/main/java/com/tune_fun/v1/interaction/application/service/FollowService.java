@@ -36,11 +36,10 @@ public class FollowService implements FollowUserUseCase {
     @Override
     public void follow(final InteractionCommands.Follow command, final User user) {
         CurrentAccount currentAccount = loadAccountPort.currentAccountInfo(user.getUsername())
-                .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
+                .orElseThrow(new CommonApplicationException(ACCOUNT_NOT_FOUND));
         Long followerAccountId = currentAccount.id();
 
         loadFollowPort.loadFollow(command.targetAccountId(), followerAccountId)
                 .ifPresentOrElse(THROW_ALREADY_FOLLOWED, () -> saveFollowPort.saveFollow(command.targetAccountId(), followerAccountId));
-
     }
 }
