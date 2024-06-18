@@ -12,3 +12,17 @@ operation::like-vote-paper-success[snipeets='http-request,http-response,path-par
 ==== 성공
 
 operation::unlike-vote-paper-success[snipeets='http-request,http-response,path-parameter,response-fields']
+
+== Follow API
+
+=== 팔로우 API
+
+==== 성공
+
+operation::follow-success[snipeets='http-request,http-response,path-parameter,response-fields']
+
+=== 팔로우 취소 API
+
+==== 성공
+
+operation::unfollow-success[snipeets='http-request,http-response,path-parameter,response-fields']
