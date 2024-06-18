@@ -4,7 +4,7 @@ import com.tune_fun.v1.account.application.port.input.usecase.email.VerifyEmailU
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.domain.value.CurrentAccount;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
-import com.tune_fun.v1.common.hexagon.UseCase;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import com.tune_fun.v1.otp.application.port.output.SaveOtpPort;
 import com.tune_fun.v1.otp.application.port.output.SendOtpPort;
 import com.tune_fun.v1.otp.domain.behavior.SaveOtp;

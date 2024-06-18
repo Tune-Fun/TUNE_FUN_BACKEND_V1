@@ -1,7 +1,7 @@
 package com.tune_fun.v1.vote.application.service;
 
 import com.tune_fun.v1.common.exception.CommonApplicationException;
-import com.tune_fun.v1.common.hexagon.UseCase;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.vote.application.port.input.usecase.DeleteVotePaperUseCase;
 import com.tune_fun.v1.vote.application.port.output.DeleteVotePaperPort;

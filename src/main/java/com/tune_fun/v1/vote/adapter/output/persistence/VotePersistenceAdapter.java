@@ -3,7 +3,7 @@ package com.tune_fun.v1.vote.adapter.output.persistence;
 import com.tune_fun.v1.account.adapter.output.persistence.AccountJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.AccountPersistenceAdapter;
 import com.tune_fun.v1.common.constant.Constants;
-import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
+import com.tune_fun.v1.common.stereotype.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeJpaEntity;
 import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeRepository;

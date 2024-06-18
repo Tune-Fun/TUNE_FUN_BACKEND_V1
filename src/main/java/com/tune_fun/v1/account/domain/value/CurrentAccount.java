@@ -11,6 +11,7 @@ import java.util.Set;
  * DTO for {@link AccountJpaEntity}
  */
 public record CurrentAccount(
+        Long id,
         LocalDateTime createdAt,
         LocalDateTime emailVerifiedAt,
         @NotNull @Size(max = 255) String uuid,

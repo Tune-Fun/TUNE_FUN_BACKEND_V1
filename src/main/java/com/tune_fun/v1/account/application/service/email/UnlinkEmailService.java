@@ -3,7 +3,7 @@ package com.tune_fun.v1.account.application.service.email;
 import com.tune_fun.v1.account.application.port.input.usecase.email.UnlinkEmailUseCase;
 import com.tune_fun.v1.account.application.port.output.RecordEmailVerifiedAtPort;
 import com.tune_fun.v1.account.application.port.output.SaveEmailPort;
-import com.tune_fun.v1.common.hexagon.UseCase;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;

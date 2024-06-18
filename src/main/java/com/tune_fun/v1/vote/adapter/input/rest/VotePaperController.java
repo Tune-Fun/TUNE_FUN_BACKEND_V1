@@ -3,11 +3,11 @@ package com.tune_fun.v1.vote.adapter.input.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tune_fun.v1.account.domain.value.CurrentUser;
 import com.tune_fun.v1.common.config.Uris;
-import com.tune_fun.v1.common.hexagon.WebAdapter;
 import com.tune_fun.v1.common.response.BasePayload;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
+import com.tune_fun.v1.common.stereotype.WebAdapter;
 import com.tune_fun.v1.vote.application.port.input.command.VotePaperCommands;
 import com.tune_fun.v1.vote.application.port.input.usecase.*;
 import com.tune_fun.v1.vote.domain.value.FullVotePaper;
@@ -21,7 +21,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
 @WebAdapter
 @RequiredArgsConstructor
 public class VotePaperController {

@@ -202,7 +202,7 @@ class AccountPersistenceAdapterTest {
         LocalDateTime createdAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         when(accountMapper.accountInfo(Mockito.<AccountJpaEntity>any()))
-                .thenReturn(new CurrentAccount(createdAt, emailVerifiedAt, "01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe",
+                .thenReturn(new CurrentAccount(1L, createdAt, emailVerifiedAt, "01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe",
                         "Nickname", "jane.doe@example.org", new HashSet<>()));
 
         // Act
@@ -516,7 +516,7 @@ class AccountPersistenceAdapterTest {
         when(accountMapper.fromSaveAccountBehavior(Mockito.<SaveAccount>any())).thenReturn(new AccountJpaEntity());
         LocalDateTime createdAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         LocalDateTime emailVerifiedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
-        CurrentAccount currentAccount = new CurrentAccount(createdAt, emailVerifiedAt,
+        CurrentAccount currentAccount = new CurrentAccount(1L, createdAt, emailVerifiedAt,
                 "01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe", "Nickname", "jane.doe@example.org", new HashSet<>());
 
         when(accountMapper.accountInfo(Mockito.<AccountJpaEntity>any())).thenReturn(currentAccount);

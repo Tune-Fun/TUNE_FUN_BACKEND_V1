@@ -29,9 +29,9 @@ public final class CustomPointCuts {
     }
 
     @Pointcut(
-            "within(@com.tune_fun.v1.common.hexagon.PersistenceAdapter *)" +
-                    " || within(@com.tune_fun.v1.common.hexagon.UseCase *)" +
-                    " || within(@com.tune_fun.v1.common.hexagon.WebAdapter *)"
+            "within(@com.tune_fun.v1.common.stereotype.PersistenceAdapter *)" +
+                    " || within(@com.tune_fun.v1.common.stereotype.UseCase *)" +
+                    " || within(@com.tune_fun.v1.common.stereotype.WebAdapter *)"
     )
     public void hexagon() {
     }

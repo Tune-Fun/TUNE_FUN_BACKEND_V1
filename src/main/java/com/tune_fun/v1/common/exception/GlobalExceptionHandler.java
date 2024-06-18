@@ -59,6 +59,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ExceptionResponse> exception(Exception e) {
+        log.error("Unrecognised Exception", e);
         return responseMapper.error(ERROR);
     }
 

@@ -1,4 +1,4 @@
-package com.tune_fun.v1.common.hexagon;
+package com.tune_fun.v1.common.stereotype;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Service;

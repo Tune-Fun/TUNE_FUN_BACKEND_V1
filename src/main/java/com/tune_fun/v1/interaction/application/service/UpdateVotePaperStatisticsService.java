@@ -1,6 +1,6 @@
 package com.tune_fun.v1.interaction.application.service;
 
-import com.tune_fun.v1.common.hexagon.UseCase;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import com.tune_fun.v1.interaction.application.port.input.usecase.UpdateVotePaperStatisticsUseCase;
 import com.tune_fun.v1.interaction.application.port.output.LoadVotePaperLikeCountPort;
 import com.tune_fun.v1.vote.application.port.output.SaveVotePaperStatisticsPort;

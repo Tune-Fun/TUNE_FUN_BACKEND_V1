@@ -1,7 +1,7 @@
 package com.tune_fun.v1.account.adapter.output.persistence.oauth2;
 
 import com.tune_fun.v1.account.application.port.output.oauth2.DeleteAuthorizationRequestPort;
-import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
+import com.tune_fun.v1.common.stereotype.PersistenceAdapter;
 import com.tune_fun.v1.common.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

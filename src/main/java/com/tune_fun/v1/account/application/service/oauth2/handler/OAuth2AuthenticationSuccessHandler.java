@@ -15,7 +15,7 @@ import com.tune_fun.v1.account.domain.value.oauth2.*;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.exception.OAuth2AuthenticationProcessingException;
 import com.tune_fun.v1.common.helper.AppleOAuth2ClientSecretHelper;
-import com.tune_fun.v1.common.hexagon.UseCase;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import com.tune_fun.v1.common.util.StringUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -43,7 +42,6 @@ import static com.tune_fun.v1.common.util.StringUtil.getFlattenAuthorities;
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
 @Slf4j
-@Component
 @UseCase
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {

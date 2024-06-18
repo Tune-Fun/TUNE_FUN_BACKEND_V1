@@ -1,7 +1,7 @@
 package com.tune_fun.v1.otp.adapter.input.rest;
 
 import com.tune_fun.v1.common.config.Uris;
-import com.tune_fun.v1.common.hexagon.WebAdapter;
+import com.tune_fun.v1.common.stereotype.WebAdapter;
 import com.tune_fun.v1.common.response.BasePayload;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;

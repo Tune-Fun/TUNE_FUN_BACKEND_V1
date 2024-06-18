@@ -3,7 +3,7 @@ package com.tune_fun.v1.account.adapter.output.persistence.jwt;
 import com.tune_fun.v1.account.application.port.output.jwt.*;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
-import com.tune_fun.v1.common.hexagon.PersistenceAdapter;
+import com.tune_fun.v1.common.stereotype.PersistenceAdapter;
 import com.tune_fun.v1.common.property.JwtProperty;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.external.aws.kms.KmsProvider;

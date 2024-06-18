@@ -15,6 +15,8 @@ import com.tune_fun.v1.account.domain.behavior.SaveDevice;
 import com.tune_fun.v1.base.annotation.IntegrationTest;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.interaction.adapter.output.persistence.LikeCountPersistenceAdapter;
+import com.tune_fun.v1.interaction.application.port.input.command.InteractionCommands;
+import com.tune_fun.v1.interaction.application.port.input.usecase.FollowUserUseCase;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpPersistenceAdapter;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
 import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
@@ -86,6 +88,9 @@ public class DummyService {
     private RegisterVoteUseCase registerVoteUseCase;
 
     @Autowired
+    private FollowUserUseCase followUserUseCase;
+
+    @Autowired
     private AccountPersistenceAdapter accountPersistenceAdapter;
 
     @Autowired
@@ -109,6 +114,9 @@ public class DummyService {
     private AccountJpaEntity defaultAccount = null;
     private DeviceJpaEntity defaultDevice = null;
 
+    private AccountJpaEntity defaultSecondAccount = null;
+    private DeviceJpaEntity defatulSecondDevice = null;
+
     private AccountJpaEntity defaultArtistAccount = null;
     private DeviceJpaEntity defaultArtistDevice = null;
 
@@ -118,6 +126,10 @@ public class DummyService {
     private String defaultUsername = null;
     private String defaultPassword = null;
     private String defaultEmail = null;
+
+    private String defaultSecondUsername = null;
+    private String defaultSecondPassword = null;
+    private String defaultSecondEmail = null;
 
     private String defaultAccessToken = null;
     private String defaultRefreshToken = null;
@@ -156,6 +168,22 @@ public class DummyService {
         registerUseCase.register("NORMAL", command);
 
         defaultAccount = accountPersistenceAdapter.loadAccountByUsername(defaultUsername)
+                .orElseThrow(() -> new RuntimeException("initUser 실패"));
+    }
+
+    @Transactional
+    public void initSecondAccount() throws NoSuchAlgorithmException {
+        defaultSecondUsername = StringUtil.randomAlphanumeric(10, 15);
+        defaultSecondPassword = StringUtil.randomAlphaNumericSymbol(15, 20);
+        defaultSecondEmail = StringUtil.randomAlphabetic(7) + "@" + StringUtil.randomAlphabetic(5) + ".com";
+        String nickname = StringUtil.randomAlphabetic(5);
+
+        AccountCommands.Notification notification = new AccountCommands.Notification(true, true, true);
+        AccountCommands.Register command = new AccountCommands.Register(defaultSecondUsername, defaultSecondPassword, defaultSecondEmail, nickname, notification);
+
+        registerUseCase.register("NORMAL", command);
+
+        defaultSecondAccount = accountPersistenceAdapter.loadAccountByUsername(defaultSecondUsername)
                 .orElseThrow(() -> new RuntimeException("initUser 실패"));
     }
 
@@ -341,6 +369,12 @@ public class DummyService {
     public void likeVotePaper(final Long votePaperId, final String username) {
         votePersistenceAdapter.saveVotePaperLike(votePaperId, username);
         likeCountPersistenceAdapter.incrementVotePaperLikeCount(votePaperId);
+    }
+
+    @Transactional
+    public void follow() {
+        InteractionCommands.Follow command = new InteractionCommands.Follow(defaultSecondAccount.getId());
+        followUserUseCase.follow(command, getSecurityUser(defaultAccount));
     }
 
     private static User getSecurityUser(AccountJpaEntity account) {

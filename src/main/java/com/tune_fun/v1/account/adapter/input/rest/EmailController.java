@@ -4,10 +4,10 @@ import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
 import com.tune_fun.v1.account.application.port.input.usecase.email.*;
 import com.tune_fun.v1.account.domain.value.CurrentUser;
 import com.tune_fun.v1.common.config.Uris;
-import com.tune_fun.v1.common.hexagon.WebAdapter;
 import com.tune_fun.v1.common.response.BasePayload;
 import com.tune_fun.v1.common.response.Response;
 import com.tune_fun.v1.common.response.ResponseMapper;
+import com.tune_fun.v1.common.stereotype.WebAdapter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import static com.tune_fun.v1.common.response.MessageCode.SUCCESS_EMAIL_UNIQUE;
 import static com.tune_fun.v1.common.response.MessageCode.SUCCESS_EMAIL_VERIFIED;
 
-@RestController
 @WebAdapter
 @Validated
 @RequiredArgsConstructor

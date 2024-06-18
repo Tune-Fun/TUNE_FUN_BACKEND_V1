@@ -1,8 +1,7 @@
 package com.tune_fun.v1.interaction.application.service;
 
 import com.tune_fun.v1.common.exception.CommonApplicationException;
-import com.tune_fun.v1.common.hexagon.UseCase;
-import com.tune_fun.v1.common.response.MessageCode;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import com.tune_fun.v1.interaction.application.port.input.usecase.LikeVotePaperUseCase;
 import com.tune_fun.v1.interaction.application.port.output.LoadLikePort;
 import com.tune_fun.v1.interaction.application.port.output.SaveLikePort;

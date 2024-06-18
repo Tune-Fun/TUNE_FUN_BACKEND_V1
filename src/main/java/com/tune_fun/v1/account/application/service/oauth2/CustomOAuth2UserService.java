@@ -9,7 +9,7 @@ import com.tune_fun.v1.account.domain.value.oauth2.OAuth2UserInfo;
 import com.tune_fun.v1.account.domain.value.oauth2.OAuth2UserInfoFactory;
 import com.tune_fun.v1.account.domain.value.oauth2.OAuth2UserPrincipal;
 import com.tune_fun.v1.common.exception.OAuth2AuthenticationProcessingException;
-import com.tune_fun.v1.common.hexagon.UseCase;
+import com.tune_fun.v1.common.stereotype.UseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
