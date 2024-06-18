@@ -1,5 +1,6 @@
 package com.tune_fun.v1.interaction.adapter.input.scheduler;
 
+import com.tune_fun.v1.common.config.annotation.NotAllowTest;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.interaction.application.port.input.usecase.UpdateVotePaperStatisticsUseCase;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@NotAllowTest
 @RequiredArgsConstructor
 public class LikeCountAggregationScheduler {
 
