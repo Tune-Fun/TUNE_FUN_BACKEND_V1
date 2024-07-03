@@ -11,8 +11,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.tune_fun.v1.common.response.MessageCode.VOTE_POLICY_ALREADY_LIKED_VOTE_PAPER;
-
 @Service
 @UseCase
 @RequiredArgsConstructor
@@ -27,7 +25,7 @@ public class LikeVotePaperService implements LikeVotePaperUseCase {
     @Override
     public void likeVotePaper(final Long votePaperId, final User user) {
         if (isVotePaperLikePresent(votePaperId, user))
-            throw new CommonApplicationException(VOTE_POLICY_ALREADY_LIKED_VOTE_PAPER);
+            throw CommonApplicationException.VOTE_POLICY_ALREADY_LIKED_VOTE_PAPER;
 
         saveLikePort.saveVotePaperLike(votePaperId, user.getUsername());
         saveVotePaperLikeCountPort.incrementVotePaperLikeCount(votePaperId);

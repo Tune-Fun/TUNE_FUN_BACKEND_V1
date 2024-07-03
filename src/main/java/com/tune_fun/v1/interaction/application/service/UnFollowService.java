@@ -13,9 +13,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
-import static com.tune_fun.v1.common.response.MessageCode.NOT_FOLLOWED;
-
 @Service
 @UseCase
 @RequiredArgsConstructor
@@ -29,14 +26,14 @@ public class UnFollowService implements UnFollowUserUseCase {
     @Override
     public void unfollow(final InteractionCommands.UnFollow command, final User user) {
         CurrentAccount currentAccount = loadAccountPort.currentAccountInfo(user.getUsername())
-                .orElseThrow(new CommonApplicationException(ACCOUNT_NOT_FOUND));
+                .orElseThrow(CommonApplicationException.ACCOUNT_NOT_FOUND);
         Long followerAccountId = currentAccount.id();
 
         loadFollowPort.loadFollow(command.targetAccountId(), followerAccountId)
                 .ifPresentOrElse(
                         follow -> deleteFollowPort.deleteFollow(follow.followeeId(), follow.followerId()),
                         () -> {
-                            throw new CommonApplicationException(NOT_FOLLOWED);
+                            throw CommonApplicationException.NOT_FOLLOWED;
                         }
                 );
     }

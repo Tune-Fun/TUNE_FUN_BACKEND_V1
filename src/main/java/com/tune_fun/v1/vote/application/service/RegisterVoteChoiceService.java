@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
-import static com.tune_fun.v1.common.response.MessageCode.*;
+import static com.tune_fun.v1.common.response.MessageCode.VOTE_PAPER_NOT_FOUND;
 import static com.tune_fun.v1.vote.domain.value.VotePaperOption.DENY_ADD_CHOICES;
 import static java.util.Collections.singleton;
 
@@ -36,7 +36,7 @@ public class RegisterVoteChoiceService implements RegisterVoteChoiceUseCase {
     @Override
     public void registerVoteChoice(final Long votePaperId, final VotePaperCommands.Offer offer, final User user) {
         RegisteredVotePaper registeredVotePaper = loadVotePaperPort.loadRegisteredVotePaper(votePaperId)
-                .orElseThrow(() -> new CommonApplicationException(VOTE_PAPER_NOT_FOUND));
+                .orElseThrow(CommonApplicationException.VOTE_PAPER_NOT_FOUND);
 
         validateVotePaperOption(registeredVotePaper);
         validateRegisteredVotePaper(votePaperId, user);
@@ -47,12 +47,12 @@ public class RegisterVoteChoiceService implements RegisterVoteChoiceUseCase {
 
     private static void validateVotePaperOption(RegisteredVotePaper registeredVotePaper) {
         if (DENY_ADD_CHOICES.equals(registeredVotePaper.option()))
-            throw new CommonApplicationException(VOTE_POLICY_ONLY_REGISTER_CHOICE_ON_ALLOW_ADD_CHOICES_OPTION);
+            throw CommonApplicationException.VOTE_POLICY_ONLY_REGISTER_CHOICE_ON_ALLOW_ADD_CHOICES_OPTION;
     }
 
     public void validateRegisteredVotePaper(Long votePaperId, User user) {
         if (loadVoteChoicePort.loadVoteChoiceByUsername(votePaperId, user.getUsername()).isPresent())
-            throw new CommonApplicationException(VOTE_POLICY_ONE_VOTE_CHOICE_PER_USER_ON_VOTE_PAPER);
+            throw CommonApplicationException.VOTE_POLICY_ONE_VOTE_CHOICE_PER_USER_ON_VOTE_PAPER;
     }
 
 }

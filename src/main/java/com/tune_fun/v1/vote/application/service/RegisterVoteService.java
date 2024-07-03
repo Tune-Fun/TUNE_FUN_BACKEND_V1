@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import static com.tune_fun.v1.common.response.MessageCode.VOTE_POLICY_ONE_VOTE_PER_USER;
-
 
 @Service
 @UseCase
@@ -23,7 +21,7 @@ public class RegisterVoteService implements RegisterVoteUseCase {
     @Override
     public void register(final Long votePaperId, final Long voteChoiceId, final User user) {
         if (loadVotePort.loadVoteByVoterAndVotePaperId(user.getUsername(), votePaperId).isPresent())
-            throw new CommonApplicationException(VOTE_POLICY_ONE_VOTE_PER_USER);
+            throw CommonApplicationException.VOTE_POLICY_ONE_VOTE_PER_USER;
 
         saveVotePort.saveVote(voteChoiceId, user.getUsername());
     }

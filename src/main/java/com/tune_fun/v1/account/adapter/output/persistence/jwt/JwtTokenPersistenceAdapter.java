@@ -3,9 +3,9 @@ package com.tune_fun.v1.account.adapter.output.persistence.jwt;
 import com.tune_fun.v1.account.application.port.output.jwt.*;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
-import com.tune_fun.v1.common.stereotype.PersistenceAdapter;
 import com.tune_fun.v1.common.property.JwtProperty;
 import com.tune_fun.v1.common.response.MessageCode;
+import com.tune_fun.v1.common.stereotype.PersistenceAdapter;
 import com.tune_fun.v1.external.aws.kms.KmsProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -82,7 +82,7 @@ public class JwtTokenPersistenceAdapter implements
             return true;
         } catch (IllegalArgumentException e) {
             log.error("JWT claims string is empty: {}", e.getMessage());
-            throw new CommonApplicationException(MessageCode.EXCEPTION_AUTHENTICATION_INVALID_TOKEN);
+            throw CommonApplicationException.EXCEPTION_AUTHENTICATION_INVALID_TOKEN;
         }
     }
 
@@ -162,10 +162,10 @@ public class JwtTokenPersistenceAdapter implements
         RefreshTokenRedisEntity refreshToken = redisTemplateRefresh.opsForValue().get(refreshTokenKey);
 
         if (refreshToken == null && refreshToken.getToken().equals(refreshTokenValue))
-            throw new CommonApplicationException(MessageCode.EXCEPTION_AUTHENTICATION_INVALID_TOKEN);
+            throw CommonApplicationException.EXCEPTION_AUTHENTICATION_INVALID_TOKEN;
 
         if (isRefreshTokenExpired(refreshToken.getToken()))
-            throw new CommonApplicationException(MessageCode.EXCEPTION_EXPIRED_REFRESH_TOKEN);
+            throw CommonApplicationException.EXCEPTION_EXPIRED_REFRESH_TOKEN;
 
         SaveJwtToken behavior = new SaveJwtToken(username, getPayload(refreshTokenValue).get("role").toString());
         return createAccessToken(behavior);
@@ -212,7 +212,7 @@ public class JwtTokenPersistenceAdapter implements
         try {
             return getJwtParser().parseSignedClaims(token).getPayload();
         } catch (IllegalArgumentException e) {
-            throw new CommonApplicationException(MessageCode.EXCEPTION_AUTHENTICATION_INVALID_TOKEN);
+            throw CommonApplicationException.EXCEPTION_AUTHENTICATION_INVALID_TOKEN;
         }
     }
 

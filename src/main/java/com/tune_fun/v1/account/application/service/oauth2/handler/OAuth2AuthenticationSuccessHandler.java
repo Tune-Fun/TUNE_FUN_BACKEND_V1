@@ -36,7 +36,6 @@ import java.util.function.Function;
 import static com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AuthorizationRequestPersistenceAdapter.*;
 import static com.tune_fun.v1.account.domain.value.oauth2.OAuth2AuthorizationRequestMode.fromQueryParameter;
 import static com.tune_fun.v1.account.domain.value.oauth2.OAuth2Provider.APPLE;
-import static com.tune_fun.v1.common.response.MessageCode.*;
 import static com.tune_fun.v1.common.util.CookieUtil.getCookie;
 import static com.tune_fun.v1.common.util.StringUtil.getFlattenAuthorities;
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
@@ -126,7 +125,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         if (usernameOptional.isEmpty()) return AUTH_FAILED_URL_FUNCTION.apply(targetUrl);
 
         if (loadRegisteredOAuth2Account(principal).isPresent())
-            throw new CommonApplicationException(USER_POLICY_ALREADY_LINKED_PROVIDER);
+            throw CommonApplicationException.USER_POLICY_ALREADY_LINKED_PROVIDER;
 
         String username = usernameOptional.get();
         RegisteredAccount registeredAccount = loadRegisteredAccount(username);
@@ -162,7 +161,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String username = usernameOptional.get();
         RegisteredAccount registeredAccount = loadRegisteredAccount(username);
         if (registeredAccount.isUniqueOAuth2Account())
-            throw new CommonApplicationException(USER_POLICY_CANNOT_UNLINK_UNIQUE_PROVIDER);
+            throw CommonApplicationException.USER_POLICY_CANNOT_UNLINK_UNIQUE_PROVIDER;
 
         unlinkHttpRequest(provider, accessToken);
         disableOAuth2AccountPort.disableOAuth2Account(principal.userInfo().getEmail());
@@ -184,7 +183,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Transactional
     public RegisteredAccount loadRegisteredAccount(final String username) {
         return loadAccountPort.registeredAccountInfoByUsername(username)
-                .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
+                .orElseThrow(CommonApplicationException.ACCOUNT_NOT_FOUND);
     }
 
     @Transactional

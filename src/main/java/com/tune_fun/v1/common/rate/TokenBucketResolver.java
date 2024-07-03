@@ -23,7 +23,7 @@ public class TokenBucketResolver {
     }
 
     public boolean checkBucketCounter(String key) {
-        if (!bucket(key).tryConsume(1)) throw new CommonApplicationException(TOO_MANY_REQUESTS);
+        if (!bucket(key).tryConsume(1)) throw CommonApplicationException.TOO_MANY_REQUESTS;
         return true;
     }
 

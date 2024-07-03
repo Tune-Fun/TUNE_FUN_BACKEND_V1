@@ -19,8 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
-
 
 @Service
 @UseCase
@@ -65,6 +63,6 @@ public class VerifyOtpService implements VerifyOtpUseCase {
     @Transactional(readOnly = true)
     public CurrentAccount getCurrentAccount(OtpQueries.Verify query) {
         return loadAccountPort.currentAccountInfo(query.username())
-                .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
+                .orElseThrow(CommonApplicationException.ACCOUNT_NOT_FOUND);
     }
 }

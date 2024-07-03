@@ -5,7 +5,6 @@ import com.tune_fun.v1.account.application.port.output.device.LoadDevicePort;
 import com.tune_fun.v1.account.domain.value.NotificationApprovedDevice;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.stereotype.UseCase;
-import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.vote.application.port.input.usecase.ScheduleVotePaperDeadlineUseCase;
 import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperEndNotification;
@@ -46,7 +45,7 @@ public class ScheduleVotePaperDeadlineService implements ScheduleVotePaperDeadli
             try {
                 sendVotePaperEndNotification(event);
             } catch (FirebaseMessagingException e) {
-                throw new CommonApplicationException(MessageCode.ERROR);
+                throw CommonApplicationException.ERROR;
             }
         }, deadlineInstant);
 

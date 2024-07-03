@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.tune_fun.v1.common.response.MessageCode.USER_POLICY_USERNAME_REGISTERED;
-
 
 @Service
 @UseCase
@@ -23,7 +21,7 @@ public class CheckUsernameDuplicateService implements CheckUsernameDuplicateUseC
     public void checkUsernameDuplicate(final String username) {
         loadAccountPort.registeredAccountInfoByUsername(username)
                 .ifPresent(account -> {
-                    throw new CommonApplicationException(USER_POLICY_USERNAME_REGISTERED);
+                    throw CommonApplicationException.USER_POLICY_USERNAME_REGISTERED;
                 });
     }
 }

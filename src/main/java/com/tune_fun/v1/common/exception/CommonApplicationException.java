@@ -19,6 +19,12 @@ public class CommonApplicationException extends RuntimeException implements Supp
 
     private MessageCode messageCode;
 
+    public static final CommonApplicationException TOO_MANY_REQUESTS = new CommonApplicationException(MessageCode.TOO_MANY_REQUESTS);
+    public static final CommonApplicationException NOT_OWNER = new CommonApplicationException(MessageCode.NOT_OWNER);
+    public static final CommonApplicationException NOT_FOUND_DATA = new CommonApplicationException(MessageCode.NOT_FOUND_DATA);
+    public static final CommonApplicationException ERROR = new CommonApplicationException(MessageCode.ERROR);
+    public static final CommonApplicationException EXCEPTION_ILLEGAL_ARGUMENT = new CommonApplicationException(MessageCode.EXCEPTION_ILLEGAL_ARGUMENT);
+
     public static final CommonApplicationException ACCOUNT_NOT_FOUND = new CommonApplicationException(MessageCode.ACCOUNT_NOT_FOUND);
     public static final CommonApplicationException USER_POLICY_ACCOUNT_REGISTERED = new CommonApplicationException(MessageCode.USER_POLICY_ACCOUNT_REGISTERED);
     public static final CommonApplicationException USER_POLICY_NICKNAME_REGISTERED = new CommonApplicationException(MessageCode.USER_POLICY_NICKNAME_REGISTERED);
@@ -63,7 +69,7 @@ public class CommonApplicationException extends RuntimeException implements Supp
 
     @Override
     public synchronized Throwable fillInStackTrace() {
-        return this;
+        return MessageCode.ERROR.equals(messageCode) ? super.fillInStackTrace() : this;
     }
 
     @Override

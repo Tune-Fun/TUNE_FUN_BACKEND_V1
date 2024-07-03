@@ -33,7 +33,7 @@ public class LogoutController {
     public ResponseEntity<Response<?>> logout(final HttpServletRequest request,
                                               @Valid @RequestBody final AccountCommands.Device device, @CurrentUser final User user) {
         String authorizationValue = Optional.ofNullable(request.getHeader(AUTHORIZATION))
-                .orElseThrow(() -> new CommonApplicationException(EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND));
+                .orElseThrow(CommonApplicationException.EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND);
         String accessToken = StringUtil.removeBearerPrefix(authorizationValue);
 
         logoutUseCase.logout(accessToken, device, user);

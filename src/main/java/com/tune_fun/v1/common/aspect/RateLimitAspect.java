@@ -2,7 +2,6 @@ package com.tune_fun.v1.common.aspect;
 
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.rate.TokenBucketResolver;
-import com.tune_fun.v1.common.response.MessageCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -31,7 +30,7 @@ public class RateLimitAspect {
 
         if (tokenBucketResolver.checkBucketCounter(key)) return joinPoint.proceed();
 
-        throw new CommonApplicationException(MessageCode.TOO_MANY_REQUESTS);
+        throw CommonApplicationException.TOO_MANY_REQUESTS;
     }
 
 }

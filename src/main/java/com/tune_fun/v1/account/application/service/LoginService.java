@@ -20,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
-
 
 @Service
 @UseCase
@@ -50,10 +48,10 @@ public class LoginService implements LoginUseCase {
     @Transactional
     public LoginResult login(final AccountCommands.Login command) {
         RegisteredAccount registeredAccount = loadAccountPort.registeredAccountInfoByUsername(command.username())
-                .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
+                .orElseThrow(CommonApplicationException.ACCOUNT_NOT_FOUND);
 
         if (!passwordEncoder.matches(command.password(), registeredAccount.password()))
-            throw new CommonApplicationException(ACCOUNT_NOT_FOUND);
+            throw CommonApplicationException.ACCOUNT_NOT_FOUND;
 
         String authorities = String.join(Constants.COMMA, registeredAccount.roles());
 
