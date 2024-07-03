@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.tune_fun.v1.common.response.MessageCode.USER_POLICY_EMAIL_REGISTERED;
-
 
 @Service
 @UseCase
@@ -23,7 +21,7 @@ public class CheckEmailDuplicateService implements CheckEmailDuplicateUseCase {
     public void checkEmailDuplicate(final String email) {
         loadAccountPort.registeredAccountInfoByEmail(email)
                 .ifPresent(account -> {
-                    throw new CommonApplicationException(USER_POLICY_EMAIL_REGISTERED);
+                    throw CommonApplicationException.USER_POLICY_EMAIL_REGISTERED;
                 });
     }
 }

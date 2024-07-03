@@ -24,7 +24,6 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.Objects;
 
-import static com.tune_fun.v1.common.response.MessageCode.*;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.fromLabel;
 import static java.lang.String.format;
 
@@ -73,13 +72,13 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
         ValueOperations<String, OtpRedisEntity> ops = redisTemplate.opsForValue();
         OtpRedisEntity otpRedisEntity = ops.get(otpKey);
 
-        if (otpRedisEntity == null) throw new CommonApplicationException(EXCEPTION_OTP_NOT_FOUND);
+        if (otpRedisEntity == null) throw CommonApplicationException.EXCEPTION_OTP_NOT_FOUND;
 
         if (checkRedisExpiration(ops, otpKey))
-            throw new CommonApplicationException(EXCEPTION_OTP_EXPIRED);
+            throw CommonApplicationException.EXCEPTION_OTP_EXPIRED;
 
         if (!checkMatchValue(verifyOtp.otp(), otpRedisEntity))
-            throw new CommonApplicationException(EXCEPTION_OTP_NOT_MATCH);
+            throw CommonApplicationException.EXCEPTION_OTP_NOT_MATCH;
 
         expire(otpKey);
     }

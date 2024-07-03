@@ -20,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.tune_fun.v1.common.response.MessageCode.USER_POLICY_ACCOUNT_REGISTERED;
-
 
 @Service
 @UseCase
@@ -71,7 +69,7 @@ public class RegisterService implements RegisterUseCase {
     @Transactional(readOnly = true)
     public void checkRegisteredAccount(AccountCommands.Register command) {
         loadAccountPort.currentAccountInfo(command.username()).ifPresent(accountInfo -> {
-            throw new CommonApplicationException(USER_POLICY_ACCOUNT_REGISTERED);
+            throw CommonApplicationException.USER_POLICY_ACCOUNT_REGISTERED;
         });
     }
 }

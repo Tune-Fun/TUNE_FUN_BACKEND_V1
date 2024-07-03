@@ -16,9 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.function.Consumer;
 
-import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
-import static com.tune_fun.v1.common.response.MessageCode.ALREADY_FOLLOWED;
-
 @Service
 @UseCase
 @RequiredArgsConstructor
@@ -29,14 +26,14 @@ public class FollowService implements FollowUserUseCase {
     private final SaveFollowPort saveFollowPort;
 
     private static final Consumer<RegisteredFollow> THROW_ALREADY_FOLLOWED = follow -> {
-        throw new CommonApplicationException(ALREADY_FOLLOWED);
+        throw CommonApplicationException.ALREADY_FOLLOWED;
     };
 
     @Transactional
     @Override
     public void follow(final InteractionCommands.Follow command, final User user) {
         CurrentAccount currentAccount = loadAccountPort.currentAccountInfo(user.getUsername())
-                .orElseThrow(new CommonApplicationException(ACCOUNT_NOT_FOUND));
+                .orElseThrow(CommonApplicationException.ACCOUNT_NOT_FOUND);
         Long followerAccountId = currentAccount.id();
 
         loadFollowPort.loadFollow(command.targetAccountId(), followerAccountId)

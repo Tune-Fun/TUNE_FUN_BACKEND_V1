@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
-import static com.tune_fun.v1.common.response.MessageCode.*;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -40,16 +38,16 @@ public class PermissionPolicyEvaluator implements PermissionEvaluator {
 
     public boolean hasPermissionForVotePaper(User principal, Serializable targetId) {
         RegisteredVotePaper registeredVotePaper = loadVotePaperPort.loadRegisteredVotePaper(principal.getUsername())
-                .orElseThrow(() -> new CommonApplicationException(VOTE_POLICY_ONLY_AUTHOR_CAN_UPDATE_DELIVERY_DATE));
+                .orElseThrow(CommonApplicationException.VOTE_POLICY_ONLY_AUTHOR_CAN_UPDATE_DELIVERY_DATE);
 
         if (registeredVotePaper.id().equals(targetId)) return true;
 
-        throw new CommonApplicationException(VOTE_PAPER_NOT_FOUND);
+        throw CommonApplicationException.VOTE_PAPER_NOT_FOUND;
     }
 
     private boolean hasPermissionForVote(User principal, Serializable targetId) {
         if (loadVotePort.loadVoteByVoterAndVotePaperId(principal.getUsername(), (Long) targetId).isPresent())
-            throw new CommonApplicationException(VOTE_POLICY_ONE_VOTE_PER_USER);
+            throw CommonApplicationException.VOTE_POLICY_ONE_VOTE_PER_USER;
 
         return true;
     }

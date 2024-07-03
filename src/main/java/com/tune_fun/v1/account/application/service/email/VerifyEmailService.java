@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
 import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.VERIFY_EMAIL;
 
 @Service
@@ -49,6 +48,6 @@ public class VerifyEmailService implements VerifyEmailUseCase {
     @Transactional(readOnly = true)
     public CurrentAccount getCurrentAccount(final String username) {
         return loadAccountPort.currentAccountInfo(username)
-                .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
+                .orElseThrow(CommonApplicationException.ACCOUNT_NOT_FOUND);
     }
 }

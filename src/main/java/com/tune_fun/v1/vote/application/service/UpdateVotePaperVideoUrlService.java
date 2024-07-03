@@ -13,9 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import static com.tune_fun.v1.common.response.MessageCode.VOTE_PAPER_NOT_FOUND;
-import static com.tune_fun.v1.common.response.MessageCode.VOTE_POLICY_ONLY_AUTHOR_CAN_UPDATE_VIDEO_URL;
-
 @Service
 @UseCase
 @RequiredArgsConstructor
@@ -30,10 +27,10 @@ public class UpdateVotePaperVideoUrlService implements UpdateVotePaperVideoUrlUs
     @Override
     public void updateVideoUrl(final Long votePaperId, final VotePaperCommands.UpdateVideoUrl command, final User user) {
         RegisteredVotePaper registeredVotePaper = loadVotePaperPort.loadRegisteredVotePaper(votePaperId)
-                .orElseThrow(() -> new CommonApplicationException(VOTE_PAPER_NOT_FOUND));
+                .orElseThrow(CommonApplicationException.VOTE_PAPER_NOT_FOUND);
 
         if (!registeredVotePaper.isAuthor(user.getUsername()))
-            throw new CommonApplicationException(VOTE_POLICY_ONLY_AUTHOR_CAN_UPDATE_VIDEO_URL);
+            throw CommonApplicationException.VOTE_POLICY_ONLY_AUTHOR_CAN_UPDATE_VIDEO_URL;
 
         RegisteredVotePaper updatedVotePaper = updateVideoUrlPort.updateVideoUrl(votePaperId, command.videoUrl());
 

@@ -10,9 +10,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
-import static com.tune_fun.v1.common.response.MessageCode.EXCEPTION_EMAIL_NOT_VERIFIED;
-
 
 @Service
 @UseCase
@@ -25,9 +22,9 @@ public class CheckEmailVerifiedService implements CheckEmailVerifiedUseCase {
     @Transactional
     public void checkEmailVerified(final User user) {
         CurrentAccount currentAccount = loadAccountPort.currentAccountInfo(user.getUsername())
-                .orElseThrow(() -> new CommonApplicationException(ACCOUNT_NOT_FOUND));
+                .orElseThrow(CommonApplicationException.ACCOUNT_NOT_FOUND);
 
         if (currentAccount.emailVerifiedAt() == null)
-            throw new CommonApplicationException(EXCEPTION_EMAIL_NOT_VERIFIED);
+            throw CommonApplicationException.EXCEPTION_EMAIL_NOT_VERIFIED;
     }
 }

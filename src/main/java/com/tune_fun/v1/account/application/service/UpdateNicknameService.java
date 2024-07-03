@@ -11,8 +11,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.tune_fun.v1.common.response.MessageCode.USER_POLICY_NICKNAME_REGISTERED;
-
 @Service
 @UseCase
 @RequiredArgsConstructor
@@ -25,7 +23,7 @@ public class UpdateNicknameService implements UpdateNicknameUseCase {
     @Transactional
     public void updateNickname(final AccountCommands.UpdateNickname command, final User user) {
         if (loadAccountPort.registeredAccountInfoByNickname(command.newNickname()).isPresent())
-            throw new CommonApplicationException(USER_POLICY_NICKNAME_REGISTERED);
+            throw CommonApplicationException.USER_POLICY_NICKNAME_REGISTERED;
 
         updateNicknamePort.updateNickname(user.getUsername(), command.newNickname());
     }

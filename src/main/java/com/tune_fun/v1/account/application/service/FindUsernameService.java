@@ -14,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.tune_fun.v1.common.response.MessageCode.ACCOUNT_NOT_FOUND;
-
 
 @Service
 @UseCase
@@ -36,6 +34,6 @@ public class FindUsernameService implements FindUsernameUseCase {
             return;
         }
 
-        throw new CommonApplicationException(ACCOUNT_NOT_FOUND);
+        throw CommonApplicationException.ACCOUNT_NOT_FOUND;
     }
 }

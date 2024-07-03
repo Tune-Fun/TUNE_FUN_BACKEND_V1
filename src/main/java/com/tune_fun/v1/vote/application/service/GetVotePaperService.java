@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.tune_fun.v1.common.response.MessageCode.VOTE_PAPER_NOT_FOUND;
-
 @Service
 @UseCase
 @RequiredArgsConstructor
@@ -33,7 +31,7 @@ public class GetVotePaperService implements GetVotePaperUseCase {
     @Override
     public FullVotePaper getVotePaper(final Long votePaperId, final User user) {
         RegisteredVotePaper registeredVotePaper = loadVotePaperPort.loadRegisteredVotePaper(votePaperId)
-                .orElseThrow(() -> new CommonApplicationException(VOTE_PAPER_NOT_FOUND));
+                .orElseThrow(CommonApplicationException.VOTE_PAPER_NOT_FOUND);
         List<RegisteredVoteChoice> registeredVoteChoices = loadVoteChoicePort.loadRegisteredVoteChoice(votePaperId);
         Optional<RegisteredVote> registeredVote = loadVotePort.loadVoteByVoterAndVotePaperId(user.getUsername(), votePaperId);
 

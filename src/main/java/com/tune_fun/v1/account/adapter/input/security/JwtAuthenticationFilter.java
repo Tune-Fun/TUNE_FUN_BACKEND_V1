@@ -87,7 +87,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String accessToken = Optional.ofNullable(request.getHeader(AUTHORIZATION))
                 .orElseThrow(() -> {
                     log.info("Servlet Path is {}", request.getServletPath());
-                    return new CommonApplicationException(MessageCode.EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND);
+                    return CommonApplicationException.EXCEPTION_AUTHENTICATION_TOKEN_NOT_FOUND;
                 });
 
         return StringUtil.removeBearerPrefix(accessToken);
