@@ -40,12 +40,12 @@ public class MailHandler {
     @Async("emailAsync")
     public void emailSend(final String target, final String subject, final String text) throws Exception {
         MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, UTF_8.name());
+        MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
 
         messageHelper.setTo(target);
         messageHelper.setFrom(mailSenderId);
         messageHelper.setSubject(subject);
-        messageHelper.setText(text);
+        messageHelper.setText(text, true);
         javaMailSender.send(message);
     }
 
