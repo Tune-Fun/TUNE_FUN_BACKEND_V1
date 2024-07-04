@@ -6,6 +6,7 @@ import com.tune_fun.v1.account.application.port.output.device.LoadDevicePort;
 import com.tune_fun.v1.account.domain.value.NotificationApprovedDevice;
 import com.tune_fun.v1.common.stereotype.UseCase;
 import com.tune_fun.v1.common.util.ObjectUtil;
+import com.tune_fun.v1.interaction.application.port.output.LoadFollowPort;
 import com.tune_fun.v1.vote.application.port.input.usecase.SendVotePaperRegisterNotificationUseCase;
 import com.tune_fun.v1.vote.application.port.output.SendVoteNotificationPort;
 import com.tune_fun.v1.vote.domain.behavior.SendVotePaperRegisterNotification;
@@ -33,6 +34,7 @@ public class SendVotePaperRegisterNotificationService implements SendVotePaperRe
 
     private final LoadDevicePort loadDevicePort;
     private final SendVoteNotificationPort sendVoteNotificationPort;
+    private final LoadFollowPort loadFollowPort;
 
     private final VoteBehaviorMapper voteBehaviorMapper;
 
@@ -41,10 +43,11 @@ public class SendVotePaperRegisterNotificationService implements SendVotePaperRe
     @Transactional
     @Override
     public void send(VotePaperRegisterEvent votePaperRegisterEvent) throws JsonProcessingException, FirebaseMessagingException {
-        // TODO : Follower Aggregate Root................... -> accountIds
+        ArrayList<Long> followerIds = new ArrayList<>(loadFollowPort.loadFollowerIds(votePaperRegisterEvent.authorId()));
+        followerIds.add(votePaperRegisterEvent.authorId());
 
         List<NotificationApprovedDevice> notificationApprovedDevices = loadDevicePort.
-                loadNotificationApprovedDevice(true, NULL_BOOLEAN, NULL_BOOLEAN, new ArrayList<>());
+                loadNotificationApprovedDevice(true, NULL_BOOLEAN, NULL_BOOLEAN, followerIds);
         log.info("notificationApprovedDevices: \n{}", objectUtil.objectToPrettyJson(notificationApprovedDevices));
 
         if (!notificationApprovedDevices.isEmpty())
@@ -68,6 +71,6 @@ public class SendVotePaperRegisterNotificationService implements SendVotePaperRe
     // TODO : Slack Notification?
     @Recover
     private void recoverSendVotePaperRegisterNotification(FirebaseMessagingException e, VotePaperRegisterEvent event, List<NotificationApprovedDevice> notificationApprovedDevices) {
-        log.error("Failed to send FCM notification for vote paper register event: {}", event.id(), e);
+        log.error("Failed to send FCM notification for vote paper register event: {}", event.uuid(), e);
     }
 }

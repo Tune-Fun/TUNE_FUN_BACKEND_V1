@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UnFollowService implements UnFollowUserUseCase {
 
+    private static final Runnable THROW_NOT_FOLLOWED = CommonApplicationException.NOT_FOLLOWED::get;
+
     private final LoadAccountPort loadAccountPort;
     private final LoadFollowPort loadFollowPort;
     private final DeleteFollowPort deleteFollowPort;
@@ -30,12 +32,7 @@ public class UnFollowService implements UnFollowUserUseCase {
         Long followerAccountId = currentAccount.id();
 
         loadFollowPort.loadFollow(command.targetAccountId(), followerAccountId)
-                .ifPresentOrElse(
-                        follow -> deleteFollowPort.deleteFollow(follow.followeeId(), follow.followerId()),
-                        () -> {
-                            throw CommonApplicationException.NOT_FOLLOWED;
-                        }
-                );
+                .ifPresentOrElse(follow -> deleteFollowPort.deleteFollow(follow.followeeId(), follow.followerId()), THROW_NOT_FOLLOWED);
     }
 
 }

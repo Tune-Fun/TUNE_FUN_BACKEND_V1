@@ -29,7 +29,7 @@ public class VoteMessageConsumer {
 
     @SqsListener(value = "${event.sqs.send-vote-paper-upload-notification.queue-name}", acknowledgementMode = ALWAYS)
     public void consumeVotePaperUploadEvent(final VotePaperRegisterEvent event) throws JsonProcessingException, FirebaseMessagingException {
-        log.info("CONSUME 'send-vote-paper-upload-notification': {}", event.id());
+        log.info("CONSUME 'send-vote-paper-upload-notification': {}", event.uuid());
         sendVotePaperRegisterNotificationUseCase.send(event);
     }
 

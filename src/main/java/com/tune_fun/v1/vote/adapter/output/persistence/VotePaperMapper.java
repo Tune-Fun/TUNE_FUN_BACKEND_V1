@@ -20,6 +20,7 @@ import java.time.temporal.ChronoUnit;
 )
 public abstract class VotePaperMapper {
 
+    @Mapping(target = "authorId", source = "author.id")
     @Mapping(target = "author", source = "author.nickname")
     @Mapping(target = "authorUsername", source = "author.username")
     public abstract RegisteredVotePaper registeredVotePaper(final VotePaperJpaEntity votePaperJpaEntity);

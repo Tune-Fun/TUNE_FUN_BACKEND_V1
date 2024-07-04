@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public record RegisteredVotePaper(
         Long id,
         String uuid,
+        Long authorId,
         String author,
         String authorUsername,
         String title,
