@@ -1,0 +1,38 @@
+{
+  "message": "요청이 성공적으로 처리되었습니다.",
+  "code": "0000",
+  "data": {
+    "users": [
+      {
+        "id": 1,
+        "username": "AkYt1bwffhkRe",
+        "nickname": "KlowD",
+        "profile_image_url": null
+      }
+    ],
+    "vote_papers": [
+      {
+        "id": 999,
+        "uuid": "c77c0f20-79bf-432d-868e-9da4405f1e09",
+        "title": "First Vote Paper",
+        "author_username": "AkYt1bwffhkRe",
+        "author_profile_image_url": null,
+        "author_nickname": "KlowD",
+        "remain_days": 2,
+        "total_vote_count": "0",
+        "total_like_count": null
+      },
+      {
+        "id": 1000,
+        "uuid": "c77c0f20-79bf-432d-868e-9da4405f1e09",
+        "title": "Second Vote Paper",
+        "author_username": "AkYt1bwffhkRe",
+        "author_profile_image_url": null,
+        "author_nickname": "KlowD",
+        "remain_days": 2,
+        "total_vote_count": "0",
+        "total_like_count": null
+      }
+    ]
+  }
+}
