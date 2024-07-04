@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Window;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -17,6 +19,14 @@ public class FollowPersistenceAdapter implements LoadFollowPort, SaveFollowPort,
 
     private final FollowRepository followRepository;
     private final FollowMapper followMapper;
+
+    @Override
+    public Set<Long> loadFollowerIds(final Long followeeId) {
+        return followRepository.findByFolloweeId(followeeId)
+                .stream()
+                .map(FollowJpaEntity::getFollowerId)
+                .collect(Collectors.toSet());
+    }
 
     @Override
     public Optional<RegisteredFollow> loadFollow(final Long followeeId, final Long followerId) {

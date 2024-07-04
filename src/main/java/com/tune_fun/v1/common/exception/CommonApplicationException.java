@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class CommonApplicationException extends RuntimeException implements Supplier<CommonApplicationException> {
+public class CommonApplicationException extends RuntimeException implements Supplier<CommonApplicationException>, Runnable {
 
     private MessageCode messageCode;
 
@@ -75,5 +75,10 @@ public class CommonApplicationException extends RuntimeException implements Supp
     @Override
     public CommonApplicationException get() {
         return this;
+    }
+
+    @Override
+    public void run() {
+        throw this;
     }
 }

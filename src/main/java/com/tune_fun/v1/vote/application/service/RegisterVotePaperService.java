@@ -68,6 +68,7 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
             throw CommonApplicationException.VOTE_POLICY_OFFERS_COUNT_SHOULD_BE_MORE_THAN_TWO;
     }
 
+    @Transactional(readOnly = true)
     public void validateRegistrableVotePaperCount(final User user) {
         if (loadVotePaperPort.loadRegisteredVotePaper(user.getUsername()).isPresent())
             throw CommonApplicationException.VOTE_POLICY_ONE_VOTE_PAPER_PER_USER;
@@ -86,7 +87,7 @@ public class RegisterVotePaperService implements RegisterVotePaperUseCase {
     }
 
     private static @NotNull VotePaperRegisterEvent getProduceVotePaperUploadEventBehavior(RegisteredVotePaper registeredVotePaper) {
-        return new VotePaperRegisterEvent(registeredVotePaper.uuid(), registeredVotePaper.author(), registeredVotePaper.title(),
-                registeredVotePaper.content());
+        return new VotePaperRegisterEvent(registeredVotePaper.id(), registeredVotePaper.uuid(), registeredVotePaper.authorId(),
+                registeredVotePaper.author(), registeredVotePaper.title(), registeredVotePaper.content());
     }
 }
