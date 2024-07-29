@@ -72,8 +72,9 @@ public class Uris {
 
     public static final String FOLLOW_ROOT = API_V1_ROOT + "/follows";
 
-    public static final String FOLLOWER = FOLLOW_ROOT + "/follower";
     public static final String FOLLOWING = FOLLOW_ROOT + "/following";
+
+    public static final String SEARCH_ROOT = API_V1_ROOT + "/search";
 
 
     public static final String SWAGGER_UI_ROOT = "/swagger-ui";
