@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Set;
 
 public record RegisteredAccount(
+        Long id,
         String username,
         String password,
+        String email,
         Set<String> roles,
         List<RegisteredOAuth2Account> oauth2Accounts
 ) implements Account {
