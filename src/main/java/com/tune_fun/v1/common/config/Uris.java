@@ -46,10 +46,13 @@ public class Uris {
     public static final String SET_NEW_PASSWORD = API_V1_ROOT + "/set-new-password";
     public static final String UPDATE_NICKNAME = API_V1_ROOT + "/update-nickname";
 
+    public static final String ACCOUNT_ROOT = API_V1_ROOT + "/accounts";
+    public static final String ARTIST_ROOT = API_V1_ROOT + "/artist";
+
     public static final String FORGOT_PASSWORD_SEND_OTP = API_V1_ROOT + "/forgot-password/send-otp";
 
     public static final String CHECK_EMAIL_VERIFIED = API_V1_ROOT + "/check-email-verified";
-    public static final String EMAIL_ROOT = API_V1_ROOT + "/accounts/email";
+    public static final String EMAIL_ROOT = ACCOUNT_ROOT + "/email";
     public static final String VERIFY_EMAIL = EMAIL_ROOT + "/verify";
 
     public static final String VERIFY_OTP = API_V1_ROOT + "/otp/verify";
