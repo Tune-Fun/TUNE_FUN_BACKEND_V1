@@ -107,6 +107,22 @@ public abstract class FluentOperationFragment {
         return operate();
     }
 
+    public <N extends Number & Comparable<?>> PredicateBuilder gtNumber(NumberExpression<N> column, N value) {
+        if (value != null) {
+            return operate(column.gt(value));
+        }
+
+        return operate();
+    }
+
+    public <N extends Number & Comparable<?>> PredicateBuilder ltNumber(NumberExpression<N> column, N value) {
+        if (value != null) {
+            return operate(column.lt(value));
+        }
+
+        return operate();
+    }
+
     public PredicateBuilder eqBoolean(BooleanExpression column, Boolean value) {
         if (value != null) {
             return operate(column.eq(value));
