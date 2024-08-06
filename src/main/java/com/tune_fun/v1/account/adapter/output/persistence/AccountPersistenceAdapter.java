@@ -12,11 +12,17 @@ import com.tune_fun.v1.account.domain.value.RegisteredAccount;
 import com.tune_fun.v1.account.domain.value.oauth2.RegisteredOAuth2Account;
 import com.tune_fun.v1.common.stereotype.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.interaction.domain.ScrollableArtist;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.KeysetScrollPosition;
+import org.springframework.data.domain.ScrollPosition;
+import org.springframework.data.domain.Window;
+import org.springframework.data.support.WindowIterator;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -66,6 +72,24 @@ public class AccountPersistenceAdapter implements
     public Optional<RegisteredOAuth2Account> registeredOAuth2AccountInfoByEmail(final String email) {
         return oauth2AccountRepository.findByEmailAndEnabledTrue(email)
                 .map(accountMapper::registeredOAuth2AccountInfo);
+    }
+
+    @Override
+    public Window<ScrollableArtist> scrollArtist(Integer lastId, String nickname) {
+        KeysetScrollPosition position;
+
+        if (lastId == null || lastId == 0)
+            position = ScrollPosition.keyset();
+        else
+            position = ScrollPosition.forward(Map.of("id", lastId));
+
+        WindowIterator<AccountJpaEntity> accounts = WindowIterator.of(pos -> accountRepository.findFirst10ByEnabledTrue((KeysetScrollPosition) pos))
+                .startingAt(ScrollPosition.keyset());
+
+        accounts.
+
+
+        return Optional.empty();
     }
 
     @Override

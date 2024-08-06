@@ -17,6 +17,7 @@ public class ScrollArtistService implements ScrollArtistUseCase {
     @Transactional(readOnly = true)
     @Override
     public Window<ScrollableArtist> scrollArtist(final Integer lastId, final String nickname) {
+        loadAccountPort.scrollArtist(lastId, nickname);
         return null;
     }
 
