@@ -44,7 +44,7 @@ public class VotePaperController {
                                                                            @RequestParam(name = "sort_type", required = false, defaultValue = "RECENT") SortType sortType,
                                                                            @RequestParam(name = "nickname", required = false) String nickname,
                                                                            @CurrentUser User user) {
-        Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollVotePaper(lastId, sortType.name());
+        Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollVotePaper(lastId, sortType.name(), nickname);
         return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
     }
 
@@ -55,7 +55,7 @@ public class VotePaperController {
         return responseMapper.ok(MessageCode.SUCCESS, votePaper);
     }
 
-    // TODO : Follower 로직 구현 후 테스트 재진행 예정
+    // TODO : Follower 로직 구현 후 테스트 재진행 예정∂
     @PreAuthorize("hasRole('ARTIST')")
     @PostMapping(value = Uris.VOTE_PAPER_ROOT)
     public ResponseEntity<Response<BasePayload>> registerVotePaper(@Valid @RequestBody final VotePaperCommands.Register command,

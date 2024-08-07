@@ -5,6 +5,7 @@ import com.tune_fun.v1.account.adapter.output.persistence.AccountPersistenceAdap
 import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeJpaEntity;
 import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeRepository;
+import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
 import com.tune_fun.v1.vote.domain.value.RegisteredVote;
 import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
@@ -213,32 +214,32 @@ class VotePersistenceAdapterTest {
 
     /**
      * Method under test:
-     * {@link VotePersistenceAdapter#scrollVotePaper(Integer, String)}
+     * {@link LoadVotePaperPort#scrollVotePaper(Integer, String, String)}
      */
     @Test
     void testScrollVotePaper() {
         // Arrange
-        when(votePaperRepository.findFirst10ByEnabledTrue(Mockito.any(), Mockito.any()))
+        when(votePaperRepository.findFirst10ByEnabledTrueAndAuthorNicknameContaining(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenThrow(new IllegalArgumentException("id"));
 
         // Act and Assert
-        assertThrows(IllegalArgumentException.class, () -> votePersistenceAdapter.scrollVotePaper(1, "Sort Type"));
-        verify(votePaperRepository).findFirst10ByEnabledTrue(isA(KeysetScrollPosition.class), isA(Sort.class));
+        assertThrows(IllegalArgumentException.class, () -> votePersistenceAdapter.scrollVotePaper(1, "Sort Type", "test"));
+        verify(votePaperRepository).findFirst10ByEnabledTrueAndAuthorNicknameContaining(isA(String.class), isA(KeysetScrollPosition.class), isA(Sort.class));
     }
 
     /**
      * Method under test:
-     * {@link VotePersistenceAdapter#scrollVotePaper(Integer, String)}
+     * {@link LoadVotePaperPort#scrollVotePaper(Integer, String, String)}
      */
     @Test
     void testScrollVotePaper2() {
         // Arrange
-        when(votePaperRepository.findFirst10ByEnabledTrue(Mockito.any(), Mockito.any()))
+        when(votePaperRepository.findFirst10ByEnabledTrueAndAuthorNicknameContaining(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenThrow(new IllegalArgumentException("id"));
 
         // Act and Assert
-        assertThrows(IllegalArgumentException.class, () -> votePersistenceAdapter.scrollVotePaper(0, "Sort Type"));
-        verify(votePaperRepository).findFirst10ByEnabledTrue(isA(KeysetScrollPosition.class), isA(Sort.class));
+        assertThrows(IllegalArgumentException.class, () -> votePersistenceAdapter.scrollVotePaper(0, "Sort Type", "test"));
+        verify(votePaperRepository).findFirst10ByEnabledTrueAndAuthorNicknameContaining(isA(String.class), isA(KeysetScrollPosition.class), isA(Sort.class));
     }
 
     /**

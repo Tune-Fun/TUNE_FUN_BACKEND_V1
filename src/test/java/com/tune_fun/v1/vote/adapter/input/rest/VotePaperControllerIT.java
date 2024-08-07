@@ -112,7 +112,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
         ParameterDescriptor[] requestDescriptors = {
                 parameterWithName("last_id").description("이전 페이지의 마지막 투표 게시물 ID").attributes(constraint("NOT NULL")),
-                parameterWithName("sort_type").description("정렬 방식").attributes(constraint("RECENT or VOTE_COUNT"))
+                parameterWithName("sort_type").description("정렬 방식").attributes(constraint("RECENT or VOTE_COUNT")),
+                parameterWithName("nickname").description("작성자 닉네임").attributes(constraint("NULL 허용"))
         };
 
         FieldDescriptor[] responseDescriptors = ArrayUtils.addAll(baseResponseFields,
@@ -174,7 +175,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
     void getVotePaperSuccess() throws Exception {
         dummyService.initArtistAndLogin();
         dummyService.initVotePaper();
-        
+
         dummyService.initAndLogin();
         dummyService.registerVote();
 
