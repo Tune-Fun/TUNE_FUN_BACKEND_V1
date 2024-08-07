@@ -58,7 +58,7 @@ ext {
     set('awspringVersion', "3.1.1")
     set('awssdkVersion', "2.25.45")
     set('jwtVersion', '0.12.5')
-    set('queryDslVersion', "6.3")
+    set('queryDslVersion', "6.6")
     set('mapstructVersion', "1.5.5.Final")
 }
 

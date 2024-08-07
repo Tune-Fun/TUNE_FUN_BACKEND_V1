@@ -74,6 +74,7 @@ class LoginControllerIT extends ControllerBaseTest {
                 fieldWithPath("data.id").description("계정 식별자"),
                 fieldWithPath("data.username").description("아이디"),
                 fieldWithPath("data.email").description("이메일"),
+                fieldWithPath("data.nickname").description("닉네임"),
                 fieldWithPath("data.roles[]").description("권한"),
                 fieldWithPath("data.access_token").description("Access Token"),
                 fieldWithPath("data.refresh_token").description("Refresh Token")

@@ -41,7 +41,7 @@ public class LoginService implements LoginUseCase {
 
     @NotNull
     private static LoginResult getLoginResult(RegisteredAccount registeredAccount, String accessToken, String refreshToken) {
-        return new LoginResult(registeredAccount.id(), registeredAccount.username(), registeredAccount.email(),
+        return new LoginResult(registeredAccount.id(), registeredAccount.username(), registeredAccount.email(), registeredAccount.nickname(),
                 registeredAccount.roles(), accessToken, refreshToken);
     }
 
