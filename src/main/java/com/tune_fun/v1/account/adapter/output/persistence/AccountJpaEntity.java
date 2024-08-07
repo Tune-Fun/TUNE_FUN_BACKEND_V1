@@ -61,6 +61,10 @@ public class AccountJpaEntity extends BaseEntity implements UserDetails {
     @Comment("닉네임")
     private String nickname;
 
+    @Column(name = "profile_image_url", length = 2000)
+    @Comment("프로필 이미지 링크")
+    private String profileImageUrl;
+
     @Builder.Default
     @Embedded
     private NotificationConfig notificationConfig = new NotificationConfig();

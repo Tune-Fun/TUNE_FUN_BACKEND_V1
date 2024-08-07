@@ -5,7 +5,7 @@
 
 ==== 성공
 
-operation::get-vote-papers-success[snippets='http-request,http-response,query-parameters,response-fields']
+operation::scroll-vote-paper-success[snippets='http-request,http-response,query-parameters,response-fields']
 
 === 투표 게시물 상세 조회 API
 

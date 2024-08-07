@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface LoadVotePaperPort {
 
-    Window<ScrollableVotePaper> scrollVotePaper(final Integer lastId, final String sortType);
+    Window<ScrollableVotePaper> scrollVotePaper(final Integer lastId, final String sortType, final String nickname);
 
     Optional<RegisteredVotePaper> loadRegisteredVotePaper(final String username);
 

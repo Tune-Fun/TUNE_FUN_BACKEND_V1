@@ -87,12 +87,14 @@ public class VotePersistenceAdapter implements
      *
      * @param lastId   해당 페이지의 마지막 인덱스
      * @param sortType 정렬 방식
+     * @param nickname 작성자 닉네임
+     *
      * @return {@link org.springframework.data.domain.Window} of {@link com.tune_fun.v1.vote.domain.value.ScrollableVotePaper}
      * @see <a href="https://github.com/spring-projects/spring-data-jpa/issues/2996">Keyset-scrolling queries add identifier columns twice when Sort already sorts by Id</a>
      * @see <a href="https://www.baeldung.com/spring-data-jpa-scroll-api">Spring Data JPA Scroll API</a><br>
      */
     @Override
-    public Window<ScrollableVotePaper> scrollVotePaper(final Integer lastId, final String sortType) {
+    public Window<ScrollableVotePaper> scrollVotePaper(final Integer lastId, final String sortType, final String nickname) {
         KeysetScrollPosition position;
 
         if (lastId == null || lastId == 0)
@@ -101,7 +103,9 @@ public class VotePersistenceAdapter implements
         position = forward(Map.of("id", lastId, "voteEndAt", Constants.LOCAL_DATE_TIME_MIN));
 
         Sort sort = by(desc("id"), desc("voteEndAt"));
-        Window<VotePaperJpaEntity> scroll = votePaperRepository.findFirst10ByEnabledTrue(position, sort);
+        Window<VotePaperJpaEntity> scroll = nickname != null ?
+                votePaperRepository.findFirst10ByEnabledTrueAndAuthorNicknameContaining(nickname, position, sort) :
+                votePaperRepository.findFirst10ByEnabledTrue(position, sort);
 
         Set<Long> votePaperIds = scroll.stream().map(VotePaperJpaEntity::getId).collect(toSet());
         Map<Long, Long> likeCountMap = votePaperStatisticsRepository.findLikeCountMap(votePaperIds);

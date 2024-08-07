@@ -12,7 +12,11 @@ import com.tune_fun.v1.account.domain.value.RegisteredAccount;
 import com.tune_fun.v1.account.domain.value.oauth2.RegisteredOAuth2Account;
 import com.tune_fun.v1.common.stereotype.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.interaction.domain.ScrollableArtist;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.AbstractPageRequest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
@@ -66,6 +70,12 @@ public class AccountPersistenceAdapter implements
     public Optional<RegisteredOAuth2Account> registeredOAuth2AccountInfoByEmail(final String email) {
         return oauth2AccountRepository.findByEmailAndEnabledTrue(email)
                 .map(accountMapper::registeredOAuth2AccountInfo);
+    }
+
+    @Override
+    public Slice<ScrollableArtist> scrollArtist(final Long lastId, final String nickname) {
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        return accountRepository.scrollArtist(pageRequest, lastId, nickname);
     }
 
     @Override

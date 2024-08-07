@@ -102,7 +102,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
     @Test
     @Order(1)
     @DisplayName("투표 게시물 스크롤 조회, 성공")
-    void getVotePapersSuccess() throws Exception {
+    void scrollVotePaperSuccess() throws Exception {
         dummyService.initArtistAndLogin();
         dummyService.initVotePaperBatch();
 
@@ -111,8 +111,9 @@ class VotePaperControllerIT extends ControllerBaseTest {
 
 
         ParameterDescriptor[] requestDescriptors = {
-                parameterWithName("last_id").description("이전 페이지의 마지막 투표 게시물 ID").attributes(constraint("NOT NULL")),
-                parameterWithName("sort_type").description("정렬 방식").attributes(constraint("RECENT or VOTE_COUNT"))
+                parameterWithName("last_id").description("이전 페이지의 마지막 투표 게시물 ID").optional().attributes(constraint("NULL 허용")),
+                parameterWithName("sort_type").description("정렬 방식").optional().attributes(constraint("RECENT or VOTE_COUNT")),
+                parameterWithName("nickname").description("작성자 닉네임").optional().attributes(constraint("NULL 허용"))
         };
 
         FieldDescriptor[] responseDescriptors = ArrayUtils.addAll(baseResponseFields,
@@ -174,7 +175,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
     void getVotePaperSuccess() throws Exception {
         dummyService.initArtistAndLogin();
         dummyService.initVotePaper();
-        
+
         dummyService.initAndLogin();
         dummyService.registerVote();
 

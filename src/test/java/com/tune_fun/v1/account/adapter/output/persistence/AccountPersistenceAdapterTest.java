@@ -63,8 +63,9 @@ class AccountPersistenceAdapterTest {
         LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         ArrayList<DeviceJpaEntity> devices = new ArrayList<>();
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
-                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, deletedAt, devices, new ArrayList<>(), true, true, true, true));
+                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", "test@test.com",
+                notificationConfig, roles, lastLoginAt, lastLogoutAt, emailVerifiedAt, withdrawalAt, deletedAt, devices,
+                new ArrayList<>(), true, true, true, true));
         when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
@@ -351,8 +352,9 @@ class AccountPersistenceAdapterTest {
         LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         ArrayList<DeviceJpaEntity> devices = new ArrayList<>();
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
-                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, deletedAt, devices, new ArrayList<>(), true, true, true, true));
+                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", "test@test.com",
+                notificationConfig, roles, lastLoginAt, lastLogoutAt, emailVerifiedAt, withdrawalAt, deletedAt, devices,
+                new ArrayList<>(), true, true, true, true));
         when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
@@ -419,8 +421,9 @@ class AccountPersistenceAdapterTest {
         LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         ArrayList<DeviceJpaEntity> devices = new ArrayList<>();
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
-                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, deletedAt, devices, new ArrayList<>(), true, true, true, true));
+                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", "test@test.com",
+                notificationConfig, roles, lastLoginAt, lastLogoutAt, emailVerifiedAt, withdrawalAt, deletedAt, devices,
+                new ArrayList<>(), true, true, true, true));
         when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
@@ -668,8 +671,9 @@ class AccountPersistenceAdapterTest {
         LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         ArrayList<DeviceJpaEntity> devices = new ArrayList<>();
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
-                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, deletedAt, devices, new ArrayList<>(), true, true, true, true));
+                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", "test@test.com",
+                notificationConfig, roles, lastLoginAt, lastLogoutAt, emailVerifiedAt, withdrawalAt, deletedAt, devices,
+                new ArrayList<>(), true, true, true, true));
         when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 
@@ -736,8 +740,9 @@ class AccountPersistenceAdapterTest {
         LocalDateTime deletedAt = LocalDate.of(1970, 1, 1).atStartOfDay();
         ArrayList<DeviceJpaEntity> devices = new ArrayList<>();
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity(1L, "01234567-89AB-CDEF-FEDC-BA9876543210",
-                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", notificationConfig, roles, lastLoginAt, lastLogoutAt,
-                emailVerifiedAt, withdrawalAt, deletedAt, devices, new ArrayList<>(), true, true, true, true));
+                "janedoe", "iloveyou", "jane.doe@example.org", "Nickname", "test@test.com",
+                notificationConfig, roles, lastLoginAt, lastLogoutAt, emailVerifiedAt, withdrawalAt, deletedAt, devices,
+                new ArrayList<>(), true, true, true, true));
         when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
 

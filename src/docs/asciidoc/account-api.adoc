@@ -104,3 +104,11 @@ operation::change-email-success[snippets='http-request,http-response,request-fie
 ==== 성공
 
 operation::unlink-email-success[snippets='http-request,http-response,response-fields']
+
+== Artist API
+
+=== 아티스트 스크롤 조회 API
+
+==== 성공
+
+operation::scroll-artist-success[snippets='http-request,http-response,query-parameters,response-fields']

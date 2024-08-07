@@ -71,18 +71,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.giffing.bucket4j.spring.boot.starter:bucket4j-spring-boot-starter:0.10.3'
     implementation 'com.bucket4j:bucket4j-redis:8.10.1'
-    implementation 'org.redisson:redisson-spring-boot-starter:3.28.0'
-    implementation 'org.zalando:logbook-spring-boot-starter:3.7.2'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.33.0'
+    implementation 'org.zalando:logbook-spring-boot-starter:3.9.0'
 
     // Persistence Layer
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.7.5'
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.8.2'
     implementation "io.github.openfeign.querydsl:querydsl-jpa-spring:${queryDslVersion}"
     implementation "io.github.openfeign.querydsl:querydsl-collections:${queryDslVersion}"
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
     implementation 'org.flywaydb:flyway-core'
-    implementation 'org.flywaydb:flyway-database-postgresql:10.13.0'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.14.0'
     implementation 'org.postgresql:postgresql'
 
     // development
@@ -90,7 +90,7 @@ dependencies {
     implementation 'org.springframework:spring-aspects'
     implementation 'com.github.f4b6a3:ulid-creator:5.2.3'
     implementation 'org.codehaus.janino:janino:3.1.12'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // @see https://github.com/awspring/spring-cloud-aws/issues/657
 //    developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -98,18 +98,18 @@ dependencies {
 
     // External
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation 'com.google.firebase:firebase-admin:9.2.0'
+    implementation 'com.google.firebase:firebase-admin:9.3.0'
     implementation 'software.amazon.awssdk:s3'
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager'
     implementation 'com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:2.0.2'
     implementation 'software.amazon.awssdk:kms'
     implementation 'software.amazon.awssdk:cloudwatchlogs'
     implementation 'com.amazonaws:aws-encryption-sdk-java:3.0.0'
-    implementation 'software.amazon.cryptography:aws-cryptographic-material-providers:1.3.0'
+    implementation 'software.amazon.cryptography:aws-cryptographic-material-providers:1.5.1'
     implementation 'org.springframework.boot:spring-boot-starter-batch'
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.1'
-    implementation 'com.slack.api:slack-app-backend:1.39.2'
-    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.108.Final:osx-aarch_64'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.2'
+    implementation 'com.slack.api:slack-app-backend:1.40.3'
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.2.0.Alpha2:osx-aarch_64'
 
     // Message Broker
     implementation 'io.awspring.cloud:spring-cloud-aws-sqs'
@@ -130,9 +130,9 @@ dependencies {
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     implementation "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     compileOnly 'org.projectlombok:lombok'
-    implementation 'com.google.guava:guava:33.2.0-jre'
-    implementation 'org.apache.commons:commons-lang3:3.14.0'
-    implementation 'org.apache.commons:commons-rng-simple:1.5'
+    implementation 'com.google.guava:guava:33.2.1-jre'
+    implementation 'org.apache.commons:commons-lang3:3.15.0'
+    implementation 'org.apache.commons:commons-rng-simple:1.6'
     implementation 'commons-io:commons-io:2.16.1'
 
     // API Documentation
@@ -152,13 +152,13 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'com.c4-soft.springaddons:spring-addons-oauth2-test:7.6.13'
+    testImplementation 'com.c4-soft.springaddons:spring-addons-oauth2-test:7.8.4'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
-    testImplementation 'org.apache.commons:commons-lang3:3.14.0'
+    testImplementation 'org.apache.commons:commons-lang3:3.15.0'
     testImplementation 'com.tngtech.archunit:archunit-junit5:1.2.2' // Architecture Rule Test
-    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.15' // Test Double
+    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.21' // Test Double
     testImplementation 'org.quickperf:quick-perf-junit5:1.1.0' // Performance Test
-    testImplementation 'io.karatelabs:karate-junit5:1.5.0.RC3' // Both Test Pyramid
+    testImplementation 'io.karatelabs:karate-junit5:1.5.0.RC5' // Both Test Pyramid
     testImplementation 'com.icegreen:greenmail-junit5:2.0.1'
     testImplementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager'
 
@@ -176,7 +176,7 @@ dependencies {
     testImplementation 'org.testcontainers:postgresql'
     testImplementation 'org.testcontainers:kafka'
     testImplementation 'org.testcontainers:localstack'
-    testImplementation 'org.elasticmq:elasticmq-server_3:1.6.1'
+    testImplementation 'org.elasticmq:elasticmq-server_3:1.6.5'
 
     testAnnotationProcessor(
             'org.springframework.boot:spring-boot-configuration-processor',

@@ -16,7 +16,7 @@ public class ScrollVotePaperService implements ScrollVotePaperUseCase {
     private final LoadVotePaperPort loadVotePaperPort;
 
     @Override
-    public Window<ScrollableVotePaper> scrollVotePaper(Integer lastId, String sortType) {
-        return loadVotePaperPort.scrollVotePaper(lastId, sortType);
+    public Window<ScrollableVotePaper> scrollVotePaper(final Integer lastId, final String sortType, final String nickname) {
+        return loadVotePaperPort.scrollVotePaper(lastId, sortType, nickname);
     }
 }
