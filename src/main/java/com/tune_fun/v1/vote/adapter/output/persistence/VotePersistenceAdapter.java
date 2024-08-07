@@ -103,7 +103,9 @@ public class VotePersistenceAdapter implements
         position = forward(Map.of("id", lastId, "voteEndAt", Constants.LOCAL_DATE_TIME_MIN));
 
         Sort sort = by(desc("id"), desc("voteEndAt"));
-        Window<VotePaperJpaEntity> scroll = votePaperRepository.findFirst10ByEnabledTrueAndAuthorNicknameContaining(nickname, position, sort);
+        Window<VotePaperJpaEntity> scroll = nickname != null ?
+                votePaperRepository.findFirst10ByEnabledTrueAndAuthorNicknameContaining(nickname, position, sort) :
+                votePaperRepository.findFirst10ByEnabledTrue(position, sort);
 
         Set<Long> votePaperIds = scroll.stream().map(VotePaperJpaEntity::getId).collect(toSet());
         Map<Long, Long> likeCountMap = votePaperStatisticsRepository.findLikeCountMap(votePaperIds);

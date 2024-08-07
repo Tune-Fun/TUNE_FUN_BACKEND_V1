@@ -40,7 +40,7 @@ public class VotePaperController {
     private final DeleteVotePaperUseCase deleteVotePaperUseCase;
 
     @GetMapping(value = Uris.VOTE_PAPER_ROOT)
-    public ResponseEntity<Response<ScrollVotePaperResponse>> getVotePapers(@RequestParam(name = "last_id") Integer lastId,
+    public ResponseEntity<Response<ScrollVotePaperResponse>> scrollVotePaper(@RequestParam(name = "last_id") Integer lastId,
                                                                            @RequestParam(name = "sort_type", required = false, defaultValue = "RECENT") SortType sortType,
                                                                            @RequestParam(name = "nickname", required = false) String nickname,
                                                                            @CurrentUser User user) {

@@ -22,4 +22,7 @@ public interface VotePaperRepository extends JpaRepository<VotePaperJpaEntity, L
     @EntityGraph(attributePaths = {"author"})
     Window<VotePaperJpaEntity> findFirst10ByEnabledTrueAndAuthorNicknameContaining(String nickname, KeysetScrollPosition position, Sort sort);
 
+    @EntityGraph(attributePaths = {"author"})
+    Window<VotePaperJpaEntity> findFirst10ByEnabledTrue(KeysetScrollPosition position, Sort sort);
+
 }

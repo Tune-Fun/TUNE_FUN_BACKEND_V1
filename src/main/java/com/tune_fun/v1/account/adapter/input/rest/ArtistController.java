@@ -23,7 +23,7 @@ public class ArtistController {
     private final ScrollArtistUseCase scrollArtistUseCase;
 
     @GetMapping(value = Uris.ARTIST_ROOT)
-    public ResponseEntity<Response<ScrollArtistResponse>> fetchArtists(
+    public ResponseEntity<Response<ScrollArtistResponse>> scrollArtist(
             @RequestParam(name = "last_id", required = false) Long lastId,
             @RequestParam(name = "nickname", required = false) String nickname) {
         Slice<ScrollableArtist> homeSearchResult = scrollArtistUseCase.scrollArtist(lastId, nickname);
