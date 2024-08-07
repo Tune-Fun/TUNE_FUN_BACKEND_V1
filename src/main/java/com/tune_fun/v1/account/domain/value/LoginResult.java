@@ -7,6 +7,7 @@ import java.util.Set;
 public record LoginResult(
         Long id,
         String username,
+        String nickname,
         String email,
         Set<String> roles,
         String accessToken,
