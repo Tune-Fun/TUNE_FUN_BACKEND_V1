@@ -156,7 +156,7 @@ dependencies {
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.apache.commons:commons-lang3:3.15.0'
     testImplementation 'com.tngtech.archunit:archunit-junit5:1.2.2' // Architecture Rule Test
-    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.21' // Test Double
+    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.23' // Test Double
     testImplementation 'org.quickperf:quick-perf-junit5:1.1.0' // Performance Test
     testImplementation 'io.karatelabs:karate-junit5:1.5.0.RC5' // Both Test Pyramid
     testImplementation 'com.icegreen:greenmail-junit5:2.0.1'
@@ -194,7 +194,7 @@ sourceSets {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.compilerArgs << '-parameters'
+//    options.compilerArgs << '-parameters'
     options.annotationProcessorGeneratedSourcesDirectory(file(generated))
 }
 
