@@ -9,18 +9,22 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import org.zalando.logbook.HttpRequest;
 import org.zalando.logbook.Logbook;
 import org.zalando.logbook.core.Conditions;
 import org.zalando.logbook.json.PrettyPrintingJsonBodyFilter;
 
 import java.time.Clock;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.function.Predicate;
 
@@ -76,6 +80,18 @@ public class CommonBeans {
     }
 
     @Bean
+    public LocaleResolver localeResolver() {
+        AcceptHeaderLocaleResolver locale = new AcceptHeaderLocaleResolver();
+        locale.setDefaultLocale(Locale.KOREA); // ko_KR
+        return locale;
+    }
+
+    @Bean
+    public MessageSourceAccessor messageSourceAccessor() {
+        return new MessageSourceAccessor(messageSource());
+    }
+
+    @Bean
     @Qualifier("message")
     public MessageSource messageSource() {
         String basename = "messages/messages";
@@ -83,6 +99,9 @@ public class CommonBeans {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename(basename);
         messageSource.setDefaultEncoding(charSet);
+        messageSource.setAlwaysUseMessageFormat(true);
+        messageSource.setUseCodeAsDefaultMessage(true);
+        messageSource.setFallbackToSystemLocale(true);
         return messageSource;
     }
 

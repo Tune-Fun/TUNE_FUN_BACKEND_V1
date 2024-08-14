@@ -2,5 +2,8 @@
 == 메시지 코드
 
 === Message Code
+==== RequestHeader Accept-Language: ko-kr
+operation::get-message-codes_ko_kr[snippets='messagecode-response-fields']
 
-operation::get-message-codes[snippets='messagecode-response-fields']
+==== RequestHeader Accept-Language: en-us
+operation::get-message-codes_en_us[snippets='messagecode-response-fields']
