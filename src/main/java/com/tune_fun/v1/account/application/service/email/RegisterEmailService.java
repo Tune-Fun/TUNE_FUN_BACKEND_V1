@@ -23,7 +23,7 @@ public class RegisterEmailService implements RegisterEmailUseCase {
 
     @Transactional
     @Override
-    public void registerEmail(AccountCommands.SaveEmail command, User user) throws Exception {
+    public void registerEmail(AccountCommands.SaveEmail command, User user) {
         CurrentAccount currentAccount = loadAccountPort.currentAccountInfo(user.getUsername())
                 .orElseThrow(CommonApplicationException.ACCOUNT_NOT_FOUND);
 
