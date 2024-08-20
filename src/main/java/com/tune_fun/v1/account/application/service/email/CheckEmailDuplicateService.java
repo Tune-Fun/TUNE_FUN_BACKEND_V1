@@ -20,8 +20,6 @@ public class CheckEmailDuplicateService implements CheckEmailDuplicateUseCase {
     @Transactional(readOnly = true)
     public void checkEmailDuplicate(final String email) {
         loadAccountPort.registeredAccountInfoByEmail(email)
-                .ifPresent(account -> {
-                    throw CommonApplicationException.USER_POLICY_EMAIL_REGISTERED;
-                });
+                .ifPresent(account -> CommonApplicationException.USER_POLICY_EMAIL_REGISTERED.run());
     }
 }
