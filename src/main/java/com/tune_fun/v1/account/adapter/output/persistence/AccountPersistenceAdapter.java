@@ -12,6 +12,7 @@ import com.tune_fun.v1.account.domain.value.RegisteredAccount;
 import com.tune_fun.v1.account.domain.value.oauth2.RegisteredOAuth2Account;
 import com.tune_fun.v1.common.stereotype.PersistenceAdapter;
 import com.tune_fun.v1.common.util.StringUtil;
+import com.tune_fun.v1.interaction.domain.ArtistInfo;
 import com.tune_fun.v1.interaction.domain.ScrollableArtist;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.AbstractPageRequest;
@@ -76,6 +77,13 @@ public class AccountPersistenceAdapter implements
     public Slice<ScrollableArtist> scrollArtist(final Long lastId, final String nickname) {
         PageRequest pageRequest = PageRequest.of(0, 10);
         return accountRepository.scrollArtist(pageRequest, lastId, nickname);
+    }
+
+    @Override
+    public Optional<ArtistInfo> findArtist(Long id) {
+        Optional<AccountJpaEntity> foundArtist = accountRepository.findById(id);
+        ArtistInfo artistInfo = new ArtistInfo(id, foundArtist.get().getNickname(), foundArtist.get().getProfileImageUrl());
+        return Optional.of(artistInfo);
     }
 
     @Override

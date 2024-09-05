@@ -4,6 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tune_fun.v1.common.util.querydsl.PredicateBuilder;
+import com.tune_fun.v1.interaction.domain.ArtistInfo;
 import com.tune_fun.v1.interaction.domain.ScrollableArtist;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -71,5 +72,6 @@ public class AccountCustomRepositoryImpl implements AccountCustomRepository {
 
         return new SliceImpl<>(fetch, pageable, hasNext);
     }
+
 
 }

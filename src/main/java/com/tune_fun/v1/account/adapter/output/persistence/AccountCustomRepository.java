@@ -1,5 +1,6 @@
 package com.tune_fun.v1.account.adapter.output.persistence;
 
+import com.tune_fun.v1.interaction.domain.ArtistInfo;
 import com.tune_fun.v1.interaction.domain.ScrollableArtist;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
