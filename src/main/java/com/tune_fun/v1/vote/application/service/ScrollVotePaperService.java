@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Window;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @UseCase
 @RequiredArgsConstructor
@@ -19,4 +21,15 @@ public class ScrollVotePaperService implements ScrollVotePaperUseCase {
     public Window<ScrollableVotePaper> scrollVotePaper(final Integer lastId, final String sortType, final String nickname) {
         return loadVotePaperPort.scrollVotePaper(lastId, sortType, nickname);
     }
+
+    @Override
+    public Window<ScrollableVotePaper> scrollUserLikedVotePaper(
+            final String username,
+            final Long lastId,
+            final LocalDateTime lastTime,
+            final Integer count
+    ) {
+        return loadVotePaperPort.scrollUserLikedVotePaper(username, lastId, lastTime, count);
+    }
+
 }

@@ -22,14 +22,13 @@ import org.springframework.data.domain.Window;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.IntFunction;
 
 import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.data.domain.ScrollPosition.forward;
+import static org.springframework.data.domain.ScrollPosition.keyset;
 import static org.springframework.data.domain.Sort.Order.desc;
 import static org.springframework.data.domain.Sort.by;
 
@@ -54,6 +53,8 @@ public class VotePersistenceAdapter implements
 
     private final VotePaperMapper votePaperMapper;
     private final VoteChoiceMapper voteChoiceMapper;
+
+    private static final int VOTE_PAPER_DEFAULT_SCROLL_COUNT = 10;
 
     @Override
     public List<Long> loadVoterIdsByVotePaperUuid(final String uuid) {
@@ -88,19 +89,13 @@ public class VotePersistenceAdapter implements
      * @param lastId   해당 페이지의 마지막 인덱스
      * @param sortType 정렬 방식
      * @param nickname 작성자 닉네임
-     *
      * @return {@link org.springframework.data.domain.Window} of {@link com.tune_fun.v1.vote.domain.value.ScrollableVotePaper}
      * @see <a href="https://github.com/spring-projects/spring-data-jpa/issues/2996">Keyset-scrolling queries add identifier columns twice when Sort already sorts by Id</a>
      * @see <a href="https://www.baeldung.com/spring-data-jpa-scroll-api">Spring Data JPA Scroll API</a><br>
      */
     @Override
     public Window<ScrollableVotePaper> scrollVotePaper(final Integer lastId, final String sortType, final String nickname) {
-        KeysetScrollPosition position;
-
-        if (lastId == null || lastId == 0)
-            position = ScrollPosition.keyset();
-
-        position = forward(Map.of("id", lastId, "voteEndAt", Constants.LOCAL_DATE_TIME_MIN));
+        KeysetScrollPosition position = forward(Map.of("id", lastId, "voteEndAt", Constants.LOCAL_DATE_TIME_MIN));
 
         Sort sort = by(desc("id"), desc("voteEndAt"));
         Window<VotePaperJpaEntity> scroll = nickname != null ?
@@ -110,7 +105,45 @@ public class VotePersistenceAdapter implements
         Set<Long> votePaperIds = scroll.stream().map(VotePaperJpaEntity::getId).collect(toSet());
         Map<Long, Long> likeCountMap = votePaperStatisticsRepository.findLikeCountMap(votePaperIds);
 
-        return scroll.map(votePaperJpaEntity -> votePaperMapper.scrollableVotePaper(votePaperJpaEntity, likeCountMap.get(votePaperJpaEntity.getId())));
+        return scroll.map(votePaperJpaEntity -> votePaperMapper.scrollableVotePaper(votePaperJpaEntity, likeCountMap.getOrDefault(votePaperJpaEntity.getId(), 0L)));
+    }
+
+    @Override
+    public Window<ScrollableVotePaper> scrollUserLikedVotePaper(
+            final String username,
+            final Long lastId,
+            final LocalDateTime lastTime,
+            final Integer count
+    ) {
+        int scrollCount = count != null ? count : VOTE_PAPER_DEFAULT_SCROLL_COUNT;
+        List<UserInteractedVotePaper> userLikedVotePapers = votePaperRepository.findLikedByUsernameBeforeLastTimeAndLastId(username, lastId, lastTime, scrollCount);
+
+        Set<Long> votePaperIds = userLikedVotePapers.stream()
+                .map(UserInteractedVotePaper::id)
+                .collect(toSet());
+        Map<Long, Long> likeCountMap = votePaperStatisticsRepository.findLikeCountMap(votePaperIds);
+
+        Set<Long> participatedVotePaperIds = new HashSet<>(votePaperRepository.findParticipatedVotePaperIdsByUsername(username, votePaperIds));
+
+        List<ScrollableVotePaper> scrollableVotePapers = userLikedVotePapers.stream()
+                .map(userLikedVotePaper -> votePaperMapper.scrollableUserInteractedVotePaper(
+                        userLikedVotePaper,
+                        likeCountMap.getOrDefault(userLikedVotePaper.id(), 0L),
+                        true,
+                        participatedVotePaperIds.contains(userLikedVotePaper.id()))
+                ).toList();
+
+        return Window.from(scrollableVotePapers, scrollPositionIntFunction(scrollableVotePapers));
+    }
+
+    private IntFunction<ScrollPosition> scrollPositionIntFunction(List<ScrollableVotePaper> scrollableVotePapers) {
+        return index -> {
+            if (index == scrollableVotePapers.size() - 1) {
+                Long lastVotePaperId = scrollableVotePapers.get(index).id();
+                return forward(Map.of("id", lastVotePaperId));
+            }
+            return keyset();
+        };
     }
 
     @Override

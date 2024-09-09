@@ -32,9 +32,23 @@ public abstract class VotePaperMapper {
     @Mapping(target = "totalLikeCount", source = "likeCount")
     public abstract ScrollableVotePaper scrollableVotePaper(final VotePaperJpaEntity votePaperJpaEntity, final Long likeCount);
 
+    @Mapping(target = "authorUsername", source = "userInteractedVotePaper.authorUsername")
+    @Mapping(target = "authorNickname", source = "userInteractedVotePaper.authorNickname")
+    @Mapping(target = "remainDays", source = "userInteractedVotePaper", qualifiedByName = "remainDays")
+    @Mapping(target = "totalVoteCount", constant = "0")
+    @Mapping(target = "totalLikeCount", source = "likeCount")
+    @Mapping(target = "userLiked", source = "userLiked")
+    @Mapping(target = "userVoted", source = "userVoted")
+    public abstract ScrollableVotePaper scrollableUserInteractedVotePaper(final UserInteractedVotePaper userInteractedVotePaper, final Long likeCount, final boolean userLiked, final boolean userVoted);
+
     @Named("remainDays")
     public Long remainDays(final VotePaperJpaEntity votePaperJpaEntity) {
         return LocalDateTime.now().until(votePaperJpaEntity.getVoteEndAt(), ChronoUnit.DAYS);
+    }
+
+    @Named("remainDays")
+    public Long remainDays(final UserInteractedVotePaper userInteractedVotePaper) {
+        return LocalDateTime.now().until(userInteractedVotePaper.voteEndAt(), ChronoUnit.DAYS);
     }
 
     @Mapping(target = "id", ignore = true)
