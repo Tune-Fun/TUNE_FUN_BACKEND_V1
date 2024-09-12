@@ -60,6 +60,16 @@ public class VotePaperController {
         return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
     }
 
+    @GetMapping(value = Uris.MY_VOTE_PAPER_VOTED)
+    public ResponseEntity<Response<ScrollVotePaperResponse>> scrollUserParticipatedVotePaper(
+            @RequestParam(name = "last_id", required = false) Long lastId,
+            @RequestParam(name = "last_time", required = false) LocalDateTime lastTime,
+            @RequestParam(name = "count", required = false) Integer count,
+            @CurrentUser User user) {
+        Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollUserVotedVotePaper(user.getUsername(), lastId, lastTime, count);
+        return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
+    }
+
     @GetMapping(value = Uris.VOTE_PAPER_ROOT + "/{votePaperId}")
     public ResponseEntity<Response<FullVotePaper>> getVotePaper(@PathVariable("votePaperId") @NotNull(message = "{vote.paper.id.not_null}") final Long votePaperId,
                                                                 @CurrentUser final User user) {

@@ -13,6 +13,8 @@ public interface LoadVotePaperPort {
 
     Window<ScrollableVotePaper> scrollUserLikedVotePaper(String username, Long lastId, LocalDateTime lastTime, Integer count);
 
+    Window<ScrollableVotePaper> scrollUserVotedVotePaper(String username, Long lastId, LocalDateTime lastTime, Integer count);
+
     Optional<RegisteredVotePaper> loadRegisteredVotePaper(final String username);
 
     Optional<RegisteredVotePaper> loadRegisteredVotePaper(final Long votePaperId);

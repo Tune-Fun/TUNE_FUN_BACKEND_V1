@@ -32,4 +32,13 @@ public class ScrollVotePaperService implements ScrollVotePaperUseCase {
         return loadVotePaperPort.scrollUserLikedVotePaper(username, lastId, lastTime, count);
     }
 
+    @Override
+    public Window<ScrollableVotePaper> scrollUserVotedVotePaper(
+            final String username,
+            final Long lastId,
+            final LocalDateTime lastTime,
+            final Integer count
+    ) {
+        return loadVotePaperPort.scrollUserVotedVotePaper(username, lastId, lastTime, count);
+    }
 }

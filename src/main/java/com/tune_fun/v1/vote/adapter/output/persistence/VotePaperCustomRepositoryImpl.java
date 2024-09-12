@@ -81,6 +81,52 @@ public class VotePaperCustomRepositoryImpl implements VotePaperCustomRepository 
     }
 
     @Override
+    public List<Long> findLikedIdsByUsernameAndIds(String username, Set<Long> ids) {
+        return queryFactory.select(VOTE_PAPER.id)
+                .from(VOTE_PAPER)
+                .join(VOTE_PAPER.likes, VOTE_PAPER_LIKE)
+                .join(VOTE_PAPER_LIKE.liker, ACCOUNT)
+                .where(
+                        VOTE_PAPER.id.in(ids),
+                        ACCOUNT.username.eq(username)
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<UserInteractedVotePaper> findParticipatedByUsernameBeforeLastId(final String username, final Long lastId, final LocalDateTime lastTime, final int limit) {
+        return queryFactory.select(
+                        Projections.constructor(UserInteractedVotePaper.class,
+                                VOTE_PAPER.id,
+                                VOTE_PAPER.uuid,
+                                VOTE_PAPER.title,
+                                VOTE_PAPER.content,
+                                VOTE_PAPER.pageLink,
+                                VOTE_PAPER.author.username,
+                                VOTE_PAPER.author.nickname,
+                                VOTE_PAPER.option,
+                                VOTE_PAPER.voteStartAt,
+                                VOTE_PAPER.voteEndAt,
+                                VOTE_PAPER.deliveryAt,
+                                VOTE_PAPER.enabled,
+                                VOTE_PAPER.videoUrl,
+                                VOTE.createdAt)
+                )
+                .from(VOTE_PAPER)
+                .leftJoin(VOTE_PAPER.choices, VOTE_CHOICE)
+                .leftJoin(VOTE_CHOICE.votes, VOTE)
+                .leftJoin(VOTE.voter, ACCOUNT)
+                .where(
+                        beforeVotePaperVoted(lastTime),
+                        ltVotePaperId(lastId),
+                        ACCOUNT.username.eq(username)
+                )
+                .orderBy(VOTE_CHOICE.createdAt.desc(), VOTE_PAPER.id.desc())
+                .limit(limit)
+                .fetch();
+    }
+
+    @Override
     public List<Long> findParticipatedVotePaperIdsByUsername(final String username, final Set<Long> ids) {
         return queryFactory.select(VOTE_PAPER.id)
                 .from(VOTE_PAPER)
@@ -101,5 +147,9 @@ public class VotePaperCustomRepositoryImpl implements VotePaperCustomRepository 
 
     private BooleanExpression beforeVotePaperLiked(LocalDateTime lastTime) {
         return lastTime != null ? VOTE_PAPER_LIKE.createdAt.before(lastTime) : null;
+    }
+
+    private BooleanExpression beforeVotePaperVoted(LocalDateTime lastTime) {
+        return lastTime != null ? VOTE_CHOICE.createdAt.before(lastTime) : null;
     }
 }

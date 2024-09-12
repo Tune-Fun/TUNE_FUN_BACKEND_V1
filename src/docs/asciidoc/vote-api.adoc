@@ -7,11 +7,18 @@
 
 operation::scroll-vote-paper-success[snippets='http-request,http-response,query-parameters,response-fields']
 
-=== 투표 게시물 스크롤 조회 API
+=== 사용자가 좋아요 누른 투표 게시물 스크롤 조회 API
 
 ==== 성공
 
 operation::scroll-user-liked-vote-paper-success[snippets='http-request,http-response,query-parameters,response-fields']
+
+=== 사용자가 투표한 투표 게시물 스크롤 조회 API
+
+==== 성공
+
+operation::scroll-user-voted-vote-paper-success[snippets='http-request,http-response,query-parameters,response-fields']
+
 
 === 투표 게시물 상세 조회 API
 

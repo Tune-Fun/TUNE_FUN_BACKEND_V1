@@ -10,4 +10,6 @@ public interface ScrollVotePaperUseCase {
     Window<ScrollableVotePaper> scrollVotePaper(Integer lastId, String sortType, String nickname);
 
     Window<ScrollableVotePaper> scrollUserLikedVotePaper(String username, Long lastId, LocalDateTime lastTime, Integer count);
+
+    Window<ScrollableVotePaper> scrollUserVotedVotePaper(String username, Long lastId, LocalDateTime lastTime, Integer count);
 }
