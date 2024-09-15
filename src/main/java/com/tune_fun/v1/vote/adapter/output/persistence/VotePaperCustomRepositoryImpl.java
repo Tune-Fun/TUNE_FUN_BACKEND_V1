@@ -141,6 +141,19 @@ public class VotePaperCustomRepositoryImpl implements VotePaperCustomRepository 
                 .fetch();
     }
 
+    @Override
+    public List<VotePaperJpaEntity> findRegisteredByUsernameBeforeLastId(String username, Long lastId, LocalDateTime lastTime, int limit) {
+        return queryFactory.selectFrom(VOTE_PAPER)
+                .join(VOTE_PAPER.author, ACCOUNT)
+                .where(
+                        beforeRegisteredPaperVoted(lastTime),
+                        ltVotePaperId(lastId),
+                        ACCOUNT.username.eq(username)
+                )
+                .orderBy(VOTE_PAPER.createdAt.desc(), VOTE_PAPER.id.desc())
+                .fetch();
+    }
+
     private BooleanExpression ltVotePaperId(Long lastId) {
         return lastId != null ? VOTE_PAPER.id.lt(lastId) : null;
     }
@@ -151,5 +164,9 @@ public class VotePaperCustomRepositoryImpl implements VotePaperCustomRepository 
 
     private BooleanExpression beforeVotePaperVoted(LocalDateTime lastTime) {
         return lastTime != null ? VOTE_CHOICE.createdAt.before(lastTime) : null;
+    }
+
+    private BooleanExpression beforeRegisteredPaperVoted(LocalDateTime lastTime) {
+        return lastTime != null ? VOTE_PAPER.createdAt.before(lastTime) : null;
     }
 }

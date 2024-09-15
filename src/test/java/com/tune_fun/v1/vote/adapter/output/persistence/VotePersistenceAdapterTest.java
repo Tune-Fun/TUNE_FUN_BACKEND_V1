@@ -7,10 +7,8 @@ import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeJpaEn
 import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeRepository;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
 import com.tune_fun.v1.vote.domain.behavior.SaveVotePaper;
-import com.tune_fun.v1.vote.domain.value.RegisteredVote;
-import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
-import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
-import com.tune_fun.v1.vote.domain.value.VotePaperOption;
+import com.tune_fun.v1.vote.domain.value.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -18,15 +16,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.KeysetScrollPosition;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Window;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {VotePersistenceAdapter.class})
@@ -1057,5 +1060,80 @@ class VotePersistenceAdapterTest {
         assertThrows(IllegalArgumentException.class,
                 () -> votePersistenceAdapter.findByVotePaperIdAndUsername(1L, "janedoe"));
         verify(voteChoiceRepository).findByVotePaperIdAndCreatedBy(eq(1L), eq("janedoe"));
+    }
+
+    /**
+     * Method under test:
+     * {@link VotePersistenceAdapter#scrollUserRegisteredVotePaper(String, Long, LocalDateTime, Integer)}
+     */
+    @Test
+    @DisplayName("유저가 등록한 투표 게시물 스크롤 조회")
+    void testScrollUserRegisteredVotePaper() {
+        // given
+        String username = "username";
+        Long lastId = 1L;
+        LocalDateTime lastTime = LocalDateTime.of(2024, 10, 10, 0, 0);
+        int count = 5;
+
+        AccountJpaEntity accountJpaEntity = AccountJpaEntity.builder()
+                .id(1L)
+                .username("username")
+                .build();
+
+        VotePaperJpaEntity votePaperJpaEntity = VotePaperJpaEntity.builder()
+                .id(1L)
+                .uuid(UUID.randomUUID().toString())
+                .title("title")
+                .content("content")
+                .pageLink("pageLink")
+                .author(accountJpaEntity)
+                .option(VotePaperOption.ALLOW_ADD_CHOICES)
+                .voteStartAt(lastTime.minusDays(7))
+                .voteEndAt(lastTime.plusDays(7))
+                .deliveryAt(lastTime)
+                .enabled(true)
+                .videoUrl("videoUrl")
+                .build();
+
+        given(votePaperRepository.findRegisteredByUsernameBeforeLastId(username, lastId, lastTime, count))
+                .willReturn(List.of(votePaperJpaEntity));
+        Long likeCount = 3L;
+        given(votePaperStatisticsRepository.findLikeCountMap(Set.of(votePaperJpaEntity.getId())))
+                .willReturn(Map.of(votePaperJpaEntity.getId(), likeCount));
+        ScrollableVotePaper mockScrollableVotePaper = new ScrollableVotePaper(
+                votePaperJpaEntity.getId(),
+                votePaperJpaEntity.getUuid(),
+                votePaperJpaEntity.getTitle(),
+                accountJpaEntity.getUsername(),
+                accountJpaEntity.getProfileImageUrl(),
+                accountJpaEntity.getNickname(),
+                lastTime.until(votePaperJpaEntity.getVoteEndAt(), ChronoUnit.DAYS),
+                "0",
+                String.valueOf(likeCount),
+                null,
+                null
+        );
+        given(votePaperMapper.scrollableVotePaper(votePaperJpaEntity, likeCount)).willReturn(mockScrollableVotePaper);
+
+        // when
+        Window<ScrollableVotePaper> result = votePersistenceAdapter.scrollUserRegisteredVotePaper(username, lastId, lastTime, count);
+
+        // then
+        then(votePaperRepository).should(times(1)).findRegisteredByUsernameBeforeLastId(username, lastId, lastTime, count);
+        then(votePaperStatisticsRepository).should(times(1)).findLikeCountMap(Set.of(votePaperJpaEntity.getId()));
+        List<ScrollableVotePaper> scrollableVotePapers = result.getContent();
+        assertThat(scrollableVotePapers).hasSize(1);
+        ScrollableVotePaper scrollableVotePaper = scrollableVotePapers.getFirst();
+        assertThat(scrollableVotePaper.id()).isEqualTo(votePaperJpaEntity.getId());
+        assertThat(scrollableVotePaper.uuid()).isEqualTo(votePaperJpaEntity.getUuid());
+        assertThat(scrollableVotePaper.title()).isEqualTo(votePaperJpaEntity.getTitle());
+        assertThat(scrollableVotePaper.authorUsername()).isEqualTo(accountJpaEntity.getUsername());
+        assertThat(scrollableVotePaper.authorProfileImageUrl()).isEqualTo(accountJpaEntity.getProfileImageUrl());
+        assertThat(scrollableVotePaper.authorNickname()).isEqualTo(accountJpaEntity.getNickname());
+        assertThat(scrollableVotePaper.remainDays()).isEqualTo(lastTime.until(votePaperJpaEntity.getVoteEndAt(), ChronoUnit.DAYS));
+        assertThat(scrollableVotePaper.totalVoteCount()).isEqualTo("0");
+        assertThat(scrollableVotePaper.totalLikeCount()).isEqualTo(String.valueOf(likeCount));
+        assertThat(scrollableVotePaper.userLiked()).isNull();
+        assertThat(scrollableVotePaper.userVoted()).isNull();
     }
 }

@@ -715,6 +715,78 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 );
     }
 
+    @Transactional
+    @Test
+    @Order(10)
+    @DisplayName("아티스트가 등록한 투표 게시물 스크롤 조회, 성공")
+    void scrollUserRegisteredVotePaperSuccess() throws Exception {
+        dummyService.initArtistAndLogin();
+        dummyService.initVotePaper();
+        Long votePaperId = dummyService.getDefaultVotePaper().getId();
+        String accessToken = dummyService.getDefaultArtistAccessToken();
+
+        ParameterDescriptor[] requestDescriptors = {
+                parameterWithName("last_id").description("이전 페이지의 마지막 투표 게시물 ID").optional().attributes(constraint("NULLABLE")),
+                parameterWithName("last_time").description("이전 페이지의 마지막 투표 게시물 투표 시간").attributes(constraint("NULLABLE")),
+                parameterWithName("count").description("다음 페이지 게시물 개수").optional().attributes(constraint("NULLABLE"))
+        };
+
+        FieldDescriptor[] responseDescriptors = ArrayUtils.addAll(baseResponseFields,
+                fieldWithPath("data.empty").description("데이터가 비어있는지 여부").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.last").description("마지막 페이지인지 여부").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.content").description("투표 게시물 목록").attributes(constraint("NOT EMPTY")),
+                fieldWithPath("data.content[].id").description("투표 게시물 ID").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.content[].uuid").description("투표 게시물 UUID").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.content[].title").description("투표 게시물 제목").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.content[].author_username").description("투표 게시물 작성자 아이디").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.content[].author_profile_image_url").description("투표 게시물 작성자 프로필 이미지 URL").attributes(constraint("NULLABLE")),
+                fieldWithPath("data.content[].author_nickname").description("투표 게시물 작성자 닉네임").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.content[].remain_days").description("투표 게시물 남은 일수").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.content[].total_vote_count").description("투표 게시물 총 투표 수").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.content[].total_like_count").description("투표 게시물 총 좋아요 수").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.content[].user_liked").description("사용자 좋아요 여부").attributes(constraint("NULL")),
+                fieldWithPath("data.content[].user_voted").description("사용자 투표 여부").attributes(constraint("NULL"))
+        );
+
+        mockMvc.perform(
+                        get(Uris.MY_VOTE_PAPER_REGISTERED)
+                                .queryParam("last_id", String.valueOf(votePaperId + 1L))
+                                .queryParam("last_time", "2100-09-10T00:00:00")
+                                .queryParam("count", "10")
+                                .header(AUTHORIZATION, bearerToken(accessToken))
+                )
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andExpectAll(jsonPath("$.data.empty", notNullValue()), jsonPath("$.data.empty", is(false)))
+                .andExpectAll(jsonPath("$.data.last", notNullValue()), jsonPath("$.data.last", is(true)))
+                .andExpect(jsonPath("$.data.content", hasSize(1)))
+                .andExpectAll(jsonPath("$.data.content[*].id").exists(), jsonPath("$.data.content[*].id", notNullValue()))
+                .andExpectAll(jsonPath("$.data.content[*].uuid").exists(), jsonPath("$.data.content[*].uuid", notNullValue()))
+                .andExpectAll(jsonPath("$.data.content[*].title").exists(), jsonPath("$.data.content[*].title", notNullValue()))
+                .andExpectAll(jsonPath("$.data.content[*].author_username").exists(), jsonPath("$.data.content[*].author_username", notNullValue()))
+                .andExpect(jsonPath("$.data.content[*].author_profile_image_url").exists())
+                .andExpectAll(jsonPath("$.data.content[*].author_nickname").exists(), jsonPath("$.data.content[*].author_nickname", notNullValue()))
+                .andExpectAll(jsonPath("$.data.content[*].remain_days").exists(), jsonPath("$.data.content[*].remain_days", notNullValue()))
+                .andExpectAll(jsonPath("$.data.content[*].total_vote_count").exists(), jsonPath("$.data.content[*].total_vote_count", notNullValue()))
+                .andExpectAll(jsonPath("$.data.content[*].total_like_count").exists(), jsonPath("$.data.content[*].total_like_count", notNullValue()))
+                .andExpectAll(jsonPath("$.data.content[*].user_liked").exists())
+                .andExpectAll(jsonPath("$.data.content[*].user_voted").exists())
+                .andExpect(jsonPath("$.data.content[0].id", is(votePaperId.intValue())))
+                .andDo(
+                        restDocs.document(
+                                requestHeaders(authorizationHeader),
+                                queryParameters(requestDescriptors),
+                                responseFields(responseDescriptors),
+                                resource(
+                                        builder().
+                                                description("아티스트가 등록한 투표 게시물 스크롤 조회").
+                                                queryParameters(requestDescriptors).
+                                                responseFields(responseDescriptors)
+                                                .build()
+                                )
+                        )
+                );
+    }
+
     private void awaitReceiveMessage(final String queueName) {
         ThrowingRunnable receiveMessageAssertionRunnable = () ->
                 sqsAsyncClient.getQueueUrl(r -> r.queueName(queueName))

@@ -16,4 +16,6 @@ public interface VotePaperCustomRepository {
     List<UserInteractedVotePaper> findParticipatedByUsernameBeforeLastId(String username, Long lastId, LocalDateTime lastTime, int limit);
 
     List<Long> findParticipatedVotePaperIdsByUsername(String username, Set<Long> ids);
+
+    List<VotePaperJpaEntity> findRegisteredByUsernameBeforeLastId(String username, Long lastId, LocalDateTime lastTime, int limit);
 }

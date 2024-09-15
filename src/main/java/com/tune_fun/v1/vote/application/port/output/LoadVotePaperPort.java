@@ -15,6 +15,8 @@ public interface LoadVotePaperPort {
 
     Window<ScrollableVotePaper> scrollUserVotedVotePaper(String username, Long lastId, LocalDateTime lastTime, Integer count);
 
+    Window<ScrollableVotePaper> scrollUserRegisteredVotePaper(String username, Long lastId, LocalDateTime lastTime, Integer count);
+
     Optional<RegisteredVotePaper> loadRegisteredVotePaper(final String username);
 
     Optional<RegisteredVotePaper> loadRegisteredVotePaper(final Long votePaperId);

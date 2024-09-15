@@ -162,6 +162,28 @@ public class VotePersistenceAdapter implements
         return Window.from(scrollableVotePapers, scrollPositionIntFunction(scrollableVotePapers));
     }
 
+    @Override
+    public Window<ScrollableVotePaper> scrollUserRegisteredVotePaper(
+            final String username,
+            final Long lastId,
+            final LocalDateTime lastTime,
+            final Integer count
+    ) {
+        int scrollCount = count != null ? count : VOTE_PAPER_DEFAULT_SCROLL_COUNT;
+        List<VotePaperJpaEntity> votePaperJpaEntities = votePaperRepository.findRegisteredByUsernameBeforeLastId(username, lastId, lastTime, scrollCount);
+
+        Set<Long> votePaperIds = votePaperJpaEntities.stream().map(VotePaperJpaEntity::getId).collect(toSet());
+        Map<Long, Long> likeCountMap = votePaperStatisticsRepository.findLikeCountMap(votePaperIds);
+
+        List<ScrollableVotePaper> scrollableVotePapers = votePaperJpaEntities.stream()
+                .map(userVotedVotePaper -> votePaperMapper.scrollableVotePaper(
+                        userVotedVotePaper,
+                        likeCountMap.getOrDefault(userVotedVotePaper.getId(), 0L))
+                ).toList();
+
+        return Window.from(scrollableVotePapers, scrollPositionIntFunction(scrollableVotePapers));
+    }
+
     private IntFunction<ScrollPosition> scrollPositionIntFunction(List<ScrollableVotePaper> scrollableVotePapers) {
         return index -> {
             if (index == scrollableVotePapers.size() - 1) {
