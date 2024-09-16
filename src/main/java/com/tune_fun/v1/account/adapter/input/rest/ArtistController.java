@@ -14,6 +14,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Window;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @WebAdapter
@@ -34,7 +35,7 @@ public class ArtistController {
     }
 
     @GetMapping(value = Uris.ARTIST_ROOT + "/{artistId}")
-    public ResponseEntity<Response<ArtistInfo>> findArtist(@RequestParam(name = "artistId") Long artistId){
+    public ResponseEntity<Response<ArtistInfo>> findArtist(@PathVariable Long artistId){
         return responseMapper.ok(MessageCode.SUCCESS, findArtistUseCase.findArtist(artistId));
     }
 

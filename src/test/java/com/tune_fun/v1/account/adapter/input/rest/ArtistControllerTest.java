@@ -87,4 +87,41 @@ class ArtistControllerTest extends ControllerBaseTest {
 
     }
 
+    @Transactional
+    @Test
+    @DisplayName("아티스트 상세 프로필 조회, 성공")
+    void findArtistSuccess() throws Exception {
+        dummyService.initArtistAndLogin();
+        String accessToken = dummyService.getDefaultArtistAccessToken();
+
+        Long artistAccountId = dummyService.getDefaultArtistAccount().getId();
+
+        FieldDescriptor[] responseDescriptors = ArrayUtils.addAll(baseResponseFields,
+                fieldWithPath("data.id").description("아티스트 ID"),
+                fieldWithPath("data.nickname").description("아티스트 닉네임"),
+                fieldWithPath("data.profile_image_url").description("아티스트 프로필 이미지 URL")
+        );
+
+        mockMvc.perform(
+                        get(Uris.ARTIST_ROOT + "/" + artistAccountId)
+                                .header(AUTHORIZATION, bearerToken(accessToken))
+                )
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andExpectAll(jsonPath("$.data.id").exists(), jsonPath("$.data.id", notNullValue()))
+                .andExpectAll(jsonPath("$.data.nickname").exists(), jsonPath("$.data.nickname", notNullValue()))
+                .andExpect(jsonPath("$.data.profile_image_url").exists())
+                .andDo(
+                        restDocs.document(
+                                requestHeaders(authorizationHeader),
+                                responseFields(responseDescriptors),
+                                resource(
+                                        builder().
+                                                description("아티스트 상세 조회")
+                                                .responseFields(responseDescriptors)
+                                                .build()
+                                )
+                        )
+                );
+    }
+
 }
