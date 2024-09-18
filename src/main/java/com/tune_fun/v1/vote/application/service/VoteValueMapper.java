@@ -16,6 +16,7 @@ public abstract class VoteValueMapper {
     @Mapping(target = "uuid", source = "votePaper.uuid")
     @Mapping(target = "author", source = "votePaper.author")
     @Mapping(target = "authorUsername", source = "votePaper.authorUsername")
+    @Mapping(target = "profileImageUrl", source = "votePaper.profileImageUrl")
     @Mapping(target = "title", source = "votePaper.title")
     @Mapping(target = "content", source = "votePaper.content")
     @Mapping(target = "option", source = "votePaper.option")

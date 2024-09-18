@@ -8,6 +8,7 @@ public record RegisteredVotePaper(
         Long authorId,
         String author,
         String authorUsername,
+        String profileImageUrl,
         String title,
         String content,
         VotePaperOption option,
