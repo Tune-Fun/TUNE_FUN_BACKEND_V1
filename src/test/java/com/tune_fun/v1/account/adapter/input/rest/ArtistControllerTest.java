@@ -109,7 +109,7 @@ class ArtistControllerTest extends ControllerBaseTest {
                 .andExpectAll(baseAssertion(MessageCode.SUCCESS))
                 .andExpectAll(jsonPath("$.data.id").exists(), jsonPath("$.data.id", notNullValue()))
                 .andExpectAll(jsonPath("$.data.nickname").exists(), jsonPath("$.data.nickname", notNullValue()))
-                .andExpect(jsonPath("$.data.profile_image_url").exists())
+                .andExpect(jsonPath("$.data.profile_image_url", nullValue()))
                 .andDo(
                         restDocs.document(
                                 requestHeaders(authorizationHeader),

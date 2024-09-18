@@ -35,7 +35,7 @@ public class ArtistController {
     }
 
     @GetMapping(value = Uris.ARTIST_ROOT + "/{artistId}")
-    public ResponseEntity<Response<ArtistInfo>> findArtist(@PathVariable Long artistId){
+    public ResponseEntity<Response<ArtistInfo>> findArtist(@PathVariable(name = "artistId") Long artistId){
         return responseMapper.ok(MessageCode.SUCCESS, findArtistUseCase.findArtist(artistId));
     }
 
