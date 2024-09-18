@@ -6,6 +6,7 @@ import com.tune_fun.v1.account.domain.value.CurrentAccount;
 import com.tune_fun.v1.account.domain.value.RegisteredAccount;
 import com.tune_fun.v1.account.domain.value.oauth2.RegisteredOAuth2Account;
 import com.tune_fun.v1.common.config.BaseMapperConfig;
+import com.tune_fun.v1.interaction.domain.ArtistInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -44,4 +45,6 @@ public abstract class AccountMapper {
     }
 
     public abstract RegisteredOAuth2Account registeredOAuth2AccountInfo(final OAuth2AccountJpaEntity oAuth2AccountJpaEntity);
+
+    public abstract ArtistInfo artistInfo(AccountJpaEntity accountJpaEntity);
 }

@@ -81,9 +81,7 @@ public class AccountPersistenceAdapter implements
 
     @Override
     public Optional<ArtistInfo> findArtist(Long id) {
-        Optional<AccountJpaEntity> foundArtist = accountRepository.findById(id);
-        ArtistInfo artistInfo = new ArtistInfo(id, foundArtist.get().getNickname(), foundArtist.get().getProfileImageUrl());
-        return Optional.of(artistInfo);
+        return accountRepository.findById(id).map(accountMapper::artistInfo);
     }
 
     @Override
