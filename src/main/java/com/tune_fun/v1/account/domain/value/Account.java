@@ -5,5 +5,5 @@ import java.util.Set;
 public interface Account {
     String username();
 
-    Set<String> roles();
+    Set<Role> roles();
 }

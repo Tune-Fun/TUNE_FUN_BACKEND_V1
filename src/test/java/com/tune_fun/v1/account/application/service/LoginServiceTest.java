@@ -7,6 +7,7 @@ import com.tune_fun.v1.account.application.port.output.device.SaveDevicePort;
 import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort;
 import com.tune_fun.v1.account.application.port.output.jwt.CreateRefreshTokenPort;
 import com.tune_fun.v1.account.domain.value.RegisteredAccount;
+import com.tune_fun.v1.account.domain.value.Role;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,7 +84,7 @@ class LoginServiceTest {
         // when
         Optional<RegisteredAccount> thenReturnAccount =
                 Optional.of(new RegisteredAccount(1L, "username", "password", "nickname",
-                        "email", Set.of("ROLE_NORMAL"), List.of()));
+                        "email", Set.of(Role.NORMAL), List.of()));
         when(loadAccountPort.registeredAccountInfoByUsername(command.username())).thenReturn(thenReturnAccount);
         when(passwordEncoder.matches(command.password(), "password")).thenReturn(false);
 

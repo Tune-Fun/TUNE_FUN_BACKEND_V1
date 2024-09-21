@@ -11,6 +11,7 @@ import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
 import com.tune_fun.v1.account.domain.value.Account;
 import com.tune_fun.v1.account.domain.value.CurrentAccount;
 import com.tune_fun.v1.account.domain.value.RegisteredAccount;
+import com.tune_fun.v1.account.domain.value.Role;
 import com.tune_fun.v1.account.domain.value.oauth2.*;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.exception.OAuth2AuthenticationProcessingException;
@@ -193,7 +194,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Transactional
     public CurrentAccount saveBaseAccount(final OAuth2UserPrincipal principal) {
-        SaveAccount saveAccountBehavior = new SaveAccount("NORMAL", StringUtil.uuid(), principal.userInfo().getEmail(),
+        SaveAccount saveAccountBehavior = new SaveAccount(Role.NORMAL, StringUtil.uuid(), principal.userInfo().getEmail(),
                 "social", principal.userInfo().getEmail(), principal.userInfo().getNickname(),
                 true, true, true);
         return saveAccountPort.saveAccount(saveAccountBehavior);

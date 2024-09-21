@@ -6,7 +6,7 @@ import java.util.Set;
 
 public record RegisterResult(
         String username,
-        Set<String> roles,
+        Set<Role> roles,
         String accessToken,
         String refreshToken
 ) implements BasePayload {

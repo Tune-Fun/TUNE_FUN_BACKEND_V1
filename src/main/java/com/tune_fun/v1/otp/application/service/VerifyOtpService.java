@@ -6,6 +6,7 @@ import com.tune_fun.v1.account.application.port.output.jwt.CreateAccessTokenPort
 import com.tune_fun.v1.account.application.port.output.jwt.CreateRefreshTokenPort;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.value.CurrentAccount;
+import com.tune_fun.v1.account.domain.value.Role;
 import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.stereotype.UseCase;
@@ -38,7 +39,7 @@ public class VerifyOtpService implements VerifyOtpUseCase {
 
     @NotNull
     private static SaveJwtToken getSaveJwtTokenBehavior(CurrentAccount currentAccount) {
-        String authorities = String.join(Constants.COMMA, currentAccount.roles());
+        String authorities = String.join(Constants.COMMA, Role.roleValues(currentAccount.roles()));
         return new SaveJwtToken(currentAccount.username(), authorities);
     }
 

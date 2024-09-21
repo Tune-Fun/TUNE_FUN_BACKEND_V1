@@ -10,6 +10,7 @@ import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.value.CurrentAccount;
 import com.tune_fun.v1.account.domain.value.RegisterResult;
+import com.tune_fun.v1.account.domain.value.Role;
 import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.stereotype.UseCase;
@@ -34,8 +35,8 @@ public class RegisterService implements RegisterUseCase {
     private final PasswordEncoder passwordEncoder;
 
     @NotNull
-    private static SaveAccount getSaveAccount(final String registerType, final AccountCommands.Register command, final String encodedPassword) {
-        return new SaveAccount(registerType,
+    private static SaveAccount getSaveAccount(final Role role, final AccountCommands.Register command, final String encodedPassword) {
+        return new SaveAccount(role,
                 StringUtil.uuid(), command.username(), encodedPassword,
                 command.email(), command.nickname(), command.notification().voteDeliveryNotification(),
                 command.notification().voteEndNotification(), command.notification().voteDeliveryNotification()
@@ -49,14 +50,15 @@ public class RegisterService implements RegisterUseCase {
 
     @Override
     @Transactional
-    public RegisterResult register(final String registerType, final AccountCommands.Register command) {
+    public RegisterResult register(final Role role, final AccountCommands.Register command) {
+        checkRegistrationRole(role);
         checkRegisteredAccount(command);
 
         String encodedPassword = passwordEncoder.encode(command.password());
-        SaveAccount saveAccount = getSaveAccount(registerType, command, encodedPassword);
+        SaveAccount saveAccount = getSaveAccount(role, command, encodedPassword);
         CurrentAccount savedAccount = saveAccountPort.saveAccount(saveAccount);
 
-        String authorities = String.join(Constants.COMMA, savedAccount.roles());
+        String authorities = String.join(Constants.COMMA, Role.roleValues(savedAccount.roles()));
 
         SaveJwtToken saveJwtToken = new SaveJwtToken(savedAccount.username(), authorities);
 
@@ -64,6 +66,12 @@ public class RegisterService implements RegisterUseCase {
         String refreshToken = createRefreshTokenPort.createRefreshToken(saveJwtToken);
 
         return getRegisterResult(savedAccount, accessToken, refreshToken);
+    }
+
+    private void checkRegistrationRole(Role role) {
+        if (role.isNotAllowedForRegistration()) {
+            throw CommonApplicationException.USER_POLICY_INVALID_ROLE;
+        }
     }
 
     @Transactional(readOnly = true)

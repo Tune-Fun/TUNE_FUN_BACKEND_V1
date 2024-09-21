@@ -9,7 +9,6 @@ import com.tune_fun.v1.common.stereotype.WebAdapter;
 import com.tune_fun.v1.interaction.domain.ScrollableArtist;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Window;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

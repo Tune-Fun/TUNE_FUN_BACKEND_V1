@@ -18,5 +18,5 @@ public record CurrentAccount(
         @Size(max = 255) String username,
         String nickname,
         String email,
-        Set<String> roles) implements Account {
+        Set<Role> roles) implements Account {
 }

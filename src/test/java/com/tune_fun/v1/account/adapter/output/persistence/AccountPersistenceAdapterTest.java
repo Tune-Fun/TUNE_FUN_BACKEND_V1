@@ -7,6 +7,7 @@ import com.tune_fun.v1.account.domain.behavior.SaveAccount;
 import com.tune_fun.v1.account.domain.behavior.SaveOAuth2Account;
 import com.tune_fun.v1.account.domain.value.CurrentAccount;
 import com.tune_fun.v1.account.domain.value.RegisteredAccount;
+import com.tune_fun.v1.account.domain.value.Role;
 import com.tune_fun.v1.account.domain.value.oauth2.RegisteredOAuth2Account;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -224,7 +225,7 @@ class AccountPersistenceAdapterTest {
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
-        HashSet<String> roles = new HashSet<>();
+        HashSet<Role> roles = new HashSet<>();
         when(accountMapper.registeredAccountInfo(Mockito.<AccountJpaEntity>any()))
                 .thenReturn(new RegisteredAccount(1L, "janedoe", "iloveyou", "a@a.com", "janedoe", roles, new ArrayList<>()));
 
@@ -246,7 +247,7 @@ class AccountPersistenceAdapterTest {
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
-        HashSet<String> roles = new HashSet<>();
+        HashSet<Role> roles = new HashSet<>();
         when(accountMapper.registeredAccountInfo(Mockito.<AccountJpaEntity>any()))
                 .thenReturn(new RegisteredAccount(1L, "janedoe", "iloveyou", "a@a.com", "janedoe", roles, new ArrayList<>()));
 
@@ -268,7 +269,7 @@ class AccountPersistenceAdapterTest {
         Optional<AccountJpaEntity> ofResult = Optional.of(new AccountJpaEntity());
         when(accountRepository.findActive(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any()))
                 .thenReturn(ofResult);
-        HashSet<String> roles = new HashSet<>();
+        HashSet<Role> roles = new HashSet<>();
         when(accountMapper.registeredAccountInfo(Mockito.<AccountJpaEntity>any()))
                 .thenReturn(new RegisteredAccount(1L, "janedoe", "iloveyou", "a@a.com", "janedoe", roles, new ArrayList<>()));
 
@@ -526,7 +527,7 @@ class AccountPersistenceAdapterTest {
 
         // Act
         CurrentAccount actualSaveAccountResult = accountPersistenceAdapter
-                .saveAccount(new SaveAccount("NORMAL", "01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe", "iloveyou",
+                .saveAccount(new SaveAccount(Role.NORMAL, "01234567-89AB-CDEF-FEDC-BA9876543210", "janedoe", "iloveyou",
                         "jane.doe@example.org", "Nickname", true, true, true));
 
         // Assert

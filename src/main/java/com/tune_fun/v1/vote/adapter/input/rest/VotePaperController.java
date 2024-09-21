@@ -69,8 +69,7 @@ public class VotePaperController {
         Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollUserVotedVotePaper(user.getUsername(), lastId, lastTime, count);
         return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
     }
-
-    @PreAuthorize("hasRole('ARTIST')")
+    
     @GetMapping(value = Uris.MY_VOTE_PAPER_REGISTERED)
     public ResponseEntity<Response<ScrollVotePaperResponse>> scrollUserRegisteredVotePaper(
             @RequestParam(name = "last_id", required = false) Long lastId,
@@ -78,6 +77,16 @@ public class VotePaperController {
             @RequestParam(name = "count", required = false) Integer count,
             @CurrentUser User user) {
         Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollUserRegisteredVotePaper(user.getUsername(), lastId, lastTime, count);
+        return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
+    }
+
+    @GetMapping(value = Uris.ARTIST_VOTE_PAPER_REGISTERED)
+    public ResponseEntity<Response<ScrollVotePaperResponse>> scrollArtistRegisteredVotePaper(
+            @RequestParam(name = "last_id", required = false) Long lastId,
+            @RequestParam(name = "last_time", required = false) LocalDateTime lastTime,
+            @RequestParam(name = "count", required = false) Integer count,
+            @PathVariable("username") String username) {
+        Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollUserRegisteredVotePaper(username, lastId, lastTime, count);
         return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
     }
 
