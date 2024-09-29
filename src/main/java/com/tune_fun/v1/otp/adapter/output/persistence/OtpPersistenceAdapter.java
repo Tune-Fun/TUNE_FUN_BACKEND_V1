@@ -9,6 +9,7 @@ import com.tune_fun.v1.otp.application.port.output.LoadOtpPort;
 import com.tune_fun.v1.otp.application.port.output.SaveOtpPort;
 import com.tune_fun.v1.otp.application.port.output.VerifyOtpPort;
 import com.tune_fun.v1.otp.domain.behavior.LoadOtp;
+import com.tune_fun.v1.otp.domain.behavior.OtpType;
 import com.tune_fun.v1.otp.domain.behavior.SaveOtp;
 import com.tune_fun.v1.otp.domain.behavior.VerifyOtp;
 import com.tune_fun.v1.otp.domain.value.CurrentDecryptedOtp;
@@ -24,7 +25,7 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.Objects;
 
-import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.fromLabel;
+import static com.tune_fun.v1.otp.domain.behavior.OtpType.fromLabel;
 import static java.lang.String.format;
 
 
@@ -67,8 +68,7 @@ public class OtpPersistenceAdapter implements SaveOtpPort, LoadOtpPort, VerifyOt
 
     @Override
     public void verifyOtp(final VerifyOtp verifyOtp) throws Exception {
-        OtpType otpTypeConstant = getConstant(verifyOtp.otpType());
-        String otpKey = setOtpKey(otpTypeConstant, verifyOtp.username());
+        String otpKey = setOtpKey(verifyOtp.otpType(), verifyOtp.username());
         ValueOperations<String, OtpRedisEntity> ops = redisTemplate.opsForValue();
         OtpRedisEntity otpRedisEntity = ops.get(otpKey);
 

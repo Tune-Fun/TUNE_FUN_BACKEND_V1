@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.VERIFY_EMAIL;
+import static com.tune_fun.v1.otp.domain.behavior.OtpType.VERIFY_EMAIL;
 
 @Service
 @UseCase
