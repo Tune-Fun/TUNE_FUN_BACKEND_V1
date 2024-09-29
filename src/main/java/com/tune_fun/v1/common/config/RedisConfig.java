@@ -6,6 +6,7 @@ import com.tune_fun.v1.account.adapter.output.persistence.jwt.RefreshTokenRedisE
 import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.common.util.count.AtomicCounter;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpRedisEntity;
+import com.tune_fun.v1.vote.adapter.output.persistence.VoteCountRedisEntity;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -128,5 +130,4 @@ public class RedisConfig {
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return redisTemplate;
     }
-
 }

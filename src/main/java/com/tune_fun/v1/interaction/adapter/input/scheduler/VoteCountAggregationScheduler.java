@@ -13,15 +13,15 @@ import org.springframework.stereotype.Component;
 @Component
 @NotAllowTest
 @RequiredArgsConstructor
-public class LikeCountAggregationScheduler {
+public class VoteCountAggregationScheduler {
 
     private final UpdateVotePaperStatisticsUseCase updateVotePaperStatisticsUseCase;
 
     @Scheduled(fixedDelay = 1000L * 5L)
-    public void aggregateLikeCount() {
+    public void aggregateVoteCount() {
         MDC.put("CORRELATION_ID", StringUtil.ulid());
-        log.info("Start to aggregate Vote Paper like count");
-        updateVotePaperStatisticsUseCase.updateLikeCountVotePaperStatistics();
+        log.info("Start to aggregate Vote Paper voteCount count");
+        updateVotePaperStatisticsUseCase.updateVoteCountVotePaperStatistics();
     }
 
 }

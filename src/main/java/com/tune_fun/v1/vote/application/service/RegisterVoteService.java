@@ -23,8 +23,7 @@ public class RegisterVoteService implements RegisterVoteUseCase {
         if (loadVotePort.loadVoteByVoterAndVotePaperId(user.getUsername(), votePaperId).isPresent())
             throw CommonApplicationException.VOTE_POLICY_ONE_VOTE_PER_USER;
 
+        saveVotePort.saveVoteCount(votePaperId, voteChoiceId);
         saveVotePort.saveVote(voteChoiceId, user.getUsername());
     }
-
-
 }

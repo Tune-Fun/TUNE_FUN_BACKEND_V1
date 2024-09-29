@@ -30,6 +30,18 @@ public class VotePaperStatisticsCustomRepositoryImpl implements VotePaperStatist
         entityManager.flush();
     }
 
+    @Transactional
+    @Override
+    public void updateVoteCount(Long votePaperId, Long voteCount) {
+        queryFactory.update(VOTE_PAPER_STATISTICS)
+                .set(VOTE_PAPER_STATISTICS.likeCount, voteCount)
+                .where(VOTE_PAPER_STATISTICS.votePaperId.eq(votePaperId))
+                .execute();
+
+        entityManager.clear();
+        entityManager.flush();
+    }
+
     @Override
     public Map<Long, Long> findLikeCountMap(Set<Long> votePaperIds) {
         return queryFactory.from(VOTE_PAPER_STATISTICS)

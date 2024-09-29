@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface VotePaperStatisticsRepository extends JpaRepository<VotePaperStatisticsJpaEntity, Long>, VotePaperStatisticsCustomRepository {
     Optional<VotePaperStatisticsJpaEntity> findByVotePaperId(final Long votePaperId);
+
 }

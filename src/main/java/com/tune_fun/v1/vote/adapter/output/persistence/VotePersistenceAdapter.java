@@ -9,6 +9,7 @@ import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeJpaEn
 import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeRepository;
 import com.tune_fun.v1.interaction.application.port.output.DeleteLikePort;
 import com.tune_fun.v1.interaction.application.port.output.LoadLikePort;
+import com.tune_fun.v1.interaction.application.port.output.LoadVotePaperVoteCountPort;
 import com.tune_fun.v1.interaction.application.port.output.SaveLikePort;
 import com.tune_fun.v1.vote.application.port.output.*;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.KeysetScrollPosition;
 import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Window;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.tune_fun.v1.common.constant.Constants.DOUBLE_COLON;
 import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.data.domain.ScrollPosition.forward;
@@ -55,6 +58,10 @@ public class VotePersistenceAdapter implements
     private final VotePaperMapper votePaperMapper;
     private final VoteChoiceMapper voteChoiceMapper;
 
+    private final LoadVotePaperVoteCountPort loadVotePaperVoteCountPort;
+
+    private RedisTemplate<String, Long> redisTemplate;
+
     @Override
     public List<Long> loadVoterIdsByVotePaperUuid(final String uuid) {
         return voteRepository.findVoterIdsByVotePaperUuid(uuid);
@@ -80,6 +87,11 @@ public class VotePersistenceAdapter implements
                 .build();
 
         voteRepository.save(vote);
+    }
+
+    @Override
+    public void saveVoteCount(Long votePaperId, Long voteChoiceId) {
+        redisTemplate.opsForHash().increment(loadVotePaperVoteCountPort.getKey(votePaperId), voteChoiceId, 1);
     }
 
     /**
@@ -222,6 +234,11 @@ public class VotePersistenceAdapter implements
     @Override
     public void updateLikeCount(final Long votePaperId, final Long likeCount) {
         votePaperStatisticsRepository.updateLikeCount(votePaperId, likeCount);
+    }
+
+    @Override
+    public void updateVoteCount(final Long votePaperId, final Long voteCount) {
+        votePaperStatisticsRepository.updateVoteCount(votePaperId, voteCount);
     }
 
     @Override
