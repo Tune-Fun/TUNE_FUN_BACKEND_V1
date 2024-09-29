@@ -25,6 +25,8 @@ public class Uris {
     public static final String DEFAULT_LOGIN_PAGE = "/login";
     public static final String CHECK_USERNAME_DUPLICATE = API_V1_ROOT + "/check-username-duplicate";
     public static final String CHECK_EMAIL_DUPLICATE = API_V1_ROOT + "/check-email-duplicate";
+
+    public static final String CHECK_PASSWORD_MATCH = API_V1_ROOT + "/check-password-match";
     public static final String FIND_USERNAME = API_V1_ROOT + "/find-username";
     public static final String REGISTER = API_V1_ROOT + "/register";
     public static final String LOGIN = API_V1_ROOT + "/login";
