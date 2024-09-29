@@ -23,6 +23,7 @@ public abstract class VotePaperMapper {
     @Mapping(target = "authorId", source = "author.id")
     @Mapping(target = "author", source = "author.nickname")
     @Mapping(target = "authorUsername", source = "author.username")
+    @Mapping(target = "profileImageUrl", source = "author.profileImageUrl")
     public abstract RegisteredVotePaper registeredVotePaper(final VotePaperJpaEntity votePaperJpaEntity);
 
     @Mapping(target = "authorUsername", source = "votePaperJpaEntity.author.username")

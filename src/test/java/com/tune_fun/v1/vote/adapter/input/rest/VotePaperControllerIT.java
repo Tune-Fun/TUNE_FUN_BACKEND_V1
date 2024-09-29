@@ -188,7 +188,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 fieldWithPath("data.id").description("투표 게시물 ID").attributes(constraint("NOT NULL")),
                 fieldWithPath("data.uuid").description("투표 게시물 UUID").attributes(constraint("NOT NULL")),
                 fieldWithPath("data.author").description("투표 게시물 작성자 닉네임").attributes(constraint("NOT NULL")),
-                fieldWithPath("data.author_username").description("투표 게시물 작성자 아이디").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.author_username").description("투표 게시물 작성자 아이디"),
+                fieldWithPath("data.profile_image_url").description("투표 게시물 작성자 프로필").attributes(constraint("NOT NULL")),
                 fieldWithPath("data.title").description("투표 게시물 제목").attributes(constraint("NOT NULL")),
                 fieldWithPath("data.content").description("투표 게시물 내용").attributes(constraint("NOT NULL")),
                 fieldWithPath("data.option").description("투표 종류").attributes(constraint("NOT NULL, allow-add-choices || deny-add-choices")),
@@ -217,6 +218,7 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 .andExpect(jsonPath("data.uuid", notNullValue()))
                 .andExpect(jsonPath("data.author", notNullValue()))
                 .andExpect(jsonPath("data.author_username", notNullValue()))
+                .andExpect(jsonPath("data.profile_image_url", nullValue()))
                 .andExpect(jsonPath("data.title", notNullValue()))
                 .andExpect(jsonPath("data.content", notNullValue()))
                 .andExpect(jsonPath("data.option", notNullValue()))

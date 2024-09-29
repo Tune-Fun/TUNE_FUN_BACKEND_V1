@@ -11,6 +11,7 @@ public record FullVotePaper(
         String uuid,
         String author,
         String authorUsername,
+        String profileImageUrl,
         String title,
         String content,
         VotePaperOption option,

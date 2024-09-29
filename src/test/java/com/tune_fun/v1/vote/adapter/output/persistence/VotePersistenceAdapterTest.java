@@ -253,7 +253,7 @@ class VotePersistenceAdapterTest {
         when(votePaperRepository.findByVoteEndAtAfterAndIdAndEnabledTrue(Mockito.any(), Mockito.<Long>any()))
                 .thenReturn(ofResult);
         when(votePaperMapper.registeredVotePaper(Mockito.any()))
-                .thenReturn(new RegisteredVotePaper(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", 1L, "JaneDoe", "janedoe", "Dr",
+                .thenReturn(new RegisteredVotePaper(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", 1L, "JaneDoe", "janedoe", "","Dr",
                         "Not all who wander are lost", VotePaperOption.ALLOW_ADD_CHOICES, "https://example.org/example",
                         Constants.LOCAL_DATE_TIME_MIN, Constants.LOCAL_DATE_TIME_MIN, Constants.LOCAL_DATE_TIME_MIN,
                         Constants.LOCAL_DATE_TIME_MIN, Constants.LOCAL_DATE_TIME_MIN));
@@ -281,7 +281,7 @@ class VotePersistenceAdapterTest {
         when(votePaperRepository.findByVoteEndAtAfterAndAuthorUsernameAndEnabledTrue(Mockito.any(),
                 Mockito.any())).thenReturn(ofResult);
         when(votePaperMapper.registeredVotePaper(Mockito.any()))
-                .thenReturn(new RegisteredVotePaper(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", 1L, "JaneDoe", "janedoe", "Dr",
+                .thenReturn(new RegisteredVotePaper(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", 1L, "JaneDoe", "janedoe", "", "Dr",
                         "Not all who wander are lost", VotePaperOption.ALLOW_ADD_CHOICES, "https://example.org/example",
                         Constants.LOCAL_DATE_TIME_MIN, Constants.LOCAL_DATE_TIME_MIN, Constants.LOCAL_DATE_TIME_MIN,
                         Constants.LOCAL_DATE_TIME_MIN, Constants.LOCAL_DATE_TIME_MIN));
@@ -312,7 +312,7 @@ class VotePersistenceAdapterTest {
         when(votePaperMapper.fromSaveVotePaperBehavior(Mockito.any(), Mockito.any()))
                 .thenReturn(new VotePaperJpaEntity());
         when(votePaperMapper.registeredVotePaper(Mockito.any()))
-                .thenReturn(new RegisteredVotePaper(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", 1L, "JaneDoe", "janedoe", "Dr",
+                .thenReturn(new RegisteredVotePaper(1L, "01234567-89AB-CDEF-FEDC-BA9876543210", 1L, "JaneDoe", "janedoe", "", "Dr",
                         "Not all who wander are lost", VotePaperOption.ALLOW_ADD_CHOICES, "https://example.org/example",
                         Constants.LOCAL_DATE_TIME_MIN, Constants.LOCAL_DATE_TIME_MIN, Constants.LOCAL_DATE_TIME_MIN,
                         Constants.LOCAL_DATE_TIME_MIN, Constants.LOCAL_DATE_TIME_MIN));
