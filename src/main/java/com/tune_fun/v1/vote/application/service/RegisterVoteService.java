@@ -17,13 +17,14 @@ public class RegisterVoteService implements RegisterVoteUseCase {
 
     private final LoadVotePort loadVotePort;
     private final SaveVotePort saveVotePort;
+    private final SaveVotePaperVoteCountPort saveVotePaperVoteCountPort;
 
     @Override
     public void register(final Long votePaperId, final Long voteChoiceId, final User user) {
         if (loadVotePort.loadVoteByVoterAndVotePaperId(user.getUsername(), votePaperId).isPresent())
             throw CommonApplicationException.VOTE_POLICY_ONE_VOTE_PER_USER;
 
-        saveVotePort.saveVoteCount(votePaperId, voteChoiceId);
+        saveVotePaperVoteCountPort.incrementVotePaperVoteCount(votePaperId, voteChoiceId);
         saveVotePort.saveVote(voteChoiceId, user.getUsername());
     }
 }

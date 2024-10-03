@@ -58,8 +58,6 @@ public class VotePersistenceAdapter implements
     private final VotePaperMapper votePaperMapper;
     private final VoteChoiceMapper voteChoiceMapper;
 
-    private final LoadVotePaperVoteCountPort loadVotePaperVoteCountPort;
-
     private RedisTemplate<String, Long> redisTemplate;
 
     @Override
@@ -87,11 +85,6 @@ public class VotePersistenceAdapter implements
                 .build();
 
         voteRepository.save(vote);
-    }
-
-    @Override
-    public void saveVoteCount(Long votePaperId, Long voteChoiceId) {
-        redisTemplate.opsForHash().increment(loadVotePaperVoteCountPort.getKey(votePaperId), voteChoiceId, 1);
     }
 
     /**
