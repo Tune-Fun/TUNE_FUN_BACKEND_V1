@@ -1,4 +1,4 @@
-package com.tune_fun.v1.account.adapter.output.persistence;
+package com.tune_fun.v1.account.domain.value;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,4 +22,7 @@ public enum Role implements GrantedAuthority {
         return roles.stream().map(Role::name).collect(toSet());
     }
 
+    public boolean isNotAllowedForRegistration() {
+        return !(this == Role.NORMAL || this == Role.ARTIST);
+    }
 }

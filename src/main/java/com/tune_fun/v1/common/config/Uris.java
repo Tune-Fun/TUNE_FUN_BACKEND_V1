@@ -57,6 +57,11 @@ public class Uris {
     public static final String EMAIL_ROOT = ACCOUNT_ROOT + "/email";
     public static final String VERIFY_EMAIL = EMAIL_ROOT + "/verify";
 
+    public static final String MY_VOTE_PAPER_LIKED = ACCOUNT_ROOT + "/my/votes/paper/liked";
+    public static final String MY_VOTE_PAPER_VOTED = ACCOUNT_ROOT + "/my/votes/paper/voted";
+    public static final String MY_VOTE_PAPER_REGISTERED = ACCOUNT_ROOT + "/my/votes/paper/registered";
+    public static final String ARTIST_VOTE_PAPER_REGISTERED = ARTIST_ROOT + "/{username}/votes/paper/registered";
+
     public static final String VERIFY_OTP = API_V1_ROOT + "/otp/verify";
     public static final String VERIFY_OTP_WITH_AUTHORIZATION = API_V1_ROOT + "/otp/verify-with-authorization";
     public static final String RESEND_OTP = API_V1_ROOT + "/otp/resend";

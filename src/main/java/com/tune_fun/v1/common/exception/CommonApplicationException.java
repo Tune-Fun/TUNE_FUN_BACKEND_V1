@@ -35,6 +35,7 @@ public class CommonApplicationException extends RuntimeException implements Supp
     public static final CommonApplicationException USER_POLICY_CANNOT_UNLINK_UNIQUE_PROVIDER = new CommonApplicationException(MessageCode.USER_POLICY_CANNOT_UNLINK_UNIQUE_PROVIDER);
     public static final CommonApplicationException USER_POLICY_ALREADY_LINKED_PROVIDER = new CommonApplicationException(MessageCode.USER_POLICY_ALREADY_LINKED_PROVIDER);
     public static final CommonApplicationException USER_POLICY_CANNOT_REGISTER_EMAIL_TWICE = new CommonApplicationException(MessageCode.USER_POLICY_CANNOT_REGISTER_EMAIL_TWICE);
+    public static final CommonApplicationException USER_POLICY_INVALID_ROLE = new CommonApplicationException(MessageCode.USER_POLICY_INVALID_ROLE);
 
     public static final CommonApplicationException EXCEPTION_AUTHENTICATION_LOGIN_FAIL = new CommonApplicationException(MessageCode.EXCEPTION_AUTHENTICATION_LOGIN_FAIL);
     public static final CommonApplicationException EXCEPTION_AUTHENTICATION_INVALID_TOKEN = new CommonApplicationException(MessageCode.EXCEPTION_AUTHENTICATION_INVALID_TOKEN);

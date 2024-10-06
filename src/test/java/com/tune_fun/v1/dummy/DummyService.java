@@ -12,6 +12,7 @@ import com.tune_fun.v1.account.application.port.input.usecase.email.RegisterEmai
 import com.tune_fun.v1.account.application.port.input.usecase.jwt.GenerateAccessTokenUseCase;
 import com.tune_fun.v1.account.application.port.input.usecase.jwt.GenerateRefreshTokenUseCase;
 import com.tune_fun.v1.account.domain.behavior.SaveDevice;
+import com.tune_fun.v1.account.domain.value.Role;
 import com.tune_fun.v1.base.annotation.IntegrationTest;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.interaction.adapter.output.persistence.LikeCountPersistenceAdapter;
@@ -165,7 +166,7 @@ public class DummyService {
         AccountCommands.Notification notification = new AccountCommands.Notification(true, true, true);
         AccountCommands.Register command = new AccountCommands.Register(defaultUsername, defaultPassword, defaultEmail, nickname, notification);
 
-        registerUseCase.register("NORMAL", command);
+        registerUseCase.register(Role.NORMAL, command);
 
         defaultAccount = accountPersistenceAdapter.loadAccountByUsername(defaultUsername)
                 .orElseThrow(() -> new RuntimeException("initUser 실패"));
@@ -181,7 +182,7 @@ public class DummyService {
         AccountCommands.Notification notification = new AccountCommands.Notification(true, true, true);
         AccountCommands.Register command = new AccountCommands.Register(defaultSecondUsername, defaultSecondPassword, defaultSecondEmail, nickname, notification);
 
-        registerUseCase.register("NORMAL", command);
+        registerUseCase.register(Role.NORMAL, command);
 
         defaultSecondAccount = accountPersistenceAdapter.loadAccountByUsername(defaultSecondUsername)
                 .orElseThrow(() -> new RuntimeException("initUser 실패"));
@@ -197,7 +198,7 @@ public class DummyService {
         AccountCommands.Notification notification = new AccountCommands.Notification(true, true, true);
         AccountCommands.Register command = new AccountCommands.Register(defaultArtistUsername, defaultArtistPassword, defaultArtistEmail, nickname, notification);
 
-        registerUseCase.register("ARTIST", command);
+        registerUseCase.register(Role.ARTIST, command);
 
         defaultArtistAccount = accountPersistenceAdapter.loadAccountByUsername(defaultArtistUsername)
                 .orElseThrow(() -> new RuntimeException("initUser 실패"));

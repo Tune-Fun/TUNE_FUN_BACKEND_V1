@@ -2,6 +2,7 @@ package com.tune_fun.v1.account.adapter.output.persistence;
 
 import com.tune_fun.v1.account.adapter.output.persistence.device.DeviceJpaEntity;
 import com.tune_fun.v1.account.adapter.output.persistence.oauth2.OAuth2AccountJpaEntity;
+import com.tune_fun.v1.account.domain.value.Role;
 import com.tune_fun.v1.common.entity.BaseEntity;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;

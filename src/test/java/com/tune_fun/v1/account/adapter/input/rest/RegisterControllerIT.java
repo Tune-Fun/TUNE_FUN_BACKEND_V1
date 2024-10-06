@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
-import static com.tune_fun.v1.account.adapter.output.persistence.Role.NORMAL;
+import static com.tune_fun.v1.account.domain.value.Role.NORMAL;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,7 +76,7 @@ class RegisterControllerIT extends ControllerBaseTest {
                         () -> assertEquals(username, accountInfo.username()),
                         () -> assertTrue(passwordEncoder.matches(password, accountInfo.password())),
                         () -> assertEquals(1, accountInfo.roles().size()),
-                        () -> assertEquals(NORMAL.name(), accountInfo.roles().stream().toList().getFirst())
+                        () -> assertEquals(NORMAL, accountInfo.roles().stream().toList().getFirst())
                 ),
                 () -> fail("회원가입 실패")
         );

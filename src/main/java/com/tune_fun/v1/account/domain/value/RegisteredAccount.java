@@ -11,7 +11,7 @@ public record RegisteredAccount(
         String password,
         String email,
         String nickname,
-        Set<String> roles,
+        Set<Role> roles,
         List<RegisteredOAuth2Account> oauth2Accounts
 ) implements Account {
 
@@ -21,4 +21,7 @@ public record RegisteredAccount(
                 .count() == 1;
     }
 
+    public boolean hasArtistRole() {
+        return roles.contains(Role.ARTIST);
+    }
 }

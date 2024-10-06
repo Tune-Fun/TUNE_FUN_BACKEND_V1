@@ -21,6 +21,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @WebAdapter
 @RequiredArgsConstructor
 public class VotePaperController {
@@ -41,10 +43,50 @@ public class VotePaperController {
 
     @GetMapping(value = Uris.VOTE_PAPER_ROOT)
     public ResponseEntity<Response<ScrollVotePaperResponse>> scrollVotePaper(@RequestParam(name = "last_id") Integer lastId,
-                                                                           @RequestParam(name = "sort_type", required = false, defaultValue = "RECENT") SortType sortType,
-                                                                           @RequestParam(name = "nickname", required = false) String nickname,
-                                                                           @CurrentUser User user) {
+                                                                             @RequestParam(name = "sort_type", required = false, defaultValue = "RECENT") SortType sortType,
+                                                                             @RequestParam(name = "nickname", required = false) String nickname,
+                                                                             @CurrentUser User user) {
         Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollVotePaper(lastId, sortType.name(), nickname);
+        return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
+    }
+
+    @GetMapping(value = Uris.MY_VOTE_PAPER_LIKED)
+    public ResponseEntity<Response<ScrollVotePaperResponse>> scrollUserLikedVotePaper(
+            @RequestParam(name = "last_id", required = false) Long lastId,
+            @RequestParam(name = "last_time", required = false) LocalDateTime lastTime,
+            @RequestParam(name = "count", required = false) Integer count,
+            @CurrentUser User user) {
+        Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollUserLikedVotePaper(user.getUsername(), lastId, lastTime, count);
+        return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
+    }
+
+    @GetMapping(value = Uris.MY_VOTE_PAPER_VOTED)
+    public ResponseEntity<Response<ScrollVotePaperResponse>> scrollUserParticipatedVotePaper(
+            @RequestParam(name = "last_id", required = false) Long lastId,
+            @RequestParam(name = "last_time", required = false) LocalDateTime lastTime,
+            @RequestParam(name = "count", required = false) Integer count,
+            @CurrentUser User user) {
+        Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollUserVotedVotePaper(user.getUsername(), lastId, lastTime, count);
+        return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
+    }
+    
+    @GetMapping(value = Uris.MY_VOTE_PAPER_REGISTERED)
+    public ResponseEntity<Response<ScrollVotePaperResponse>> scrollUserRegisteredVotePaper(
+            @RequestParam(name = "last_id", required = false) Long lastId,
+            @RequestParam(name = "last_time", required = false) LocalDateTime lastTime,
+            @RequestParam(name = "count", required = false) Integer count,
+            @CurrentUser User user) {
+        Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollUserRegisteredVotePaper(user.getUsername(), lastId, lastTime, count);
+        return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
+    }
+
+    @GetMapping(value = Uris.ARTIST_VOTE_PAPER_REGISTERED)
+    public ResponseEntity<Response<ScrollVotePaperResponse>> scrollArtistRegisteredVotePaper(
+            @RequestParam(name = "last_id", required = false) Long lastId,
+            @RequestParam(name = "last_time", required = false) LocalDateTime lastTime,
+            @RequestParam(name = "count", required = false) Integer count,
+            @PathVariable("username") String username) {
+        Window<ScrollableVotePaper> scrollableVotePapers = scrollVotePaperUseCase.scrollUserRegisteredVotePaper(username, lastId, lastTime, count);
         return responseMapper.ok(MessageCode.SUCCESS, new ScrollVotePaperResponse(scrollableVotePapers));
     }
 

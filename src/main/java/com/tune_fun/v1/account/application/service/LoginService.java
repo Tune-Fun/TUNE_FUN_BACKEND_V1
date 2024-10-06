@@ -11,6 +11,7 @@ import com.tune_fun.v1.account.domain.behavior.SaveDevice;
 import com.tune_fun.v1.account.domain.behavior.SaveJwtToken;
 import com.tune_fun.v1.account.domain.value.LoginResult;
 import com.tune_fun.v1.account.domain.value.RegisteredAccount;
+import com.tune_fun.v1.account.domain.value.Role;
 import com.tune_fun.v1.common.constant.Constants;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import com.tune_fun.v1.common.stereotype.UseCase;
@@ -54,7 +55,7 @@ public class LoginService implements LoginUseCase {
         if (!passwordEncoder.matches(command.password(), registeredAccount.password()))
             throw CommonApplicationException.ACCOUNT_NOT_FOUND;
 
-        String authorities = String.join(Constants.COMMA, registeredAccount.roles());
+        String authorities = String.join(Constants.COMMA, Role.roleValues(registeredAccount.roles()));
 
         SaveJwtToken saveJwtTokenBehavior = getSaveJwtToken(registeredAccount, authorities);
 

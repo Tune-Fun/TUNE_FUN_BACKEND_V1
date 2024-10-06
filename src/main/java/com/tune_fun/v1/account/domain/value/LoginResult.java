@@ -9,7 +9,7 @@ public record LoginResult(
         String username,
         String nickname,
         String email,
-        Set<String> roles,
+        Set<Role> roles,
         String accessToken,
         String refreshToken
 ) implements BasePayload {
