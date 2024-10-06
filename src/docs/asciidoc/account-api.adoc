@@ -35,6 +35,12 @@ operation::check-email-duplicate-failed[snippets='http-request,http-response,que
 
 operation::check-username-duplicate-success[snippets='http-request,http-response,query-parameters,response-fields']
 
+=== 비밀번호 일치 확인 API
+
+==== 성공
+
+operation::check-username-duplicate-success[snippets='http-request,http-response,query-parameters,response-fields']
+
 ==== 실패
 
 operation::check-username-duplicate-success-failed[snippets='http-request,http-response']

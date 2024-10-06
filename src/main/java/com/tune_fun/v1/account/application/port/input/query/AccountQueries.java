@@ -14,4 +14,9 @@ public class AccountQueries {
 
     }
 
+    public record Password(
+            @NotBlank(message = "{password.not_blank}")
+            String password
+    ) {
+    }
 }
