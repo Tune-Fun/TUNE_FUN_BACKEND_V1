@@ -47,7 +47,7 @@ public class CommonApplicationException extends RuntimeException implements Supp
     public static final CommonApplicationException EXCEPTION_OTP_NOT_FOUND = new CommonApplicationException(MessageCode.EXCEPTION_OTP_NOT_FOUND);
     public static final CommonApplicationException EXCEPTION_OTP_EXPIRED = new CommonApplicationException(MessageCode.EXCEPTION_OTP_EXPIRED);
     public static final CommonApplicationException EXCEPTION_OTP_NOT_MATCH = new CommonApplicationException(MessageCode.EXCEPTION_OTP_NOT_MATCH);
-    public static final CommonApplicationException EXCEPTION_OTP_TYPE_NOT_FOUND = new CommonApplicationException(MessageCode.SUCCESS_OTP_VERIFIED);
+    public static final CommonApplicationException EXCEPTION_OTP_TYPE_NOT_FOUND = new CommonApplicationException(MessageCode.EXCEPTION_OTP_TYPE_NOT_FOUND);
 
     public static final CommonApplicationException VOTE_POLICY_ONE_VOTE_PAPER_PER_USER = new CommonApplicationException(MessageCode.VOTE_POLICY_ONE_VOTE_PAPER_PER_USER);
     public static final CommonApplicationException VOTE_POLICY_ONLY_AUTHOR_CAN_UPDATE_DELIVERY_DATE = new CommonApplicationException(MessageCode.VOTE_POLICY_ONLY_AUTHOR_CAN_UPDATE_DELIVERY_DATE);
