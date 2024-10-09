@@ -5,11 +5,9 @@ import com.tune_fun.v1.common.stereotype.UseCase;
 import com.tune_fun.v1.vote.application.port.input.usecase.GetVotePaperUseCase;
 import com.tune_fun.v1.vote.application.port.output.LoadVoteChoicePort;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePaperPort;
+import com.tune_fun.v1.vote.application.port.output.LoadVotePaperStatisticsPort;
 import com.tune_fun.v1.vote.application.port.output.LoadVotePort;
-import com.tune_fun.v1.vote.domain.value.FullVotePaper;
-import com.tune_fun.v1.vote.domain.value.RegisteredVote;
-import com.tune_fun.v1.vote.domain.value.RegisteredVoteChoice;
-import com.tune_fun.v1.vote.domain.value.RegisteredVotePaper;
+import com.tune_fun.v1.vote.domain.value.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -25,6 +23,7 @@ public class GetVotePaperService implements GetVotePaperUseCase {
     private final LoadVotePaperPort loadVotePaperPort;
     private final LoadVoteChoicePort loadVoteChoicePort;
     private final LoadVotePort loadVotePort;
+    private final LoadVotePaperStatisticsPort loadVotePaperStatisticsPort;
 
     private final VoteValueMapper voteValueMapper;
 
@@ -34,7 +33,8 @@ public class GetVotePaperService implements GetVotePaperUseCase {
                 .orElseThrow(CommonApplicationException.VOTE_PAPER_NOT_FOUND);
         List<RegisteredVoteChoice> registeredVoteChoices = loadVoteChoicePort.loadRegisteredVoteChoice(votePaperId);
         Optional<RegisteredVote> registeredVote = loadVotePort.loadVoteByVoterAndVotePaperId(user.getUsername(), votePaperId);
+        VotePaperStatistics votePaperStatistics = new VotePaperStatistics(votePaperId, loadVotePaperStatisticsPort.getVoteCount(votePaperId), loadVotePaperStatisticsPort.getLikeCount(votePaperId));
 
-        return voteValueMapper.fullVotePaper(registeredVotePaper, registeredVoteChoices, registeredVote.isPresent());
+        return voteValueMapper.fullVotePaper(registeredVotePaper, registeredVoteChoices, registeredVote.isPresent(), votePaperStatistics);
     }
 }

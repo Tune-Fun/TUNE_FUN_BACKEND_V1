@@ -128,7 +128,6 @@ public class VotePersistenceAdapter implements
         return findProgressingVotePaperById(votePaperId).map(votePaperMapper::registeredVotePaper);
     }
 
-
     @Override
     public RegisteredVotePaper saveVotePaper(final SaveVotePaper saveVotePaper) {
         AccountJpaEntity account = accountPersistenceAdapter.loadAccountByUsername(saveVotePaper.author())
@@ -239,6 +238,13 @@ public class VotePersistenceAdapter implements
         VotePaperStatisticsJpaEntity stat = votePaperStatisticsRepository.findByVotePaperId(votePaperId)
                 .orElseThrow(() -> new IllegalArgumentException("VotePaperStatistics not found"));
         return stat.getLikeCount();
+    }
+
+    @Override
+    public Long getVoteCount(Long votePaperId) {
+        VotePaperStatisticsJpaEntity stat = votePaperStatisticsRepository.findByVotePaperId(votePaperId)
+                .orElseThrow(() -> new IllegalArgumentException("VotePaperStatistics not found"));
+        return stat.getVoteCount();
     }
 
     public Optional<VotePaperJpaEntity> findOneAvailable(final Long votePaperId, final String username) {

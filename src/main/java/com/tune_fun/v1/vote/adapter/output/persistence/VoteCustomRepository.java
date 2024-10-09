@@ -1,6 +1,7 @@
 package com.tune_fun.v1.vote.adapter.output.persistence;
 
 import com.tune_fun.v1.vote.domain.value.RegisteredVote;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Map;
