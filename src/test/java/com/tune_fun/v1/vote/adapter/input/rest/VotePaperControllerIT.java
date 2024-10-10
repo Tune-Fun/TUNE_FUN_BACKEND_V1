@@ -192,6 +192,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 fieldWithPath("data.profile_image_url").description("투표 게시물 작성자 프로필").attributes(constraint("NOT NULL")),
                 fieldWithPath("data.title").description("투표 게시물 제목").attributes(constraint("NOT NULL")),
                 fieldWithPath("data.content").description("투표 게시물 내용").attributes(constraint("NOT NULL")),
+                fieldWithPath("data.total_vote_count").description("투표 수"),
+                fieldWithPath("data.total_like_count").description("좋아요 수"),
                 fieldWithPath("data.option").description("투표 종류").attributes(constraint("NOT NULL, allow-add-choices || deny-add-choices")),
                 fieldWithPath("data.video_url").description("투표 게시물 영상 URL").attributes(constraint("NULL or NOT NULL")),
                 fieldWithPath("data.is_voted").description("투표 여부").attributes(constraint("NOT NULL")),
@@ -221,6 +223,8 @@ class VotePaperControllerIT extends ControllerBaseTest {
                 .andExpect(jsonPath("data.profile_image_url", nullValue()))
                 .andExpect(jsonPath("data.title", notNullValue()))
                 .andExpect(jsonPath("data.content", notNullValue()))
+                .andExpect(jsonPath("data.total_vote_count").value(0))
+                .andExpect(jsonPath("data.total_like_count").value(0))
                 .andExpect(jsonPath("data.option", notNullValue()))
                 .andExpect(jsonPath("data.video_url", nullValue()))
                 .andExpectAll(jsonPath("data.is_voted", notNullValue()), jsonPath("data.is_voted", is(true)))

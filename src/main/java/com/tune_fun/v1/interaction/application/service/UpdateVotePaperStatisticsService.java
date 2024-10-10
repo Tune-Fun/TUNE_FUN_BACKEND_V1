@@ -49,7 +49,7 @@ public class UpdateVotePaperStatisticsService implements UpdateVotePaperStatisti
             Long votePaperId = loadVotePaperVoteCountPort.getVotePaperId(key);
 
             long totalVotes = voteData.values().stream()
-                    .mapToLong(value -> (Long) value)
+                    .mapToLong(value -> ((Integer) value).longValue())
                     .sum();
 
             saveVotePaperStatPort.updateVoteCount(votePaperId, totalVotes);

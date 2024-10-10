@@ -34,7 +34,7 @@ public class VotePaperStatisticsCustomRepositoryImpl implements VotePaperStatist
     @Override
     public void updateVoteCount(Long votePaperId, Long voteCount) {
         queryFactory.update(VOTE_PAPER_STATISTICS)
-                .set(VOTE_PAPER_STATISTICS.likeCount, voteCount)
+                .set(VOTE_PAPER_STATISTICS.voteCount, voteCount)
                 .where(VOTE_PAPER_STATISTICS.votePaperId.eq(votePaperId))
                 .execute();
 

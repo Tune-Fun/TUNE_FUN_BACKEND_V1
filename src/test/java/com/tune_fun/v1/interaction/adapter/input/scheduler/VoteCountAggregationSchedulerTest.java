@@ -5,24 +5,27 @@ import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.dummy.DummyService;
 import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVoteUseCase;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.request.ParameterDescriptor;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.security.web.http.SecurityHeaders.bearerToken;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@SpringBootTest
 class VoteCountAggregationSchedulerTest extends ControllerBaseTest {
 
     @Autowired
@@ -31,7 +34,11 @@ class VoteCountAggregationSchedulerTest extends ControllerBaseTest {
     @Autowired
     RegisterVoteUseCase registerVoteUseCase;
 
+    @Autowired
+    VoteCountAggregationScheduler voteCountAggregationScheduler;
+
     @Test
+    @DisplayName("투표수 스케줄러 작동 성공")
     public void VoteCountSchedulerTest() throws Exception{
         //given
         dummyService.initArtistAndLogin();
@@ -69,8 +76,17 @@ class VoteCountAggregationSchedulerTest extends ControllerBaseTest {
                         )
                 );
 
-        //then
+        voteCountAggregationScheduler.aggregateVoteCount();
 
+        //then
+        mockMvc.perform(
+                        get(Uris.VOTE_PAPER_ROOT + "/{votePaperId}", votePaperId)
+                                .header(AUTHORIZATION, bearerToken(accessToken))
+                                .contentType(APPLICATION_JSON_VALUE)
+                )
+                .andExpectAll(baseAssertion(MessageCode.SUCCESS))
+                .andExpect(jsonPath("data.total_vote_count").value(1))
+                .andExpect(jsonPath("data.total_like_count").value(0));
 
     }
 

@@ -58,8 +58,6 @@ public class VotePersistenceAdapter implements
     private final VotePaperMapper votePaperMapper;
     private final VoteChoiceMapper voteChoiceMapper;
 
-    private RedisTemplate<String, Long> redisTemplate;
-
     @Override
     public List<Long> loadVoterIdsByVotePaperUuid(final String uuid) {
         return voteRepository.findVoterIdsByVotePaperUuid(uuid);

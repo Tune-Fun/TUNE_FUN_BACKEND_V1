@@ -33,7 +33,7 @@ public class GetVotePaperService implements GetVotePaperUseCase {
                 .orElseThrow(CommonApplicationException.VOTE_PAPER_NOT_FOUND);
         List<RegisteredVoteChoice> registeredVoteChoices = loadVoteChoicePort.loadRegisteredVoteChoice(votePaperId);
         Optional<RegisteredVote> registeredVote = loadVotePort.loadVoteByVoterAndVotePaperId(user.getUsername(), votePaperId);
-        VotePaperStatistics votePaperStatistics = new VotePaperStatistics(votePaperId, loadVotePaperStatisticsPort.getVoteCount(votePaperId), loadVotePaperStatisticsPort.getLikeCount(votePaperId));
+        VotePaperStatistics votePaperStatistics = new VotePaperStatistics(votePaperId,  loadVotePaperStatisticsPort.getVoteCount(votePaperId), loadVotePaperStatisticsPort.getLikeCount(votePaperId) );
 
         return voteValueMapper.fullVotePaper(registeredVotePaper, registeredVoteChoices, registeredVote.isPresent(), votePaperStatistics);
     }

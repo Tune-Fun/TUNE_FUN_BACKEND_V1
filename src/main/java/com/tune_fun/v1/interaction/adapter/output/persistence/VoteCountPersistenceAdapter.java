@@ -23,7 +23,7 @@ public class VoteCountPersistenceAdapter implements LoadVotePaperVoteCountPort, 
 
     @Override
     public void incrementVotePaperVoteCount(Long votePaperId, Long voteChoiceId) {
-        redisTemplate.opsForHash().increment(getKey(votePaperId), voteChoiceId, 1);
+        redisTemplate.opsForHash().increment(getKey(votePaperId), voteChoiceId.toString(), 1);
     }
 
     @Override
