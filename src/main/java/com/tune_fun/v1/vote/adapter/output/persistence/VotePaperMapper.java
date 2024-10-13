@@ -29,7 +29,7 @@ public abstract class VotePaperMapper {
     @Mapping(target = "authorUsername", source = "votePaperJpaEntity.author.username")
     @Mapping(target = "authorNickname", source = "votePaperJpaEntity.author.nickname")
     @Mapping(target = "remainDays", source = "votePaperJpaEntity", qualifiedByName = "remainDays")
-    @Mapping(target = "totalVoteCount", constant = "0")
+    @Mapping(target = "totalVoteCount", constant = "0L")
     @Mapping(target = "totalLikeCount", source = "likeCount")
     public abstract ScrollableVotePaper scrollableVotePaper(final VotePaperJpaEntity votePaperJpaEntity, final Long likeCount);
 

@@ -9,6 +9,7 @@ import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeJpaEn
 import com.tune_fun.v1.interaction.adapter.output.persistence.VotePaperLikeRepository;
 import com.tune_fun.v1.interaction.application.port.output.DeleteLikePort;
 import com.tune_fun.v1.interaction.application.port.output.LoadLikePort;
+import com.tune_fun.v1.interaction.application.port.output.LoadVotePaperVoteCountPort;
 import com.tune_fun.v1.interaction.application.port.output.SaveLikePort;
 import com.tune_fun.v1.vote.application.port.output.*;
 import com.tune_fun.v1.vote.domain.behavior.SaveVoteChoice;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.KeysetScrollPosition;
 import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Window;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.tune_fun.v1.common.constant.Constants.DOUBLE_COLON;
 import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.data.domain.ScrollPosition.forward;
@@ -122,7 +125,6 @@ public class VotePersistenceAdapter implements
     public Optional<RegisteredVotePaper> loadRegisteredVotePaper(final Long votePaperId) {
         return findProgressingVotePaperById(votePaperId).map(votePaperMapper::registeredVotePaper);
     }
-
 
     @Override
     public RegisteredVotePaper saveVotePaper(final SaveVotePaper saveVotePaper) {
@@ -225,10 +227,22 @@ public class VotePersistenceAdapter implements
     }
 
     @Override
+    public void updateVoteCount(final Long votePaperId, final Long voteCount) {
+        votePaperStatisticsRepository.updateVoteCount(votePaperId, voteCount);
+    }
+
+    @Override
     public Long getLikeCount(final Long votePaperId) {
         VotePaperStatisticsJpaEntity stat = votePaperStatisticsRepository.findByVotePaperId(votePaperId)
                 .orElseThrow(() -> new IllegalArgumentException("VotePaperStatistics not found"));
         return stat.getLikeCount();
+    }
+
+    @Override
+    public Long getVoteCount(Long votePaperId) {
+        VotePaperStatisticsJpaEntity stat = votePaperStatisticsRepository.findByVotePaperId(votePaperId)
+                .orElseThrow(() -> new IllegalArgumentException("VotePaperStatistics not found"));
+        return stat.getVoteCount();
     }
 
     public Optional<VotePaperJpaEntity> findOneAvailable(final Long votePaperId, final String username) {

@@ -12,7 +12,7 @@ public record ScrollableVotePaper(
         String authorProfileImageUrl,
         String authorNickname,
         Long remainDays,
-        String totalVoteCount,
-        String totalLikeCount
+        Long totalVoteCount,
+        Long totalLikeCount
 ) {
 }

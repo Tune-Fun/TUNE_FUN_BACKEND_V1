@@ -1,6 +1,5 @@
 package com.tune_fun.v1.interaction.adapter.input.scheduler;
 
-import com.tune_fun.v1.common.config.annotation.NotAllowTest;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.interaction.application.port.input.usecase.UpdateVotePaperStatisticsUseCase;
 import lombok.RequiredArgsConstructor;
@@ -11,17 +10,16 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@NotAllowTest
 @RequiredArgsConstructor
-public class LikeCountAggregationScheduler {
+public class VoteCountAggregationScheduler {
 
     private final UpdateVotePaperStatisticsUseCase updateVotePaperStatisticsUseCase;
 
     @Scheduled(fixedDelay = 1000L * 5L)
-    public void aggregateLikeCount() {
+    public void aggregateVoteCount() {
         MDC.put("CORRELATION_ID", StringUtil.ulid());
-        log.info("Start to aggregate Vote Paper like count");
-        updateVotePaperStatisticsUseCase.updateLikeCountVotePaperStatistics();
+        log.info("Start to aggregate Vote Paper voteCount count");
+        updateVotePaperStatisticsUseCase.updateVoteCountVotePaperStatistics();
     }
 
 }

@@ -14,6 +14,8 @@ public record FullVotePaper(
         String profileImageUrl,
         String title,
         String content,
+        Long totalVoteCount,
+        Long totalLikeCount,
         VotePaperOption option,
         String videoUrl,
 

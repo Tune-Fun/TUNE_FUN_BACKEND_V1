@@ -13,5 +13,4 @@ public interface LoadVotePaperPort {
     Optional<RegisteredVotePaper> loadRegisteredVotePaper(final String username);
 
     Optional<RegisteredVotePaper> loadRegisteredVotePaper(final Long votePaperId);
-
 }
