@@ -8,14 +8,18 @@ import com.tune_fun.v1.vote.application.port.input.usecase.RegisterVoteUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.restdocs.request.ParameterDescriptor;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
+
+import java.util.concurrent.TimeUnit;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.awaitility.Awaitility.await;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -34,7 +38,7 @@ class VoteCountAggregationSchedulerTest extends ControllerBaseTest {
     @Autowired
     RegisterVoteUseCase registerVoteUseCase;
 
-    @Autowired
+    @SpyBean
     VoteCountAggregationScheduler voteCountAggregationScheduler;
 
     @Test
@@ -76,8 +80,8 @@ class VoteCountAggregationSchedulerTest extends ControllerBaseTest {
                         )
                 );
 
-        voteCountAggregationScheduler.aggregateVoteCount();
-
+        await().atMost(20, TimeUnit.SECONDS).untilAsserted(() ->
+                verify(voteCountAggregationScheduler, times(4)).aggregateVoteCount());
         //then
         mockMvc.perform(
                         get(Uris.VOTE_PAPER_ROOT + "/{votePaperId}", votePaperId)

@@ -19,6 +19,7 @@ public class VotePaperStatisticsCustomRepositoryImpl implements VotePaperStatist
     public static final QVotePaperStatisticsJpaEntity VOTE_PAPER_STATISTICS = QVotePaperStatisticsJpaEntity.votePaperStatisticsJpaEntity;
 
     @Override
+    @Transactional
     public void updateLikeCount(Long votePaperId, Long likeCount) {
         queryFactory.update(VOTE_PAPER_STATISTICS)
                 .set(VOTE_PAPER_STATISTICS.likeCount, likeCount)
@@ -30,6 +31,7 @@ public class VotePaperStatisticsCustomRepositoryImpl implements VotePaperStatist
     }
 
     @Override
+    @Transactional
     public void updateVoteCount(Long votePaperId, Long voteCount) {
         queryFactory.update(VOTE_PAPER_STATISTICS)
                 .set(VOTE_PAPER_STATISTICS.voteCount, voteCount)
