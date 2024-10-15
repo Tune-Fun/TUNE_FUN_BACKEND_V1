@@ -1,4 +1,4 @@
-package com.tune_fun.v1.otp.adapter.output.persistence;
+package com.tune_fun.v1.otp.domain.behavior;
 
 import com.tune_fun.v1.common.exception.CommonApplicationException;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,8 @@ public enum OtpType {
     VERIFY_EMAIL("verify-email"),
     CHANGE_EMAIL("change-email"),
     CHANGE_PASSWORD("change-password"),
-    WITHDRAWAL("withdrawal");
+    WITHDRAWAL("withdrawal"),
+    ACCOUNT_CANCELLATION("account-cancellation");
 
     private final String label;
 

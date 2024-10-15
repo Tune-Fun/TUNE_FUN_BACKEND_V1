@@ -9,7 +9,7 @@ import com.tune_fun.v1.common.config.Uris;
 import com.tune_fun.v1.common.response.MessageCode;
 import com.tune_fun.v1.common.util.StringUtil;
 import com.tune_fun.v1.dummy.DummyService;
-import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
+import com.tune_fun.v1.otp.domain.behavior.OtpType;
 import com.tune_fun.v1.otp.application.port.output.LoadOtpPort;
 import com.tune_fun.v1.otp.application.port.output.VerifyOtpPort;
 import com.tune_fun.v1.otp.domain.behavior.LoadOtp;
@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
-import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.VERIFY_EMAIL;
+import static com.tune_fun.v1.otp.domain.behavior.OtpType.VERIFY_EMAIL;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -230,7 +230,7 @@ class EmailControllerIT extends ControllerBaseTest {
         LoadOtp loadOtpBehavior = new LoadOtp(username, VERIFY_EMAIL.getLabel());
         CurrentDecryptedOtp decryptedOtp = loadOtpPort.loadOtp(loadOtpBehavior);
 
-        VerifyOtp verifyOtpBehavior = new VerifyOtp(username, VERIFY_EMAIL.getLabel(), decryptedOtp.token());
+        VerifyOtp verifyOtpBehavior = new VerifyOtp(username, VERIFY_EMAIL, decryptedOtp.token());
         assertDoesNotThrow(() -> verifyOtpPort.verifyOtp(verifyOtpBehavior));
 
         resultActions.andDo(

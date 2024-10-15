@@ -18,11 +18,12 @@ import com.tune_fun.v1.interaction.adapter.output.persistence.LikeCountPersisten
 import com.tune_fun.v1.interaction.application.port.input.command.InteractionCommands;
 import com.tune_fun.v1.interaction.application.port.input.usecase.FollowUserUseCase;
 import com.tune_fun.v1.otp.adapter.output.persistence.OtpPersistenceAdapter;
-import com.tune_fun.v1.otp.adapter.output.persistence.OtpType;
+import com.tune_fun.v1.otp.domain.behavior.OtpType;
 import com.tune_fun.v1.otp.application.port.input.query.OtpQueries;
 import com.tune_fun.v1.otp.application.port.input.usecase.VerifyOtpUseCase;
 import com.tune_fun.v1.otp.domain.behavior.LoadOtp;
 import com.tune_fun.v1.otp.domain.value.CurrentDecryptedOtp;
+import com.tune_fun.v1.otp.domain.value.EmailVerifyResult;
 import com.tune_fun.v1.otp.domain.value.VerifyResult;
 import com.tune_fun.v1.vote.adapter.output.persistence.VoteChoiceJpaEntity;
 import com.tune_fun.v1.vote.adapter.output.persistence.VotePaperJpaEntity;
@@ -55,7 +56,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.tune_fun.v1.common.util.StringUtil.ulid;
-import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
+import static com.tune_fun.v1.otp.domain.behavior.OtpType.FORGOT_PASSWORD;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @IntegrationTest
@@ -260,8 +261,10 @@ public class DummyService {
         OtpQueries.Verify query = new OtpQueries.Verify(defaultUsername, otpType.getLabel(), token);
         VerifyResult verifyResult = verifyOtpUseCase.verify(query);
 
-        defaultAccessToken = verifyResult.accessToken();
-        defaultRefreshToken = verifyResult.refreshToken();
+        if (verifyResult instanceof EmailVerifyResult emailVerifyResult) {
+            defaultAccessToken = emailVerifyResult.getAccessToken();
+            defaultRefreshToken = emailVerifyResult.getRefreshToken();
+        }
     }
 
     @Transactional

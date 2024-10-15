@@ -1,7 +1,6 @@
 package com.tune_fun.v1.account.application.service;
 
-import com.tune_fun.v1.account.application.port.input.command.AccountCommands;
-import com.tune_fun.v1.account.application.port.input.usecase.SendForgotPasswordOtpUseCase;
+import com.tune_fun.v1.account.application.port.input.usecase.SendAccountCancellationOtpUseCase;
 import com.tune_fun.v1.account.application.port.output.LoadAccountPort;
 import com.tune_fun.v1.account.domain.value.CurrentAccount;
 import com.tune_fun.v1.common.exception.CommonApplicationException;
@@ -16,13 +15,13 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.tune_fun.v1.otp.domain.behavior.OtpType.FORGOT_PASSWORD;
+import static com.tune_fun.v1.otp.domain.behavior.OtpType.ACCOUNT_CANCELLATION;
 
 
 @Service
 @UseCase
 @RequiredArgsConstructor
-public class SendForgotPasswordOtpService implements SendForgotPasswordOtpUseCase {
+public class SendAccountCancellationOtpService implements SendAccountCancellationOtpUseCase {
 
     private final LoadAccountPort loadAccountPort;
     private final SaveOtpPort saveOtpPort;
@@ -30,13 +29,13 @@ public class SendForgotPasswordOtpService implements SendForgotPasswordOtpUseCas
 
     @NotNull
     private static SaveOtp getSaveOtp(String username) {
-        return new SaveOtp(username, FORGOT_PASSWORD.getLabel());
+        return new SaveOtp(username, ACCOUNT_CANCELLATION.getLabel());
     }
 
     @Override
     @Transactional
-    public void sendOtp(final AccountCommands.SendForgotPasswordOtp command) throws Exception {
-        CurrentAccount currentAccount = getCurrentAccount(command);
+    public void sendOtp(final String username) throws Exception {
+        CurrentAccount currentAccount = getCurrentAccount(username);
 
         SaveOtp saveOtp = getSaveOtp(currentAccount.username());
         CurrentOtp currentOtp = saveOtpPort.saveOtp(saveOtp);
@@ -45,9 +44,8 @@ public class SendForgotPasswordOtpService implements SendForgotPasswordOtpUseCas
         sendOtpPort.sendOtp(sendOtp);
     }
 
-    @Transactional(readOnly = true)
-    public CurrentAccount getCurrentAccount(final AccountCommands.SendForgotPasswordOtp command) {
-        return loadAccountPort.currentAccountInfo(command.username())
+    private CurrentAccount getCurrentAccount(String username) {
+        return loadAccountPort.currentAccountInfo(username)
                 .orElseThrow(CommonApplicationException.ACCOUNT_NOT_FOUND);
     }
 }

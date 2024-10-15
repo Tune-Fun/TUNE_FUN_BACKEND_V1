@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
-import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.FORGOT_PASSWORD;
+import static com.tune_fun.v1.otp.domain.behavior.OtpType.FORGOT_PASSWORD;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -78,7 +78,7 @@ class ForgotPasswordOtpControllerIT extends ControllerBaseTest {
         LoadOtp loadOtpBehavior = new LoadOtp(username, FORGOT_PASSWORD.getLabel());
         CurrentDecryptedOtp decryptedOtp = loadOtpPort.loadOtp(loadOtpBehavior);
 
-        VerifyOtp verifyOtpBehavior = new VerifyOtp(username, FORGOT_PASSWORD.getLabel(), decryptedOtp.token());
+        VerifyOtp verifyOtpBehavior = new VerifyOtp(username, FORGOT_PASSWORD, decryptedOtp.token());
         assertDoesNotThrow(() -> verifyOtpPort.verifyOtp(verifyOtpBehavior));
 
         FieldDescriptor requestDescriptors = fieldWithPath("username").description("아이디")

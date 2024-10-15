@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.tune_fun.v1.base.doc.RestDocsConfig.constraint;
-import static com.tune_fun.v1.otp.adapter.output.persistence.OtpType.VERIFY_EMAIL;
+import static com.tune_fun.v1.otp.domain.behavior.OtpType.VERIFY_EMAIL;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
