@@ -112,8 +112,9 @@ public class VotePersistenceAdapter implements
 
         Set<Long> votePaperIds = scroll.stream().map(VotePaperJpaEntity::getId).collect(toSet());
         Map<Long, Long> likeCountMap = votePaperStatisticsRepository.findLikeCountMap(votePaperIds);
+        Map<Long, Long> voteCountMap = votePaperStatisticsRepository.findVoteCountMap(votePaperIds);
 
-        return scroll.map(votePaperJpaEntity -> votePaperMapper.scrollableVotePaper(votePaperJpaEntity, likeCountMap.get(votePaperJpaEntity.getId())));
+        return scroll.map(votePaperJpaEntity -> votePaperMapper.scrollableVotePaper(votePaperJpaEntity, likeCountMap.get(votePaperJpaEntity.getId()), voteCountMap.get(votePaperJpaEntity.getId())));
     }
 
     @Override
