@@ -8,4 +8,5 @@ public interface VotePaperStatisticsCustomRepository {
     void updateVoteCount(final Long votePaperId, final Long voteCount);
 
     Map<Long, Long> findLikeCountMap(final Set<Long> votePaperIds);
+    Map<Long, Long> findVoteCountMap(final Set<Long> votePaperIds);
 }

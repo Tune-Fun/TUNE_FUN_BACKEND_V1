@@ -13,6 +13,7 @@ public record ScrollableVotePaper(
         String authorNickname,
         Long remainDays,
         Long totalVoteCount,
-        Long totalLikeCount
+        Long totalLikeCount,
+        Boolean isVoted
 ) {
 }

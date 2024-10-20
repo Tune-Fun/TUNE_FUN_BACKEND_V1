@@ -48,4 +48,11 @@ public class VotePaperStatisticsCustomRepositoryImpl implements VotePaperStatist
                 .where(VOTE_PAPER_STATISTICS.votePaperId.in(votePaperIds))
                 .transform(groupBy(VOTE_PAPER_STATISTICS.votePaperId).as(VOTE_PAPER_STATISTICS.likeCount));
     }
+
+    @Override
+    public Map<Long, Long> findVoteCountMap(Set<Long> votePaperIds) {
+        return queryFactory.from(VOTE_PAPER_STATISTICS)
+                .where(VOTE_PAPER_STATISTICS.votePaperId.in(votePaperIds))
+                .transform(groupBy(VOTE_PAPER_STATISTICS.votePaperId).as(VOTE_PAPER_STATISTICS.voteCount));
+    }
 }
